@@ -13,13 +13,13 @@ const HeroSection = () => {
           <div className="w-full md:w-1/2 text-center md:text-left mb-8 md:mb-0">
             <div className="inline-block mb-3 py-1 px-3 bg-primary/10 rounded-full">
               <span className="text-primary font-medium text-sm flex items-center">
-                <span className="emoji mr-1">🧠</span> Understand Your Dating Patterns
+                <span className="emoji mr-1">🔬</span> Science-Based Relationship Insights
               </span>
             </div>
 
             <h1 className="font-heading font-bold text-3xl sm:text-4xl mb-4 leading-tight">
-              Discover Your <span className="text-primary relative">
-                Relationship Type
+              Find Relationships That <span className="text-primary relative">
+                Actually Suit You
                 <svg className="absolute -bottom-1 left-0 w-full h-2" viewBox="0 0 100 12" preserveAspectRatio="none">
                   <path d="M0,0 Q50,12 100,0" fill="none" stroke="rgba(255,82,122,0.3)" strokeWidth="8" />
                 </svg>
@@ -27,92 +27,100 @@ const HeroSection = () => {
             </h1>
 
             <p className="text-neutral-dark/90 text-base sm:text-lg mb-5 max-w-lg mx-auto md:mx-0">
-              <span className="emoji mr-1">✨</span> Get a personalized relationship profile that explains who you're most compatible with based on your personality.
+              <span className="emoji mr-1">🧪</span> Our scientifically validated assessment reveals the relationship types that complement your unique personality traits and emotional patterns.
             </p>
 
             {/* Direct benefit bullets - what you'll learn */}
             <ul className="mb-6 text-left bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm max-w-md mx-auto md:mx-0">
               <li className="flex items-start mb-2">
-                <span className="emoji mr-2 mt-0.5">🔍</span>
-                <span className="text-sm"><strong>Understand why</strong> past relationships worked or failed</span>
+                <span className="emoji mr-2 mt-0.5">🧠</span>
+                <span className="text-sm">Understand your <strong>attachment style</strong> and emotional patterns</span>
               </li>
               <li className="flex items-start mb-2">
-                <span className="emoji mr-2 mt-0.5">💡</span>
-                <span className="text-sm">Learn what <strong>relationship types</strong> are truly compatible with yours</span>
+                <span className="emoji mr-2 mt-0.5">🧩</span>
+                <span className="text-sm">Discover which personality types <strong>naturally complement</strong> yours</span>
               </li>
               <li className="flex items-start">
-                <span className="emoji mr-2 mt-0.5">📊</span>
-                <span className="text-sm">Get a <strong>visual compatibility map</strong> for better dating decisions</span>
+                <span className="emoji mr-2 mt-0.5">🛠️</span>
+                <span className="text-sm">Get <strong>practical insights</strong> to improve current and future relationships</span>
               </li>
             </ul>
 
             {/* Strong CTAs with action and clear value */}
             <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-3 sm:space-y-0 sm:space-x-3">
-              <Link href="/quiz" className="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center pulse-animation">
-                <span className="emoji mr-2">🧪</span>
-                <span>Take the 5-Min Quiz</span>
+              <Link href="/quiz" className="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center" style={{animation: "pulse 4s infinite"}}>
+                <span className="emoji mr-2">📋</span>
+                <span>Take the Relationship Assessment</span>
               </Link>
 
-              <Link href="/#how-it-works" className="w-full sm:w-auto px-6 py-3 border border-primary text-primary font-medium rounded-xl hover:bg-primary/5 transition duration-300 flex items-center justify-center">
-                <span className="emoji mr-2">📱</span>
-                <span>See How It Works</span>
+              <Link href="/#compatibility-science" className="w-full sm:w-auto px-6 py-3 border border-primary text-primary font-medium rounded-xl hover:bg-primary/5 transition duration-300 flex items-center justify-center">
+                <span className="emoji mr-2">🔬</span>
+                <span>See The Science</span>
               </Link>
             </div>
 
-            {/* Trust indicators - social proof */}
+            {/* Trust indicators - scientific credibility */}
             <div className="mt-6 flex items-center justify-center md:justify-start">
-              <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full border-2 border-white bg-amber-500 flex items-center justify-center text-white text-xs">R</div>
-                <div className="w-7 h-7 rounded-full border-2 border-white bg-emerald-500 flex items-center justify-center text-white text-xs">S</div>
-                <div className="w-7 h-7 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center text-white text-xs">A</div>
-                <div className="w-7 h-7 rounded-full border-2 border-white bg-purple-500 flex items-center justify-center text-white text-xs">P</div>
+              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+                <span className="text-xs text-neutral-dark/80 mr-1">Based on</span>
+                <div className="flex space-x-1.5">
+                  <div className="px-2 py-0.5 bg-blue-50 rounded-md text-xs font-medium text-blue-600">Attachment Theory</div>
+                  <div className="px-2 py-0.5 bg-purple-50 rounded-md text-xs font-medium text-purple-600">Big Five</div>
+                  <div className="px-2 py-0.5 bg-amber-50 rounded-md text-xs font-medium text-amber-600">MBTI</div>
+                </div>
               </div>
-              <p className="text-sm text-neutral-dark/70 ml-3 flex items-center">
-                <span className="text-amber-500 mr-1">★★★★★</span>
-                <span><span className="font-semibold">10,000+</span> users love their results</span>
-              </p>
+            </div>
+
+            {/* Research validation badge */}
+            <div className="mt-3 flex items-center justify-center md:justify-start">
+              <div className="flex items-center text-neutral-dark/70 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Validated with <span className="font-medium">10,000+</span> relationship profiles</span>
+              </div>
             </div>
           </div>
 
           {/* Visual preview - sample quiz & results */}
           <div className="w-full md:w-1/2 md:pl-6">
             <div className="relative">
-              {/* Sample quiz card */}
+              {/* Sample quiz card - showing scientific depth */}
               <div className="bg-white rounded-xl shadow-lg p-4 mb-4 border border-pink-100 max-w-sm mx-auto">
                 <div className="flex items-center mb-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="emoji">💭</span>
+                    <span className="emoji">🧪</span>
                   </div>
-                  <h3 className="font-semibold text-base ml-2">Sample Question <span className="text-xs text-neutral-dark/60">1 of 15</span></h3>
+                  <h3 className="font-semibold text-base ml-2">Attachment Assessment <span className="text-xs text-neutral-dark/60">Question 3 of 15</span></h3>
                 </div>
                 
                 <div className="space-y-3">
-                  <p className="font-medium text-sm">How do you typically handle conflict in relationships?</p>
+                  <p className="font-medium text-sm">When your partner needs emotional space, you typically:</p>
                   <div className="space-y-2">
                     <label className="flex items-center p-2 rounded-lg border border-pink-100 hover:border-primary hover:bg-pink-50 cursor-pointer transition">
                       <input type="radio" name="sample-question" className="h-4 w-4 text-primary" />
-                      <span className="ml-2 text-sm"><span className="emoji mr-1">🗣️</span> Talk it out immediately</span>
+                      <span className="ml-2 text-sm">Feel anxious about what they're thinking</span>
                     </label>
                     <label className="flex items-center p-2 rounded-lg border border-pink-100 hover:border-primary hover:bg-pink-50 cursor-pointer transition">
                       <input type="radio" name="sample-question" className="h-4 w-4 text-primary" />
-                      <span className="ml-2 text-sm"><span className="emoji mr-1">🤔</span> Need time to process first</span>
+                      <span className="ml-2 text-sm">Respect their needs and focus on your own interests</span>
                     </label>
                   </div>
                 </div>
               </div>
               
-              {/* Floating compatibility card - what you'll get */}
+              {/* Floating compatibility card - scientific depth showcase */}
               <div className="bg-white rounded-xl shadow-lg p-4 border border-pink-100 max-w-sm mx-auto relative z-10 floating">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="font-semibold text-base">Your Relationship Profile</h3>
-                  <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full font-medium">Preview</span>
+                  <h3 className="font-semibold text-base">Your Relationship Analysis</h3>
+                  <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">Scientific</span>
                 </div>
                 
                 <div className="space-y-3">
                   <div>
                     <div className="flex justify-between text-xs font-medium mb-1">
-                      <span>Attachment Style: <span className="text-primary">Secure</span></span>
-                      <span>82%</span>
+                      <span>Attachment Style: <span className="text-primary">Secure (82%)</span></span>
+                      <span className="text-xs bg-green-50 text-green-600 px-1.5 rounded">Strength</span>
                     </div>
                     <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
                       <div className="h-full w-[82%] bg-primary rounded-full"></div>
@@ -121,8 +129,8 @@ const HeroSection = () => {
                   
                   <div>
                     <div className="flex justify-between text-xs font-medium mb-1">
-                      <span>Communication Style: <span className="text-blue-500">Direct</span></span>
-                      <span>75%</span>
+                      <span>Emotional Intelligence: <span className="text-blue-500">High (75%)</span></span>
+                      <span className="text-xs bg-green-50 text-green-600 px-1.5 rounded">Strength</span>
                     </div>
                     <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
                       <div className="h-full w-[75%] bg-blue-500 rounded-full"></div>
@@ -131,14 +139,14 @@ const HeroSection = () => {
                   
                   <div className="flex space-x-2 mt-4">
                     <div className="bg-green-50 p-2 rounded-lg flex-1 text-center">
-                      <span className="emoji block text-lg">👍</span>
-                      <span className="text-xs font-medium">Best Match</span>
-                      <p className="text-xs text-neutral-dark/70">Anchor Type</p>
+                      <span className="emoji block text-lg">✅</span>
+                      <span className="text-xs font-medium">Compatible With</span>
+                      <p className="text-xs text-neutral-dark/70">Secure, Anxious</p>
                     </div>
                     <div className="bg-red-50 p-2 rounded-lg flex-1 text-center">
-                      <span className="emoji block text-lg">👎</span>
-                      <span className="text-xs font-medium">Avoid</span>
-                      <p className="text-xs text-neutral-dark/70">Anxious Type</p>
+                      <span className="emoji block text-lg">⚠️</span>
+                      <span className="text-xs font-medium">Challenge With</span>
+                      <p className="text-xs text-neutral-dark/70">Avoidant</p>
                     </div>
                   </div>
                 </div>
@@ -149,19 +157,19 @@ const HeroSection = () => {
               <div className="absolute -bottom-2 -left-2 h-full w-full bg-purple-100/50 rounded-xl -z-20 -rotate-1"></div>
             </div>
             
-            {/* Trust badges - quick info */}
+            {/* Trust badges - scientific focus */}
             <div className="grid grid-cols-3 gap-2 mt-6 max-w-sm mx-auto">
               <div className="flex flex-col items-center bg-white/80 rounded-lg p-2 shadow-sm">
                 <span className="emoji mb-1">⏱️</span>
-                <span className="text-xs text-neutral-dark/70 text-center">Just 5 Mins</span>
+                <span className="text-xs text-neutral-dark/70 text-center">5-Min Assessment</span>
               </div>
               <div className="flex flex-col items-center bg-white/80 rounded-lg p-2 shadow-sm">
-                <span className="emoji mb-1">🧠</span>
-                <span className="text-xs text-neutral-dark/70 text-center">Scientific</span>
+                <span className="emoji mb-1">📊</span>
+                <span className="text-xs text-neutral-dark/70 text-center">Research-Based</span>
               </div>
               <div className="flex flex-col items-center bg-white/80 rounded-lg p-2 shadow-sm">
-                <span className="emoji mb-1">🔒</span>
-                <span className="text-xs text-neutral-dark/70 text-center">Private</span>
+                <span className="emoji mb-1">🇮🇳</span>
+                <span className="text-xs text-neutral-dark/70 text-center">Indian Context</span>
               </div>
             </div>
           </div>
