@@ -42,7 +42,7 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
               <span className="emoji mr-2">🧭</span>
               <span>How It Works</span>
             </Link>
-            <Link href="/#compatibility-science" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/science" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
               <span className="emoji mr-2">🧠</span>
               <span>The Science</span>
             </Link>

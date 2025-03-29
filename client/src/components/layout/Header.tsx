@@ -32,7 +32,7 @@ const Header = () => {
           <Link href="/how-it-works" className={`text-neutral-dark hover:text-primary font-medium ${location === '/how-it-works' ? 'text-primary' : ''}`}>
             How It Works
           </Link>
-          <Link href="/#compatibility-science" className={`text-neutral-dark hover:text-primary font-medium ${location === '/#compatibility-science' ? 'text-primary' : ''}`}>
+          <Link href="/science" className={`text-neutral-dark hover:text-primary font-medium ${location === '/science' ? 'text-primary' : ''}`}>
             The Science
           </Link>
           <Link href="/#testimonials" className={`text-neutral-dark hover:text-primary font-medium ${location === '/#testimonials' ? 'text-primary' : ''}`}>

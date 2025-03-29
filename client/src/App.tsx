@@ -21,6 +21,7 @@ import Dashboard from "@/pages/Dashboard";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/HowItWorks";
+import Science from "@/pages/Science";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/how-it-works" component={HowItWorks} />
+      <Route path="/science" component={Science} />
       <Route path="/quiz" component={Quiz} />
       <Route path="/results" component={Results} />
       <Route path="/payment" component={Payment} />
