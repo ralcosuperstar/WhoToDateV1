@@ -36,11 +36,11 @@ const BlogPost = () => {
             <meta property="og:title" content={post.title} />
             <meta property="og:description" content={post.excerpt} />
             <meta property="og:type" content="article" />
-            <meta property="og:image" content={post.imageUrl} />
+            <meta property="og:image" content={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} />
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content={post.title} />
             <meta name="twitter:description" content={post.excerpt} />
-            <meta name="twitter:image" content={post.imageUrl} />
+            <meta name="twitter:image" content={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} />
             <link rel="canonical" href={`https://mydate.com/blog/${post.slug}`} />
           </>
         )}
@@ -88,13 +88,9 @@ const BlogPost = () => {
               
               <div className="rounded-xl overflow-hidden mb-8">
                 <img 
-                  src={post.imageUrl} 
+                  src={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} 
                   alt={post.title} 
                   className="w-full h-auto object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`;
-                  }}
                 />
               </div>
               

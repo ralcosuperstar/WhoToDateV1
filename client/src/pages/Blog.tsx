@@ -50,13 +50,9 @@ const Blog = () => {
               {posts?.map((post) => (
                 <div key={post.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                   <img 
-                    src={post.imageUrl} 
+                    src={post.imageUrl || `https://via.placeholder.com/600x400/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} 
                     alt={post.title} 
                     className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = `https://via.placeholder.com/600x400/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`;
-                    }}
                   />
                   <div className="p-6">
                     <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">

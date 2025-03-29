@@ -218,7 +218,7 @@ export class MemStorage implements IStorage {
         slug: "understanding-attachment-styles",
         excerpt: "Learn how your early life experiences shape your adult relationships and how to work with different attachment styles.",
         content: "# Understanding Attachment Styles\n\nAttachment theory, developed by John Bowlby and expanded by Mary Ainsworth, suggests that the bonds we form with our primary caregivers in infancy create a template for how we form relationships throughout life...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?couple,talking",
+        imageUrl: "https://via.placeholder.com/600x400/ff6b6b/ffffff?text=Attachment+Styles",
         category: "Relationship Psychology"
       },
       {
@@ -226,7 +226,7 @@ export class MemStorage implements IStorage {
         slug: "navigating-family-expectations",
         excerpt: "Balancing personal choice with family values can be challenging. Here's how to find harmony without sacrificing your happiness.",
         content: "# Navigating Family Expectations in Modern Indian Relationships\n\nIn Indian culture, relationships often extend beyond the couple to include both families. While this can provide a strong support system, it can also create unique challenges...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?family,india",
+        imageUrl: "https://via.placeholder.com/600x400/4ecdc4/ffffff?text=Family+Expectations",
         category: "Cultural Insights"
       },
       {
@@ -234,7 +234,7 @@ export class MemStorage implements IStorage {
         slug: "understanding-compatibility-profile",
         excerpt: "What does your compatibility color mean? Discover the strengths and challenges of each profile and how to use this knowledge in your dating life.",
         content: "# Green, Yellow, Red: Understanding Your Compatibility Profile\n\nAt MyDate, we classify compatibility profiles into three categories: Green, Yellow, and Red. Each represents different relationship dynamics and compatibility levels...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?colors,personality",
+        imageUrl: "https://via.placeholder.com/600x400/ff9f1c/ffffff?text=Compatibility+Profiles",
         category: "Compatibility Guide"
       },
       {
@@ -242,7 +242,7 @@ export class MemStorage implements IStorage {
         slug: "emotional-intelligence-relationships",
         excerpt: "Discover how developing your emotional intelligence can lead to deeper connections and fewer conflicts.",
         content: "# Building Emotional Intelligence for Healthier Relationships\n\nEmotional intelligence (EQ) is the ability to understand, use, and manage your emotions in positive ways to relieve stress, communicate effectively, empathize with others, overcome challenges, and defuse conflict...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?emotions,connection",
+        imageUrl: "https://via.placeholder.com/600x400/9c6644/ffffff?text=Emotional+Intelligence",
         category: "Relationship Skills"
       },
       {
@@ -250,7 +250,7 @@ export class MemStorage implements IStorage {
         slug: "dating-apps-authenticity",
         excerpt: "How to stay true to yourself while using dating apps in India, and still find meaningful connections.",
         content: "# Dating in the Digital Age: Navigating Apps With Authenticity\n\nDating apps have transformed how young Indians meet potential partners. While they offer unprecedented access to new connections, they also present challenges to maintaining authenticity...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?smartphone,dating",
+        imageUrl: "https://via.placeholder.com/600x400/f9c74f/ffffff?text=Digital+Dating",
         category: "Modern Dating"
       },
       {
@@ -258,7 +258,7 @@ export class MemStorage implements IStorage {
         slug: "science-opposites-attract-myth",
         excerpt: "Research shows that similarity, not opposition, predicts relationship success. Learn what science has to say about compatibility.",
         content: "# The Science Behind Why Opposites Don't Actually Attract\n\nContrary to popular belief, psychological research consistently shows that we are attracted to people who share our values, beliefs, and personality traits...",
-        imageUrl: "https://source.unsplash.com/random/600x400/?science,attraction",
+        imageUrl: "https://via.placeholder.com/600x400/43aa8b/ffffff?text=Attraction+Science",
         category: "Relationship Science"
       }
     ];
