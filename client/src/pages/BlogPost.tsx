@@ -91,6 +91,10 @@ const BlogPost = () => {
                   src={post.imageUrl} 
                   alt={post.title} 
                   className="w-full h-auto object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`;
+                  }}
                 />
               </div>
               
