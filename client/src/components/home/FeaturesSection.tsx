@@ -2,134 +2,151 @@ import { Link } from "wouter";
 
 const FeaturesSection = () => {
   return (
-    <section className="py-16 bg-white px-4" id="how-it-works">
-      <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-heading font-bold text-2xl md:text-3xl lg:text-4xl mb-4">How MyDate Works</h2>
-          <p className="max-w-2xl mx-auto text-neutral-dark/80">Our scientific approach helps you understand yourself better and find meaningful connections.</p>
+    <section className="py-20 bg-white px-4 relative overflow-hidden" id="how-it-works">
+      {/* Background decorations */}
+      <div className="absolute -right-16 -top-16 w-64 h-64 bg-pink-50 rounded-full opacity-70"></div>
+      <div className="absolute left-10 bottom-10 w-32 h-32 bg-yellow-50 rounded-full opacity-70"></div>
+      
+      <div className="container mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-block mb-3 py-1 px-3 bg-primary/10 rounded-full">
+            <span className="text-primary font-medium text-sm flex items-center">
+              <span className="emoji mr-1">⚡</span> Quick & Fun Process
+            </span>
+          </div>
+          <h2 className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl mb-4">How MyDate Works <span className="emoji">🚀</span></h2>
+          <p className="max-w-2xl mx-auto text-neutral-dark/80">Our modern approach to finding your perfect match combines science with fun!</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-neutral-light rounded-xl p-6 transition-all hover:shadow-md">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-              </svg>
+          <div className="bg-gradient-to-br from-pink-50 to-white rounded-3xl p-8 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border border-pink-100">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary">
+              <span className="emoji text-4xl">🎯</span>
             </div>
-            <h3 className="font-heading font-semibold text-xl mb-3">Take the Assessment</h3>
-            <p className="text-neutral-dark/80">Complete our fun yet insightful questionnaire designed to understand your personality, values, and relationship preferences.</p>
+            <h3 className="font-heading font-semibold text-2xl mb-4">Take the Quiz</h3>
+            <p className="text-neutral-dark/80 leading-relaxed">Answer fun questions about your personality, values, and relationship goals. Takes just 5 minutes!</p>
+            <div className="mt-6 flex">
+              <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">Step 1</span>
+            </div>
           </div>
           
-          <div className="bg-neutral-light rounded-xl p-6 transition-all hover:shadow-md">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-              </svg>
+          <div className="bg-gradient-to-br from-pink-50 to-white rounded-3xl p-8 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border border-pink-100">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary">
+              <span className="emoji text-4xl">📊</span>
             </div>
-            <h3 className="font-heading font-semibold text-xl mb-3">Get Your Report</h3>
-            <p className="text-neutral-dark/80">Receive a comprehensive compatibility profile with insights into your relationship tendencies and compatibility patterns.</p>
+            <h3 className="font-heading font-semibold text-2xl mb-4">Get Insights</h3>
+            <p className="text-neutral-dark/80 leading-relaxed">Receive your colorful compatibility profile with insights about your dating personality!</p>
+            <div className="mt-6 flex">
+              <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">Step 2</span>
+            </div>
           </div>
           
-          <div className="bg-neutral-light rounded-xl p-6 transition-all hover:shadow-md">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
-              </svg>
+          <div className="bg-gradient-to-br from-pink-50 to-white rounded-3xl p-8 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border border-pink-100">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary">
+              <span className="emoji text-4xl">💝</span>
             </div>
-            <h3 className="font-heading font-semibold text-xl mb-3">Share & Compare</h3>
-            <p className="text-neutral-dark/80">Use your insights to make better relationship choices. Compare with others to discover your true compatibility.</p>
+            <h3 className="font-heading font-semibold text-2xl mb-4">Find Matches</h3>
+            <p className="text-neutral-dark/80 leading-relaxed">Compare your profile with potential partners to find your true match scientifically!</p>
+            <div className="mt-6 flex">
+              <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">Step 3</span>
+            </div>
           </div>
         </div>
         
-        <div className="mt-16">
-          <div className="bg-primary/5 rounded-2xl p-6 md:p-8">
+        <div className="mt-20">
+          <div className="bg-gradient-to-r from-primary/5 to-pink-50 rounded-3xl p-8 shadow-lg border border-pink-100">
             <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-2/3 md:pr-8">
-                <h3 className="font-heading font-semibold text-xl md:text-2xl mb-4">What Makes Our Assessment Unique</h3>
-                <ul className="space-y-3">
+              <div className="md:w-2/3 md:pr-10">
+                <h3 className="font-heading font-semibold text-2xl md:text-3xl mb-6">What Makes Us Special <span className="emoji">✨</span></h3>
+                <ul className="space-y-5">
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary mt-0.5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Blends scientific psychology with cultural relevance for Indian relationships</span>
+                    <span className="emoji text-xl mr-3 mt-0.5">🇮🇳</span>
+                    <div>
+                      <span className="font-medium text-lg">Made for Indian Dating Culture</span>
+                      <p className="text-neutral-dark/80 mt-1">We understand family values, traditions, and modern Indian relationship dynamics</p>
+                    </div>
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary mt-0.5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Combines multiple frameworks: Big Five traits, MBTI, attachment styles, and EQ</span>
+                    <span className="emoji text-xl mr-3 mt-0.5">🧠</span>
+                    <div>
+                      <span className="font-medium text-lg">Scientific Approach</span>
+                      <p className="text-neutral-dark/80 mt-1">Combines personality science, attachment styles, and emotional intelligence</p>
+                    </div>
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary mt-0.5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Includes specific scenarios related to family dynamics, traditions, and values</span>
+                    <span className="emoji text-xl mr-3 mt-0.5">🔒</span>
+                    <div>
+                      <span className="font-medium text-lg">Privacy First</span>
+                      <p className="text-neutral-dark/80 mt-1">Your data stays private - you control who sees your compatibility results</p>
+                    </div>
                   </li>
                   <li className="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary mt-0.5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Provides actionable insights you can apply to any relationship situation</span>
+                    <span className="emoji text-xl mr-3 mt-0.5">⚡</span>
+                    <div>
+                      <span className="font-medium text-lg">Fast & Fun</span>
+                      <p className="text-neutral-dark/80 mt-1">No boring questionnaires - our colorful quiz is quick and enjoyable!</p>
+                    </div>
                   </li>
                 </ul>
+                
+                <div className="mt-8">
+                  <Link href="/quiz" className="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-xl text-center transition shadow-lg shadow-primary/20 inline-flex items-center">
+                    <span className="emoji mr-2">🚀</span> Start Your Quiz Now
+                  </Link>
+                </div>
               </div>
               
-              <div className="md:w-1/3 mt-6 md:mt-0">
-                <div className="relative">
-                  <div className="bg-white rounded-xl shadow p-4 md:p-6 relative z-10">
+              <div className="md:w-1/3 mt-8 md:mt-0">
+                <div className="relative floating">
+                  <div className="bg-white rounded-3xl shadow-lg p-6 relative z-10 border-2 border-pink-100">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-emerald-500">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                      <div className="h-12 w-12 rounded-full bg-green-400/20 flex items-center justify-center">
+                        <span className="emoji text-xl">💚</span>
                       </div>
                       <div>
-                        <span className="block font-medium">Green Compatibility</span>
-                        <span className="text-sm text-neutral-dark/70">Adaptable & Open</span>
+                        <span className="block font-semibold text-lg">Green Match</span>
+                        <span className="text-sm text-neutral-dark/70">High Compatibility</span>
                       </div>
                     </div>
                     
-                    <p className="text-sm mb-3">Your profile indicates high adaptability and openness to different personalities and backgrounds.</p>
+                    <p className="text-sm mb-4">Your profile suggests you match well with caring, emotionally open partners who value communication.</p>
                     
-                    <div className="h-1.5 w-full bg-neutral-dark/10 rounded-full mb-3">
-                      <div className="h-full w-4/5 bg-emerald-500 rounded-full"></div>
-                    </div>
-                    
-                    <div className="flex justify-between text-xs text-neutral-dark/70">
-                      <span>Flexibility</span>
-                      <span>80%</span>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1">
+                          <span>Communication</span>
+                          <span>85%</span>
+                        </div>
+                        <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
+                          <div className="h-full w-[85%] bg-green-400 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1">
+                          <span>Emotional Connection</span>
+                          <span>92%</span>
+                        </div>
+                        <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
+                          <div className="h-full w-[92%] bg-green-400 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1">
+                          <span>Values Alignment</span>
+                          <span>78%</span>
+                        </div>
+                        <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
+                          <div className="h-full w-[78%] bg-green-400 rounded-full"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="absolute -left-3 top-4 -z-10">
-                    <div className="bg-white rounded-xl shadow p-4 md:p-6 opacity-70">
-                      <div className="flex items-center space-x-3 mb-4">
-                        <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-amber-500">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <span className="block font-medium">Yellow Compatibility</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute -left-6 top-10 -z-20">
-                    <div className="bg-white rounded-xl shadow p-4 md:p-6 opacity-40">
-                      <div className="flex items-center space-x-3 mb-4">
-                        <div className="h-10 w-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-red-500">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <span className="block font-medium">Red Compatibility</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Decorative cards */}
+                  <div className="absolute -right-4 -bottom-4 h-full w-full bg-yellow-100 rounded-3xl -z-10 rotate-6"></div>
+                  <div className="absolute -left-4 -bottom-2 h-full w-full bg-pink-100 rounded-3xl -z-20 -rotate-6"></div>
                 </div>
               </div>
             </div>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,5 +11,57 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .emoji {
+    font-size: 1.5em;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  
+  .love-gradient {
+    background: linear-gradient(135deg, rgba(255,192,203,0.2) 0%, rgba(255,105,180,0.3) 100%);
+  }
+  
+  .energy-gradient {
+    background: linear-gradient(135deg, rgba(255,223,186,0.2) 0%, rgba(255,165,0,0.15) 100%);
+  }
+  
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(0.97);
+      box-shadow: 0 0 0 0 rgba(255, 82, 122, 0.7);
+    }
+    
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(255, 82, 122, 0);
+    }
+    
+    100% {
+      transform: scale(0.97);
+      box-shadow: 0 0 0 0 rgba(255, 82, 122, 0);
+    }
+  }
+  
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  @keyframes floating {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
 }
