@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import * as React from "react";
 import { useEffect } from "react";
 
 interface MobileMenuProps {

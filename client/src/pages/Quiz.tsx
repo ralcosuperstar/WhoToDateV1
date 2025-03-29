@@ -338,15 +338,15 @@ const Quiz = () => {
   
   // Load existing answers if available
   useEffect(() => {
-    if (existingQuiz && existingQuiz.answers) {
-      setAnswers(existingQuiz.answers);
+    if (existingQuiz && typeof existingQuiz === 'object' && 'answers' in existingQuiz && existingQuiz.answers) {
+      setAnswers(existingQuiz.answers as Record<number, number>);
       
-      if (existingQuiz.completed) {
+      if ('completed' in existingQuiz && existingQuiz.completed) {
         setQuizCompleted(true);
         navigate('/results');
       } else {
         // Find the next unanswered question
-        const answeredIds = Object.keys(existingQuiz.answers).map(Number);
+        const answeredIds = Object.keys(existingQuiz.answers as Record<number, number>).map(Number);
         if (answeredIds.length > 0) {
           const nextId = Math.max(...answeredIds) + 1;
           if (nextId <= quizQuestions.length) {

@@ -77,20 +77,23 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
           
           {/* Section Scores */}
           <div className="grid grid-cols-2 gap-3">
-            {Object.entries(profile.sectionScores).map(([section, score]: [string, number]) => (
-              <div key={section} className="bg-neutral-50 p-3 rounded-md">
-                <p className="text-sm font-medium capitalize">{section}</p>
-                <div className="flex items-center mt-1">
-                  <div className="h-2 flex-grow bg-neutral-200 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-primary rounded-full"
-                      style={{ width: `${score}%` }}
-                    ></div>
+            {Object.entries(profile.sectionScores).map(([section, scoreValue]) => {
+              const score = scoreValue as number;
+              return (
+                <div key={section} className="bg-neutral-50 p-3 rounded-md">
+                  <p className="text-sm font-medium capitalize">{section}</p>
+                  <div className="flex items-center mt-1">
+                    <div className="h-2 flex-grow bg-neutral-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${score}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs ml-2 font-medium">{Math.round(score)}%</span>
                   </div>
-                  <span className="text-xs ml-2 font-medium">{Math.round(score)}%</span>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Key Profile Insights */}
