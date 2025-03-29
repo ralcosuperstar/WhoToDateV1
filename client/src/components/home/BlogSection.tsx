@@ -44,7 +44,7 @@ const BlogSection = () => {
       title: "5 Signs You've Found Your Perfect Match",
       excerpt: "Discover the key indicators that you've found a truly compatible partner for a lasting relationship.",
       category: "Relationship Tips",
-      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      emoji: "❤️",
       date: "Apr 12, 2025"
     },
     {
@@ -52,7 +52,7 @@ const BlogSection = () => {
       title: "Understanding Attachment Styles in Modern Dating",
       excerpt: "Learn how your attachment style influences your relationship patterns and dating choices.",
       category: "Relationship Psychology",
-      image: "https://images.unsplash.com/photo-1622175469717-b8b0c95a9053?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      emoji: "💭",
       date: "Mar 28, 2025"
     },
     {
@@ -60,7 +60,7 @@ const BlogSection = () => {
       title: "Navigating Family Expectations in Modern Indian Relationships",
       excerpt: "Balancing personal choice with family values in the modern dating landscape.",
       category: "Cultural Insights",
-      image: "https://images.unsplash.com/photo-1499568509606-0fde7674dceb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      emoji: "🇮🇳",
       date: "Mar 15, 2025"
     }
   ];
@@ -92,12 +92,10 @@ const BlogSection = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
             <article key={post.id} className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src={post.image} 
-                  alt={post.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
+              <div className="h-48 overflow-hidden bg-gradient-to-r from-pink-50 to-purple-50 flex items-center justify-center">
+                <span className="text-6xl transition-transform duration-300 hover:scale-110">
+                  {post.emoji}
+                </span>
               </div>
 
               <div className="p-6">
