@@ -2,7 +2,7 @@ import { Link } from "wouter";
 
 const HeroSection = () => {
   return (
-    <section className="pt-10 pb-10 relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <section className="pt-20 pb-12 relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
       {/* Background elements - subtle & mobile-friendly */}
       <div className="absolute top-0 right-0 -mt-5 -mr-10 w-40 h-40 sm:w-60 sm:h-60 bg-pink-100 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -mb-5 -ml-10 w-40 h-40 sm:w-60 sm:h-60 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
