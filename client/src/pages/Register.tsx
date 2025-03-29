@@ -67,7 +67,8 @@ const Register = () => {
         title: "Registration successful",
         description: "Your account has been created!",
       });
-      navigate("/quiz");
+      // Fix for history pushState error - use window.location instead of wouter navigate
+      window.location.href = "/quiz";
     },
     onError: (error) => {
       setIsLoading(false);

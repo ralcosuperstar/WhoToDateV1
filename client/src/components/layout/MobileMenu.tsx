@@ -13,6 +13,19 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
   const handleLinkClick = () => {
     onClose();
   };
+  
+  // Handle dashboard and analytics links with direct navigation
+  const handleDashboardClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    onClose();
+    window.location.href = "/dashboard";
+  };
+  
+  const handleAnalyticsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    onClose();
+    window.location.href = "/analytics";
+  };
 
   // Close menu when pressing escape key
   useEffect(() => {
@@ -63,11 +76,11 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
           <div className="mt-2">
             {user ? (
               <div className="space-y-1">
-                <Link href="/dashboard" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+                <Link href="/dashboard" onClick={handleDashboardClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
                   <span className="emoji mr-2">👤</span>
                   <span>Dashboard</span>
                 </Link>
-                <Link href="/analytics" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+                <Link href="/analytics" onClick={handleAnalyticsClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
                   <span className="emoji mr-2">📊</span>
                   <span>Analytics</span>
                 </Link>

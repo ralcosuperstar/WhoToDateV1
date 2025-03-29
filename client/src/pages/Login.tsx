@@ -55,7 +55,9 @@ const Login = () => {
         title: "Login successful",
         description: "Welcome back!",
       });
-      navigate(`/${redirectTo}`);
+      // Fix for history pushState error - use window.location instead of wouter navigate
+      const destination = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+      window.location.href = `/${destination}`;
     },
     onError: (error) => {
       setIsLoading(false);
