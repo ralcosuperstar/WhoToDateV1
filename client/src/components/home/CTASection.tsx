@@ -10,117 +10,71 @@ const CTASection = () => {
   });
 
   const ctaLink = user ? "/quiz" : "/register";
-  
+
   return (
-    <section className="py-10 sm:py-16 px-4 energy-gradient relative overflow-hidden">
-      {/* Simplified background decorations for mobile */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/30 to-transparent"></div>
-      <div className="absolute -left-10 -top-10 w-32 h-32 bg-pink-200 opacity-30 rounded-full blur-xl"></div>
-      <div className="absolute right-5 bottom-10 w-24 h-24 bg-yellow-200 opacity-30 rounded-full blur-xl"></div>
-      
-      <div className="max-w-md sm:max-w-xl md:max-w-4xl mx-auto relative z-10">
-        {/* Mobile optimized CTA card */}
-        <div className="bg-gradient-to-r from-primary to-primary/90 rounded-2xl overflow-hidden shadow-xl border border-white/20">
-          {/* Content */}
-          <div className="p-6 sm:p-8 text-white">
-            <div className="inline-block mb-4 py-1 px-3 bg-white/20 backdrop-blur-sm rounded-full">
-              <span className="text-white font-medium text-xs sm:text-sm flex items-center">
-                <span className="emoji mr-1">⭐</span> Find Your Perfect Match
-              </span>
-            </div>
-            
-            <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4">
-              Begin Your Love <span className="relative inline-block">
-                Journey
-                <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 100 12" preserveAspectRatio="none">
-                  <path d="M0,0 Q50,12 100,0" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="8" />
-                </svg>
-              </span> <span className="emoji">💖</span>
-            </h2>
-            
-            <p className="mb-5 text-white/90 text-sm sm:text-base">
-              Our 5-minute quiz finds your perfect match based on science that understands
-              modern Indian relationships!
-            </p>
-            
-            {/* Features grid - mobile friendly */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <span className="emoji mb-1 block">⏱️</span>
-                <span className="text-sm font-medium">5-Minute Quiz</span>
-              </div>
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <span className="emoji mb-1 block">📊</span>
-                <span className="text-sm font-medium">Visual Report</span>
-              </div>
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <span className="emoji mb-1 block">🇮🇳</span>
-                <span className="text-sm font-medium">For Indians</span>
-              </div>
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <span className="emoji mb-1 block">🔄</span>
-                <span className="text-sm font-medium">Find Matches</span>
-              </div>
-            </div>
-            
-            {/* Primary CTA button - full width on mobile */}
-            <Link 
-              href={ctaLink} 
-              className="w-full block text-center bg-white text-primary font-medium px-6 py-4 rounded-xl hover:bg-white/90 transition shadow-lg shadow-primary/30 pulse-animation"
-            >
-              <span className="emoji mr-2">🚀</span> Start Free Quiz Now
-            </Link>
-          </div>
-          
-          {/* Floating compatibility card */}
-          <div className="relative mx-4 -mt-2 -mb-4 z-20">
-            <div className="bg-white rounded-2xl shadow-lg p-4 border border-pink-100 floating">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mr-2">
-                    <span className="emoji">💘</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-neutral-dark text-sm">Match Preview</p>
-                  </div>
+    <section className="py-20 px-4 relative overflow-hidden bg-gradient-to-br from-primary/90 to-primary">
+      {/* Background elements */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white blur-3xl"></div>
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-white blur-3xl"></div>
+      </div>
+
+      <div className="container mx-auto relative z-10">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-white">
+            Ready to Discover Your Compatibility DNA?
+          </h2>
+
+          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+            Take our scientifically designed assessment and get matched with compatible partners who share your relationship values and goals.
+          </p>
+
+          <div className="rounded-lg bg-white/10 p-6 mb-8 backdrop-blur-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="p-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                <div className="bg-green-400/20 text-green-500 text-xs rounded-full px-2 py-1 font-medium flex items-center">
-                  <span className="emoji mr-1">💚</span> 87% Match
-                </div>
+                <h3 className="text-white font-semibold mb-1">10 Minutes</h3>
+                <p className="text-white/80 text-sm">Complete the assessment</p>
               </div>
-              
-              <div className="flex space-x-2 items-center">
-                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">S</div>
-                <div className="h-1 flex-grow bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[87%] bg-primary rounded-full"></div>
+
+              <div className="p-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white text-xs font-bold">R</div>
+                <h3 className="text-white font-semibold mb-1">15+ Page Report</h3>
+                <p className="text-white/80 text-sm">Detailed compatibility insights</p>
+              </div>
+
+              <div className="p-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-semibold mb-1">Instant Matches</h3>
+                <p className="text-white/80 text-sm">Connect with compatible profiles</p>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Testimonial - simplified for mobile */}
-        <div className="mt-6 bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-pink-100 shadow-sm">
-          <div className="flex items-center">
-            <div className="flex -space-x-2 mr-3">
-              <div className="w-7 h-7 rounded-full border-2 border-white bg-yellow-500 flex items-center justify-center text-white text-xs">S</div>
-              <div className="w-7 h-7 rounded-full border-2 border-white bg-pink-500 flex items-center justify-center text-white text-xs">P</div>
-            </div>
-            <div>
-              <div className="flex text-amber-500 text-xs mb-1">★★★★★</div>
-              <p className="text-xs italic text-neutral-dark/80">"MyDate helped us find true compatibility! The quiz was fun, insights spot on!"</p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Trust badge */}
-        <div className="mt-5 text-center text-xs text-neutral-dark/60">
-          <div className="flex items-center justify-center">
-            <span className="emoji mr-1">🔒</span> 100% secure & private
-            <span className="mx-2">•</span>
-            <span className="emoji mr-1">👫</span> 10,000+ matches made
-          </div>
+
+          <Link href={ctaLink} className="px-10 py-4 bg-white text-primary font-semibold rounded-lg shadow-lg hover:bg-neutral-100 transition duration-300 transform hover:-translate-y-1">
+            <span className="flex items-center justify-center">
+              Take the Free Assessment
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </span>
+          </Link>
+
+          <p className="text-white/70 text-sm mt-4">
+            No credit card required. 100% free to start.
+          </p>
         </div>
       </div>
     </section>

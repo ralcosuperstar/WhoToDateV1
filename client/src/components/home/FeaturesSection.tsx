@@ -2,27 +2,94 @@ import { Link } from "wouter";
 
 const FeaturesSection = () => {
   return (
-    <section className="py-10 sm:py-16 bg-white px-4 relative overflow-hidden" id="how-it-works">
-      {/* Background decorations - reduced for mobile */}
-      <div className="absolute -right-10 -top-10 w-32 h-32 bg-pink-50 rounded-full opacity-70"></div>
-      <div className="absolute left-5 bottom-5 w-24 h-24 bg-yellow-50 rounded-full opacity-70"></div>
+    <section className="py-16 sm:py-24 bg-white px-4 relative overflow-hidden" id="how-it-works">
+      {/* Background decorations */}
+      <div className="absolute -right-32 -top-32 w-96 h-96 bg-pink-50 rounded-full opacity-70 blur-xl"></div>
+      <div className="absolute left-10 bottom-10 w-64 h-64 bg-yellow-50 rounded-full opacity-70 blur-xl"></div>
       
-      <div className="max-w-md sm:max-w-xl md:max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-10">
-          <div className="inline-block mb-2 py-1 px-3 bg-primary/10 rounded-full">
-            <span className="text-primary font-medium text-xs sm:text-sm flex items-center">
-              <span className="emoji mr-1">⚡</span> Quick & Fun Process
+      <div className="max-w-md sm:max-w-xl md:max-w-5xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-block mb-3 py-1.5 px-4 bg-primary/10 rounded-full">
+            <span className="text-primary font-medium text-sm flex items-center justify-center">
+              <span className="emoji mr-2">⚡</span> Simple 3-Step Process
             </span>
           </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-3">How MyDate Works <span className="emoji">🚀</span></h2>
-          <p className="text-sm sm:text-base mx-auto text-neutral-dark/80">The easiest way to find your perfect match!</p>
+          <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">How MyDate Connects Hearts <span className="emoji">🚀</span></h2>
+          <p className="text-lg mx-auto text-neutral-dark/80 max-w-2xl">Our scientific approach makes finding your perfect match easier than ever before!</p>
         </div>
         
-        {/* Steps - Simplified for mobile */}
-        <div className="space-y-4 sm:space-y-6 mb-8">
+        {/* Steps - Enhanced for better visual appeal */}
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
           {/* Step 1 */}
-          <div className="bg-gradient-to-r from-pink-50 to-white rounded-2xl p-4 shadow-md border border-pink-100 relative">
-            <div className="absolute -left-2 -top-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold">1</div>
+          <div className="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 shadow-lg border border-pink-100 relative h-full transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div className="absolute -left-3 -top-3 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">1</div>
+            
+            <div className="pt-6 pb-2">
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              
+              <h3 className="font-heading font-semibold text-xl mb-3 text-center">Take the Assessment</h3>
+              <p className="text-neutral-dark/80 text-center">Complete our scientifically-designed compatibility questionnaire in just 10 minutes to reveal your relationship preferences and patterns.</p>
+            </div>
+          </div>
+          
+          {/* Step 2 */}
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg border border-blue-100 relative h-full transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div className="absolute -left-3 -top-3 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">2</div>
+            
+            <div className="pt-6 pb-2">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              
+              <h3 className="font-heading font-semibold text-xl mb-3 text-center">Get Your Compatibility DNA</h3>
+              <p className="text-neutral-dark/80 text-center">Receive a comprehensive compatibility report that reveals your attachment style, emotional patterns, and relationship strengths.</p>
+            </div>
+          </div>
+          
+          {/* Step 3 */}
+          <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-6 shadow-lg border border-green-100 relative h-full transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div className="absolute -left-3 -top-3 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">3</div>
+            
+            <div className="pt-6 pb-2">
+              <div className="w-16 h-16 mx-auto mb-4 bg-green-500/10 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              
+              <h3 className="font-heading font-semibold text-xl mb-3 text-center">Connect With Matches</h3>
+              <p className="text-neutral-dark/80 text-center">Get introduced to compatible partners based on your profile and start meaningful conversations that lead to lasting relationships.</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Stats section */}
+        <div className="bg-neutral-light rounded-2xl p-8 shadow-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <p className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">87%</p>
+              <p className="text-sm text-neutral-dark/80">Match success rate</p>
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">10 min</p>
+              <p className="text-sm text-neutral-dark/80">Average assessment time</p>
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">4,000+</p>
+              <p className="text-sm text-neutral-dark/80">Successful matches</p>
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">94%</p>
+              <p className="text-sm text-neutral-dark/80">User satisfaction</p>
+            </div>
+          </div>
+        </div>/div>
             <div className="flex items-center">
               <div className="mr-3 w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                 <span className="emoji text-2xl">🎯</span>

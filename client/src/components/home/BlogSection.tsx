@@ -38,69 +38,98 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
 };
 
 const BlogSection = () => {
-  const { data: posts, isLoading, error } = useQuery<BlogPost[]>({ 
-    queryKey: ['/api/blog'],
-    staleTime: 300000, // 5 minutes cache
-  });
+  const blogPosts = [
+    {
+      id: 1,
+      title: "5 Signs You've Found Your Perfect Match",
+      excerpt: "Discover the key indicators that you've found a truly compatible partner for a lasting relationship.",
+      category: "Relationship Tips",
+      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      date: "Apr 12, 2025"
+    },
+    {
+      id: 2,
+      title: "Understanding Attachment Styles in Modern Dating",
+      excerpt: "Learn how your attachment style influences your relationship patterns and dating choices.",
+      category: "Relationship Psychology",
+      image: "https://images.unsplash.com/photo-1622175469717-b8b0c95a9053?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      date: "Mar 28, 2025"
+    },
+    {
+      id: 3,
+      title: "Navigating Family Expectations in Modern Indian Relationships",
+      excerpt: "Balancing personal choice with family values in the modern dating landscape.",
+      category: "Cultural Insights",
+      image: "https://images.unsplash.com/photo-1499568509606-0fde7674dceb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      date: "Mar 15, 2025"
+    }
+  ];
 
   return (
-    <section className="py-16 bg-white px-4" id="blog">
+    <section className="py-16 px-4 bg-neutral-light">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-heading font-bold text-2xl md:text-3xl lg:text-4xl mb-4">
-            Relationship Insights Blog
-          </h2>
-          <p className="max-w-2xl mx-auto text-neutral-dark/80">
-            Expert advice and research-backed articles on relationships, compatibility, and dating in India.
-          </p>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+          <div>
+            <div className="inline-block mb-3 py-1.5 px-4 bg-teal-500/10 rounded-full">
+              <span className="text-teal-600 font-medium text-sm flex items-center">
+                <span className="emoji mr-2">📝</span> Relationship Insights
+              </span>
+            </div>
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-2">From Our Blog</h2>
+            <p className="text-lg text-neutral-dark/80 max-w-2xl">
+              Expert advice and research-backed articles on relationships
+            </p>
+          </div>
+
+          <a href="/blog" className="mt-6 md:mt-0 inline-flex items-center px-5 py-2.5 bg-white rounded-lg shadow-sm border border-neutral-dark/10 text-primary font-medium hover:bg-neutral-50 transition">
+            View All Articles
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </a>
         </div>
-        
-        {isLoading ? (
-          <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-neutral-light rounded-xl animate-pulse">
-                <div className="w-full h-48 bg-neutral-dark/10"></div>
-                <div className="p-6">
-                  <div className="h-4 w-20 bg-neutral-dark/10 rounded-full"></div>
-                  <div className="h-6 w-full bg-neutral-dark/10 rounded mt-3 mb-2"></div>
-                  <div className="h-4 w-full bg-neutral-dark/10 rounded mb-4"></div>
-                  <div className="h-4 w-24 bg-neutral-dark/10 rounded"></div>
-                </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {blogPosts.map((post) => (
+            <article key={post.id} className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={post.image} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
               </div>
-            ))}
-          </div>
-        ) : error ? (
-          <div className="text-center p-8 bg-neutral-light rounded-xl">
-            <p className="text-red-500">Failed to load blog posts. Please try again later.</p>
-          </div>
-        ) : (
-          <>
-            <div className="grid md:grid-cols-3 gap-8">
-              {posts?.slice(0, 3).map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
-            
-            <div className="mt-8 text-center">
-              <Link 
-                href="/blog" 
-                className="inline-flex items-center text-primary font-medium hover:underline"
-              >
-                View All Articles
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  strokeWidth={1.5} 
-                  stroke="currentColor" 
-                  className="w-5 h-5 ml-1"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-              </Link>
-            </div>
-          </>
-        )}
+
+              <div className="p-6">
+                <div className="flex items-center mb-3">
+                  <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-0.5 rounded">
+                    {post.category}
+                  </span>
+                  <span className="text-xs text-neutral-dark/60 ml-auto">
+                    {post.date}
+                  </span>
+                </div>
+
+                <h3 className="font-heading font-semibold text-xl mb-2 line-clamp-2">
+                  <a href={`/blog/${post.id}`} className="hover:text-primary transition">
+                    {post.title}
+                  </a>
+                </h3>
+
+                <p className="text-neutral-dark/80 mb-4 line-clamp-2">
+                  {post.excerpt}
+                </p>
+
+                <a href={`/blog/${post.id}`} className="inline-flex items-center text-primary font-medium hover:underline">
+                  Read Article
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

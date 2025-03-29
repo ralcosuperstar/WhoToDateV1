@@ -3,18 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyDate - Discover Your Compatibility DNA</title>
-    <meta name="description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+    <title>MyDate - Discover Your Compatibility DNA | Find Meaningful Connections</title>
+    <meta name="description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles. Find your perfect match today!" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="canonical" href="https://mydate.com/" />
-    <meta property="og:title" content="MyDate - Discover Your Compatibility DNA" />
-    <meta property="og:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+    <meta property="og:title" content="MyDate - Discover Your Compatibility DNA | Find Meaningful Connections" />
+    <meta property="og:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles. Find your perfect match today!" />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://mydate.com/images/social-share.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MyDate - Discover Your Compatibility DNA" />
-    <meta name="twitter:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+    <meta name="twitter:title" content="MyDate - Discover Your Compatibility DNA | Find Meaningful Connections" />
+    <meta name="twitter:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles. Find your perfect match today!" />
+    <meta name="twitter:image" content="https://mydate.com/images/social-share.jpg" />
     
     <!-- Structured data for rich snippets -->
     <script type="application/ld+json">
@@ -36,14 +38,42 @@
       :root {
         --font-heading: 'Poppins', sans-serif;
         --font-body: 'Inter', sans-serif;
+        --color-primary: #7F56D9;
+        --color-primary-dark: #6941C6;
       }
       
       body {
         font-family: var(--font-body);
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-color: #FCFCFD;
       }
       
       .font-heading {
         font-family: var(--font-heading);
+      }
+      
+      /* Scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Basic button reset */
+      button {
+        cursor: pointer;
+        font-family: var(--font-body);
+      }
+      
+      /* Remove focus outline for non-keyboard interactions */
+      *:focus:not(:focus-visible) {
+        outline: none;
+      }
+      
+      /* Proper focus for keyboard navigation */
+      *:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
     </style>
   </head>

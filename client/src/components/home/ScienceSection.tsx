@@ -2,242 +2,82 @@ import { Link } from "wouter";
 
 const ScienceSection = () => {
   return (
-    <section className="py-16 px-4" id="compatibility-science">
+    <section className="py-16 bg-neutral-light px-4">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-heading font-bold text-2xl md:text-3xl lg:text-4xl mb-4">The Science Behind Our Compatibility Assessment</h2>
-          <p className="max-w-2xl mx-auto text-neutral-dark/80">Our methodology combines established psychological frameworks to provide a comprehensive understanding of your relationship compatibility.</p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-5">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
-                </svg>
-              </div>
-              <h3 className="font-heading font-semibold text-xl ml-4">Big Five Personality Traits</h3>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3 py-1.5 px-4 bg-blue-500/10 rounded-full">
+              <span className="text-blue-500 font-medium text-sm flex items-center justify-center">
+                <span className="emoji mr-2">🧬</span> Based on Research
+              </span>
             </div>
-            
-            <p className="mb-4">The scientifically validated OCEAN model measures your personality across five dimensions:</p>
-            
-            <ul className="space-y-3">
-              <li className="flex items-center">
-                <span className="w-28 font-medium">Openness</span>
-                <div className="h-2 flex-1 bg-neutral-dark/10 rounded-full mx-3">
-                  <div className="h-full w-3/4 bg-primary rounded-full"></div>
-                </div>
-                <span className="text-sm">75%</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-28 font-medium">Conscientiousness</span>
-                <div className="h-2 flex-1 bg-neutral-dark/10 rounded-full mx-3">
-                  <div className="h-full w-4/5 bg-primary rounded-full"></div>
-                </div>
-                <span className="text-sm">80%</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-28 font-medium">Extraversion</span>
-                <div className="h-2 flex-1 bg-neutral-dark/10 rounded-full mx-3">
-                  <div className="h-full w-1/2 bg-primary rounded-full"></div>
-                </div>
-                <span className="text-sm">50%</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-28 font-medium">Agreeableness</span>
-                <div className="h-2 flex-1 bg-neutral-dark/10 rounded-full mx-3">
-                  <div className="h-full w-2/3 bg-primary rounded-full"></div>
-                </div>
-                <span className="text-sm">66%</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-28 font-medium">Neuroticism</span>
-                <div className="h-2 flex-1 bg-neutral-dark/10 rounded-full mx-3">
-                  <div className="h-full w-1/3 bg-primary rounded-full"></div>
-                </div>
-                <span className="text-sm">33%</span>
-              </li>
-            </ul>
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">The Science Behind MyDate</h2>
+            <p className="text-lg mx-auto text-neutral-dark/80 max-w-2xl">
+              Our approach is grounded in attachment theory, personality psychology, and relationship science
+            </p>
           </div>
-          
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-5">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                </svg>
+
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="grid md:grid-cols-2">
+              <div className="p-8 md:p-10">
+                <h3 className="font-heading font-semibold text-2xl mb-4">Compatibility DNA Assessment</h3>
+                <p className="text-neutral-dark/80 mb-6">
+                  Our proprietary algorithm analyzes 29 dimensions of compatibility, including:
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Attachment styles and emotional patterns",
+                    "Core values and life priorities",
+                    "Communication preferences",
+                    "Conflict resolution styles",
+                    "Cultural compatibility factors"
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <h3 className="font-heading font-semibold text-xl ml-4">Attachment Styles</h3>
-            </div>
-            
-            <p className="mb-4">Your attachment style influences how you connect with partners emotionally:</p>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="border border-neutral-dark/10 rounded-lg p-4 bg-primary/5 relative">
-                <div className="absolute -top-3 -right-3 bg-primary text-white text-xs py-1 px-2 rounded-full">
-                  Your Style
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 md:p-10 flex flex-col justify-center">
+                <div className="mb-6">
+                  <div className="inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <h4 className="font-heading font-semibold text-lg">Research-Backed</h4>
+                  </div>
+                  <p className="text-neutral-dark/80 mt-2">
+                    Based on 40+ years of relationship research and validated psychological models
+                  </p>
                 </div>
-                <h4 className="font-heading font-semibold mb-2">Secure</h4>
-                <p className="text-sm">You're comfortable with intimacy and independence. You trust others and communicate openly.</p>
-              </div>
-              
-              <div className="border border-neutral-dark/10 rounded-lg p-4">
-                <h4 className="font-heading font-semibold mb-2">Anxious</h4>
-                <p className="text-sm">Worry about rejection and abandonment. Seek reassurance and closeness.</p>
-              </div>
-              
-              <div className="border border-neutral-dark/10 rounded-lg p-4">
-                <h4 className="font-heading font-semibold mb-2">Avoidant</h4>
-                <p className="text-sm">Value independence and self-sufficiency. May struggle with emotional intimacy.</p>
-              </div>
-              
-              <div className="border border-neutral-dark/10 rounded-lg p-4">
-                <h4 className="font-heading font-semibold mb-2">Fearful</h4>
-                <p className="text-sm">Combination of anxious and avoidant traits. Desire but also fear close relationships.</p>
+                <div className="mb-6">
+                  <div className="inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h4 className="font-heading font-semibold text-lg">Culturally Sensitive</h4>
+                  </div>
+                  <p className="text-neutral-dark/80 mt-2">
+                    Specifically designed for Indian dating culture and relationship expectations
+                  </p>
+                </div>
+                <div>
+                  <div className="inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <h4 className="font-heading font-semibold text-lg">Private & Secure</h4>
+                  </div>
+                  <p className="text-neutral-dark/80 mt-2">
+                    Your data is encrypted and never shared with third parties
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-5">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                </svg>
-              </div>
-              <h3 className="font-heading font-semibold text-xl ml-4">Myers-Briggs Type</h3>
-            </div>
-            
-            <p className="mb-4">The MBTI framework helps identify your cognitive preferences and communication style:</p>
-            
-            <div className="flex flex-wrap">
-              <div className="w-1/2 mb-4 pr-2">
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Introversion</span>
-                  <span className="font-medium">Extraversion</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-1/3 bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="w-1/2 mb-4 pl-2">
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Sensing</span>
-                  <span className="font-medium">Intuition</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-2/3 bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="w-1/2 mb-4 pr-2">
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Thinking</span>
-                  <span className="font-medium">Feeling</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-4/5 bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="w-1/2 mb-4 pl-2">
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Judging</span>
-                  <span className="font-medium">Perceiving</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-2/5 bg-primary rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-primary/5 rounded-lg p-4 mt-2">
-              <div className="flex items-center mb-2">
-                <span className="text-primary font-heading font-bold text-xl">INFJ</span>
-                <span className="ml-3 text-neutral-dark/80">The Advocate</span>
-              </div>
-              <p className="text-sm">Idealistic, principled, and sensitive. You seek meaningful connections and value deep, authentic relationships.</p>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-5">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                </svg>
-              </div>
-              <h3 className="font-heading font-semibold text-xl ml-4">Emotional Intelligence</h3>
-            </div>
-            
-            <p className="mb-4">EQ is crucial for relationship success. Your emotional intelligence profile:</p>
-            
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Self-Awareness</span>
-                  <span>85%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[85%] bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Self-Regulation</span>
-                  <span>70%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[70%] bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Motivation</span>
-                  <span>90%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[90%] bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Empathy</span>
-                  <span>80%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[80%] bg-primary rounded-full"></div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Social Skills</span>
-                  <span>75%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div className="h-full w-[75%] bg-primary rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-4 text-sm text-neutral-dark/80">
-              <p>Your high emotional intelligence helps you navigate relationship challenges and communicate effectively.</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="mt-12 text-center">
-          <Link href="/quiz" className="inline-block bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg transition">
-            Take the Assessment Now
-          </Link>
         </div>
       </div>
     </section>
