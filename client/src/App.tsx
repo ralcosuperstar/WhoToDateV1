@@ -15,6 +15,7 @@ import Quiz from "@/pages/Quiz";
 import Results from "@/pages/Results";
 import Payment from "@/pages/Payment";
 import Report from "@/pages/Report";
+import Analytics from "@/pages/Analytics";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/results" component={Results} />
       <Route path="/payment" component={Payment} />
       <Route path="/report" component={Report} />
+      <Route path="/analytics" component={Analytics} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/dashboard" component={Dashboard} />

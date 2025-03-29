@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import ReportSection from "@/components/report/ReportSection";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
+import AnalyticsDashboard from "@/components/dashboard/AnalyticsDashboard";
 
 const Report = () => {
   const [, navigate] = useLocation();
@@ -390,9 +391,37 @@ const Report = () => {
               </div>
             </ReportSection>
             
-            <div className="text-center pt-8">
+            <ReportSection 
+              title="Interactive Analytics" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+              }
+            >
+              <div className="space-y-4">
+                <p>
+                  Explore your compatibility profile in detail with interactive charts and visualizations.
+                  These analytics provide deeper insights into your personality traits, attachment style, and relationship preferences.
+                </p>
+                
+                <AnalyticsDashboard report={reportData} />
+              </div>
+            </ReportSection>
+            
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-8">
               <Button asChild>
                 <Link href="/dashboard">Back to Dashboard</Link>
+              </Button>
+              <Button asChild variant="outline" className="flex items-center gap-2">
+                <Link href="/analytics">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                  </svg>
+                  <span>Advanced Analytics</span>
+                </Link>
               </Button>
             </div>
           </div>

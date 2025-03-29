@@ -45,9 +45,14 @@ const Header = () => {
         
         <div className="flex items-center space-x-4">
           {user ? (
-            <Link href="/dashboard" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
-              Dashboard
-            </Link>
+            <>
+              <Link href="/dashboard" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
+                Dashboard
+              </Link>
+              <Link href="/analytics" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
+                Analytics
+              </Link>
+            </>
           ) : (
             <Link href="/login" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
               Login
