@@ -36,11 +36,11 @@ const BlogPost = () => {
             <meta property="og:title" content={post.title} />
             <meta property="og:description" content={post.excerpt} />
             <meta property="og:type" content="article" />
-            <meta property="og:image" content={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} />
+            <meta property="og:image" content={`https://via.placeholder.com/1200x600/f9a8d4/ffffff?text=${encodeURIComponent(post.title)}`} />
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content={post.title} />
             <meta name="twitter:description" content={post.excerpt} />
-            <meta name="twitter:image" content={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} />
+            <meta name="twitter:image" content={`https://via.placeholder.com/1200x600/f9a8d4/ffffff?text=${encodeURIComponent(post.title)}`} />
             <link rel="canonical" href={`https://mydate.com/blog/${post.slug}`} />
           </>
         )}
@@ -86,12 +86,17 @@ const BlogPost = () => {
                 </div>
               </header>
               
-              <div className="rounded-xl overflow-hidden mb-8">
-                <img 
-                  src={post.imageUrl || `https://via.placeholder.com/1200x600/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} 
-                  alt={post.title} 
-                  className="w-full h-auto object-cover"
-                />
+              <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl mb-8 p-8 text-center">
+                {/* Assign emoji based on category */}
+                <span className="text-6xl inline-block mb-4">
+                  {post.category === "Relationship Psychology" ? "💭" :
+                   post.category === "Cultural Insights" ? "🇮🇳" :
+                   post.category === "Compatibility Guide" ? "🧩" :
+                   post.category === "Relationship Skills" ? "❤️" :
+                   post.category === "Modern Dating" ? "📱" :
+                   post.category === "Relationship Science" ? "🔬" : "📝"}
+                </span>
+                <h2 className="font-heading text-2xl font-bold">{post.category}</h2>
               </div>
               
               <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-8">

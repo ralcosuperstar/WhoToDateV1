@@ -47,47 +47,58 @@ const Blog = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
-              {posts?.map((post) => (
-                <div key={post.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  <img 
-                    src={post.imageUrl || `https://via.placeholder.com/600x400/f9a8d4/1a2028?text=${encodeURIComponent(post.category)}`} 
-                    alt={post.title} 
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-6">
-                    <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-                      {post.category}
-                    </span>
-                    <h2 className="font-heading font-semibold text-xl mt-3 mb-2">{post.title}</h2>
-                    <p className="text-neutral-dark/80 text-sm mb-4">{post.excerpt}</p>
-                    <div className="flex justify-between items-center">
-                      <Link 
-                        href={`/blog/${post.slug}`} 
-                        className="text-primary font-medium hover:underline inline-flex items-center"
-                      >
-                        Read Article
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          strokeWidth={1.5} 
-                          stroke="currentColor" 
-                          className="w-4 h-4 ml-1"
+              {posts?.map((post) => {
+                // Assign emoji based on category
+                let categoryEmoji = "📝"; // default
+                if (post.category === "Relationship Psychology") categoryEmoji = "💭";
+                if (post.category === "Cultural Insights") categoryEmoji = "🇮🇳";
+                if (post.category === "Compatibility Guide") categoryEmoji = "🧩";
+                if (post.category === "Relationship Skills") categoryEmoji = "❤️";
+                if (post.category === "Modern Dating") categoryEmoji = "📱";
+                if (post.category === "Relationship Science") categoryEmoji = "🔬";
+                
+                return (
+                  <div key={post.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div className="p-6">
+                      <div className="flex items-center mb-3">
+                        <span className="text-2xl mr-3">{categoryEmoji}</span>
+                        <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                          {post.category}
+                        </span>
+                      </div>
+                      
+                      <h2 className="font-heading font-semibold text-xl mb-2">{post.title}</h2>
+                      <p className="text-neutral-dark/80 text-sm mb-4">{post.excerpt}</p>
+                      
+                      <div className="flex justify-between items-center">
+                        <Link 
+                          href={`/blog/${post.slug}`} 
+                          className="text-primary font-medium hover:underline inline-flex items-center"
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                      </Link>
-                      <span className="text-xs text-neutral-dark/60">
-                        {new Date(post.publishedAt).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </span>
+                          Read Article
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            strokeWidth={1.5} 
+                            stroke="currentColor" 
+                            className="w-4 h-4 ml-1"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </Link>
+                        <span className="text-xs text-neutral-dark/60">
+                          {new Date(post.publishedAt).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
           
