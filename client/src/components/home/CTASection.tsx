@@ -133,15 +133,25 @@ const CTASection = () => {
             </div>
           </div>
 
-          {/* Strong CTA button with scientific emphasis */}
-          <Link 
-            href={ctaLink} 
-            className="px-8 py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center justify-center" 
-            style={{animation: "pulse 4s infinite"}}
-          >
-            <span className="emoji mr-2">🧪</span>
-            <span>Take the Scientific Assessment</span>
-          </Link>
+          {/* CTA buttons with scientific emphasis */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link 
+              href={ctaLink} 
+              className="px-8 py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center justify-center" 
+              style={{animation: "pulse 4s infinite"}}
+            >
+              <span className="emoji mr-2">🧪</span>
+              <span>Take the Scientific Assessment</span>
+            </Link>
+            
+            <Link 
+              href="/how-it-works" 
+              className="px-6 py-4 bg-white/20 backdrop-blur-sm text-white font-medium rounded-xl hover:bg-white/30 transition duration-300 inline-flex items-center justify-center"
+            >
+              <span className="emoji mr-2">🧭</span>
+              <span>Learn How It Works</span>
+            </Link>
+          </div>
 
           {/* Trust indicators with scientific focus */}
           <div className="mt-6 flex flex-wrap justify-center gap-6">

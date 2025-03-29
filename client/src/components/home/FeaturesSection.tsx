@@ -15,9 +15,15 @@ const FeaturesSection = () => {
             </span>
           </div>
           <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-3">How WhoToDate Works <span className="emoji">🔍</span></h2>
-          <p className="text-sm sm:text-base md:text-lg mx-auto text-neutral-dark/80 max-w-2xl">
+          <p className="text-sm sm:text-base md:text-lg mx-auto text-neutral-dark/80 max-w-2xl mb-4">
             Our scientific assessment translates your unique personality traits into actionable relationship insights
           </p>
+          <Link href="/how-it-works" className="text-primary font-medium hover:underline inline-flex items-center">
+            <span>View detailed process</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </Link>
         </div>
         
         {/* Enhanced process flow - horizontal on larger screens */}

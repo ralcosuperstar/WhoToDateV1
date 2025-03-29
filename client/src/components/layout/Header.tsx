@@ -29,7 +29,7 @@ const Header = () => {
         </Link>
         
         <nav className="hidden md:flex space-x-8">
-          <Link href="/#how-it-works" className={`text-neutral-dark hover:text-primary font-medium ${location === '/#how-it-works' ? 'text-primary' : ''}`}>
+          <Link href="/how-it-works" className={`text-neutral-dark hover:text-primary font-medium ${location === '/how-it-works' ? 'text-primary' : ''}`}>
             How It Works
           </Link>
           <Link href="/#compatibility-science" className={`text-neutral-dark hover:text-primary font-medium ${location === '/#compatibility-science' ? 'text-primary' : ''}`}>

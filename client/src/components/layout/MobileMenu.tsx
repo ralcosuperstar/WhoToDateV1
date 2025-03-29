@@ -38,7 +38,7 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
         <div className="py-3">
           <span className="text-xs uppercase text-neutral-dark/60 font-medium">Navigate</span>
           <div className="mt-2 grid grid-cols-2 gap-y-2">
-            <Link href="/#how-it-works" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/how-it-works" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
               <span className="emoji mr-2">🧭</span>
               <span>How It Works</span>
             </Link>
