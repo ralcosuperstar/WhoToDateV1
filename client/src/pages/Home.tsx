@@ -11,14 +11,14 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>MyDate - Discover Your Compatibility DNA</title>
-        <meta name="description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
-        <meta property="og:title" content="MyDate - Discover Your Compatibility DNA" />
-        <meta property="og:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+        <title>WhoToDate - Discover Your Compatibility DNA</title>
+        <meta name="description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+        <meta property="og:title" content="WhoToDate - Discover Your Compatibility DNA" />
+        <meta property="og:description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MyDate - Discover Your Compatibility DNA" />
-        <meta name="twitter:description" content="MyDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+        <meta name="twitter:title" content="WhoToDate - Discover Your Compatibility DNA" />
+        <meta name="twitter:description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
       </Helmet>
       
       <HeroSection />

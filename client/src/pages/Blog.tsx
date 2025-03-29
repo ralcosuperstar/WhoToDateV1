@@ -11,9 +11,9 @@ const Blog = () => {
   return (
     <>
       <Helmet>
-        <title>Relationship Insights Blog - MyDate</title>
+        <title>Relationship Insights Blog - WhoToDate</title>
         <meta name="description" content="Expert advice and research-backed articles on relationships, compatibility, and dating in India." />
-        <meta property="og:title" content="Relationship Insights Blog - MyDate" />
+        <meta property="og:title" content="Relationship Insights Blog - WhoToDate" />
         <meta property="og:description" content="Expert advice and research-backed articles on relationships, compatibility, and dating in India." />
         <meta property="og:type" content="website" />
       </Helmet>

@@ -23,7 +23,7 @@ const BlogPost = () => {
   }, []);
   
   // SEO tags
-  const pageTitle = post ? `${post.title} - MyDate Blog` : "Loading...";
+  const pageTitle = post ? `${post.title} - WhoToDate Blog` : "Loading...";
   const pageDescription = post ? post.excerpt : "Loading article...";
   
   return (
@@ -41,7 +41,7 @@ const BlogPost = () => {
             <meta name="twitter:title" content={post.title} />
             <meta name="twitter:description" content={post.excerpt} />
             <meta name="twitter:image" content={`https://via.placeholder.com/1200x600/f9a8d4/ffffff?text=${encodeURIComponent(post.title)}`} />
-            <link rel="canonical" href={`https://mydate.com/blog/${post.slug}`} />
+            <link rel="canonical" href={`https://whotodate.com/blog/${post.slug}`} />
           </>
         )}
       </Helmet>

@@ -8,9 +8,9 @@ const Footer = () => {
           <div>
             <div className="flex items-center space-x-2 mb-6">
               <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center">
-                <span className="text-primary font-heading font-bold">M</span>
+                <span className="text-primary font-heading font-bold">W</span>
               </div>
-              <span className="text-white font-heading font-bold text-xl">MyDate</span>
+              <span className="text-white font-heading font-bold text-xl">WhoToDate</span>
             </div>
             
             <p className="text-white/70 mb-6">
@@ -70,7 +70,7 @@ const Footer = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white/70 mr-3 mt-0.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
-                <span className="text-white/70">support@mydate.com</span>
+                <span className="text-white/70">support@whotodate.com</span>
               </li>
               <li className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white/70 mr-3 mt-0.5">
@@ -91,7 +91,7 @@ const Footer = () => {
         
         <div className="border-t border-white/10 pt-6">
           <div className="flex flex-col md:flex-row md:justify-between items-center">
-            <p className="text-white/60 text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} MyDate. All rights reserved.</p>
+            <p className="text-white/60 text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} WhoToDate. All rights reserved.</p>
             
             <div className="flex space-x-6">
               <Link href="/privacy" className="text-white/60 hover:text-white text-sm transition">Privacy Policy</Link>

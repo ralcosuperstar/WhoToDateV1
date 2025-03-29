@@ -5,8 +5,8 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard - MyDate</title>
-        <meta name="description" content="Access your MyDate dashboard, manage your profile, and view your compatibility report." />
+        <title>Dashboard - WhoToDate</title>
+        <meta name="description" content="Access your WhoToDate dashboard, manage your profile, and view your compatibility report." />
         <meta name="robots" content="noindex" /> {/* Private content */}
       </Helmet>
       
