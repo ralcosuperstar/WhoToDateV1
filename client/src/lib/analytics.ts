@@ -46,9 +46,10 @@ export const initMetaPixel = () => {
   
   // Initialize Meta Pixel
   const initFbPixel = function() {
-    const f = window;
+    const f = window as any;
     const b = document;
-    if (f.fbq) return;
+    // Check if fbq already exists and is a function
+    if (f.fbq && typeof f.fbq === 'function') return;
     const fbq = function(this: any) {
       // @ts-ignore
       fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments);
@@ -66,7 +67,7 @@ export const initMetaPixel = () => {
     t.async = true;
     t.src = 'https://connect.facebook.net/en_US/fbevents.js';
     const s = b.getElementsByTagName('script')[0];
-    if (s?.parentNode) s.parentNode.insertBefore(t, s);
+    if (s && s.parentNode) s.parentNode.insertBefore(t, s);
   };
   
   initFbPixel();
