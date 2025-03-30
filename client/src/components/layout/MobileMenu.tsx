@@ -1,14 +1,18 @@
 import { Link } from "wouter";
 import * as React from "react";
 import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   user: any;
+  onLogout?: () => void;
 }
 
-const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
+  const { toast } = useToast();
+  
   // Close menu when clicking a link
   const handleLinkClick = () => {
     onClose();
@@ -25,6 +29,38 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
     e.preventDefault();
     onClose();
     window.location.href = "/analytics";
+  };
+  
+  // Handle logout
+  const handleLogout = () => {
+    onClose();
+    if (onLogout) {
+      onLogout();
+    } else {
+      // Fallback if no onLogout is provided
+      fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      .then(response => {
+        if (response.ok) {
+          toast({
+            title: "Logged out successfully",
+            description: "You have been logged out of your account",
+          });
+          window.location.href = "/";
+        } else {
+          throw new Error('Logout failed');
+        }
+      })
+      .catch(error => {
+        toast({
+          title: "Error logging out",
+          description: "There was a problem logging out. Please try again.",
+          variant: "destructive",
+        });
+      });
+    }
   };
 
   // Close menu when pressing escape key
@@ -88,6 +124,13 @@ const MobileMenu = ({ isOpen, onClose, user }: MobileMenuProps) => {
                   <span className="emoji mr-2">🧪</span>
                   <span>Take Quiz</span>
                 </Link>
+                <button 
+                  onClick={handleLogout} 
+                  className="w-full text-red-500 hover:text-red-600 flex items-center py-2 mt-2 border-t border-gray-100 pt-3"
+                >
+                  <span className="emoji mr-2">🚪</span>
+                  <span>Log Out</span>
+                </button>
               </div>
             ) : (
               <div className="space-y-3">

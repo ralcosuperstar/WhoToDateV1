@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation } from "wouter";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { User, Report } from "@shared/schema";
+import { apiRequest } from "@/lib/queryClient"; 
+import { useToast } from "@/hooks/use-toast";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
+  const [_, navigate] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: user, isLoading: isUserLoading } = useQuery<User>({ 
     queryKey: ['/api/me']
@@ -17,6 +22,27 @@ const UserDashboard = () => {
   const { data: report, isLoading: isReportLoading } = useQuery<Report>({ 
     queryKey: ['/api/report'],
     enabled: !!user
+  });
+  
+  const logoutMutation = useMutation({
+    mutationFn: () => apiRequest('POST', '/api/logout'),
+    onSuccess: () => {
+      // Clear user data from cache
+      queryClient.invalidateQueries({ queryKey: ['/api/me'] });
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account",
+      });
+      // Navigate to home page
+      window.location.href = "/";
+    },
+    onError: () => {
+      toast({
+        title: "Error logging out",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
+    }
   });
 
   if (isUserLoading) {
@@ -86,8 +112,13 @@ const UserDashboard = () => {
                 
                 <div className="flex gap-3 pt-4">
                   <Button variant="outline">Edit Profile</Button>
-                  <Button variant="outline" className="text-red-500 hover:text-red-600">
-                    Log Out
+                  <Button 
+                    variant="outline" 
+                    className="text-red-500 hover:text-red-600"
+                    onClick={() => logoutMutation.mutate()}
+                    disabled={logoutMutation.isPending}
+                  >
+                    {logoutMutation.isPending ? 'Logging out...' : 'Log Out'}
                   </Button>
                 </div>
               </div>
