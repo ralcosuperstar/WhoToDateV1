@@ -33,32 +33,41 @@ export class PgStorage implements IStorage {
   private _db = db;
   
   constructor() {
-    // Initialize blog posts after a short delay
-    // to ensure connection is established
-    setTimeout(() => {
-      this.initializeBlogPosts().catch(err => 
-        console.error('Failed to initialize blog posts:', err)
-      );
-    }, 1000);
+    // Only try to initialize if we have a database connection
+    if (this._db) {
+      // Initialize blog posts after a short delay
+      // to ensure connection is established
+      setTimeout(() => {
+        this.initializeBlogPosts().catch(err => 
+          console.error('Failed to initialize blog posts:', err)
+        );
+      }, 1000);
+    } else {
+      console.warn("PgStorage initialized without database connection - operations will fail!");
+    }
   }
   
   // User operations
   async getUser(id: number): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
     const results = await this._db.select().from(users).where(eq(users.id, id));
     return results[0];
   }
   
   async getUserByUsername(username: string): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
     const results = await this._db.select().from(users).where(eq(users.username, username));
     return results[0];
   }
   
   async getUserByEmail(email: string): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
     const results = await this._db.select().from(users).where(eq(users.email, email));
     return results[0];
   }
   
   async createUser(user: InsertUser): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
     const result = await this._db.insert(users).values(user).returning();
     return result[0];
   }
@@ -160,6 +169,11 @@ export class PgStorage implements IStorage {
   
   // Helper method to initialize blog posts
   private async initializeBlogPosts() {
+    if (!this._db) {
+      console.warn("⚠️ Database connection not available, skipping blog posts initialization");
+      return;
+    }
+    
     // Check if we have any blog posts
     const existingPosts = await this._db.select().from(blogPosts);
     
@@ -204,6 +218,12 @@ export class PgStorage implements IStorage {
 
   // Initialize the database tables
   async initializeTables() {
+    // Check for database connection
+    if (!this._db) {
+      console.warn("⚠️ Database connection not available, skipping table initialization");
+      return;
+    }
+    
     try {
       // Push the schema to the database using drizzle-orm's createTable
       // This is a simplified approach - for production, use drizzle-kit migration tools

@@ -2,6 +2,7 @@ import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { pgStorage } from "./pgStorage";
+import { db as dbConnection } from "./db"; // Import to check if connection is available
 import { z } from "zod";
 import { 
   insertUserSchema, 
@@ -10,12 +11,30 @@ import {
   insertPaymentSchema,
   insertBlogPostSchema
 } from "@shared/schema";
-
-// Use PostgreSQL storage if DATABASE_URL is available, otherwise use memory storage
-const db = process.env.DATABASE_URL ? pgStorage : storage;
 import bcrypt from "bcryptjs";
 import session from "express-session";
 import MemoryStore from "memorystore";
+import { log } from "./vite";
+
+// Select appropriate storage implementation
+// Use PostgreSQL if DATABASE_URL is available and connection is successful, otherwise fallback to memory storage
+// We're using IStorage to ensure both implementations are compatible
+import { IStorage } from "./storage";
+let db: IStorage = storage;
+
+// Only use pgStorage if we have a database connection
+if (process.env.DATABASE_URL && dbConnection) {
+  try {
+    db = pgStorage as IStorage;
+    log("Using PostgreSQL database for storage");
+  } catch (err) {
+    log("⚠️ Failed to initialize PostgreSQL storage, falling back to in-memory storage");
+    log(`Error: ${err}`);
+    db = storage;
+  }
+} else {
+  log("Using in-memory storage (no database connection available)");
+}
 
 // Extend express-session with our custom properties
 declare module 'express-session' {
@@ -57,36 +76,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userData = insertUserSchema.parse(req.body);
       
       // Check if username or email already exists
-      const existingUser = await db.getUserByUsername(userData.username);
-      if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
+      try {
+        const existingUser = await db.getUserByUsername(userData.username);
+        if (existingUser) {
+          return res.status(400).json({ message: "Username already exists" });
+        }
+        
+        const existingEmail = await db.getUserByEmail(userData.email);
+        if (existingEmail) {
+          return res.status(400).json({ message: "Email already exists" });
+        }
+        
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(userData.password, salt);
+        
+        // Create user
+        const user = await db.createUser({
+          ...userData,
+          password: hashedPassword
+        });
+        
+        // Set session
+        req.session.userId = user.id;
+        
+        // Return user without password
+        const { password, ...userWithoutPassword } = user;
+        res.status(201).json(userWithoutPassword);
+      } catch (dbError) {
+        log(`Database error during registration: ${dbError}`);
+        // Send a more specific error message if database is unavailable
+        if (dbError instanceof Error && dbError.message.includes("Database connection not available")) {
+          return res.status(503).json({ 
+            message: "Registration service temporarily unavailable. Please try again later." 
+          });
+        }
+        throw dbError; // Re-throw to be caught by outer catch block
       }
-      
-      const existingEmail = await db.getUserByEmail(userData.email);
-      if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists" });
-      }
-      
-      // Hash password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(userData.password, salt);
-      
-      // Create user
-      const user = await db.createUser({
-        ...userData,
-        password: hashedPassword
-      });
-      
-      // Set session
-      req.session.userId = user.id;
-      
-      // Return user without password
-      const { password, ...userWithoutPassword } = user;
-      res.status(201).json(userWithoutPassword);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors });
       }
+      console.error("Registration error:", error);
       res.status(500).json({ message: "Failed to register user" });
     }
   });
@@ -100,25 +131,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Username and password required" });
       }
       
-      // Find user
-      const user = await db.getUserByUsername(username);
-      if (!user) {
-        return res.status(401).json({ message: "Invalid credentials" });
+      try {
+        // Find user
+        const user = await db.getUserByUsername(username);
+        if (!user) {
+          return res.status(401).json({ message: "Invalid credentials" });
+        }
+        
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res.status(401).json({ message: "Invalid credentials" });
+        }
+        
+        // Set session
+        req.session.userId = user.id;
+        
+        // Return user without password
+        const { password: _, ...userWithoutPassword } = user;
+        res.json(userWithoutPassword);
+      } catch (dbError) {
+        log(`Database error during login: ${dbError}`);
+        // Send a more specific error message if database is unavailable
+        if (dbError instanceof Error && dbError.message.includes("Database connection not available")) {
+          return res.status(503).json({ 
+            message: "Login service temporarily unavailable. Please try again later." 
+          });
+        }
+        throw dbError; // Re-throw to be caught by outer catch block
       }
-      
-      // Compare password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-      
-      // Set session
-      req.session.userId = user.id;
-      
-      // Return user without password
-      const { password: _, ...userWithoutPassword } = user;
-      res.json(userWithoutPassword);
     } catch (error) {
+      console.error("Login error:", error);
       res.status(500).json({ message: "Login failed" });
     }
   });
@@ -154,38 +197,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: req.session.userId
       });
       
-      // Check if user already has quiz answers
-      const existingQuiz = await db.getQuizAnswers(req.session.userId!);
-      
-      if (existingQuiz) {
-        // Update existing quiz
-        const updatedQuiz = await db.updateQuizAnswers(
-          existingQuiz.id,
-          quizData.answers,
-          quizData.completed || false // Use false as fallback if completed is not defined
-        );
-        return res.json(updatedQuiz);
+      try {
+        // Check if user already has quiz answers
+        const existingQuiz = await db.getQuizAnswers(req.session.userId!);
+        
+        if (existingQuiz) {
+          // Update existing quiz
+          const updatedQuiz = await db.updateQuizAnswers(
+            existingQuiz.id,
+            quizData.answers,
+            quizData.completed || false // Use false as fallback if completed is not defined
+          );
+          return res.json(updatedQuiz);
+        }
+        
+        // Create new quiz
+        const quiz = await db.createQuizAnswers(quizData);
+        res.status(201).json(quiz);
+      } catch (dbError) {
+        log(`Database error during quiz save: ${dbError}`);
+        // Send a more specific error message if database is unavailable
+        if (dbError instanceof Error && dbError.message.includes("Database connection not available")) {
+          return res.status(503).json({ 
+            message: "Quiz service temporarily unavailable. Please try again later." 
+          });
+        }
+        throw dbError; // Re-throw to be caught by outer catch block
       }
-      
-      // Create new quiz
-      const quiz = await db.createQuizAnswers(quizData);
-      res.status(201).json(quiz);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors });
       }
+      console.error("Quiz save error:", error);
       res.status(500).json({ message: "Failed to save quiz" });
     }
   });
 
   apiRouter.get("/quiz", isAuthenticated, async (req, res) => {
     try {
-      const quiz = await db.getQuizAnswers(req.session.userId!);
-      if (!quiz) {
-        return res.status(404).json({ message: "Quiz not found" });
+      try {
+        const quiz = await db.getQuizAnswers(req.session.userId!);
+        if (!quiz) {
+          return res.status(404).json({ message: "Quiz not found" });
+        }
+        res.json(quiz);
+      } catch (dbError) {
+        log(`Database error during quiz fetch: ${dbError}`);
+        // Send a more specific error message if database is unavailable
+        if (dbError instanceof Error && dbError.message.includes("Database connection not available")) {
+          return res.status(503).json({ 
+            message: "Quiz service temporarily unavailable. Please try again later." 
+          });
+        }
+        throw dbError; // Re-throw to be caught by outer catch block
       }
-      res.json(quiz);
     } catch (error) {
+      console.error("Quiz fetch error:", error);
       res.status(500).json({ message: "Failed to get quiz" });
     }
   });
