@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Question } from "@/lib/questions";
+import { QuizQuestion as QuizQuestionType } from "@/lib/quizData";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 interface QuizQuestionProps {
-  question: Question;
+  question: QuizQuestionType;
   onAnswer: (questionId: number, answerIndex: number) => void;
   onPrevious: () => void;
   currentAnswerIndex?: number;
