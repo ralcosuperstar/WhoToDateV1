@@ -95,7 +95,7 @@ const Header = () => {
             </Link>
           )}
           <Link href={user ? "/quiz" : "/register"} className="bg-primary hover:bg-primary/90 text-white font-medium px-4 py-2 rounded-lg transition">
-            {user ? "Take Quiz" : "Take Quiz"}
+            {user ? "Take Assessment" : "Free Assessment"}
           </Link>
           <button 
             className="md:hidden text-neutral-dark" 
