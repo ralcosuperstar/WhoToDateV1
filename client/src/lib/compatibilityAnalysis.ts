@@ -71,6 +71,113 @@ export interface CompatibilityProfile {
   compatibleTypes: CompatibleTypes;
   compatibilityInsights: string[];
   relationshipTips: string[];
+  growthRecommendation?: string;
+  idealPartnerSummary?: string;
+  datingExperience?: string;
+}
+
+// Growth recommendation for personal development
+function getGrowthRecommendation(profile: CompatibilityProfile): string {
+  const { personalityTraits, attachmentStyle, emotionalIntelligence } = profile;
+  
+  // Check for high neuroticism
+  if (personalityTraits.neuroticism > 70) {
+    return "You may experience intense emotions in relationships, which can lead to conflict or insecurity. Work on developing emotional regulation — try journaling your feelings before reacting, or take a pause during arguments instead of responding impulsively.";
+  }
+  
+  // Check for low conscientiousness
+  if (personalityTraits.conscientiousness < 40) {
+    return "You might struggle with consistency or follow-through in dating. This can cause confusion or mixed signals. Focus on becoming more dependable — show up on time, follow through on plans, and communicate clearly.";
+  }
+  
+  // Check for avoidant attachment
+  if (attachmentStyle === 'avoidant') {
+    return "You value your space, but that might sometimes come across as cold or distant. Try opening up more emotionally — share small personal stories early on and express appreciation when someone does the same.";
+  }
+  
+  // Check for anxious attachment
+  if (attachmentStyle === 'anxious') {
+    return "You seek deep emotional connection, but may worry about being 'too much'. Practice self-soothing when you don't hear back right away. The right partner will appreciate your emotional depth — but only if it comes from confidence, not fear.";
+  }
+  
+  // Check for low empathy
+  if (emotionalIntelligence.empathy < 50) {
+    return "Empathy is a bridge to lasting relationships. Try reflecting back your partner's feelings before offering advice, or ask questions like 'How did that make you feel?' more often in conversations.";
+  }
+  
+  // Default recommendation if none of the specific conditions are met
+  return "Continue developing self-awareness in relationships by noticing your emotional patterns. Keep a journal of your feelings during key relationship moments, and look for recurring themes that might indicate areas for growth.";
+}
+
+// Ideal partner summary based on personality profile
+function getIdealPartnerSummary(profile: CompatibilityProfile): string {
+  const { personalityTraits, attachmentStyle, coreValues } = profile;
+  
+  // High conscientiousness and traditionalism
+  if (personalityTraits.conscientiousness > 70 && coreValues.tradition > 70) {
+    return "You'll thrive with a partner who respects structure, values family, and enjoys building a stable life together. You're looking for reliability — someone who means what they say and follows through.";
+  }
+  
+  // High openness and low tradition
+  if (personalityTraits.openness > 70 && coreValues.tradition < 40) {
+    return "You need someone who's open-minded, adventurous, and emotionally expressive. Conventional thinking may bore you — look for someone creative, independent, and growth-focused.";
+  }
+  
+  // High agreeableness
+  if (personalityTraits.agreeableness > 70) {
+    return "You're kind, warm, and naturally supportive — and you'll thrive with someone who reciprocates that gentleness. Look for a partner who values harmony and avoids unnecessary drama.";
+  }
+  
+  // High extraversion
+  if (personalityTraits.extraversion > 70) {
+    return "You have a lot of energy and social presence — a great match for someone who's outgoing and spontaneous. Just make sure your partner also values emotional depth, not just fun.";
+  }
+  
+  // Low extraversion (introverted)
+  if (personalityTraits.extraversion < 40) {
+    return "You'll connect best with someone who appreciates depth over flash — a good listener, emotionally intelligent, and someone who respects your need for space.";
+  }
+  
+  // Secure attachment default
+  if (attachmentStyle === 'secure') {
+    return "Your balanced approach to relationships means you can thrive with many personality types. Look for someone who shares your core values and communicates openly, regardless of whether they're similar to you or complementary.";
+  }
+  
+  // Default recommendation
+  return "Based on your profile, you'll likely connect best with someone who balances acceptance of who you are with encouragement to grow. Look for emotional intelligence, shared values, and complementary communication styles.";
+}
+
+// Dating experiences to try based on profile
+function getDatingExperience(profile: CompatibilityProfile): string {
+  const { overallColor, attachmentStyle } = profile;
+  
+  // Red flag profile
+  if (overallColor === 'red') {
+    return "To grow your dating confidence, take a break from swiping and reflect on past relationships. Write down what worked and what didn't. Then go on a date where your only goal is to practice honest communication, not impress.";
+  }
+  
+  // For avoidants
+  if (attachmentStyle === 'avoidant') {
+    return "Practice emotional vulnerability — pick a trusted friend or date and share a feeling you usually hide. Start small: 'I really enjoyed our conversation' or 'That topic made me feel a bit uncomfortable.'";
+  }
+  
+  // For anxious types
+  if (attachmentStyle === 'anxious') {
+    return "Set a 24-hour 'pause rule' — if someone takes time to respond, wait a day before double-texting. In the meantime, do something fun or self-soothing. You're learning that love isn't earned through worry.";
+  }
+  
+  // For fearful types
+  if (attachmentStyle === 'fearful') {
+    return "Before your next date, spend 10 minutes writing about what makes you feel safe in relationships. During the date, check in with yourself: Are any of these safety factors present? This builds awareness of your comfort levels.";
+  }
+  
+  // For yellow profiles
+  if (overallColor === 'yellow') {
+    return "Try a 'values date' where you and your potential partner each share 3 things you couldn't compromise on in a relationship. Listen deeply to understand not just what they value, but why it matters to them.";
+  }
+  
+  // For green profiles
+  return "Your balanced approach allows you to date mindfully. On your next date, focus on asking open-ended questions that reveal values, dreams, and emotional intelligence rather than simple facts about their life.";
 }
 
 export const calculateCompatibilityProfile = (answers: Record<number, number>): CompatibilityProfile => {
@@ -129,7 +236,8 @@ export const calculateCompatibilityProfile = (answers: Record<number, number>): 
     emotionalIntelligence
   );
   
-  return {
+  // Create the basic profile
+  const profile: CompatibilityProfile = {
     overallColor,
     description,
     personalityTraits,
@@ -144,6 +252,13 @@ export const calculateCompatibilityProfile = (answers: Record<number, number>): 
     compatibilityInsights,
     relationshipTips
   };
+  
+  // Add the new personalized recommendations
+  profile.growthRecommendation = getGrowthRecommendation(profile);
+  profile.idealPartnerSummary = getIdealPartnerSummary(profile);
+  profile.datingExperience = getDatingExperience(profile);
+  
+  return profile;
 };
 
 // Generate a simplified preview of the profile
@@ -156,7 +271,10 @@ export const generateProfilePreview = (compatibilityProfile: CompatibilityProfil
     mbtiStyle,
     sectionScores,
     strengthsWeaknesses,
-    compatibleTypes
+    compatibleTypes,
+    growthRecommendation,
+    idealPartnerSummary,
+    datingExperience
   } = compatibilityProfile;
 
   // Preview strengths/challenges (limit to 2 of each)
@@ -167,6 +285,11 @@ export const generateProfilePreview = (compatibilityProfile: CompatibilityProfil
   const previewCompatible = compatibleTypes.mostCompatible.slice(0, 1);
   const previewChallenging = compatibleTypes.challengingMatches.slice(0, 1);
   
+  // Create preview of growth recommendation (simplified version)
+  const previewGrowthRecommendation = growthRecommendation ? 
+    growthRecommendation.split('. ')[0] + '.' : 
+    "Focus on developing greater self-awareness in your relationships.";
+  
   return {
     overallColor,
     description,
@@ -176,7 +299,9 @@ export const generateProfilePreview = (compatibilityProfile: CompatibilityProfil
     previewStrengths,
     previewChallenges,
     previewCompatible,
-    previewChallenging
+    previewChallenging,
+    previewGrowthRecommendation, // Only include a hint of the growth recommendation in the preview
+    // Don't include idealPartnerSummary or datingExperience in the preview - save them for the paid version
   };
 };
 

@@ -392,6 +392,63 @@ const Report = () => {
             </ReportSection>
             
             <ReportSection 
+              title="Growth Recommendation" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+            >
+              <div className="bg-neutral-light rounded-lg p-6">
+                <h4 className="font-heading font-semibold text-lg mb-3">What You Should Work On</h4>
+                <p className="mb-2">
+                  {reportData.growthRecommendation || "Focus on developing greater self-awareness in your relationships and communication patterns. Notice how your emotions affect your interactions with potential partners."}
+                </p>
+                <div className="pt-4 border-t border-neutral-dark/10 mt-4 text-sm text-neutral-dark/70">
+                  Everyone has growth areas—identifying yours is a sign of emotional intelligence and maturity.
+                </div>
+              </div>
+            </ReportSection>
+            
+            <ReportSection 
+              title="Ideal Partner Summary" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                </svg>
+              }
+            >
+              <div className="bg-neutral-light rounded-lg p-6">
+                <h4 className="font-heading font-semibold text-lg mb-3">Your Ideal Match</h4>
+                <p className="mb-2">
+                  {reportData.idealPartnerSummary || "Your compatibility profile suggests you'd thrive with someone who balances emotional openness with respect for boundaries. Look for shared core values and complementary communication styles."}
+                </p>
+                <div className="pt-4 border-t border-neutral-dark/10 mt-4 text-sm text-neutral-dark/70">
+                  Understanding who you're most compatible with can help you recognize valuable connections when they appear.
+                </div>
+              </div>
+            </ReportSection>
+            
+            <ReportSection 
+              title="Real-Life Experiences to Try" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+              }
+            >
+              <div className="bg-neutral-light rounded-lg p-6">
+                <h4 className="font-heading font-semibold text-lg mb-3">Try This In Real Life</h4>
+                <p className="mb-2">
+                  {reportData.datingExperience || "On your next date, focus more on asking thoughtful questions that reveal values and emotional intelligence. Listen actively for alignment with your core needs rather than just surface-level compatibility."}
+                </p>
+                <div className="pt-4 border-t border-neutral-dark/10 mt-4 text-sm text-neutral-dark/70">
+                  Small changes in your approach to dating can lead to significantly better experiences and connections.
+                </div>
+              </div>
+            </ReportSection>
+            
+            <ReportSection 
               title="Interactive Analytics" 
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">

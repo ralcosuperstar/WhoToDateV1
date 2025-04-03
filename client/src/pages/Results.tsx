@@ -141,6 +141,28 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
             </div>
           </div>
 
+          {/* Growth Preview */}
+          <div>
+            <h3 className="font-medium mb-2 text-sm uppercase tracking-wide text-neutral-dark/70">Growth Insight</h3>
+            <div className="space-y-3">
+              <div className="bg-purple-50 p-3 rounded-md">
+                <p className="text-sm font-medium text-purple-800 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  Personal Growth (Preview)
+                </p>
+                <p className="text-sm text-purple-800 mt-1">
+                  {profile.previewGrowthRecommendation}
+                </p>
+                <p className="text-xs text-purple-700/70 mt-2 flex items-center">
+                  <Lock className="h-3 w-3 mr-1 inline" />
+                  Full growth plan available in premium report
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Preview Compatibility */}
           <div>
             <h3 className="font-medium mb-2 text-sm uppercase tracking-wide text-neutral-dark/70">Compatibility Preview</h3>
@@ -184,11 +206,15 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                 </li>
                 <li className="flex text-sm items-start">
                   <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Full compatibility insights (not just preview)</span>
+                  <span>Personalized growth recommendations for personal development</span>
                 </li>
                 <li className="flex text-sm items-start">
                   <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Personalized relationship tips and guidance</span>
+                  <span>Ideal partner summary based on your personality profile</span>
+                </li>
+                <li className="flex text-sm items-start">
+                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Actionable dating experiences to try in real life</span>
                 </li>
                 <li className="flex text-sm items-start">
                   <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
