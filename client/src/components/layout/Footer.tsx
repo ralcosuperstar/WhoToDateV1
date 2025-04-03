@@ -3,7 +3,7 @@ import { Heart, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-neutral-dark to-neutral-dark/95 text-white pt-16 pb-8 px-4">
+    <footer className="bg-gradient-to-b from-neutral-dark to-[#1a1a25] text-white pt-16 pb-8 px-4">
       <div className="container mx-auto">
         {/* Newsletter & Header Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-12 pb-12 border-b border-white/10">
@@ -15,7 +15,7 @@ const Footer = () => {
               <span className="text-white font-heading font-bold text-2xl">WhoToDate</span>
             </div>
             
-            <p className="text-white/80 text-lg mb-6 max-w-md">
+            <p className="text-white text-lg mb-6 max-w-md">
               Discover your compatibility DNA and find meaningful connections based on personality, values, and emotional intelligence.
             </p>
             
@@ -53,7 +53,7 @@ const Footer = () => {
           
           <div className="flex flex-col justify-center">
             <h3 className="font-heading font-semibold text-xl mb-4">Stay Updated</h3>
-            <p className="text-white/70 mb-5">Subscribe to our newsletter for relationship tips and compatibility insights.</p>
+            <p className="text-white mb-5">Subscribe to our newsletter for relationship tips and compatibility insights.</p>
             
             <div className="flex flex-col sm:flex-row gap-3">
               <input 
@@ -77,32 +77,32 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3.5">
               <li>
-                <Link href="/#how-it-works" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/#how-it-works" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>How It Works</span>
                 </Link>
               </li>
               <li>
-                <Link href="/#compatibility-science" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/#compatibility-science" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>The Science</span>
                 </Link>
               </li>
               <li>
-                <Link href="/#testimonials" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/#testimonials" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Testimonials</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Blog</span>
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/help" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Help & Support</span>
                 </Link>
               </li>
@@ -116,32 +116,32 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3.5">
               <li>
-                <Link href="/blog/understanding-compatibility-profile" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog/understanding-compatibility-profile" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Compatibility Guide</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Relationship Tips</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog/understanding-attachment-styles" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog/understanding-attachment-styles" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Understanding Attachment</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Personality Types</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white/70 hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5" />
+                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
+                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Emotional Intelligence</span>
                 </Link>
               </li>
@@ -157,19 +157,19 @@ const Footer = () => {
               <li>
                 <Link href="/blog/the-science-of-attachment" className="group">
                   <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">The Science of Attachment Styles</p>
-                  <p className="text-white/60 text-xs">April 2, 2025</p>
+                  <p className="text-white/80 text-xs">April 2, 2025</p>
                 </Link>
               </li>
               <li>
                 <Link href="/blog/emotional-intelligence" className="group">
                   <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">Why Emotional Intelligence Matters in Relationships</p>
-                  <p className="text-white/60 text-xs">March 28, 2025</p>
+                  <p className="text-white/80 text-xs">March 28, 2025</p>
                 </Link>
               </li>
               <li>
                 <Link href="/blog/personality-compatibility" className="group">
                   <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">Personality Compatibility: Myths vs. Reality</p>
-                  <p className="text-white/60 text-xs">March 15, 2025</p>
+                  <p className="text-white/80 text-xs">March 15, 2025</p>
                 </Link>
               </li>
             </ul>
@@ -186,8 +186,8 @@ const Footer = () => {
                   <Mail className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-white/80 font-medium mb-0.5">Email</p>
-                  <a href="mailto:support@whotodate.com" className="text-white/60 hover:text-primary transition-colors">support@whotodate.com</a>
+                  <p className="text-white font-medium mb-0.5">Email</p>
+                  <a href="mailto:support@whotodate.com" className="text-white/80 hover:text-primary transition-colors">support@whotodate.com</a>
                 </div>
               </li>
               <li className="flex">
@@ -195,8 +195,8 @@ const Footer = () => {
                   <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-white/80 font-medium mb-0.5">Phone</p>
-                  <a href="tel:+919876543210" className="text-white/60 hover:text-primary transition-colors">+91 98765 43210</a>
+                  <p className="text-white font-medium mb-0.5">Phone</p>
+                  <a href="tel:+919876543210" className="text-white/80 hover:text-primary transition-colors">+91 98765 43210</a>
                 </div>
               </li>
               <li className="flex">
@@ -204,8 +204,8 @@ const Footer = () => {
                   <MapPin className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-white/80 font-medium mb-0.5">Address</p>
-                  <p className="text-white/60">123 Tech Park, Bengaluru<br/>Karnataka, India - 560001</p>
+                  <p className="text-white font-medium mb-0.5">Address</p>
+                  <p className="text-white/80">123 Tech Park, Bengaluru<br/>Karnataka, India - 560001</p>
                 </div>
               </li>
             </ul>
@@ -218,16 +218,16 @@ const Footer = () => {
             <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3">
               <Heart className="w-4 h-4 text-primary" />
             </div>
-            <p className="text-white/60 text-sm">
+            <p className="text-white/80 text-sm">
               &copy; {new Date().getFullYear()} WhoToDate. All rights reserved.
             </p>
           </div>
           
           <div className="flex flex-wrap gap-x-8 gap-y-3">
-            <Link href="/privacy" className="text-white/60 hover:text-primary text-sm transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-white/60 hover:text-primary text-sm transition-colors">Terms of Service</Link>
-            <Link href="/cookies" className="text-white/60 hover:text-primary text-sm transition-colors">Cookie Policy</Link>
-            <Link href="/sitemap" className="text-white/60 hover:text-primary text-sm transition-colors">Sitemap</Link>
+            <Link href="/privacy" className="text-white/80 hover:text-primary text-sm transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-white/80 hover:text-primary text-sm transition-colors">Terms of Service</Link>
+            <Link href="/cookies" className="text-white/80 hover:text-primary text-sm transition-colors">Cookie Policy</Link>
+            <Link href="/sitemap" className="text-white/80 hover:text-primary text-sm transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
