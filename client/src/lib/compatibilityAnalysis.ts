@@ -356,7 +356,7 @@ function calculateMbtiStyle(answers: Record<number, number>): MbtiStyle {
   // E/I calculation
   [3, 8, 13, 18, 23].forEach(q => {
     if (answers[q] !== undefined) {
-      eScore += mapAnswerToRawScore(answers[q]);
+      eScore += mapAnswerToRawScore(q, answers[q]);
     }
   });
   
@@ -972,6 +972,9 @@ function generateRelationshipTips(
   return tips;
 }
 
+// Import the getScoreForAnswer function from quizData
+import { getScoreForAnswer } from './quizData';
+
 function mapAnswerToScore(answerIndex: number, scoreMapping: number[]): number {
   // Map from 0-4 answer index to a scaled score based on provided mapping
   if (answerIndex >= 0 && answerIndex < scoreMapping.length) {
@@ -980,8 +983,14 @@ function mapAnswerToScore(answerIndex: number, scoreMapping: number[]): number {
   return 50; // Default middle value
 }
 
-function mapAnswerToRawScore(answerIndex: number): number {
-  // Convert from 0-4 answer index to raw score (0-4)
+function mapAnswerToRawScore(questionId: number, answerIndex: number): number {
+  // Try to get the score from the JSON data first
+  const jsonScore = getScoreForAnswer(questionId, answerIndex);
+  if (jsonScore > 0) {
+    return jsonScore;
+  }
+  
+  // Fallback to the old method if no JSON score available
   return Math.max(0, Math.min(4, answerIndex));
 }
 
