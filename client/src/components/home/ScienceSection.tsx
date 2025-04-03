@@ -279,7 +279,7 @@ const ScienceSection = () => {
           {/* Final call to action */}
           <div className="mt-8 text-center">
             <Link 
-              href="/quiz" 
+              href="/register" 
               className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition"
             >
               <span className="emoji mr-2">🧪</span> Take the Scientific Assessment

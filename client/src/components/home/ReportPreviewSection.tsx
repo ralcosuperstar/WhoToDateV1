@@ -97,7 +97,7 @@ const ReportPreviewSection = () => {
 
               <div className="flex space-x-3">
                 <Link 
-                  href="/quiz" 
+                  href="/register" 
                   className="flex-1 px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center"
                 >
                   <span className="emoji mr-2">🧪</span> Get Your Scientific Profile

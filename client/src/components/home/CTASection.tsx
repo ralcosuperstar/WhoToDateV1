@@ -136,7 +136,7 @@ const CTASection = () => {
           {/* CTA buttons with scientific emphasis */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
-              href={ctaLink} 
+              href="/register" 
               className="px-8 py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center justify-center" 
               style={{animation: "pulse 4s infinite"}}
             >

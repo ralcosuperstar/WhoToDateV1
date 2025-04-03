@@ -48,7 +48,7 @@ const HeroSection = () => {
 
             {/* Strong CTAs with action and clear value */}
             <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-3 sm:space-y-0 sm:space-x-3">
-              <Link href="/quiz" className="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center" style={{animation: "pulse 4s infinite"}}>
+              <Link href="/register" className="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center" style={{animation: "pulse 4s infinite"}}>
                 <span className="emoji mr-2">📋</span>
                 <span>Take the Relationship Assessment</span>
               </Link>
