@@ -363,21 +363,21 @@ function calculateMbtiStyle(answers: Record<number, number>): MbtiStyle {
   // S/N calculation (reversed from openness)
   [1, 6, 11, 16, 21].forEach(q => {
     if (answers[q] !== undefined) {
-      sScore += 4 - mapAnswerToRawScore(answers[q]);
+      sScore += 4 - mapAnswerToRawScore(q, answers[q]);
     }
   });
   
   // T/F calculation (reversed from agreeableness)
   [4, 9, 14, 19, 24].forEach(q => {
     if (answers[q] !== undefined) {
-      tScore += 4 - mapAnswerToRawScore(answers[q]);
+      tScore += 4 - mapAnswerToRawScore(q, answers[q]);
     }
   });
   
   // J/P calculation (from conscientiousness)
   [2, 7, 12, 17, 22].forEach(q => {
     if (answers[q] !== undefined) {
-      jScore += mapAnswerToRawScore(answers[q]);
+      jScore += mapAnswerToRawScore(q, answers[q]);
     }
   });
   
@@ -510,7 +510,7 @@ function calculateSectionScores(answers: Record<number, number>): SectionScores 
   
   for (let i = 1; i <= 30; i++) {
     if (answers[i] !== undefined) {
-      personalityPoints += mapAnswerToRawScore(answers[i]);
+      personalityPoints += mapAnswerToRawScore(i, answers[i]);
       personalityCount++;
     }
   }
@@ -525,7 +525,7 @@ function calculateSectionScores(answers: Record<number, number>): SectionScores 
   
   for (let i = 31; i <= 34; i++) {
     if (answers[i] !== undefined) {
-      emotionalPoints += mapAnswerToRawScore(answers[i]);
+      emotionalPoints += mapAnswerToRawScore(i, answers[i]);
       emotionalCount++;
     }
   }
@@ -540,7 +540,7 @@ function calculateSectionScores(answers: Record<number, number>): SectionScores 
   
   for (let i = 35; i <= 39; i++) {
     if (answers[i] !== undefined) {
-      valuesPoints += mapAnswerToRawScore(answers[i]);
+      valuesPoints += mapAnswerToRawScore(i, answers[i]);
       valuesCount++;
     }
   }
@@ -555,7 +555,7 @@ function calculateSectionScores(answers: Record<number, number>): SectionScores 
   
   for (let i = 40; i <= 43; i++) {
     if (answers[i] !== undefined) {
-      physicalPoints += mapAnswerToRawScore(answers[i]);
+      physicalPoints += mapAnswerToRawScore(i, answers[i]);
       physicalCount++;
     }
   }

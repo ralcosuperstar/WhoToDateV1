@@ -26,7 +26,7 @@ export interface QuizQuestion {
 }
 
 // Load quiz questions from JSON file
-import rawQuestionsData from '../../attached_assets/who_to_date_quiz_questions.json';
+import rawQuestionsData from '../assets/who_to_date_quiz_questions.json';
 
 // Convert section name from JSON to our internal format
 const mapSectionName = (section: string): 'personality' | 'emotional' | 'values' | 'physical' => {
