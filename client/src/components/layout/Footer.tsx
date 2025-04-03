@@ -1,7 +1,25 @@
 import { Link } from "wouter";
 import { Heart, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  
+  const handleNewsletterSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email && email.includes("@")) {
+      // In a production app, you would call an API to subscribe user
+      console.log("Subscribing email:", email);
+      setSubscribed(true);
+      setEmail("");
+      
+      // Reset the subscribed state after 3 seconds
+      setTimeout(() => {
+        setSubscribed(false);
+      }, 3000);
+    }
+  };
   return (
     <footer className="bg-gradient-to-b from-neutral-dark to-[#1a1a25] text-white pt-16 pb-8 px-4">
       <div className="container mx-auto">
@@ -55,16 +73,22 @@ const Footer = () => {
             <h3 className="font-heading font-semibold text-xl mb-4">Stay Updated</h3>
             <p className="text-white mb-5">Subscribe to our newsletter for relationship tips and compatibility insights.</p>
             
-            <div className="flex flex-col sm:flex-row gap-3">
+            <form onSubmit={handleNewsletterSubscribe} className="flex flex-col sm:flex-row gap-3">
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address" 
                 className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary/50 flex-grow"
+                required
               />
-              <button className="bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-2.5 transition-colors whitespace-nowrap">
-                Subscribe
+              <button 
+                type="submit"
+                className="bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-2.5 transition-colors whitespace-nowrap"
+              >
+                {subscribed ? "Thank you! ✓" : "Subscribe"}
               </button>
-            </div>
+            </form>
           </div>
         </div>
         

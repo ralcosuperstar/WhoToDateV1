@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { loadRazorpay, createOrder } from "@/lib/razorpay";
+import { loadRazorpay, createOrder, getRazorpayKey } from "@/lib/razorpay";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -75,10 +75,10 @@ const PaymentForm = () => {
       const orderId = await createOrder(999 * 100); // Convert to paise
       
       const options = {
-        key: process.env.RAZORPAY_KEY_ID || "rzp_test_Key",
+        key: getRazorpayKey(),
         amount: 999 * 100, // in paise
         currency: "INR",
-        name: "MyDate",
+        name: "WhoToDate",
         description: "Compatibility Report Payment",
         order_id: orderId,
         handler: function(response: any) {
@@ -95,7 +95,7 @@ const PaymentForm = () => {
           email: user.email,
         },
         theme: {
-          color: "#6366F1",
+          color: "#ec4899", // Matching our primary pink color
         },
         modal: {
           ondismiss: function() {

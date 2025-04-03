@@ -60,6 +60,25 @@ const Analytics = () => {
       </div>
     );
   }
+  
+  // Check if user has paid for the report
+  if (report && !report.isPaid) {
+    return (
+      <div className="pt-20 px-4 pb-12 min-h-screen">
+        <div className="container mx-auto max-w-3xl">
+          <Alert className="mb-4 border-amber-500 bg-amber-50 text-amber-900">
+            <AlertCircle className="h-4 w-4 mr-2" />
+            <AlertDescription>
+              Please purchase the full report to access detailed analytics.
+            </AlertDescription>
+          </Alert>
+          <Button onClick={() => navigate("/payment")} className="bg-primary hover:bg-primary/90">
+            Unlock Full Report
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-20 px-4 pb-12 bg-neutral-50 min-h-screen">
