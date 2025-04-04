@@ -66,9 +66,7 @@ function App() {
     initAnalytics();
   }, []);
 
-  // Use either VITE_CLERK_PUBLISHABLE_KEY or CLERK_PUBLISHABLE_KEY
-  // In development, we can access the CLERK_PUBLISHABLE_KEY directly
-  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
+  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
   // Enable Clerk authentication since API keys are set up
   const useClerkAuth = true;
