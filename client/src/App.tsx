@@ -67,6 +67,10 @@ function App() {
   }, []);
 
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  
+  if (!clerkPubKey) {
+    console.warn('Clerk publishable key is missing. Add VITE_CLERK_PUBLISHABLE_KEY to your environment variables.');
+  }
 
   // Only enable Clerk if we have the key
   const useClerkAuth = Boolean(clerkPubKey);
