@@ -80,25 +80,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set trust proxy to allow cookies to work in development
   app.set('trust proxy', 1);
   
-  // Important cookie settings - modified for Replit environment
+  // Important cookie settings - specially configured for Replit environment
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieSettings = {
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true,
-    secure: false, // Set to false in development to work with http
-    sameSite: 'lax' as const,
+    secure: false, // Must be false for Replit development environment
+    sameSite: 'lax' as const, // Must be 'lax' for Replit development environment
     path: '/'
   };
   
   log(`Cookie settings: ${JSON.stringify(cookieSettings)}`);
   
+  // Name the session cookie consistently
+  const SESSION_NAME = 'whotodate.sid';
+  
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || "mydate-secret-key",
+      name: SESSION_NAME,
+      secret: process.env.SESSION_SECRET || "whotodate-persistent-session-key",
       resave: false, 
-      saveUninitialized: true, // Store session regardless of if it's modified
+      rolling: true, // Reset expiration with each request
+      saveUninitialized: false, // Only save when we have data (more secure)
       cookie: cookieSettings,
-      store: sessionStore,
-      name: 'whotodate.sid', // Custom name to avoid conflicts
+      store: sessionStore
     })
   );
 
@@ -134,16 +139,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         // For demonstration, we'll accept any token as valid in the demo
         // In a real app, we'd validate the token against a database
-        // and retrieve the associated user
         
-        // Since we don't have a tokens table yet, we'll just
-        // set a hardcoded user ID for testing purposes
-        // In a real implementation, we'd look up the user ID associated with this token
-        req.session.userId = 1; // Use the first user in the system
-        
-        // If we get here, token auth succeeded
-        log(`User authenticated via token, set userId: ${req.session.userId}`);
-        return next();
+        // Since we don't have a tokens table yet, we'll use the safer
+        // regenerate + save pattern for session management
+        req.session.regenerate((err) => {
+          if (err) {
+            log(`Error regenerating session in auth middleware: ${err.message}`);
+            return res.status(500).json({ message: "Failed to create session" });
+          }
+          
+          // Set the user ID after regeneration
+          req.session.userId = 1; // Use the first user in the system for demo
+          
+          // Save session explicitly after setting userId
+          req.session.save((saveErr) => {
+            if (saveErr) {
+              log(`Error saving regenerated session in auth middleware: ${saveErr.message}`);
+              return res.status(500).json({ message: "Failed to save session" });
+            }
+            
+            log(`Session regenerated and saved successfully in auth middleware, userId: ${req.session.userId}, sessionID: ${req.session.id}`);
+            
+            // If we get here, token auth succeeded
+            log(`User authenticated via token, set userId: ${req.session.userId}`);
+            return next();
+          });
+        });
       } catch (error) {
         log(`Token authentication error: ${error}`);
       }
@@ -215,12 +236,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
           password: hashedPassword
         });
         
-        // Set session
-        req.session.userId = user.id;
-        
-        // Return user without password
-        const { password, ...userWithoutPassword } = user;
-        res.status(201).json(userWithoutPassword);
+        // Set user session and regenerate to ensure clean session
+        req.session.regenerate((err) => {
+          if (err) {
+            log(`Error regenerating session during registration: ${err.message}`);
+            return res.status(500).json({ message: "Failed to create session" });
+          }
+          
+          // Set session data after regeneration
+          req.session.userId = user.id;
+          
+          // Generate a token as an alternative auth mechanism
+          const authToken = crypto.randomUUID();
+          
+          // Save session explicitly after setting userId
+          req.session.save((saveErr) => {
+            if (saveErr) {
+              log(`Error saving regenerated session during registration: ${saveErr.message}`);
+              return res.status(500).json({ message: "Failed to save session" });
+            }
+            
+            log(`Session regenerated and saved successfully for new user, userId: ${req.session.userId}, sessionID: ${req.session.id}`);
+            
+            const { password, ...userWithoutPassword } = user;
+            
+            // Set token cookie
+            res.cookie('auth_token', authToken, {
+              httpOnly: false, // For debugging
+              secure: false,   // Development mode
+              maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+              path: '/',
+              sameSite: 'lax'
+            });
+            
+            return res.status(201).json({
+              ...userWithoutPassword,
+              authToken,
+              debug: {
+                sessionId: req.session.id,
+                userId: req.session.userId
+              }
+            });
+          });
+        });
       } catch (dbError) {
         log(`Database error during registration: ${dbError}`);
         // Send a more specific error message if database is unavailable
