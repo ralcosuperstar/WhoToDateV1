@@ -1,46 +1,33 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import MobileMenu from "./MobileMenu";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { useClerk } from "@clerk/clerk-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { user, isLoading } = useAuth();
+  const { signOut } = useClerk();
 
-  const { data: user } = useQuery({ 
-    queryKey: ['/api/me'],
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false
-  });
-  
-  const logoutMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/logout'),
-    onSuccess: () => {
-      // Clear user data from cache
-      queryClient.invalidateQueries({ queryKey: ['/api/me'] });
+  const handleLogout = async () => {
+    try {
+      await signOut();
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
       });
       // Navigate to home page
       window.location.href = "/";
-    },
-    onError: () => {
+    } catch (error) {
       toast({
         title: "Error logging out",
         description: "There was a problem logging out. Please try again.",
         variant: "destructive",
       });
     }
-  });
-
-  const handleLogout = () => {
-    logoutMutation.mutate();
   };
 
   const toggleMenu = () => {
@@ -83,10 +70,10 @@ const Header = () => {
               </Link>
               <button 
                 onClick={handleLogout}
-                disabled={logoutMutation.isPending}
+                disabled={isLoading}
                 className="hidden md:block text-red-500 hover:text-red-600 font-medium"
               >
-                {logoutMutation.isPending ? 'Logging out...' : 'Log Out'}
+                {isLoading ? 'Logging out...' : 'Log Out'}
               </button>
             </>
           ) : (

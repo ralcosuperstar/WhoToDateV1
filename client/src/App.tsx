@@ -66,12 +66,10 @@ function App() {
     initAnalytics();
   }, []);
 
-  // Get the Clerk publishable key from environment variables
-  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
+  // Hard-coding the Clerk publishable key
+  // This is a demo key that should not be used in production
+  const clerkPubKey = "pk_test_c3VyZS1wYW50aGVyLTQ3LmNsZXJrLmFjY291bnRzLmRldiQ";
   
-  if (!clerkPubKey) {
-    console.error("Missing Clerk Publishable Key");
-  }
 
   return (
     <QueryClientProvider client={queryClient}>

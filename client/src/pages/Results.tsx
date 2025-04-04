@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Helmet } from "react-helmet";
-import { calculateCompatibilityProfile, generateProfilePreview } from "@/lib/compatibilityAnalysis";
+import { calculateCompatibilityProfile, generateProfilePreview, type CompatibilityProfile } from "@/lib/compatibilityAnalysis";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -18,11 +18,15 @@ import {
   Send, 
   CreditCard 
 } from "lucide-react";
+import FullReportView from "@/components/reports/FullReportView";
+import { downloadPDFReport } from "@/lib/pdfGenerator";
 
 const ResultsPreview = ({ profile, onGetFullReport }: { 
-  profile: any; 
+  profile: CompatibilityProfile; 
   onGetFullReport: () => void;
 }) => {
+  // Generate preview data from full profile
+  const previewData = generateProfilePreview(profile);
   const colorClass = profile.overallColor === 'green' 
     ? 'bg-green-50 text-green-800 border-green-200' 
     : profile.overallColor === 'yellow' 
@@ -121,7 +125,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   Strengths (Preview)
                 </p>
                 <ul className="ml-6 mt-1 text-sm list-disc text-green-800">
-                  {profile.previewStrengths.map((strength: string, idx: number) => (
+                  {previewData.previewStrengths.map((strength: string, idx: number) => (
                     <li key={idx}>{strength}</li>
                   ))}
                 </ul>
@@ -133,7 +137,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   Challenges (Preview)
                 </p>
                 <ul className="ml-6 mt-1 text-sm list-disc text-yellow-800">
-                  {profile.previewChallenges.map((challenge: string, idx: number) => (
+                  {previewData.previewChallenges.map((challenge: string, idx: number) => (
                     <li key={idx}>{challenge}</li>
                   ))}
                 </ul>
@@ -153,7 +157,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   Personal Growth (Preview)
                 </p>
                 <p className="text-sm text-purple-800 mt-1">
-                  {profile.previewGrowthRecommendation}
+                  {previewData.previewGrowthRecommendation}
                 </p>
                 <p className="text-xs text-purple-700/70 mt-2 flex items-center">
                   <Lock className="h-3 w-3 mr-1 inline" />
@@ -173,7 +177,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   Most Compatible With
                 </p>
                 <p className="text-sm text-blue-800 mt-1">
-                  {profile.previewCompatible[0]}
+                  {previewData.previewCompatible[0]}
                 </p>
                 
                 <p className="text-sm font-medium text-blue-800 flex items-center mt-2">
@@ -181,7 +185,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   Potential Challenges With
                 </p>
                 <p className="text-sm text-blue-800 mt-1">
-                  {profile.previewChallenging[0]}
+                  {previewData.previewChallenging[0]}
                 </p>
               </div>
             </div>
@@ -339,8 +343,23 @@ const PaymentModal = ({
   );
 };
 
-const SuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  if (!isOpen) return null;
+const SuccessModal = ({ 
+  isOpen, 
+  onClose,
+  profile,
+  onViewOnline
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+  profile: CompatibilityProfile | null;
+  onViewOnline: () => void;
+}) => {
+  if (!isOpen || !profile) return null;
+  
+  const handleDownload = () => {
+    downloadPDFReport(profile);
+    onClose();
+  };
   
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
@@ -358,7 +377,7 @@ const SuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           <div className="space-y-3">
             <button 
               className="w-full py-3 px-4 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
-              onClick={onClose}
+              onClick={handleDownload}
             >
               <Download className="h-5 w-5 mr-2" />
               Download Full Report
@@ -366,7 +385,7 @@ const SuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
             
             <button 
               className="w-full py-3 px-4 border border-neutral-300 text-neutral-dark rounded-lg"
-              onClick={onClose}
+              onClick={onViewOnline}
             >
               View Online
             </button>
@@ -382,9 +401,10 @@ const Results = () => {
   const { toast } = useToast();
   
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
   // Get user data
   const { data: user } = useQuery({ 
@@ -424,9 +444,10 @@ const Results = () => {
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       try {
+        // This generates the full compatibility profile
         const compatibilityProfile = calculateCompatibilityProfile(answers);
-        const previewProfile = generateProfilePreview(compatibilityProfile);
-        setProfile(previewProfile);
+        // Set the full profile directly
+        setProfile(compatibilityProfile);
       } catch (e) {
         console.error('Failed to generate profile', e);
         toast({
@@ -454,6 +475,11 @@ const Results = () => {
     }
   };
   
+  const handleViewOnline = () => {
+    setIsSuccessModalOpen(false);
+    setIsPremiumReportVisible(true);
+  };
+  
   if (!profile) {
     return (
       <div className="pt-20 px-4 pb-12">
@@ -475,7 +501,25 @@ const Results = () => {
       </Helmet>
       
       <div className="container mx-auto max-w-2xl">
-        <ResultsPreview profile={profile} onGetFullReport={handleGetFullReport} />
+        {isPremiumReportVisible ? (
+          <div>
+            <FullReportView profile={profile} />
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={() => downloadPDFReport(profile)}
+                className="py-3 px-6 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Download PDF Report
+              </button>
+            </div>
+          </div>
+        ) : (
+          <ResultsPreview 
+            profile={profile} 
+            onGetFullReport={handleGetFullReport} 
+          />
+        )}
         
         <PaymentModal 
           isOpen={isPaymentModalOpen} 
@@ -485,7 +529,9 @@ const Results = () => {
         
         <SuccessModal 
           isOpen={isSuccessModalOpen} 
-          onClose={() => setIsSuccessModalOpen(false)} 
+          onClose={() => setIsSuccessModalOpen(false)}
+          profile={profile}
+          onViewOnline={handleViewOnline} 
         />
       </div>
     </div>

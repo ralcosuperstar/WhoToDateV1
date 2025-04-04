@@ -1205,6 +1205,9 @@ function generateDefaultProfile(): CompatibilityProfile {
       "Be clear about your needs and boundaries while remaining open to compromise.",
       "Remember that growing together requires both vulnerability and respect.",
       "Look for patterns in your relationship history to identify what truly works for you."
-    ]
+    ],
+    growthRecommendation: "Focus on developing stronger emotional communication skills. Practice sharing your feelings more openly and asking clarifying questions when you don't understand others' emotions. This skill will strengthen all your relationships.",
+    idealPartnerSummary: "Your ideal partner balances emotional openness with respect for independence. They communicate clearly, handle conflict with maturity, and share your core values while bringing complementary strengths to the relationship.",
+    datingExperience: "Try a 'values date' where you and your potential partner each share 3 things you couldn't compromise on in a relationship. Listen deeply to understand not just what they value, but why it matters to them."
   };
 }
