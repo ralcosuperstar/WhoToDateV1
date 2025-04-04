@@ -84,7 +84,7 @@ const HowItWorks = () => {
             Our scientifically-backed approach analyzes your personality traits and relationship needs to help you find lasting compatibility
           </p>
           <Link 
-            href="/quiz" 
+            href="/register" 
             className="inline-flex items-center px-8 py-4 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary/90 transition duration-300 text-lg"
             style={{animation: "pulse 4s infinite"}}
           >
@@ -186,7 +186,7 @@ const HowItWorks = () => {
 
           <div className="mt-12 text-center">
             <Link 
-              href="/quiz" 
+              href="/register" 
               className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300"
             >
               <span className="emoji mr-2">📋</span> Start Your Assessment
@@ -196,6 +196,172 @@ const HowItWorks = () => {
         </div>
       </section>
 
+      {/* Assessment Experience Section */}
+      <section className="py-16 px-4 bg-neutral-50">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3 py-1.5 px-4 bg-primary/10 rounded-full">
+              <span className="text-primary font-medium text-sm flex items-center justify-center">
+                <span className="emoji mr-2">📱</span> What to Expect
+              </span>
+            </div>
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4">The Assessment Experience</h2>
+            <p className="text-lg text-neutral-dark/80 max-w-3xl mx-auto">
+              Our user-friendly assessment process is designed to be engaging, insightful, and accessible on any device
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+            <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100">
+              <h3 className="font-heading font-semibold text-xl mb-4 flex items-center">
+                <span className="emoji mr-2">🧠</span> Thoughtfully Designed Questions
+              </h3>
+              
+              <div className="space-y-6">
+                <div className="bg-neutral-50 rounded-lg p-4">
+                  <p className="text-sm text-neutral-dark/80 italic mb-3">Sample question:</p>
+                  <h4 className="font-medium text-base mb-3">When facing conflict in a relationship, I tend to:</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 rounded-full border-2 border-primary flex-shrink-0"></div>
+                      <p className="text-sm">Address issues directly and seek resolution</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 rounded-full border-2 border-primary flex-shrink-0"></div>
+                      <p className="text-sm">Try to smooth things over to maintain harmony</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 rounded-full border-2 border-primary flex-shrink-0"></div>
+                      <p className="text-sm">Need time to process before discussing the issue</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 rounded-full border-2 border-primary flex-shrink-0"></div>
+                      <p className="text-sm">Tend to withdraw or distance myself</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-base mb-2">Our Questions Are:</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-start">
+                      <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="text-sm">Based on validated psychological research</p>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="text-sm">Designed to reveal deeper relationship patterns</p>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="text-sm">Culturally sensitive to Indian relationship dynamics</p>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="text-sm">Clear and jargon-free for easy understanding</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100">
+                <h3 className="font-heading font-semibold text-lg mb-3 flex items-center">
+                  <span className="emoji mr-2">⏱️</span> Quick & Convenient
+                </h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="text-xs font-bold">1</span>
+                    </div>
+                    <p className="text-sm"><span className="font-medium">10-15 minutes</span> to complete</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="text-xs font-bold">2</span>
+                    </div>
+                    <p className="text-sm"><span className="font-medium">Mobile-optimized</span> for any device</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="text-xs font-bold">3</span>
+                    </div>
+                    <p className="text-sm"><span className="font-medium">Save progress</span> and continue later</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="text-xs font-bold">4</span>
+                    </div>
+                    <p className="text-sm"><span className="font-medium">Instant results</span> after completion</p>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100">
+                <h3 className="font-heading font-semibold text-lg mb-3 flex items-center">
+                  <span className="emoji mr-2">🔒</span> Private & Secure
+                </h3>
+                <p className="text-sm text-neutral-dark/80 mb-3">
+                  Your privacy is our top priority. We implement comprehensive security measures:
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">End-to-end encrypted data transfer</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">No sharing of personal data with third parties</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Secure data storage with industry-standard protection</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Link 
+              href="/register" 
+              className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300"
+            >
+              <span className="emoji mr-2">🚀</span> Start Your Assessment Now
+            </Link>
+          </div>
+        </div>
+      </section>
+      
       {/* Scientific Frameworks Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
@@ -243,6 +409,178 @@ const HowItWorks = () => {
         </div>
       </section>
 
+      {/* Results Presentation Section */}
+      <section className="py-16 px-4 bg-neutral-50">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3 py-1.5 px-4 bg-primary/10 rounded-full">
+              <span className="text-primary font-medium text-sm flex items-center justify-center">
+                <span className="emoji mr-2">🎯</span> Your Results
+              </span>
+            </div>
+            
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4">How Your Results Are Presented</h2>
+            
+            <p className="text-lg text-neutral-dark/80 max-w-3xl mx-auto">
+              We transform complex psychological data into clear, actionable insights through our beautifully designed results interface
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-10 items-center mb-12">
+            <div>
+              <h3 className="font-heading font-semibold text-xl mb-4">Free Assessment Results</h3>
+              <div className="bg-white rounded-xl p-5 shadow-md border border-neutral-100 mb-6">
+                <div className="flex items-center mb-4">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                    <span className="emoji">🔍</span>
+                  </div>
+                  <h4 className="font-medium">Basic Compatibility Profile</h4>
+                </div>
+                
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Overall compatibility color (green, yellow, or red)</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Primary attachment style identification</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Basic relationship strengths preview</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Key relationship pattern insight</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Sample of premium report offerings</p>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-primary/10 rounded-xl p-5">
+                <p className="text-sm text-neutral-dark/80">
+                  <span className="emoji mr-1">💡</span> Our free results give you valuable initial insights while showcasing the depth available in the premium report.
+                </p>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-heading font-semibold text-xl mb-4">Premium Report Experience</h3>
+              <div className="bg-white rounded-xl p-5 shadow-md border border-neutral-100 mb-6 relative">
+                <div className="absolute -top-3 -right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
+                  PREMIUM
+                </div>
+                
+                <div className="flex items-center mb-4">
+                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                    <span className="emoji">📊</span>
+                  </div>
+                  <h4 className="font-medium">Comprehensive Analysis Dashboard</h4>
+                </div>
+                
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Interactive visualizations of all dimensions</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Detailed personality trait breakdown</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Personalized compatibility insights</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Specific most/least compatible types</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Actionable relationship recommendations</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Advanced analytics comparison tools</p>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Scientific explanations for all insights</p>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-primary/10 rounded-xl p-5">
+                <p className="text-sm text-neutral-dark/80">
+                  <span className="emoji mr-1">✨</span> Your premium report is accessible anytime from your account dashboard and can be revisited as your relationship journey evolves.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Link 
+              href="/register" 
+              className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300"
+            >
+              <span className="emoji mr-2">🚀</span> Take Your Assessment
+            </Link>
+          </div>
+        </div>
+      </section>
+      
       {/* Premium Report Value */}
       <section className="py-16 px-4 bg-gradient-to-br from-primary/5 to-purple-50">
         <div className="container mx-auto max-w-5xl">
@@ -326,7 +664,7 @@ const HowItWorks = () => {
               
               <div className="flex space-x-4">
                 <Link 
-                  href="/quiz" 
+                  href="/register" 
                   className="px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center"
                 >
                   <span className="emoji mr-2">🚀</span> Start Your Journey
@@ -405,7 +743,7 @@ const HowItWorks = () => {
               
               <div className="text-center">
                 <Link 
-                  href="/quiz" 
+                  href="/register" 
                   className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 rounded-xl flex items-center justify-center transition"
                 >
                   <span className="emoji mr-2">🧪</span> Take the Assessment
@@ -471,13 +809,13 @@ const HowItWorks = () => {
             Discover your relationship personality and find the connections that truly complement who you are
           </p>
           <Link 
-            href="/quiz" 
+            href="/register" 
             className="inline-flex items-center px-8 py-4 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary/90 transition duration-300 text-lg"
             style={{animation: "pulse 4s infinite"}}
           >
             <span className="emoji mr-2">🔍</span> Take the Free Assessment
           </Link>
-          <p className="mt-4 text-neutral-dark/70">No registration required to begin</p>
+          <p className="mt-4 text-neutral-dark/70">Quick registration helps save your progress</p>
         </div>
       </section>
     </div>
