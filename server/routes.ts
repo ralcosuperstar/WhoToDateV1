@@ -401,7 +401,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Debug route for authentication testing
+  // Debug login endpoint - only available in development mode
   apiRouter.post("/debug-login", async (req, res) => {
+    // In production environments, return a 404 to hide this endpoint
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(404).json({ message: "Not found" });
+    }
+    
     try {
       log("Debug login endpoint called");
       
@@ -544,16 +550,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     // Check if we have a userId after potential token auth
     if (!req.session.userId) {
-      return res.status(401).json({ 
-        message: "Unauthorized",
-        debug: {
-          sessionId: req.session.id,
-          userId: req.session.userId,
-          authToken: authToken ? 'present' : 'missing',
-          authHeader: authHeader ? 'present' : 'missing',
-          cookies: cookies || []
-        }
-      });
+      // Only include debug info in development environment
+      const isDev = process.env.NODE_ENV !== 'production';
+      const responseData = isDev 
+        ? { 
+            message: "Unauthorized",
+            debug: {
+              sessionId: req.session.id,
+              userId: req.session.userId,
+              authToken: authToken ? 'present' : 'missing',
+              authHeader: authHeader ? 'present' : 'missing',
+              cookies: cookies || []
+            }
+          }
+        : { message: "Unauthorized" };
+        
+      return res.status(401).json(responseData);
     }
     
     try {

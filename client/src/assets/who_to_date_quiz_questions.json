@@ -5,23 +5,23 @@
     "question": "It\u2019s Friday night. What sounds most appealing to you?",
     "options": [
       {
-        "label": "A",
-        "text": "Big party or meet-up \u2013 energizing the room.",
+        "label": "a",
+        "text": "Hitting a big party or meet-up \u2013 you\u2019ll likely be found chatting with everyone and energizing the room.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Small get-together with close friends.",
+        "label": "b",
+        "text": "A small get-together with close friends \u2013 good conversations with your favorite people.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Cozy night in \u2013 solo or one-on-one time.",
+        "label": "c",
+        "text": "A cozy night in \u2013 Netflix, a book, or gaming, enjoying some solo downtime or one-on-one with a partner.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Early bed \u2013 social scenes drain me.",
+        "label": "d",
+        "text": "Going to bed early \u2013 crowds and social scenes aren\u2019t your thing, you\u2019d rather recharge alone.",
         "score": 1
       }
     ]
@@ -29,26 +29,26 @@
   {
     "id": 2,
     "section": "Personality",
-    "question": "How do you keep your space (room/desk) organized?",
+    "question": "When it comes to keeping your space (room/desk) organized:",
     "options": [
       {
-        "label": "A",
-        "text": "Everything in its place. Mess bugs me.",
+        "label": "a",
+        "text": "\u201cEverything has its place\u201d \u2013 You\u2019re meticulously neat, and clutter seriously bugs you.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Fairly tidy but not obsessive.",
+        "label": "b",
+        "text": "You prefer things fairly tidy, though a little mess is okay as long as it\u2019s not out of control.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Organized chaos \u2013 messy but I get by.",
+        "label": "c",
+        "text": "\u201cOrganized chaos\u201d \u2013 Your space is messy but functional, and you can usually find what you need.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Utter chaos. Cleaning only when urgent.",
+        "label": "d",
+        "text": "Utterly chaotic \u2013 piles of stuff everywhere, cleaning isn\u2019t a priority until it\u2019s absolutely necessary.",
         "score": 1
       }
     ]
@@ -56,26 +56,26 @@
   {
     "id": 3,
     "section": "Personality",
-    "question": "Question 3 placeholder?",
+    "question": "You\u2019ve planned a weekend trip with your partner. How do you approach it?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q3",
+        "label": "a",
+        "text": "You create a detailed itinerary days in advance, complete with hotel bookings, routes, and a list of sights to see. Preparation is key!",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q3",
+        "label": "b",
+        "text": "You list a couple of must-do activities but leave plenty of free time for spontaneous adventures. Balance is good.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q3",
+        "label": "c",
+        "text": "You decide to just wing it \u2013 no fixed plans, just go with the flow when you arrive. Spontaneity makes it fun.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q3",
+        "label": "d",
+        "text": "Trip? Oh, you didn\u2019t get around to planning anything\u2026 You\u2019ll figure it out (or not) once you\u2019re there.",
         "score": 1
       }
     ]
@@ -83,26 +83,26 @@
   {
     "id": 4,
     "section": "Personality",
-    "question": "Question 4 placeholder?",
+    "question": "If someone (friend or partner) criticizes you or points out a mistake you made, you usually:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q4",
+        "label": "a",
+        "text": "Appreciate the feedback and calmly discuss how to improve \u2013 you own up to it and consider it constructively.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q4",
+        "label": "b",
+        "text": "Feel a bit defensive initially, but later reflect and maybe apologize if needed \u2013 you try to be fair.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q4",
+        "label": "c",
+        "text": "Get upset or anxious and might take it quite personally \u2013 it really bothers you to be criticized.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q4",
+        "label": "d",
+        "text": "Brush it off or counter-criticize them \u2013 you don\u2019t like being blamed and might feel they\u2019re overreacting.",
         "score": 1
       }
     ]
@@ -110,26 +110,26 @@
   {
     "id": 5,
     "section": "Personality",
-    "question": "Question 5 placeholder?",
+    "question": "Your ideal approach to solving a problem or making a big decision is:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q5",
+        "label": "a",
+        "text": "Analyze it with cold hard logic \u2013 pros/cons lists, maybe spreadsheets. Emotions shouldn\u2019t cloud judgment.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q5",
+        "label": "b",
+        "text": "Consider the facts but also listen to your gut feelings and values \u2013 a mix of head and heart.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q5",
+        "label": "c",
+        "text": "Go with what feels right in your heart \u2013 if it aligns with your emotions and values, that\u2019s the choice.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q5",
+        "label": "d",
+        "text": "Honestly, you often defer the decision hoping it resolves itself, or ask someone you trust to decide for you.",
         "score": 1
       }
     ]
@@ -137,26 +137,26 @@
   {
     "id": 6,
     "section": "Personality",
-    "question": "Question 6 placeholder?",
+    "question": "How do you usually handle meeting new people at a gathering or event?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q6",
+        "label": "a",
+        "text": "You love it \u2013 you naturally introduce yourself and enjoy making new friends.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q6",
+        "label": "b",
+        "text": "You don\u2019t mind it \u2013 you\u2019re friendly when approached.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q6",
+        "label": "c",
+        "text": "It\u2019s a bit uncomfortable \u2013 you mostly stick to who you know.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q6",
+        "label": "d",
+        "text": "You avoid it \u2013 you find a corner or stay on your phone to dodge small talk.",
         "score": 1
       }
     ]
@@ -164,26 +164,26 @@
   {
     "id": 7,
     "section": "Personality",
-    "question": "Question 7 placeholder?",
+    "question": "When working on a project, what style describes you best?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q7",
+        "label": "a",
+        "text": "Highly organized \u2013 you plan and hit deadlines early.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q7",
+        "label": "b",
+        "text": "Fairly reliable \u2013 you plan but may cram sometimes.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q7",
+        "label": "c",
+        "text": "Improvisational \u2013 you work in bursts of last-minute energy.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q7",
+        "label": "d",
+        "text": "Disorganized \u2013 you struggle to meet deadlines and structure.",
         "score": 1
       }
     ]
@@ -191,26 +191,26 @@
   {
     "id": 8,
     "section": "Personality",
-    "question": "Question 8 placeholder?",
+    "question": "Imagine your friend is going through a tough time. You are more likely to:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q8",
+        "label": "a",
+        "text": "Offer practical advice to fix the issue.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q8",
+        "label": "b",
+        "text": "Give emotional support and suggest solutions later.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q8",
+        "label": "c",
+        "text": "Comfort them deeply, focusing on their feelings.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q8",
+        "label": "d",
+        "text": "Feel lost on how to help \u2013 you might avoid emotional talks.",
         "score": 1
       }
     ]
@@ -218,53 +218,53 @@
   {
     "id": 9,
     "section": "Personality",
-    "question": "Question 9 placeholder?",
+    "question": "Your friends would say you:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q9",
+        "label": "a",
+        "text": "Are creative and adventurous \u2013 always trying new things.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q9",
+        "label": "b",
+        "text": "Are practical and prefer reliable routines.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q9",
-        "score": 2
+        "label": "c",
+        "text": "Are warm and friendly \u2013 avoid unnecessary conflict.",
+        "score": 3
       },
       {
-        "label": "D",
-        "text": "Option D for Q9",
-        "score": 1
+        "label": "d",
+        "text": "Are blunt and straightforward \u2013 speak your mind regardless.",
+        "score": 2
       }
     ]
   },
   {
     "id": 10,
     "section": "Personality",
-    "question": "Question 10 placeholder?",
+    "question": "In group work or planning with others, your style is:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q10",
+        "label": "a",
+        "text": "Take charge \u2013 you lead and organize.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q10",
+        "label": "b",
+        "text": "Collaborative \u2013 you aim for consensus.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q10",
+        "label": "c",
+        "text": "Supportive \u2013 you follow the group\u2019s lead.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q10",
+        "label": "d",
+        "text": "Independent \u2013 you\u2019d rather work alone.",
         "score": 1
       }
     ]
@@ -272,26 +272,26 @@
   {
     "id": 11,
     "section": "Emotional Intelligence",
-    "question": "Question 11 placeholder?",
+    "question": "When you and your partner have a serious disagreement or fight, what do you usually do afterwards?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q11",
+        "label": "a",
+        "text": "Initiate a talk as soon as possible to resolve it \u2013 you hate letting conflicts linger and prefer to address the issue calmly.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q11",
+        "label": "b",
+        "text": "Cool off for a while and then discuss it later \u2013 you need a bit of space to process, but you won\u2019t sweep it under the rug.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q11",
+        "label": "c",
+        "text": "Give the silent treatment for a day or more \u2013 you find it hard to immediately engage, and you wait for them to approach or for things to blow over.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q11",
+        "label": "d",
+        "text": "Get very upset and worry the relationship is in jeopardy \u2013 you might cry, panic, or feel sick until reassured that things are okay.",
         "score": 1
       }
     ]
@@ -299,53 +299,53 @@
   {
     "id": 12,
     "section": "Emotional Intelligence",
-    "question": "Question 12 placeholder?",
+    "question": "Your partner hasn\u2019t replied to your messages all day. How do you feel?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q12",
+        "label": "a",
+        "text": "Concerned but composed \u2013 you figure they\u2019re busy or something came up, and you\u2019ll patiently wait or gently check in by evening.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q12",
+        "label": "b",
+        "text": "A bit annoyed or hurt \u2013 you don\u2019t like being ignored, but you\u2019ll likely send a follow-up text and try not to overthink it.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q12",
-        "score": 2
+        "label": "c",
+        "text": "Very anxious \u2013 you start imagining something\u2019s wrong: \u201cDid I do something? Are they upset or in trouble?\u201d",
+        "score": 1
       },
       {
-        "label": "D",
-        "text": "Option D for Q12",
-        "score": 1
+        "label": "d",
+        "text": "Largely unfazed \u2013 it\u2019s fine, you have your own day going on. You\u2019ll talk when you talk; you value that kind of independence.",
+        "score": 3
       }
     ]
   },
   {
     "id": 13,
     "section": "Emotional Intelligence",
-    "question": "Question 13 placeholder?",
+    "question": "If your partner or close friend is visibly upset but says \u201cI\u2019m fine\u201d when you ask, you will:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q13",
+        "label": "a",
+        "text": "Gently press them: \u201cI can tell something\u2019s off. You know I\u2019m here for you \u2013 want to talk about it?\u201d",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q13",
+        "label": "b",
+        "text": "Give them some space but keep an eye on them \u2013 maybe later you\u2019ll do something nice or try again.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q13",
+        "label": "c",
+        "text": "Take it at face value and drop the topic \u2013 you don\u2019t want to pry.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q13",
+        "label": "d",
+        "text": "Feel frustrated and shut down too \u2013 if they won\u2019t open up, you withdraw as well.",
         "score": 1
       }
     ]
@@ -353,26 +353,26 @@
   {
     "id": 14,
     "section": "Emotional Intelligence",
-    "question": "Question 14 placeholder?",
+    "question": "How easily do you say \u201csorry\u201d or admit fault in a relationship?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q14",
+        "label": "a",
+        "text": "Very easily \u2013 if I realize I\u2019m wrong or hurt them, I\u2019ll apologize sincerely and quickly.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q14",
+        "label": "b",
+        "text": "I will apologize, but I might explain my perspective too \u2013 I want to be understood that it wasn\u2019t malicious.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q14",
+        "label": "c",
+        "text": "It\u2019s hard for me to admit I\u2019m wrong \u2013 I might do it reluctantly or avoid situations where I\u2019d have to apologize.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q14",
+        "label": "d",
+        "text": "I often end up saying sorry even when it\u2019s not my fault, just to keep the peace.",
         "score": 1
       }
     ]
@@ -380,26 +380,26 @@
   {
     "id": 15,
     "section": "Emotional Intelligence",
-    "question": "Question 15 placeholder?",
+    "question": "When your partner achieves something great (promotion, personal goal), how do you react?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q15",
+        "label": "a",
+        "text": "Celebrate enthusiastically \u2013 you feel genuinely proud and let them know.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q15",
+        "label": "b",
+        "text": "You\u2019re happy for them and say \u201ccongrats!\u201d, but keep the celebration modest.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q15",
+        "label": "c",
+        "text": "You feel happy but also a twinge of insecurity or jealousy.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q15",
+        "label": "d",
+        "text": "You acknowledge it but don\u2019t make a big deal \u2013 a simple \u201cnice job\u201d and move on.",
         "score": 1
       }
     ]
@@ -407,53 +407,53 @@
   {
     "id": 16,
     "section": "Emotional Intelligence",
-    "question": "Question 16 placeholder?",
+    "question": "How do you handle jealousy in a relationship?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q16",
+        "label": "a",
+        "text": "You rarely get jealous \u2013 you have strong trust and prefer talking things through.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q16",
+        "label": "b",
+        "text": "You feel a bit jealous occasionally but try not to let it show.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q16",
-        "score": 2
+        "label": "c",
+        "text": "You do get jealous easily and might confront or feel insecure.",
+        "score": 1
       },
       {
-        "label": "D",
-        "text": "Option D for Q16",
-        "score": 1
+        "label": "d",
+        "text": "You tend to dismiss jealousy entirely \u2013 it\u2019s their issue, not yours.",
+        "score": 2
       }
     ]
   },
   {
     "id": 17,
     "section": "Emotional Intelligence",
-    "question": "Question 17 placeholder?",
+    "question": "When it comes to talking about your feelings with a partner:",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q17",
+        "label": "a",
+        "text": "You\u2019re an open book \u2013 communication is key.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q17",
+        "label": "b",
+        "text": "You communicate important feelings but take time to get there.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q17",
+        "label": "c",
+        "text": "It\u2019s hard for you \u2013 you prefer to show you care through actions.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q17",
+        "label": "d",
+        "text": "Your emotions often overwhelm you \u2013 you overshare or have outbursts.",
         "score": 1
       }
     ]
@@ -461,26 +461,26 @@
   {
     "id": 18,
     "section": "Emotional Intelligence",
-    "question": "Question 18 placeholder?",
+    "question": "If your partner does something that hurts your feelings a little, how do you respond?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q18",
+        "label": "a",
+        "text": "You calmly share what bothered you and aim to resolve it constructively.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q18",
+        "label": "b",
+        "text": "You drop hints or act off, but eventually bring it up.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q18",
+        "label": "c",
+        "text": "You stay quiet \u2013 not worth the argument.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q18",
+        "label": "d",
+        "text": "You react with sarcasm or sulk \u2013 they should figure it out.",
         "score": 1
       }
     ]
@@ -488,26 +488,26 @@
   {
     "id": 19,
     "section": "Emotional Intelligence",
-    "question": "Question 19 placeholder?",
+    "question": "How do stressful situations affect your mood with your partner?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q19",
+        "label": "a",
+        "text": "You handle stress gracefully and don\u2019t take it out on your partner.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q19",
+        "label": "b",
+        "text": "You get tense or distracted but try not to snap.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q19",
+        "label": "c",
+        "text": "You become irritable or distant, and your partner feels it.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q19",
+        "label": "d",
+        "text": "You withdraw completely and deal with it alone.",
         "score": 1
       }
     ]
@@ -515,323 +515,323 @@
   {
     "id": 20,
     "section": "Emotional Intelligence",
-    "question": "Question 20 placeholder?",
+    "question": "What best describes your attachment style or feelings in close relationships?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q20",
+        "label": "a",
+        "text": "Secure \u2013 you trust easily and communicate needs openly.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q20",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q20",
+        "label": "b",
+        "text": "Anxious \u2013 you worry others don\u2019t want to be as close and seek reassurance.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q20",
+        "label": "c",
+        "text": "Avoidant \u2013 you value space and feel uncomfortable with too much closeness.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "Mixed \u2013 sometimes you want closeness, sometimes you push people away.",
         "score": 1
       }
     ]
   },
   {
     "id": 21,
-    "section": "Values",
-    "question": "Question 21 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "Whose opinion matters most when you\u2019re choosing someone to date or marry?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q21",
+        "label": "a",
+        "text": "Mine, ultimately. I will consider my family\u2019s input, but the final decision is mine.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q21",
+        "label": "b",
+        "text": "It\u2019s a balance \u2013 ideally both my family's and my own feelings align.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q21",
+        "label": "c",
+        "text": "My family\u2019s opinion carries a lot of weight. I'd struggle to go against them.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q21",
-        "score": 1
+        "label": "d",
+        "text": "Only mine \u2013 I would go ahead with my choice even if family disagrees.",
+        "score": 4
       }
     ]
   },
   {
     "id": 22,
-    "section": "Values",
-    "question": "Question 22 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "How important is it that your future partner is from the same religion, community, or cultural background as you?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q22",
-        "score": 4
+        "label": "a",
+        "text": "Extremely important \u2013 shared religion/caste/culture is essential.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q22",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q22",
+        "label": "b",
+        "text": "Preferable, but if we connect deeply, I could accept differences.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q22",
-        "score": 1
+        "label": "c",
+        "text": "Not very important \u2013 I'm open as long as values align.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Completely irrelevant \u2013 love has nothing to do with caste or religion.",
+        "score": 4
       }
     ]
   },
   {
     "id": 23,
-    "section": "Values",
-    "question": "Question 23 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "What are your thoughts on gender roles in relationships?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q23",
-        "score": 4
+        "label": "a",
+        "text": "I believe in traditional roles \u2013 husband as earner, wife as homemaker.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q23",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q23",
+        "label": "b",
+        "text": "Some traditional roles are okay, but should be flexible.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q23",
-        "score": 1
+        "label": "c",
+        "text": "Equal partnership \u2013 roles should be shared based on strengths.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Completely dismantle roles \u2013 expectations based on gender are outdated.",
+        "score": 4
       }
     ]
   },
   {
     "id": 24,
-    "section": "Values",
-    "question": "Question 24 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "If you were in an unhappy marriage, would you consider divorce?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q24",
-        "score": 4
+        "label": "a",
+        "text": "No \u2013 marriage is for life. One must endure and adjust.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q24",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q24",
+        "label": "b",
+        "text": "Only after trying everything else. It\u2019s a last resort.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q24",
-        "score": 1
+        "label": "c",
+        "text": "Yes, if nothing works despite trying. Life\u2019s too short to be stuck.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Absolutely \u2013 I'd rather be happy alone than stay miserable.",
+        "score": 4
       }
     ]
   },
   {
     "id": 25,
-    "section": "Values",
-    "question": "Question 25 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "How do you feel about lying or hiding things in a relationship?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q25",
+        "label": "a",
+        "text": "Never okay \u2013 honesty is the foundation of any relationship.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q25",
+        "label": "b",
+        "text": "White lies are okay sometimes to avoid hurting feelings.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q25",
+        "label": "c",
+        "text": "Privacy is fine \u2013 not everything needs to be shared.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q25",
+        "label": "d",
+        "text": "Lies are normal \u2013 as long as it doesn\u2019t hurt the other.",
         "score": 1
       }
     ]
   },
   {
     "id": 26,
-    "section": "Values",
-    "question": "Question 26 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "If your parents disapprove of your partner for unfair reasons (e.g. caste), what would you do?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q26",
-        "score": 4
+        "label": "a",
+        "text": "Probably break up \u2013 I can't go against my parents.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q26",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q26",
+        "label": "b",
+        "text": "Try to convince them, but it would be stressful.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q26",
-        "score": 1
+        "label": "c",
+        "text": "Stand by my partner \u2013 even without approval, I\u2019d continue.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Definitely choose my partner \u2013 even elope if needed.",
+        "score": 4
       }
     ]
   },
   {
     "id": 27,
-    "section": "Values",
-    "question": "Question 27 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "What are your life priorities for the next 5\u201310 years?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q27",
+        "label": "a",
+        "text": "Career/education comes first \u2013 relationship can wait.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q27",
+        "label": "b",
+        "text": "Balance \u2013 I want both growth and a relationship.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q27",
+        "label": "c",
+        "text": "Settling down is top priority \u2013 marriage and family.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q27",
-        "score": 1
+        "label": "d",
+        "text": "Flexible \u2013 I\u2019ll go with the flow.",
+        "score": 3
       }
     ]
   },
   {
     "id": 28,
-    "section": "Values",
-    "question": "Question 28 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "How would you describe your religious/spiritual outlook?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q28",
-        "score": 4
+        "label": "a",
+        "text": "Devout/Traditional \u2013 rituals and religion are central.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q28",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q28",
+        "label": "b",
+        "text": "Moderately religious \u2013 some traditions matter, but open-minded.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q28",
-        "score": 1
+        "label": "c",
+        "text": "Spiritual but not religious \u2013 I follow personal beliefs.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Not religious \u2013 secular or agnostic.",
+        "score": 4
       }
     ]
   },
   {
     "id": 29,
-    "section": "Values",
-    "question": "Question 29 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "Is infidelity ever forgivable?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q29",
-        "score": 4
+        "label": "a",
+        "text": "Never \u2013 it's a complete deal-breaker.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q29",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q29",
+        "label": "b",
+        "text": "Almost never \u2013 maybe one final chance if truly remorseful.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q29",
-        "score": 1
+        "label": "c",
+        "text": "It depends \u2013 people make mistakes.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Forgivable \u2013 especially if we have a family/life built together.",
+        "score": 4
       }
     ]
   },
   {
     "id": 30,
-    "section": "Values",
-    "question": "Question 30 placeholder?",
+    "section": "Values & Beliefs",
+    "question": "Which of these is most important in a relationship?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q30",
-        "score": 4
-      },
-      {
-        "label": "B",
-        "text": "Option B for Q30",
+        "label": "a",
+        "text": "Trust > Respect > Honesty",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q30",
+        "label": "b",
+        "text": "Honesty > Trust > Respect",
+        "score": 4
+      },
+      {
+        "label": "c",
+        "text": "Respect > Trust > Honesty",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q30",
-        "score": 1
+        "label": "d",
+        "text": "All are equally vital \u2013 can\u2019t rank them.",
+        "score": 3
       }
     ]
   },
   {
     "id": 31,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 31 placeholder?",
+    "question": "What level of physical affection are you generally comfortable with in a relationship?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q31",
+        "label": "a",
+        "text": "Very high \u2013 I\u2019m quite affectionate and need closeness regularly.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q31",
+        "label": "b",
+        "text": "Moderate \u2013 I enjoy it but also value personal space.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q31",
+        "label": "c",
+        "text": "Low \u2013 I\u2019m okay with some affection in private, but I can go long without it.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q31",
+        "label": "d",
+        "text": "Very low \u2013 I prefer to express love in other ways. Constant touch is uneasy.",
         "score": 1
       }
     ]
@@ -839,26 +839,26 @@
   {
     "id": 32,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 32 placeholder?",
+    "question": "What\u2019s your stance on public displays of affection (PDA)?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q32",
+        "label": "a",
+        "text": "All for it \u2013 holding hands or casual kisses are totally fine.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q32",
+        "label": "b",
+        "text": "Mild PDA is okay \u2013 but I keep it limited in public.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q32",
+        "label": "c",
+        "text": "I\u2019m uncomfortable with PDA \u2013 hand-holding is the max.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q32",
+        "label": "d",
+        "text": "I avoid PDA entirely \u2013 affection is private.",
         "score": 1
       }
     ]
@@ -866,80 +866,80 @@
   {
     "id": 33,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 33 placeholder?",
+    "question": "What are your personal beliefs about sex before marriage?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q33",
-        "score": 4
+        "label": "a",
+        "text": "I believe in waiting until marriage.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q33",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q33",
+        "label": "b",
+        "text": "Ideally wait, but might be okay if we're serious or engaged.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q33",
-        "score": 1
+        "label": "c",
+        "text": "Okay if in a committed relationship \u2013 not strictly tied to marriage.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "No issue with premarital sex \u2013 it's natural if both are ready.",
+        "score": 4
       }
     ]
   },
   {
     "id": 34,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 34 placeholder?",
+    "question": "How important is it that the person you marry is a virgin?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q34",
-        "score": 4
+        "label": "a",
+        "text": "Very important \u2013 I want someone who\u2019s never had any past partners.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q34",
-        "score": 3
-      },
-      {
-        "label": "C",
-        "text": "Option C for Q34",
+        "label": "b",
+        "text": "Somewhat important \u2013 preferably a virgin, but can accept minor past.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q34",
-        "score": 1
+        "label": "c",
+        "text": "Not very important \u2013 their past doesn\u2019t define them.",
+        "score": 3
+      },
+      {
+        "label": "d",
+        "text": "Completely irrelevant \u2013 character matters, not virginity.",
+        "score": 4
       }
     ]
   },
   {
     "id": 35,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 35 placeholder?",
+    "question": "Would you consider living together before marriage?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q35",
+        "label": "a",
+        "text": "Absolutely yes \u2013 it\u2019s a great way to test compatibility.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q35",
+        "label": "b",
+        "text": "Maybe, if we're engaged or heading towards marriage.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q35",
+        "label": "c",
+        "text": "Probably not \u2013 only in very rare, special circumstances.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q35",
+        "label": "d",
+        "text": "No \u2013 it's against my values and/or family would never approve.",
         "score": 1
       }
     ]
@@ -947,26 +947,26 @@
   {
     "id": 36,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 36 placeholder?",
+    "question": "How openly can you talk about sex or intimate topics with a partner?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q36",
+        "label": "a",
+        "text": "Very openly \u2013 I\u2019m comfortable discussing preferences and boundaries.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q36",
+        "label": "b",
+        "text": "Somewhat \u2013 it\u2019s awkward but I manage when needed.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q36",
+        "label": "c",
+        "text": "I feel shy/uncomfortable \u2013 I prefer to avoid explicit talk.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q36",
+        "label": "d",
+        "text": "I avoid it entirely \u2013 I can\u2019t talk openly even if needed.",
         "score": 1
       }
     ]
@@ -974,26 +974,26 @@
   {
     "id": 37,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 37 placeholder?",
+    "question": "How important is sexual chemistry in a long-term relationship for you?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q37",
+        "label": "a",
+        "text": "Very important \u2013 without it, something major is lacking.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q37",
+        "label": "b",
+        "text": "Quite important \u2013 it helps deepen connection.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q37",
+        "label": "c",
+        "text": "Somewhat important \u2013 emotional connection is more important.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q37",
+        "label": "d",
+        "text": "Not important \u2013 I could be happy even without sex.",
         "score": 1
       }
     ]
@@ -1001,26 +1001,26 @@
   {
     "id": 38,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 38 placeholder?",
+    "question": "How would you approach birth control and protection?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q38",
+        "label": "a",
+        "text": "We should discuss it proactively \u2013 it's part of responsible intimacy.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q38",
+        "label": "b",
+        "text": "I'd expect protection but might not initiate the talk early.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q38",
+        "label": "c",
+        "text": "I\u2019d delay the discussion until serious \u2013 not applicable early.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q38",
+        "label": "d",
+        "text": "I avoid the topic \u2013 I assume love will sort things out.",
         "score": 1
       }
     ]
@@ -1028,26 +1028,26 @@
   {
     "id": 39,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 39 placeholder?",
+    "question": "If your partner wanted to wait until marriage for sex, but you didn\u2019t (or vice versa), how would you handle it?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q39",
+        "label": "a",
+        "text": "Respect their wishes and wait \u2013 love is patient.",
         "score": 4
       },
       {
-        "label": "B",
-        "text": "Option B for Q39",
+        "label": "b",
+        "text": "Try to compromise or understand their perspective.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q39",
+        "label": "c",
+        "text": "It would be tough \u2013 I might eventually push or leave.",
         "score": 2
       },
       {
-        "label": "D",
-        "text": "Option D for Q39",
+        "label": "d",
+        "text": "I\u2019d hope to change their mind \u2013 if not, I may resent it.",
         "score": 1
       }
     ]
@@ -1055,27 +1055,27 @@
   {
     "id": 40,
     "section": "Physical & Moral Beliefs",
-    "question": "Question 40 placeholder?",
+    "question": "Which statement about love and sex resonates more with you?",
     "options": [
       {
-        "label": "A",
-        "text": "Option A for Q40",
-        "score": 4
+        "label": "a",
+        "text": "Physical intimacy belongs within love and commitment only.",
+        "score": 1
       },
       {
-        "label": "B",
-        "text": "Option B for Q40",
+        "label": "b",
+        "text": "Love comes first, but sex is a natural expression of it.",
         "score": 3
       },
       {
-        "label": "C",
-        "text": "Option C for Q40",
-        "score": 2
+        "label": "c",
+        "text": "They can be separate \u2013 sex doesn't require deep love.",
+        "score": 4
       },
       {
-        "label": "D",
-        "text": "Option D for Q40",
-        "score": 1
+        "label": "d",
+        "text": "I\u2019m unsure \u2013 it depends on the situation and person.",
+        "score": 2
       }
     ]
   }
