@@ -141,7 +141,7 @@ const Science = () => {
               
               <div className="flex space-x-4">
                 <Link 
-                  href="/quiz" 
+                  href="/register" 
                   className="px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center"
                 >
                   <span className="emoji mr-2">🧪</span> Take the Assessment
@@ -381,6 +381,273 @@ const Science = () => {
         </div>
       </section>
 
+      {/* Scoring System Explained */}
+      <section className="py-16 px-4 bg-neutral-50">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3 py-1.5 px-4 bg-primary/10 rounded-full">
+              <span className="text-primary font-medium text-sm flex items-center justify-center">
+                <span className="emoji mr-2">🧮</span> Our Scoring System
+              </span>
+            </div>
+            
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-4">
+              Understanding Your Compatibility Score
+            </h2>
+            
+            <p className="text-neutral-dark/80 text-lg max-w-3xl mx-auto">
+              Our advanced scoring algorithm integrates multiple psychological dimensions to create a comprehensive compatibility profile
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-md border border-neutral-100 overflow-hidden mb-10">
+            <div className="bg-primary text-white p-5">
+              <h3 className="font-heading font-semibold text-xl">Scoring Methodology Overview</h3>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-medium text-lg mb-4 flex items-center">
+                    <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">1</span>
+                    Multi-Dimensional Analysis
+                  </h4>
+                  <p className="text-neutral-dark/80 mb-6">
+                    Unlike simplistic compatibility tests, our assessment evaluates 4 key dimensions with 15+ sub-factors. Each dimension receives its own scoring weight based on research-validated importance.
+                  </p>
+                  
+                  <div className="bg-neutral-50 rounded-lg p-4 mb-6">
+                    <h5 className="font-medium text-base mb-3">Dimension Weights in Overall Score</h5>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium flex items-center">
+                            <span className="h-3 w-3 rounded-full bg-blue-500 mr-2"></span>
+                            Attachment Style
+                          </span>
+                          <span className="text-sm">35%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-neutral-200 rounded-full">
+                          <div className="h-full w-[35%] bg-blue-500 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium flex items-center">
+                            <span className="h-3 w-3 rounded-full bg-purple-500 mr-2"></span>
+                            Personality Traits
+                          </span>
+                          <span className="text-sm">25%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-neutral-200 rounded-full">
+                          <div className="h-full w-[25%] bg-purple-500 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium flex items-center">
+                            <span className="h-3 w-3 rounded-full bg-green-500 mr-2"></span>
+                            Emotional Intelligence
+                          </span>
+                          <span className="text-sm">25%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-neutral-200 rounded-full">
+                          <div className="h-full w-[25%] bg-green-500 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium flex items-center">
+                            <span className="h-3 w-3 rounded-full bg-amber-500 mr-2"></span>
+                            Core Values & Intimacy
+                          </span>
+                          <span className="text-sm">15%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-neutral-200 rounded-full">
+                          <div className="h-full w-[15%] bg-amber-500 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-lg mb-4 flex items-center">
+                    <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">2</span>
+                    Advanced Pattern Recognition
+                  </h4>
+                  <p className="text-neutral-dark/80 mb-4">
+                    Our algorithm doesn't just average scores. It identifies specific patterns in your responses that indicate compatibility strengths and challenges based on psychological research.
+                  </p>
+                  
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className="bg-green-50 rounded-lg p-3 text-center">
+                      <div className="h-10 w-10 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-2">
+                        <span className="emoji">🟢</span>
+                      </div>
+                      <h6 className="text-sm font-medium mb-1">Green Profile</h6>
+                      <p className="text-xs text-neutral-dark/70">Strong relationship patterns</p>
+                    </div>
+                    
+                    <div className="bg-amber-50 rounded-lg p-3 text-center">
+                      <div className="h-10 w-10 mx-auto rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mb-2">
+                        <span className="emoji">🟡</span>
+                      </div>
+                      <h6 className="text-sm font-medium mb-1">Yellow Profile</h6>
+                      <p className="text-xs text-neutral-dark/70">Mixed patterns needing awareness</p>
+                    </div>
+                    
+                    <div className="bg-red-50 rounded-lg p-3 text-center">
+                      <div className="h-10 w-10 mx-auto rounded-full bg-red-100 flex items-center justify-center text-red-600 mb-2">
+                        <span className="emoji">🔴</span>
+                      </div>
+                      <h6 className="text-sm font-medium mb-1">Red Profile</h6>
+                      <p className="text-xs text-neutral-dark/70">Challenging patterns to address</p>
+                    </div>
+                  </div>
+                  
+                  <h4 className="font-medium text-lg mb-4 flex items-center">
+                    <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">3</span>
+                    Personalized Insights Engine
+                  </h4>
+                  <p className="text-neutral-dark/80">
+                    Our scientific profile delivers personalized compatibility insights, not generic advice. We analyze 300+ possible psychological profiles to generate tailored relationship guidance specific to your unique patterns.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5">
+              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-4">
+                <span className="emoji text-xl">🧪</span>
+              </div>
+              <h4 className="font-medium text-lg mb-2">Scientific Scoring Factors</h4>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Attachment mapping using 5-question clusters</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Big Five personality dimensions analysis</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">MBTI style determination</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Emotional intelligence evaluation</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Core values & intimacy pattern analysis</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5">
+              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-4">
+                <span className="emoji text-xl">📊</span>
+              </div>
+              <h4 className="font-medium text-lg mb-2">Response Analysis Method</h4>
+              <p className="text-sm text-neutral-dark/80 mb-4">
+                Each of your responses is analyzed through multiple psychological lenses:
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Weighted multi-dimensional mapping</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Pattern recognition across question sets</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Normalized scoring to ensure accuracy</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Cross-factor correlation evaluation</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Cultural context adjustment factors</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5">
+              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-4">
+                <span className="emoji text-xl">💡</span>
+              </div>
+              <h4 className="font-medium text-lg mb-2">Result Generation</h4>
+              <p className="text-sm text-neutral-dark/80 mb-4">
+                Your assessment results are generated through a sophisticated algorithm that produces:
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Overall compatibility color rating</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Personalized insights based on your specific response patterns</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Strengths & challenges analysis</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Most & least compatible relationship types</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">Actionable relationship recommendations</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Research Highlights */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
