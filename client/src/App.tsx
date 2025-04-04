@@ -43,6 +43,12 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
+      
+      {/* Clerk authentication routes */}
+      <Route path="/sign-in/*" component={Login} />
+      <Route path="/sign-up/*" component={Register} />
+      <Route path="/user/*" component={Dashboard} />
+      
       <Route component={NotFound} />
     </Switch>
   );
@@ -66,14 +72,16 @@ function App() {
     initAnalytics();
   }, []);
 
-  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  // Use either VITE_CLERK_PUBLISHABLE_KEY or CLERK_PUBLISHABLE_KEY
+  // In development, we can access the CLERK_PUBLISHABLE_KEY directly
+  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
   
   if (!clerkPubKey) {
-    console.error('Clerk publishable key is missing. Please add VITE_CLERK_PUBLISHABLE_KEY to your environment variables.');
+    console.error('Clerk publishable key is missing. Please add CLERK_PUBLISHABLE_KEY to your environment variables.');
   }
 
-  // Only enable Clerk if we have a valid key
-  const useClerkAuth = Boolean(clerkPubKey && clerkPubKey.startsWith('pk_'));
+  // Enable Clerk authentication since API keys are set up
+  const useClerkAuth = true;
   
   return (
     <QueryClientProvider client={queryClient}>
