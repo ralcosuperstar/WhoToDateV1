@@ -2,15 +2,15 @@ import { Link } from "wouter";
 
 const HeroSection = () => {
   return (
-    <section className="pt-20 pb-12 relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <section className="pt-28 sm:pt-32 md:pt-36 pb-12 relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
       {/* Mobile-optimized background elements */}
       <div className="absolute top-0 right-0 -mt-5 -mr-10 w-40 h-40 sm:w-60 sm:h-60 bg-pink-100 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -mb-5 -ml-10 w-40 h-40 sm:w-60 sm:h-60 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
 
       <div className="container mx-auto px-4">
-        {/* Mobile headline banner */}
-        <div className="mb-6 text-center bg-white rounded-xl shadow-sm py-3 px-4 border border-pink-100 md:hidden">
-          <h1 className="font-bold text-2xl leading-tight">
+        {/* Mobile headline banner - with extra padding to prevent overlap */}
+        <div className="mb-6 mt-4 text-center bg-white rounded-xl shadow-sm py-3 px-4 border border-pink-100 md:hidden">
+          <h1 className="font-bold text-xl sm:text-2xl leading-tight">
             <span className="emoji">💘</span> Tired of dating the wrong people?
           </h1>
         </div>
