@@ -2,7 +2,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -70,12 +70,44 @@ function App() {
   // In development, we can access the CLERK_PUBLISHABLE_KEY directly
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
 
-  
+  // State to track Clerk initialization errors
+  const [clerkError, setClerkError] = useState(false);
 
+  // We'll use useEffect to catch errors by detecting when ClerkProvider fails
+  useEffect(() => {
+    // If we have a key but there's an error loading Clerk from earlier attempt, 
+    // just set clerkError to true to use fallback
+    if (clerkPubKey) {
+      const timer = setTimeout(() => {
+        // If Clerk doesn't initialize after 5 seconds, fallback to non-authenticated mode
+        const clerkElement = document.querySelector('[data-clerk-frontend-api]');
+        if (!clerkElement) {
+          console.error("Clerk failed to initialize within timeout period");
+          setClerkError(true);
+        }
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [clerkPubKey]);
+  
   return (
     <QueryClientProvider client={queryClient}>
-      {clerkPubKey ? (
-        <ClerkProvider publishableKey={clerkPubKey}>
+      {clerkPubKey && !clerkError ? (
+        <ClerkProvider 
+          publishableKey={clerkPubKey} 
+          appearance={{
+            elements: {
+              rootBox: "mx-auto",
+              card: "shadow-md rounded-lg border border-gray-200",
+              headerTitle: "text-primary font-bold",
+              headerSubtitle: "text-gray-600",
+              socialButtonsBlockButton: "border border-gray-300 hover:bg-gray-50",
+              formButtonPrimary: "bg-primary hover:bg-primary/90",
+              footerActionLink: "text-primary hover:text-primary/90"
+            }
+          }}
+        >
           <AuthProvider>
             <AppContent />
             <Toaster />
