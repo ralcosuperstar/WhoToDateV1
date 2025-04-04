@@ -5,10 +5,12 @@ import { z } from "zod";
 // Users table - for authentication and profiles
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
+  clerkId: text("clerk_id").unique(), // Clerk user ID for authentication
   username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+  password: text("password"), // Optional now as Clerk handles auth
   email: text("email").notNull().unique(),
   fullName: text("full_name"),
+  imageUrl: text("image_url"), // Profile image from Clerk
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -58,10 +60,12 @@ export const blogPosts = pgTable("blog_posts", {
 
 // Schemas for inserts
 export const insertUserSchema = createInsertSchema(users).pick({
+  clerkId: true,
   username: true,
   password: true,
   email: true,
   fullName: true,
+  imageUrl: true,
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({

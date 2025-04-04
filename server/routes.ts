@@ -89,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Hash password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(userData.password, salt);
+        const hashedPassword = await bcrypt.hash(userData.password || '', salt);
         
         // Create user
         const user = await db.createUser({
@@ -139,7 +139,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // Compare password
-        const isMatch = await bcrypt.compare(password, user.password);
+        // Handle null/undefined passwords for Clerk users
+        if (!user.password) {
+          return res.status(401).json({ message: "Please login with your third-party provider" });
+        }
+        
+        const isMatch = await bcrypt.compare(password, user.password || '');
         if (!isMatch) {
           return res.status(401).json({ message: "Invalid credentials" });
         }
@@ -186,6 +191,113 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(userWithoutPassword);
     } catch (error) {
       res.status(500).json({ message: "Failed to get user" });
+    }
+  });
+  
+  // Clerk integration routes
+  apiRouter.post("/users/sync", async (req, res) => {
+    try {
+      const { clerkId, email, username, fullName, imageUrl } = req.body;
+      
+      if (!clerkId) {
+        return res.status(400).json({ message: "Clerk ID is required" });
+      }
+      
+      // Check if user with this Clerk ID already exists
+      const existingUser = await db.getUserByClerkId(clerkId);
+      
+      if (existingUser) {
+        // Update existing user with the latest Clerk data
+        const updatedUser = await db.updateUserByClerkId(clerkId, {
+          email: email || existingUser.email,
+          username: username || existingUser.username,
+          fullName: fullName || existingUser.fullName,
+          imageUrl: imageUrl || existingUser.imageUrl
+        });
+        
+        // Set user session
+        req.session.userId = updatedUser.id;
+        
+        const { password, ...userWithoutPassword } = updatedUser;
+        return res.json(userWithoutPassword);
+      }
+      
+      // Check if user exists with the same email but without clerk ID (existing app users)
+      if (email) {
+        const userByEmail = await db.getUserByEmail(email);
+        
+        if (userByEmail && !userByEmail.clerkId) {
+          // Link existing account to Clerk
+          const linkedUser = await db.linkUserToClerk(userByEmail.id, clerkId);
+          
+          // Update user profile data from Clerk
+          const updatedUser = await db.updateUserByClerkId(clerkId, {
+            username: username || userByEmail.username,
+            fullName: fullName || userByEmail.fullName,
+            imageUrl: imageUrl || userByEmail.imageUrl
+          });
+          
+          // Set user session
+          req.session.userId = updatedUser.id;
+          
+          const { password, ...userWithoutPassword } = updatedUser;
+          return res.json(userWithoutPassword);
+        }
+      }
+      
+      // Create new user if none exists
+      const newUser = await db.createUser({
+        clerkId,
+        email: email || `user_${clerkId}@placeholder.com`,
+        username: username || `user_${clerkId}`,
+        password: null, // Password is managed by Clerk
+        fullName: fullName || null,
+        imageUrl: imageUrl || null
+      });
+      
+      // Set user session
+      req.session.userId = newUser.id;
+      
+      const { password, ...userWithoutPassword } = newUser;
+      return res.status(201).json(userWithoutPassword);
+      
+    } catch (error) {
+      console.error("User sync error:", error);
+      res.status(500).json({ message: "Failed to synchronize user" });
+    }
+  });
+  
+  apiRouter.post("/users/link", isAuthenticated, async (req, res) => {
+    try {
+      const { userId, clerkId } = req.body;
+      
+      if (!userId || !clerkId) {
+        return res.status(400).json({ message: "User ID and Clerk ID are required" });
+      }
+      
+      // Check if the specified user exists
+      const user = await db.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Check if the user is already linked to a different Clerk ID
+      if (user.clerkId && user.clerkId !== clerkId) {
+        return res.status(400).json({ message: "User is already linked to a different account" });
+      }
+      
+      // Link user to Clerk
+      const linkedUser = await db.linkUserToClerk(userId, clerkId);
+      
+      // Set user session
+      req.session.userId = linkedUser.id;
+      
+      const { password, ...userWithoutPassword } = linkedUser;
+      res.json(userWithoutPassword);
+      
+    } catch (error) {
+      console.error("Account linking error:", error);
+      res.status(500).json({ message: "Failed to link accounts" });
     }
   });
 

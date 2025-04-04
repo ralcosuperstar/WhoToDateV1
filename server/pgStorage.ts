@@ -66,6 +66,44 @@ export class PgStorage implements IStorage {
     return results[0];
   }
   
+  async getUserByClerkId(clerkId: string): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
+    const results = await this._db.select().from(users).where(eq(users.clerkId, clerkId));
+    return results[0];
+  }
+  
+  async updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set(userData)
+      .where(eq(users.clerkId, clerkId))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
+  }
+  
+  async linkUserToClerk(userId: number, clerkId: string): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set({ clerkId })
+      .where(eq(users.id, userId))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
+  }
+  
   async createUser(user: InsertUser): Promise<User> {
     if (!this._db) throw new Error("Database connection not available");
     const result = await this._db.insert(users).values(user).returning();

@@ -12,7 +12,10 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByClerkId(clerkId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User>;
+  linkUserToClerk(userId: number, clerkId: string): Promise<User>;
   
   // Quiz operations
   getQuizAnswers(userId: number): Promise<QuizAnswer | undefined>;
@@ -83,13 +86,52 @@ export class MemStorage implements IStorage {
       (user) => user.email === email,
     );
   }
+  
+  async getUserByClerkId(clerkId: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.clerkId === clerkId,
+    );
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
     const createdAt = new Date();
-    const user: User = { ...insertUser, id, createdAt };
+    // Ensure all fields are properly initialized with null rather than undefined
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      createdAt,
+      clerkId: insertUser.clerkId || null,
+      password: insertUser.password || null,
+      fullName: insertUser.fullName || null,
+      imageUrl: insertUser.imageUrl || null
+    };
     this.users.set(id, user);
     return user;
+  }
+  
+  async updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User> {
+    const user = await this.getUserByClerkId(clerkId);
+    
+    if (!user) {
+      throw new Error('User not found with the provided Clerk ID');
+    }
+    
+    const updatedUser: User = { ...user, ...userData };
+    this.users.set(user.id, updatedUser);
+    return updatedUser;
+  }
+  
+  async linkUserToClerk(userId: number, clerkId: string): Promise<User> {
+    const user = await this.getUser(userId);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = { ...user, clerkId };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
   }
   
   // Quiz operations
@@ -103,10 +145,12 @@ export class MemStorage implements IStorage {
     const id = this.currentQuizId++;
     const startedAt = new Date();
     const quizAnswer: QuizAnswer = { 
-      ...insertQuizAnswer, 
+      userId: insertQuizAnswer.userId,
+      answers: insertQuizAnswer.answers,
+      completed: insertQuizAnswer.completed || false,
       id, 
       startedAt,
-      completedAt: insertQuizAnswer.completed ? new Date() : undefined 
+      completedAt: insertQuizAnswer.completed ? new Date() : null 
     };
     this.quizAnswers.set(id, quizAnswer);
     return quizAnswer;
@@ -122,7 +166,7 @@ export class MemStorage implements IStorage {
       ...quiz, 
       answers, 
       completed,
-      completedAt: completed ? new Date() : quiz.completedAt
+      completedAt: completed ? new Date() : (quiz.completedAt || null)
     };
     
     this.quizAnswers.set(id, updatedQuiz);
@@ -143,7 +187,15 @@ export class MemStorage implements IStorage {
   async createReport(insertReport: InsertReport): Promise<Report> {
     const id = this.currentReportId++;
     const createdAt = new Date();
-    const report: Report = { ...insertReport, id, createdAt };
+    const report: Report = { 
+      userId: insertReport.userId,
+      quizId: insertReport.quizId,
+      report: insertReport.report,
+      compatibilityColor: insertReport.compatibilityColor,
+      isPaid: insertReport.isPaid || false,
+      id, 
+      createdAt
+    };
     this.reports.set(id, report);
     return report;
   }
@@ -163,7 +215,15 @@ export class MemStorage implements IStorage {
   async createPayment(insertPayment: InsertPayment): Promise<Payment> {
     const id = this.currentPaymentId++;
     const createdAt = new Date();
-    const payment: Payment = { ...insertPayment, id, createdAt };
+    const payment: Payment = { 
+      userId: insertPayment.userId,
+      reportId: insertPayment.reportId,
+      amount: insertPayment.amount,
+      status: insertPayment.status,
+      razorpayPaymentId: insertPayment.razorpayPaymentId || null,
+      id, 
+      createdAt 
+    };
     this.payments.set(id, payment);
     return payment;
   }
@@ -188,7 +248,11 @@ export class MemStorage implements IStorage {
   // Blog operations
   async getAllBlogPosts(): Promise<BlogPost[]> {
     return Array.from(this.blogPosts.values()).sort(
-      (a, b) => b.publishedAt.getTime() - a.publishedAt.getTime()
+      (a, b) => {
+        const aTime = a.publishedAt ? a.publishedAt.getTime() : 0;
+        const bTime = b.publishedAt ? b.publishedAt.getTime() : 0;
+        return bTime - aTime;
+      }
     );
   }
   
@@ -205,7 +269,16 @@ export class MemStorage implements IStorage {
   async createBlogPost(insertBlogPost: InsertBlogPost): Promise<BlogPost> {
     const id = this.currentBlogPostId++;
     const publishedAt = new Date();
-    const blogPost: BlogPost = { ...insertBlogPost, id, publishedAt };
+    const blogPost: BlogPost = { 
+      title: insertBlogPost.title,
+      slug: insertBlogPost.slug,
+      excerpt: insertBlogPost.excerpt,
+      content: insertBlogPost.content,
+      category: insertBlogPost.category,
+      imageUrl: insertBlogPost.imageUrl || null,
+      id, 
+      publishedAt
+    };
     this.blogPosts.set(id, blogPost);
     return blogPost;
   }
@@ -266,7 +339,16 @@ export class MemStorage implements IStorage {
     samplePosts.forEach(post => {
       const id = this.currentBlogPostId++;
       const publishedAt = new Date();
-      const blogPost: BlogPost = { ...post, id, publishedAt };
+      const blogPost: BlogPost = { 
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: post.content,
+        category: post.category,
+        imageUrl: post.imageUrl || null,
+        id,
+        publishedAt
+      };
       this.blogPosts.set(id, blogPost);
     });
   }

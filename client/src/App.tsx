@@ -4,6 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { AuthProvider } from "@/hooks/use-auth";
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -64,10 +66,62 @@ function App() {
     initAnalytics();
   }, []);
 
+  // Get the Clerk publishable key from environment variables
+  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
+  
+  if (!clerkPubKey) {
+    console.error("Missing Clerk Publishable Key");
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
-      <AppContent />
-      <Toaster />
+      {clerkPubKey ? (
+        <ClerkProvider publishableKey={clerkPubKey}>
+          <AuthProvider>
+            <AppContent />
+            <Toaster />
+          </AuthProvider>
+        </ClerkProvider>
+      ) : (
+        // Fallback without Clerk auth when keys are not available
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-1">
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/how-it-works" component={HowItWorks} />
+              <Route path="/science" component={Science} />
+              <Route path="/blog" component={Blog} />
+              <Route path="/blog/:slug" component={BlogPost} />
+              <Route path="/login" component={() => (
+                <div className="container mx-auto p-4 text-center mt-12">
+                  <h2 className="text-2xl font-semibold mb-4">Authentication System Unavailable</h2>
+                  <p className="mb-4">
+                    The authentication system is currently not configured. Please provide Clerk API keys.
+                  </p>
+                  <p>
+                    You can still explore most of the site functionality, but login/registration features are unavailable.
+                  </p>
+                </div>
+              )} />
+              <Route path="/register" component={() => (
+                <div className="container mx-auto p-4 text-center mt-12">
+                  <h2 className="text-2xl font-semibold mb-4">Authentication System Unavailable</h2>
+                  <p className="mb-4">
+                    The authentication system is currently not configured. Please provide Clerk API keys.
+                  </p>
+                  <p>
+                    You can still explore most of the site functionality, but login/registration features are unavailable.
+                  </p>
+                </div>
+              )} />
+              <Route component={NotFound} />
+            </Switch>
+          </main>
+          <Footer />
+          <Toaster />
+        </div>
+      )}
     </QueryClientProvider>
   );
 }
