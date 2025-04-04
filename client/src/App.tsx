@@ -25,6 +25,7 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/HowItWorks";
 import Science from "@/pages/Science";
+import AuthDebug from "@/pages/AuthDebug";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -43,6 +44,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/auth-debug" component={AuthDebug} />
       
       {/* Clerk authentication routes */}
       <Route path="/sign-in/*" component={Login} />
@@ -124,6 +126,7 @@ function App() {
                 <Route path="/science" component={Science} />
                 <Route path="/blog" component={Blog} />
                 <Route path="/blog/:slug" component={BlogPost} />
+                <Route path="/auth-debug" component={AuthDebug} />
                 <Route path="/login" component={() => (
                   <div className="container mx-auto p-4 mt-12 max-w-2xl">
                     <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">

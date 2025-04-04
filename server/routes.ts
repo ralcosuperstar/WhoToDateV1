@@ -291,8 +291,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (err) {
         return res.status(500).json({ message: "Failed to logout" });
       }
+      
+      // Clear auth token cookie if it exists
+      res.clearCookie('auth_token', {
+        path: '/',
+        sameSite: 'lax'
+      });
+      
       res.json({ message: "Logged out successfully" });
     });
+  });
+  
+  // Debug route for authentication testing
+  apiRouter.post("/debug-login", async (req, res) => {
+    try {
+      log("Debug login endpoint called");
+      
+      // Get first user in the system for debugging
+      // In a real app, we would validate credentials
+      let user;
+      try {
+        // Try to get first user by ID
+        user = await db.getUser(1);
+        
+        if (!user) {
+          // If no user exists, create a test user
+          log("No users found, creating debug user");
+          user = await db.createUser({
+            username: "debug_user",
+            email: "debug@example.com",
+            password: "not_used_for_debug",
+            fullName: "Debug User",
+            clerkId: null,
+            imageUrl: null
+          });
+        }
+      } catch (error) {
+        log(`Error getting/creating debug user: ${error}`);
+        throw error;
+      }
+      
+      // Set session
+      req.session.userId = user.id;
+      
+      // Generate a token for alternative auth mechanism
+      const authToken = crypto.randomUUID();
+      
+      // Save session immediately
+      await new Promise<void>((resolve, reject) => {
+        req.session.save(err => {
+          if (err) {
+            log(`Error saving debug session: ${err}`);
+            reject(err);
+          } else {
+            log(`Debug session saved, userId: ${req.session.userId}`);
+            resolve();
+          }
+        });
+      });
+      
+      // Return user data with auth token
+      const { password, ...userWithoutPassword } = user;
+      
+      // Set token cookie
+      res.cookie('auth_token', authToken, {
+        httpOnly: false, // For debugging
+        secure: false,   // Development mode
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        path: '/',
+        sameSite: 'lax'
+      });
+      
+      // Include session info in response for debugging
+      res.json({
+        ...userWithoutPassword,
+        authToken,
+        debug: {
+          sessionId: req.session.id,
+          cookies: req.headers.cookie,
+          sessionUserId: req.session.userId
+        }
+      });
+    } catch (error) {
+      log(`Debug login error: ${error}`);
+      res.status(500).json({ message: "Debug login failed", error: String(error) });
+    }
   });
 
   apiRouter.get("/me", async (req, res) => {
