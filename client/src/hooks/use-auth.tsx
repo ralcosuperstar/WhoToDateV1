@@ -1,8 +1,21 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { useUser, useClerk } from "@clerk/clerk-react";
 import { apiRequest, queryClient } from "../lib/queryClient";
 import { User } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+
+// We'll conditionally import Clerk to avoid the error
+let useUser: any;
+let useClerk: any;
+try {
+  // Dynamic import to avoid errors when Clerk is not available
+  const clerkReact = require("@clerk/clerk-react");
+  useUser = clerkReact.useUser;
+  useClerk = clerkReact.useClerk;
+} catch (e) {
+  // Provide mock implementations if Clerk is not available
+  useUser = () => ({ user: null, isLoaded: true });
+  useClerk = () => ({ session: null });
+}
 
 type AuthContextType = {
   user: User | null;
@@ -14,7 +27,25 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+// A version of the provider for when Clerk is not available
+export function NoClerkAuthProvider({ children }: { children: ReactNode }) {
+  return (
+    <AuthContext.Provider
+      value={{
+        user: null,
+        isLoading: false,
+        error: null,
+        syncUserWithClerk: async () => { /* No-op */ },
+        linkExistingAccount: async () => { /* No-op */ }
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+// The regular auth provider when Clerk is available
+export function ClerkAuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const { user: clerkUser, isLoaded: clerkIsLoaded } = useUser();
   const { session } = useClerk();
@@ -135,6 +166,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+// Wrapper component that chooses the appropriate provider
+export function AuthProvider({ children, noClerk = false }: { children: ReactNode, noClerk?: boolean }) {
+  if (noClerk) {
+    return <NoClerkAuthProvider>{children}</NoClerkAuthProvider>;
+  } else {
+    return <ClerkAuthProvider>{children}</ClerkAuthProvider>;
+  }
 }
 
 export function useAuth() {
