@@ -323,7 +323,7 @@ const FullReportView = ({
               
               <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                 <p className="text-purple-800">
-                  {profile.growthRecommendation}
+                  {profile.growthRecommendation || "Focus on developing greater self-awareness in your relationships. Notice emotional patterns and work on responding rather than reacting."}
                 </p>
               </div>
             </div>
@@ -339,7 +339,7 @@ const FullReportView = ({
               
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <p className="text-blue-800">
-                  {profile.idealPartnerSummary}
+                  {profile.idealPartnerSummary || "You'll connect best with someone who values emotional depth and authentic communication. Look for a partner who appreciates your unique perspective and respects your need for both connection and independence."}
                 </p>
               </div>
             </div>
@@ -355,7 +355,7 @@ const FullReportView = ({
               
               <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                 <p className="text-green-800">
-                  {profile.datingExperience}
+                  {profile.datingExperience || "Try practicing active listening on your next date - put your phone away and truly focus on what the other person is saying. Ask thoughtful follow-up questions that show you're engaged with their story."}
                 </p>
               </div>
             </div>
