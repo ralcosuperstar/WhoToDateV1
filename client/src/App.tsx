@@ -70,32 +70,17 @@ function App() {
   // In development, we can access the CLERK_PUBLISHABLE_KEY directly
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
 
-  // State to track Clerk initialization errors
-  const [clerkError, setClerkError] = useState(false);
-
-  // We'll use useEffect to catch errors by detecting when ClerkProvider fails
-  useEffect(() => {
-    // If we have a key but there's an error loading Clerk from earlier attempt, 
-    // just set clerkError to true to use fallback
-    if (clerkPubKey) {
-      const timer = setTimeout(() => {
-        // If Clerk doesn't initialize after 5 seconds, fallback to non-authenticated mode
-        const clerkElement = document.querySelector('[data-clerk-frontend-api]');
-        if (!clerkElement) {
-          console.error("Clerk failed to initialize within timeout period");
-          setClerkError(true);
-        }
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [clerkPubKey]);
+  // For simplicity, let's just use the non-authenticated mode
+  // We've seen that there are issues with Clerk initialization
+  // Once you have both the CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY correctly set up,
+  // you can switch this back to use Clerk
+  const useClerkAuth = false;
   
   return (
     <QueryClientProvider client={queryClient}>
-      {clerkPubKey && !clerkError ? (
+      {useClerkAuth && clerkPubKey ? (
         <ClerkProvider 
-          publishableKey={clerkPubKey} 
+          publishableKey={clerkPubKey}
           appearance={{
             elements: {
               rootBox: "mx-auto",
@@ -126,25 +111,59 @@ function App() {
                 <Route path="/blog" component={Blog} />
                 <Route path="/blog/:slug" component={BlogPost} />
                 <Route path="/login" component={() => (
-                  <div className="container mx-auto p-4 text-center mt-12">
-                    <h2 className="text-2xl font-semibold mb-4">Authentication System Unavailable</h2>
-                    <p className="mb-4">
-                      The authentication system is currently not configured. Please provide Clerk API keys.
-                    </p>
-                    <p>
-                      You can still explore most of the site functionality, but login/registration features are unavailable.
-                    </p>
+                  <div className="container mx-auto p-4 mt-12 max-w-2xl">
+                    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                      <div className="flex items-center justify-center mb-4 text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <h2 className="text-2xl font-semibold mb-4 text-center">Authentication System in Development Mode</h2>
+                      <p className="mb-4 text-gray-600">
+                        The authentication system is currently running in development mode without Clerk integration. To enable full authentication features:
+                      </p>
+                      <ul className="list-disc list-inside mb-4 text-gray-600 space-y-2">
+                        <li>Set up a Clerk account at <a href="https://clerk.dev" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">clerk.dev</a></li>
+                        <li>Add both <code className="bg-gray-100 px-1 rounded">CLERK_PUBLISHABLE_KEY</code> and <code className="bg-gray-100 px-1 rounded">CLERK_SECRET_KEY</code> to your environment</li>
+                        <li>Set <code className="bg-gray-100 px-1 rounded">useClerkAuth = true</code> in <code className="bg-gray-100 px-1 rounded">App.tsx</code></li>
+                      </ul>
+                      <p className="mt-4 text-gray-700">
+                        You can still explore the rest of the WhoToDate application without logging in. Try the compatibility quiz or browse the science page!
+                      </p>
+                      <div className="mt-6 flex justify-center">
+                        <Link to="/" className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2 rounded-lg transition">
+                          Return to Home
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 )} />
                 <Route path="/register" component={() => (
-                  <div className="container mx-auto p-4 text-center mt-12">
-                    <h2 className="text-2xl font-semibold mb-4">Authentication System Unavailable</h2>
-                    <p className="mb-4">
-                      The authentication system is currently not configured. Please provide Clerk API keys.
-                    </p>
-                    <p>
-                      You can still explore most of the site functionality, but login/registration features are unavailable.
-                    </p>
+                  <div className="container mx-auto p-4 mt-12 max-w-2xl">
+                    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                      <div className="flex items-center justify-center mb-4 text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <h2 className="text-2xl font-semibold mb-4 text-center">Registration System in Development Mode</h2>
+                      <p className="mb-4 text-gray-600">
+                        The authentication system is currently running in development mode without Clerk integration. To enable full registration features:
+                      </p>
+                      <ul className="list-disc list-inside mb-4 text-gray-600 space-y-2">
+                        <li>Set up a Clerk account at <a href="https://clerk.dev" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">clerk.dev</a></li>
+                        <li>Add both <code className="bg-gray-100 px-1 rounded">CLERK_PUBLISHABLE_KEY</code> and <code className="bg-gray-100 px-1 rounded">CLERK_SECRET_KEY</code> to your environment</li>
+                        <li>Set <code className="bg-gray-100 px-1 rounded">useClerkAuth = true</code> in <code className="bg-gray-100 px-1 rounded">App.tsx</code></li>
+                      </ul>
+                      <p className="mt-4 text-gray-700">
+                        In the meantime, you can still try out all the features of WhoToDate! Take the compatibility quiz to see your personalized results.
+                      </p>
+                      <div className="mt-6 flex justify-center">
+                        <Link to="/quiz" className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2 rounded-lg transition">
+                          Try the Quiz
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 )} />
                 <Route component={NotFound} />
