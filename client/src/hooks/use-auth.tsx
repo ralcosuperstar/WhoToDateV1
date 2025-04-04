@@ -65,6 +65,13 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       }
     }
   }, [clerkUser, clerkIsLoaded]);
+  
+  // Handle when the Clerk session becomes active to re-sync user data
+  useEffect(() => {
+    if (session?.status === "active" && clerkUser) {
+      syncUserWithClerk();
+    }
+  }, [session?.status]);
 
   // Create or update user in the backend
   const syncUserWithClerk = async (): Promise<void> => {

@@ -47,6 +47,7 @@ const Register = () => {
               routing="path"
               signInUrl="/login"
               redirectUrl={redirectTo}
+              afterSignUpUrl={redirectTo}
               appearance={{
                 elements: {
                   formButtonPrimary: 'bg-primary hover:bg-primary/90',

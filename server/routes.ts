@@ -69,6 +69,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API routes - prefixed with /api
   const apiRouter = express.Router();
   app.use("/api", apiRouter);
+  
+  // Clerk API proxy for handling authentication routes
+  app.use('/.clerk', async (req, res, next) => {
+    try {
+      log(`Forwarding Clerk request: ${req.method} ${req.url}`);
+      // Forward the request to Clerk's API
+      const response = await fetch(`https://api.clerk.dev${req.url}`, {
+        method: req.method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.CLERK_SECRET_KEY}`,
+          ...req.headers as any
+        },
+        body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined
+      });
+      
+      // Forward the response back to the client
+      const data = await response.text();
+      res.status(response.status).send(data);
+    } catch (error) {
+      console.error('Error in Clerk API proxy:', error);
+      next(error);
+    }
+  });
 
   // Auth routes
   apiRouter.post("/register", async (req, res) => {

@@ -49,6 +49,13 @@ function Router() {
       <Route path="/sign-up/*" component={Register} />
       <Route path="/user/*" component={Dashboard} />
       
+      {/* Additional Clerk verification routes */}
+      <Route path="/register/*" component={Register} />
+      <Route path="/login/*" component={Login} />
+      <Route path="/verify/*" component={Register} />
+      <Route path="/forgot-password/*" component={Login} />
+      <Route path="/reset-password/*" component={Login} />
+      
       <Route component={NotFound} />
     </Switch>
   );
