@@ -101,7 +101,10 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
 
 // Types for frontend/backend usage
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type User = typeof users.$inferSelect & {
+  // Non-persisted fields that may be sent from the API but are not in the database
+  authToken?: string;
+};
 
 export type InsertQuizAnswer = z.infer<typeof insertQuizAnswerSchema>;
 export type QuizAnswer = typeof quizAnswers.$inferSelect;

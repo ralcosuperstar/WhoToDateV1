@@ -106,8 +106,18 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       console.log("User synchronized successfully:", userData);
       setUser(userData);
       
-      // Update the cached user data
-      queryClient.setQueryData(["/api/me"], userData);
+      // Check if we have an authToken in response and store it
+      if (userData.authToken) {
+        console.log("Auth token received, storing for future requests:", userData.authToken.substring(0, 8) + "...");
+        localStorage.setItem("auth_token", userData.authToken);
+        
+        // Also set in a cookie for cross-tab access
+        document.cookie = `auth_token=${userData.authToken}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+      }
+      
+      // Update the cached user data (remove authToken from cached data)
+      const { authToken, ...userWithoutToken } = userData;
+      queryClient.setQueryData(["/api/me"], userWithoutToken);
       
       // Make a follow-up request to /api/me to ensure session is established
       // Use direct fetch with credentials to ensure cookies are sent
@@ -117,7 +127,8 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
         credentials: "include",
         headers: {
           'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+          'Pragma': 'no-cache',
+          'Authorization': `Bearer ${userData.authToken || localStorage.getItem("auth_token") || ""}`
         }
       });
       
@@ -187,8 +198,18 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       const userData: User = await response.json();
       setUser(userData);
       
-      // Update the cached user data
-      queryClient.setQueryData(["/api/me"], userData);
+      // Check if we have an authToken in response and store it
+      if (userData.authToken) {
+        console.log("Auth token received during account linking, storing for future requests:", userData.authToken.substring(0, 8) + "...");
+        localStorage.setItem("auth_token", userData.authToken);
+        
+        // Also set in a cookie for cross-tab access
+        document.cookie = `auth_token=${userData.authToken}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+      }
+      
+      // Update the cached user data (remove authToken from cached data if it exists)
+      const { authToken, ...userWithoutToken } = userData;
+      queryClient.setQueryData(["/api/me"], userWithoutToken);
       
       // Verify session by making a follow-up request to /api/me
       console.log("Verifying session after account linking with /api/me, cookies:", document.cookie.split(';').map(c => c.trim()));
@@ -196,7 +217,8 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
         credentials: "include",
         headers: {
           'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+          'Pragma': 'no-cache',
+          'Authorization': `Bearer ${userData.authToken || localStorage.getItem("auth_token") || ""}`
         }
       });
       
