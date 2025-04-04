@@ -2,7 +2,7 @@ import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { pgStorage } from "./pgStorage";
-import { db as dbConnection } from "./db"; // Import to check if connection is available
+import { db as dbConnection, pool } from "./db"; // Import to check if connection is available
 import { z } from "zod";
 import { 
   insertUserSchema, 
@@ -14,6 +14,7 @@ import {
 import bcrypt from "bcryptjs";
 import session from "express-session";
 import MemoryStore from "memorystore";
+import connectPgSimple from "connect-pg-simple";
 import { log } from "./vite";
 
 // Select appropriate storage implementation
@@ -45,25 +46,55 @@ declare module 'express-session' {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Configure session middleware
-  const SessionStore = MemoryStore(session);
+  // If we have a PostgreSQL connection, use it for sessions
+  let sessionStore;
+  
+  try {
+    if (process.env.DATABASE_URL && pool) {
+      log("Using PostgreSQL for session storage");
+      const PostgresStore = connectPgSimple(session);
+      sessionStore = new PostgresStore({
+        pool: pool as any, // Cast to any to avoid type issues
+        tableName: 'user_sessions',
+        createTableIfMissing: true,
+      });
+    } else {
+      log("Using memory store for session storage (no database connection)");
+      const SessionStore = MemoryStore(session);
+      sessionStore = new SessionStore({
+        checkPeriod: 86400000, // prune expired entries every 24h
+      });
+    }
+  } catch (err) {
+    log(`Session store initialization error: ${err}`);
+    log("Falling back to memory store for sessions");
+    const SessionStore = MemoryStore(session);
+    sessionStore = new SessionStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    });
+  }
   
   // Set trust proxy to allow cookies to work in development
   app.set('trust proxy', 1);
   
+  // Important cookie settings
+  const cookieSettings = {
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true,
+    secure: false, // Set to false in development to work with http
+    sameSite: 'lax' as const
+  };
+  
+  log(`Cookie settings: ${JSON.stringify(cookieSettings)}`);
+  
   app.use(
     session({
       secret: process.env.SESSION_SECRET || "mydate-secret-key",
-      resave: false,
-      saveUninitialized: true, // Changed to true to ensure cookie is always set
-      cookie: { 
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      },
-      store: new SessionStore({
-        checkPeriod: 86400000, // prune expired entries every 24h
-      }),
+      resave: false, 
+      saveUninitialized: true, // Store session regardless of if it's modified
+      cookie: cookieSettings,
+      store: sessionStore,
+      name: 'whotodate.sid', // Custom name to avoid conflicts
     })
   );
 

@@ -111,8 +111,14 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       
       // Make a follow-up request to /api/me to ensure session is established
       // Use direct fetch with credentials to ensure cookies are sent
+      console.log("Verifying session with /api/me, cookies:", document.cookie.split(';').map(c => c.trim()));
+      
       const meResponse = await fetch("/api/me", { 
-        credentials: "include"
+        credentials: "include",
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
       });
       
       if (meResponse.ok) {
@@ -185,7 +191,14 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/me"], userData);
       
       // Verify session by making a follow-up request to /api/me
-      const meResponse = await fetch("/api/me", { credentials: "include" });
+      console.log("Verifying session after account linking with /api/me, cookies:", document.cookie.split(';').map(c => c.trim()));
+      const meResponse = await fetch("/api/me", { 
+        credentials: "include",
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       
       if (meResponse.ok) {
         const updatedUserData = await meResponse.json();
