@@ -29,7 +29,7 @@ const FrameworkCard = ({
           </div>
         </div>
         
-        <div className="grid grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mt-6">
           {stats.map((stat, index) => (
             <div key={index} className="bg-neutral-50 p-3 rounded-lg text-center">
               <div className="text-2xl font-semibold text-primary mb-1">{stat.value}</div>
@@ -158,7 +158,7 @@ const Science = () => {
             
             <div className="relative">
               <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200 relative z-10">
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6">
                   <div className="bg-blue-50 rounded-lg p-3 flex flex-col items-center justify-center text-center">
                     <div className="text-3xl font-bold text-blue-600 mb-1">4</div>
                     <p className="text-xs text-blue-600/80">Scientific<br />Frameworks</p>
@@ -216,7 +216,7 @@ const Science = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
             <FrameworkCard
               title="Attachment Theory"
               description="Explains how your early relationships with caregivers shape your adult attachment patterns and impacts how you form emotional bonds."
@@ -250,7 +250,7 @@ const Science = () => {
             />
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <FrameworkCard
               title="Emotional Intelligence"
               description="Evaluates your ability to understand and manage emotions in yourself and others - a critical factor in relationship success."
@@ -352,7 +352,7 @@ const Science = () => {
           <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100">
             <h3 className="font-heading font-semibold text-xl mb-4 text-center">Our Scientific Advisory Board</h3>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="h-16 w-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-3">
                   <span className="emoji text-xl">👩‍🔬</span>
@@ -406,7 +406,7 @@ const Science = () => {
             </div>
             
             <div className="p-6">
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div>
                   <h4 className="font-medium text-lg mb-4 flex items-center">
                     <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">1</span>
@@ -483,7 +483,7 @@ const Science = () => {
                     Our algorithm doesn't just average scores. It identifies specific patterns in your responses that indicate compatibility strengths and challenges based on psychological research.
                   </p>
                   
-                  <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-6">
                     <div className="bg-green-50 rounded-lg p-3 text-center">
                       <div className="h-10 w-10 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-2">
                         <span className="emoji">🟢</span>
@@ -521,7 +521,7 @@ const Science = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5">
               <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-4">
                 <span className="emoji text-xl">🧪</span>
@@ -667,7 +667,7 @@ const Science = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
             <ResearchHighlight
               title="Attachment Styles Predict Relationship Patterns"
               source="Journal of Personality and Social Psychology, 2018"
@@ -733,7 +733,7 @@ const Science = () => {
           </div>
           
           <div className="bg-white rounded-xl p-6 md:p-8 shadow-md border border-neutral-100 mb-8">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               <div>
                 <h3 className="font-heading font-semibold text-xl mb-4">Multi-Dimensional Analysis</h3>
                 
@@ -831,7 +831,7 @@ const Science = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="bg-green-50 p-3 rounded-lg">
                       <h5 className="text-xs font-medium text-green-700 mb-2">Strengths</h5>
                       <ul className="space-y-1">
