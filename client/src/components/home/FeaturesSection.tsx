@@ -2,87 +2,146 @@ import { Link } from "wouter";
 
 const FeaturesSection = () => {
   return (
-    <section className="py-16 bg-white px-4 relative overflow-hidden" id="how-it-works">
+    <section className="py-12 bg-white px-4 relative overflow-hidden" id="how-it-works">
       {/* Mobile-friendly background elements */}
       <div className="absolute -right-10 -top-10 w-32 h-32 bg-pink-50 rounded-full opacity-70"></div>
       <div className="absolute left-5 bottom-5 w-24 h-24 bg-yellow-50 rounded-full opacity-70"></div>
       
       <div className="max-w-md sm:max-w-xl md:max-w-5xl mx-auto relative z-10">
-        <div className="text-center mb-10">
-          <div className="inline-block mb-2 py-1 px-3 bg-primary/10 rounded-full">
-            <span className="text-primary font-medium text-xs sm:text-sm flex items-center">
-              <span className="emoji mr-1">🧭</span> From Insight to Action
-            </span>
-          </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-3">How WhoToDate Works <span className="emoji">🔍</span></h2>
-          <p className="text-sm sm:text-base md:text-lg mx-auto text-neutral-dark/80 max-w-2xl mb-4">
-            Our scientific assessment translates your unique personality traits into actionable relationship insights
+        {/* Mobile-friendly heading */}
+        <div className="text-center mb-8">
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-3">
+            <span className="emoji mr-2">💘</span> Stop Guessing, Start Knowing
+          </h2>
+          <p className="text-base md:text-lg mx-auto text-neutral-dark/80 max-w-2xl leading-relaxed">
+            Our personality test takes the guesswork out of relationships by showing you exactly who you're compatible with
           </p>
-          <Link href="/how-it-works" className="text-primary font-medium hover:underline inline-flex items-center">
-            <span>View detailed process</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </Link>
         </div>
         
-        {/* Enhanced process flow - horizontal on larger screens */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {/* Step 1: Take the Assessment */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-pink-100 relative">
-            <div className="absolute -left-2 -top-2 w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">1</div>
-            <div className="flex flex-col items-center text-center md:items-start md:text-left">
-              <div className="mb-4 w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                <span className="emoji text-2xl">📋</span>
-              </div>
-              <div>
-                <h3 className="font-heading font-semibold text-lg sm:text-xl mb-2">Complete the Assessment</h3>
-                <p className="text-sm sm:text-base text-neutral-dark/80">
-                  Answer 30 scientifically designed questions that measure your attachment style, personality traits, emotional intelligence, and relationship values
-                </p>
-                <div className="mt-3 inline-flex items-center bg-purple-50 py-1 px-2 rounded-lg">
-                  <span className="emoji mr-1">⏱️</span>
-                  <span className="text-xs text-purple-700 font-medium">Just 5 minutes to complete</span>
-                </div>
-              </div>
+        {/* Results snapshot - what you'll get */}
+        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-5 md:p-8 shadow-md mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-heading font-semibold text-xl">
+              <span className="emoji mr-2">✨</span> What You'll Discover
+            </h3>
+            <div className="bg-white rounded-full py-1 px-3 text-xs font-medium text-primary shadow-sm border border-pink-100">
+              In Just 5 Minutes
             </div>
           </div>
           
-          {/* Step 2: Get Your Comprehensive Analysis */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-blue-100 relative">
-            <div className="absolute -left-2 -top-2 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">2</div>
-            <div className="flex flex-col items-center text-center md:items-start md:text-left">
-              <div className="mb-4 w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
-                <span className="emoji text-2xl">🧠</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-pink-100 flex flex-col items-center text-center">
+              <div className="h-12 w-12 rounded-full bg-pink-50 flex items-center justify-center text-primary mb-2">
+                <span className="emoji text-xl">👫</span>
               </div>
-              <div>
-                <h3 className="font-heading font-semibold text-lg sm:text-xl mb-2">Receive Your Analysis</h3>
-                <p className="text-sm sm:text-base text-neutral-dark/80">
-                  Our algorithm analyzes your responses against established psychological frameworks to create your comprehensive relationship profile
-                </p>
-                <div className="mt-3 inline-flex items-center bg-blue-50 py-1 px-2 rounded-lg">
-                  <span className="emoji mr-1">📊</span>
-                  <span className="text-xs text-blue-700 font-medium">Data-driven insights</span>
-                </div>
+              <h4 className="font-medium text-sm md:text-base mb-1">Your Match Type</h4>
+              <p className="text-xs text-neutral-dark/70">
+                Exactly who you should date
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100 flex flex-col items-center text-center">
+              <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-2">
+                <span className="emoji text-xl">🧠</span>
               </div>
+              <h4 className="font-medium text-sm md:text-base mb-1">Love Personality</h4>
+              <p className="text-xs text-neutral-dark/70">
+                Your unique relationship style
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-green-100 flex flex-col items-center text-center">
+              <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-2">
+                <span className="emoji text-xl">💪</span>
+              </div>
+              <h4 className="font-medium text-sm md:text-base mb-1">Key Strengths</h4>
+              <p className="text-xs text-neutral-dark/70">
+                What makes you special
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-yellow-100 flex flex-col items-center text-center">
+              <div className="h-12 w-12 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600 mb-2">
+                <span className="emoji text-xl">🚫</span>
+              </div>
+              <h4 className="font-medium text-sm md:text-base mb-1">Red Flags</h4>
+              <p className="text-xs text-neutral-dark/70">
+                Who to definitely avoid
+              </p>
             </div>
           </div>
           
-          {/* Step 3: Apply the Insights */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-green-100 relative">
-            <div className="absolute -left-2 -top-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">3</div>
-            <div className="flex flex-col items-center text-center md:items-start md:text-left">
-              <div className="mb-4 w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-green-600">
-                <span className="emoji text-2xl">💪</span>
-              </div>
-              <div>
-                <h3 className="font-heading font-semibold text-lg sm:text-xl mb-2">Apply the Knowledge</h3>
-                <p className="text-sm sm:text-base text-neutral-dark/80">
-                  Transform your relationship journey with practical compatibility guidance, personalized recommendations, and relationship skill-building tips
+          {/* Mobile primary CTA */}
+          <div className="mt-5 md:hidden">
+            <Link 
+              href="/register" 
+              className="block w-full py-3 bg-primary text-white font-bold rounded-xl text-center shadow-md hover:bg-primary/90 transition"
+              style={{animation: "pulse 2s infinite"}}
+            >
+              <span className="emoji mr-2">🚀</span> Take Free Test Now
+            </Link>
+          </div>
+        </div>
+        
+        {/* Simple, super easy process - 3 steps with illustrations */}
+        <div className="mb-10">
+          <h3 className="font-heading font-semibold text-xl md:text-2xl text-center mb-6">
+            <span className="emoji mr-2">👣</span> 3 Simple Steps to Better Relationships
+          </h3>
+          
+          <div className="grid md:grid-cols-3 gap-5">
+            <div className="relative">
+              <div className="bg-white rounded-xl p-5 shadow-md border border-pink-100 h-full">
+                <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">1</div>
+                <img 
+                  src="https://cdn-icons-png.flaticon.com/512/3209/3209175.png" 
+                  alt="Take the quiz" 
+                  className="w-16 h-16 mx-auto mb-3 opacity-80"
+                />
+                <h4 className="font-bold text-center text-lg mb-2">Quick Quiz</h4>
+                <p className="text-center text-sm text-neutral-dark/70">
+                  Answer fun personality questions about your relationship habits
                 </p>
-                <div className="mt-3 inline-flex items-center bg-green-50 py-1 px-2 rounded-lg">
-                  <span className="emoji mr-1">🔑</span>
-                  <span className="text-xs text-green-700 font-medium">Actionable strategies</span>
+                <div className="bg-primary/5 text-primary text-xs font-medium py-1 px-2 rounded-full flex items-center justify-center mt-3 w-max mx-auto">
+                  <span className="emoji mr-1">⏱️</span> Only 5 minutes
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative mt-6 md:mt-0">
+              <div className="hidden md:block absolute top-1/2 -left-5 h-0.5 w-10 bg-pink-100"></div>
+              <div className="bg-white rounded-xl p-5 shadow-md border border-blue-100 h-full">
+                <div className="absolute -top-3 -left-3 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">2</div>
+                <img 
+                  src="https://cdn-icons-png.flaticon.com/512/2910/2910756.png" 
+                  alt="Get results" 
+                  className="w-16 h-16 mx-auto mb-3 opacity-80"
+                />
+                <h4 className="font-bold text-center text-lg mb-2">See Results</h4>
+                <p className="text-center text-sm text-neutral-dark/70">
+                  Discover your relationship type and who you're compatible with
+                </p>
+                <div className="bg-blue-50 text-blue-600 text-xs font-medium py-1 px-2 rounded-full flex items-center justify-center mt-3 w-max mx-auto">
+                  <span className="emoji mr-1">💯</span> Scientifically backed
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative mt-6 md:mt-0">
+              <div className="hidden md:block absolute top-1/2 -left-5 h-0.5 w-10 bg-blue-100"></div>
+              <div className="bg-white rounded-xl p-5 shadow-md border border-green-100 h-full">
+                <div className="absolute -top-3 -left-3 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg">3</div>
+                <img 
+                  src="https://cdn-icons-png.flaticon.com/512/2518/2518048.png" 
+                  alt="Transform relationships" 
+                  className="w-16 h-16 mx-auto mb-3 opacity-80"
+                />
+                <h4 className="font-bold text-center text-lg mb-2">Level Up</h4>
+                <p className="text-center text-sm text-neutral-dark/70">
+                  Use your insights to find better matches and improve relationships
+                </p>
+                <div className="bg-green-50 text-green-600 text-xs font-medium py-1 px-2 rounded-full flex items-center justify-center mt-3 w-max mx-auto">
+                  <span className="emoji mr-1">🔝</span> Premium features available
                 </div>
               </div>
             </div>
@@ -137,13 +196,120 @@ const FeaturesSection = () => {
           
           {/* CTA with clear benefit */}
           <div className="flex justify-center mt-8">
-            <Link href="/quiz" className="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-xl text-center transition shadow-md shadow-primary/20 text-sm sm:text-base flex items-center" style={{animation: "pulse 4s infinite"}}>
+            <Link href="/register" className="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-xl text-center transition shadow-md shadow-primary/20 text-sm sm:text-base flex items-center" style={{animation: "pulse 4s infinite"}}>
               <span className="emoji mr-2">🧪</span> Take the Free Assessment
             </Link>
           </div>
         </div>
         
-        {/* Real-world application - practical benefits with visual card */}
+        {/* Before & After stories - real transformation */}
+        <div className="mb-10">
+          <h3 className="font-heading font-semibold text-xl md:text-2xl text-center mb-6">
+            <span className="emoji mr-2">🔄</span> See The Transformation
+          </h3>
+          
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="bg-white rounded-xl shadow-md border border-pink-100 overflow-hidden">
+              <div className="bg-primary text-white py-2 px-4 font-medium text-sm">
+                <span className="emoji mr-2">⛔</span> BEFORE OUR TEST
+              </div>
+              <div className="p-4">
+                <div className="flex items-start mb-4">
+                  <div className="h-10 w-10 rounded-full bg-neutral-100 mr-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="font-medium text-sm">Neha, 27</p>
+                    <p className="text-xs text-neutral-dark/70">Software Engineer, Bengaluru</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 mb-3">
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">⛔</span>
+                    </div>
+                    <p className="text-sm">"I kept dating the same type of guys who never committed"</p>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">⛔</span>
+                    </div>
+                    <p className="text-sm">"Always attracted to people who weren't good for me"</p>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">⛔</span>
+                    </div>
+                    <p className="text-sm">"Frustrated with dating apps showing wrong matches"</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="bg-red-50 py-1 px-3 rounded-full text-xs font-medium text-red-600">
+                    <span className="emoji mr-1">💔</span> Frustrated & Confused
+                  </div>
+                  <div className="flex">
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-neutral-200">★</span>
+                    <span className="text-neutral-200">★</span>
+                    <span className="text-neutral-200">★</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-md border border-green-100 overflow-hidden">
+              <div className="bg-green-500 text-white py-2 px-4 font-medium text-sm">
+                <span className="emoji mr-2">✅</span> AFTER OUR TEST
+              </div>
+              <div className="p-4">
+                <div className="flex items-start mb-4">
+                  <div className="h-10 w-10 rounded-full bg-neutral-100 mr-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="font-medium text-sm">Neha, 27</p>
+                    <p className="text-xs text-neutral-dark/70">Software Engineer, Bengaluru</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 mb-3">
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">✅</span>
+                    </div>
+                    <p className="text-sm">"I understood my anxious attachment style & found a secure partner"</p>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">✅</span>
+                    </div>
+                    <p className="text-sm">"Now I recognize red flags early and avoid toxic matches"</p>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-2 mt-0.5 flex-shrink-0">
+                      <span className="emoji text-xs">✅</span>
+                    </div>
+                    <p className="text-sm">"In a healthy relationship with someone who complements me"</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="bg-green-50 py-1 px-3 rounded-full text-xs font-medium text-green-600">
+                    <span className="emoji mr-1">💕</span> Happy & Confident
+                  </div>
+                  <div className="flex">
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-yellow-400">★</span>
+                    <span className="text-yellow-400">★</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Relationship Type Preview */}
         <div className="grid md:grid-cols-2 gap-8 mb-10">
           <div>
             <h3 className="font-heading font-semibold text-xl sm:text-2xl mb-4">Why Understanding Your Type Transforms Relationships <span className="emoji">✨</span></h3>
