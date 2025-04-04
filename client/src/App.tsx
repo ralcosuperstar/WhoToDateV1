@@ -68,8 +68,8 @@ function App() {
 
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-  // Enable Clerk authentication since API keys are set up
-  const useClerkAuth = true;
+  // Only enable Clerk if we have the key
+  const useClerkAuth = Boolean(clerkPubKey);
   
   return (
     <QueryClientProvider client={queryClient}>
