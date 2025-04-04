@@ -70,11 +70,8 @@ function App() {
   // In development, we can access the CLERK_PUBLISHABLE_KEY directly
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
 
-  // For simplicity, let's just use the non-authenticated mode
-  // We've seen that there are issues with Clerk initialization
-  // Once you have both the CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY correctly set up,
-  // you can switch this back to use Clerk
-  const useClerkAuth = false;
+  // Enable Clerk authentication since API keys are set up
+  const useClerkAuth = true;
   
   return (
     <QueryClientProvider client={queryClient}>
