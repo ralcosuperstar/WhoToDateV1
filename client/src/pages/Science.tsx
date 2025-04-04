@@ -46,7 +46,7 @@ const FrameworkCard = ({
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-sm text-neutral-dark/80">{insight}</span>
+                <span className="text-sm text-neutral-dark/80 break-words-mobile">{insight}</span>
               </li>
             ))}
           </ul>
@@ -114,7 +114,7 @@ const ScienceMethodCard = ({
 
 const Science = () => {
   return (
-    <div className="pt-16">
+    <div className="pt-16 overflow-x-hidden">
       <Helmet>
         <title>The Science of Compatibility | WhoToDate</title>
         <meta name="description" content="Explore the scientific frameworks behind WhoToDate's compatibility assessment - attachment theory, personality traits, emotional intelligence, and relationship values." />
@@ -135,21 +135,21 @@ const Science = () => {
                 The Science Behind Relationship Compatibility
               </h1>
               
-              <p className="text-neutral-dark/80 text-lg mb-8">
+              <p className="text-neutral-dark/80 text-lg mb-8 break-words-mobile">
                 Our compatibility assessment is built on decades of psychological research, combining multiple scientific frameworks to provide personalized insights into your relationship patterns.
               </p>
               
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
                 <Link 
                   href="/register" 
-                  className="px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center"
+                  className="px-4 sm:px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center"
                 >
                   <span className="emoji mr-2">🧪</span> Take the Assessment
                 </Link>
                 
                 <Link 
                   href="/how-it-works" 
-                  className="px-6 py-3 border border-neutral-300 text-neutral-dark font-medium rounded-xl hover:bg-neutral-50 transition duration-300 flex items-center"
+                  className="px-4 sm:px-6 py-3 border border-neutral-300 text-neutral-dark font-medium rounded-xl hover:bg-neutral-50 transition duration-300 flex items-center justify-center"
                 >
                   <span className="emoji mr-2">🧭</span> How It Works
                 </Link>
@@ -184,7 +184,7 @@ const Science = () => {
                   <h3 className="font-medium text-lg mb-2 flex items-center">
                     <span className="emoji mr-2">🔬</span> Scientific Validation
                   </h3>
-                  <p className="text-sm text-neutral-dark/80">
+                  <p className="text-sm text-neutral-dark/80 break-words-mobile">
                     Our assessment methodology has been refined through analysis of 10,000+ relationship profiles and shows 85% accuracy in predicting relationship satisfaction when comparing compatible types.
                   </p>
                 </div>
@@ -704,7 +704,7 @@ const Science = () => {
             
             <Link 
               href="/quiz" 
-              className="px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 inline-flex items-center"
+              className="px-4 sm:px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition duration-300 inline-flex items-center justify-center w-full sm:w-auto"
             >
               <span className="emoji mr-2">🧪</span> Take the Assessment
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -882,7 +882,7 @@ const Science = () => {
             
             <Link 
               href="/quiz" 
-              className="px-8 py-4 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary/90 transition duration-300 inline-flex items-center"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white font-medium rounded-xl shadow-lg hover:bg-primary/90 transition duration-300 inline-flex items-center justify-center w-full sm:w-auto"
               style={{animation: "pulse 4s infinite"}}
             >
               <span className="emoji mr-2">🧪</span> Start Your Scientific Assessment
@@ -910,7 +910,7 @@ const Science = () => {
           
           <Link 
             href="/quiz" 
-            className="px-8 py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center" 
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center justify-center w-full sm:w-auto" 
           >
             <span className="emoji mr-2">🧪</span>
             <span>Take the Scientific Assessment</span>
