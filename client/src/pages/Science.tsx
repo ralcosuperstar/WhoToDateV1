@@ -18,21 +18,21 @@ const FrameworkCard = ({
 }) => {
   return (
     <div className="bg-white rounded-xl shadow-md border border-neutral-100 overflow-hidden">
-      <div className="p-6">
-        <div className="flex items-start">
-          <div className="mr-4 text-primary">
+      <div className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start">
+          <div className="mb-3 sm:mb-0 sm:mr-4 text-primary">
             {icon}
           </div>
           <div>
             <h3 className="font-heading font-semibold text-xl mb-2">{title}</h3>
-            <p className="text-neutral-dark/80">{description}</p>
+            <p className="text-sm sm:text-base text-neutral-dark/80">{description}</p>
           </div>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mt-6">
           {stats.map((stat, index) => (
             <div key={index} className="bg-neutral-50 p-3 rounded-lg text-center">
-              <div className="text-2xl font-semibold text-primary mb-1">{stat.value}</div>
+              <div className="text-xl sm:text-2xl font-semibold text-primary mb-1">{stat.value}</div>
               <div className="text-xs text-neutral-dark/70">{stat.label}</div>
             </div>
           ))}
@@ -69,9 +69,9 @@ const ResearchHighlight = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-neutral-100">
-      <div className="flex items-start">
-        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3 mt-1 shrink-0">
+    <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-neutral-100">
+      <div className="flex flex-col sm:flex-row items-start">
+        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-3 sm:mb-0 sm:mr-3 sm:mt-1 shrink-0">
           {icon}
         </div>
         <div>
@@ -97,7 +97,7 @@ const ScienceMethodCard = ({
   icon: React.ReactNode; 
 }) => {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100 h-full">
+    <div className="bg-white rounded-xl p-4 sm:p-6 shadow-md border border-neutral-100 h-full">
       <div className="h-12 w-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg mb-4">
         {number}
       </div>
@@ -105,9 +105,9 @@ const ScienceMethodCard = ({
         <div className="mr-2 text-primary">
           {icon}
         </div>
-        <h3 className="font-heading font-semibold text-lg">{title}</h3>
+        <h3 className="font-heading font-semibold text-base sm:text-lg">{title}</h3>
       </div>
-      <p className="text-neutral-dark/80 text-sm">{description}</p>
+      <p className="text-neutral-dark/80 text-xs sm:text-sm">{description}</p>
     </div>
   );
 };
@@ -157,7 +157,7 @@ const Science = () => {
             </div>
             
             <div className="relative">
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200 relative z-10">
+              <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-neutral-200 relative z-10 overflow-hidden">
                 <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6">
                   <div className="bg-blue-50 rounded-lg p-3 flex flex-col items-center justify-center text-center">
                     <div className="text-3xl font-bold text-blue-600 mb-1">4</div>
@@ -401,12 +401,12 @@ const Science = () => {
           </div>
           
           <div className="bg-white rounded-xl shadow-md border border-neutral-100 overflow-hidden mb-10">
-            <div className="bg-primary text-white p-5">
-              <h3 className="font-heading font-semibold text-xl">Scoring Methodology Overview</h3>
+            <div className="bg-primary text-white p-4 sm:p-5">
+              <h3 className="font-heading font-semibold text-lg sm:text-xl">Scoring Methodology Overview</h3>
             </div>
             
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 <div>
                   <h4 className="font-medium text-lg mb-4 flex items-center">
                     <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">1</span>
@@ -521,8 +521,8 @@ const Science = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 sm:p-5">
               <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-4">
                 <span className="emoji text-xl">🧪</span>
               </div>
