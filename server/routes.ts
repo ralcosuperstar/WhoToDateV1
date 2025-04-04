@@ -46,12 +46,21 @@ declare module 'express-session' {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Configure session middleware
   const SessionStore = MemoryStore(session);
+  
+  // Set trust proxy to allow cookies to work in development
+  app.set('trust proxy', 1);
+  
   app.use(
     session({
       secret: process.env.SESSION_SECRET || "mydate-secret-key",
       resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 86400000 }, // 24 hours
+      saveUninitialized: true, // Changed to true to ensure cookie is always set
+      cookie: { 
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+      },
       store: new SessionStore({
         checkPeriod: 86400000, // prune expired entries every 24h
       }),
@@ -204,16 +213,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  apiRouter.get("/me", isAuthenticated, async (req, res) => {
+  apiRouter.get("/me", async (req, res) => {
+    // Add debug logging
+    log(`/api/me called, session: ${req.session.id}, userId: ${req.session.userId || 'none'}`);
+    
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
     try {
-      const user = await db.getUser(req.session.userId!);
+      log(`Looking up user with ID: ${req.session.userId}`);
+      const user = await db.getUser(req.session.userId);
+      
       if (!user) {
+        log(`User not found with ID: ${req.session.userId}`);
         return res.status(404).json({ message: "User not found" });
       }
       
+      log(`Found user: ${user.username} (ID: ${user.id})`);
       const { password, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
     } catch (error) {
+      log(`Error retrieving user: ${error}`);
       res.status(500).json({ message: "Failed to get user" });
     }
   });
@@ -227,10 +248,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Clerk ID is required" });
       }
       
+      // Log important debugging information
+      log(`Syncing user with Clerk ID: ${clerkId}, email: ${email || 'not provided'}`);
+      log(`Current session ID: ${req.session.id}`);
+      log(`Current session userId: ${req.session.userId || 'not set'}`);
+      
       // Check if user with this Clerk ID already exists
       const existingUser = await db.getUserByClerkId(clerkId);
       
       if (existingUser) {
+        log(`Found existing user with Clerk ID: ${clerkId}, user ID: ${existingUser.id}`);
+        
         // Update existing user with the latest Clerk data
         const updatedUser = await db.updateUserByClerkId(clerkId, {
           email: email || existingUser.email,
@@ -242,6 +270,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Set user session
         req.session.userId = updatedUser.id;
         
+        // Save session immediately to ensure it persists
+        await new Promise<void>((resolve, reject) => {
+          req.session.save(err => {
+            if (err) {
+              log(`Error saving session: ${err.message}`);
+              reject(err);
+            } else {
+              log(`Session saved successfully, userId: ${req.session.userId}`);
+              resolve();
+            }
+          });
+        });
+        
         const { password, ...userWithoutPassword } = updatedUser;
         return res.json(userWithoutPassword);
       }
@@ -251,6 +292,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const userByEmail = await db.getUserByEmail(email);
         
         if (userByEmail && !userByEmail.clerkId) {
+          log(`Found existing user by email: ${email}, linking to Clerk ID: ${clerkId}`);
+          
           // Link existing account to Clerk
           const linkedUser = await db.linkUserToClerk(userByEmail.id, clerkId);
           
@@ -264,11 +307,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Set user session
           req.session.userId = updatedUser.id;
           
+          // Save session immediately
+          await new Promise<void>((resolve, reject) => {
+            req.session.save(err => {
+              if (err) {
+                log(`Error saving session: ${err.message}`);
+                reject(err);
+              } else {
+                log(`Session saved successfully, userId: ${req.session.userId}`);
+                resolve();
+              }
+            });
+          });
+          
           const { password, ...userWithoutPassword } = updatedUser;
           return res.json(userWithoutPassword);
         }
       }
       
+      log(`Creating new user for Clerk ID: ${clerkId}`);
       // Create new user if none exists
       const newUser = await db.createUser({
         clerkId,
@@ -281,6 +338,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Set user session
       req.session.userId = newUser.id;
+      
+      // Save session immediately
+      await new Promise<void>((resolve, reject) => {
+        req.session.save(err => {
+          if (err) {
+            log(`Error saving session: ${err.message}`);
+            reject(err);
+          } else {
+            log(`Session saved successfully, userId: ${req.session.userId}`);
+            resolve();
+          }
+        });
+      });
       
       const { password, ...userWithoutPassword } = newUser;
       return res.status(201).json(userWithoutPassword);

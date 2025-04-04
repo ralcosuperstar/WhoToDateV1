@@ -81,6 +81,8 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
+      console.log("Syncing user with Clerk ID:", clerkUser.id);
+      
       // Send the Clerk user data to our backend
       const response = await apiRequest("POST", "/api/users/sync", {
         clerkId: clerkUser.id,
@@ -91,20 +93,30 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
       });
       
       if (!response.ok) {
-        throw new Error("Failed to sync user with backend");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to sync user with backend");
       }
       
       const userData: User = await response.json();
+      console.log("User synchronized successfully:", userData);
       setUser(userData);
       
       // Update the cached user data
       queryClient.setQueryData(["/api/me"], userData);
       
+      // Make a follow-up request to /api/me to ensure session is established
+      const meResponse = await apiRequest("GET", "/api/me");
+      if (meResponse.ok) {
+        const updatedUserData: User = await meResponse.json();
+        queryClient.setQueryData(["/api/me"], updatedUserData);
+      }
+      
     } catch (err) {
+      console.error("Error syncing user:", err);
       setError(err instanceof Error ? err : new Error(String(err)));
       toast({
         title: "Authentication error",
-        description: "Failed to synchronize your account data",
+        description: err instanceof Error ? err.message : "Failed to synchronize your account data",
         variant: "destructive",
       });
     } finally {
