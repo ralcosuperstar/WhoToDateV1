@@ -261,18 +261,21 @@ const Quiz = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   
   // Get user data
-  const { data: user } = useQuery({ 
+  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
     queryKey: ['/api/me'],
     retry: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    // Use default on401: "throw" so we get errors instead of retrying endlessly
+    staleTime: Infinity,
   });
   
   // Check for existing quiz answers
   const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({ 
     queryKey: ['/api/quiz'],
-    enabled: !!user,
+    enabled: !!user, // Only run this query if we have a user
     retry: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
   
   // Find current question
@@ -443,8 +446,8 @@ const Quiz = () => {
   const canGoNext = currentQuestion ? answers[currentQuestion.id] !== undefined : false;
   const isLastQuestion = currentQuestion ? currentQuestion.id === quizQuestions.length : false;
   
-  // Handle authentication requirements
-  if (user === undefined) {
+  // Handle authentication and loading states
+  if (isUserLoading) {
     // Initial loading
     return (
       <div className="pt-20 px-4 pb-12">
@@ -455,6 +458,17 @@ const Quiz = () => {
         </div>
       </div>
     );
+  }
+  
+  // Check for authentication error but allow guest users
+  if (isUserError) {
+    // Show intro page for guests
+    if (showIntro) {
+      // Do nothing, the render after this condition will show the intro
+    } else {
+      // Handle answers locally for guest users
+      console.log("User is not authenticated, storing answers locally only");
+    }
   }
   
   return (

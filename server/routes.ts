@@ -69,9 +69,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Authentication middleware
   const isAuthenticated = (req: Request, res: Response, next: Function) => {
+    log(`isAuthenticated check: session ID: ${req.session.id}, userId: ${req.session.userId || 'none'}`);
+    
     if (req.session.userId) {
+      log(`User is authenticated: ${req.session.userId}`);
       return next();
     }
+    
+    log(`Authentication failed, no userId in session`);
     res.status(401).json({ message: "Unauthorized" });
   };
 
