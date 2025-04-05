@@ -83,16 +83,14 @@ function App() {
     initAnalytics();
   }, []);
 
-  // Use either VITE_CLERK_PUBLISHABLE_KEY or CLERK_PUBLISHABLE_KEY
-  // In development, we can access the CLERK_PUBLISHABLE_KEY directly
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
+  
+  // Enable Clerk authentication when key is present
+  const useClerkAuth = !!clerkPubKey;
   
   if (!clerkPubKey) {
     console.error('Clerk publishable key is missing. Please add CLERK_PUBLISHABLE_KEY to your environment variables.');
   }
-
-  // Enable Clerk authentication since API keys are set up
-  const useClerkAuth = true;
   
   return (
     <QueryClientProvider client={queryClient}>
