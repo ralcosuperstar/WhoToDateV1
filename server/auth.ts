@@ -4,7 +4,7 @@ import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
-import { storage } from "./storage";
+import { IStorage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
 import { generateVerificationToken, generateTokenExpiry, sendVerificationEmail, sendWelcomeEmail } from "./emailService";
 
@@ -29,12 +29,12 @@ async function comparePasswords(supplied: string, stored: string) {
   return timingSafeEqual(hashedBuf, suppliedBuf);
 }
 
-export function setupAuth(app: Express) {
+export function setupAuth(app: Express, db: IStorage) {
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || 'default-secret-change-in-production',
     resave: false,
     saveUninitialized: false,
-    store: storage.sessionStore,
+    store: db.sessionStore,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       httpOnly: true,
@@ -52,7 +52,7 @@ export function setupAuth(app: Express) {
   passport.use(
     new LocalStrategy(async (username: string, password: string, done: (error: any, user?: any, options?: any) => void) => {
       try {
-        const user = await storage.getUserByUsername(username);
+        const user = await db.getUserByUsername(username);
         // Check if user exists and if the password is valid
         if (!user || !user.password || !(await comparePasswords(password, user.password || ''))) {
           return done(null, false);
@@ -68,7 +68,7 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user: Express.User, done: (err: any, id?: number) => void) => done(null, user.id));
   passport.deserializeUser(async (id: number, done) => {
     try {
-      const user = await storage.getUser(id);
+      const user = await db.getUser(id);
       done(null, user);
     } catch (err) {
       done(err);
@@ -78,18 +78,18 @@ export function setupAuth(app: Express) {
   app.post("/api/register", async (req, res, next) => {
     try {
       // Check if username or email already exists
-      const existingUsername = await storage.getUserByUsername(req.body.username);
+      const existingUsername = await db.getUserByUsername(req.body.username);
       if (existingUsername) {
         return res.status(400).json({ error: "Username already exists" });
       }
       
-      const existingEmail = await storage.getUserByEmail(req.body.email);
+      const existingEmail = await db.getUserByEmail(req.body.email);
       if (existingEmail) {
         return res.status(400).json({ error: "Email already exists" });
       }
 
       // Create new user with verification fields set by default (not verified)
-      const user = await storage.createUser({
+      const user = await db.createUser({
         ...req.body,
         password: await hashPassword(req.body.password),
         clerkId: null
@@ -100,7 +100,7 @@ export function setupAuth(app: Express) {
       const tokenExpiry = generateTokenExpiry();
       
       // Update user with verification token and expiry
-      const updatedUser = await storage.setVerificationToken(user.id, verificationToken, tokenExpiry);
+      const updatedUser = await db.setVerificationToken(user.id, verificationToken, tokenExpiry);
       
       // Send verification email
       const emailSent = await sendVerificationEmail(updatedUser, verificationToken);
@@ -166,7 +166,7 @@ export function setupAuth(app: Express) {
       }
       
       // Find user with this verification token
-      const user = await storage.getUserByVerificationToken(token);
+      const user = await db.getUserByVerificationToken(token);
       
       if (!user) {
         return res.status(400).json({ 
@@ -176,14 +176,14 @@ export function setupAuth(app: Express) {
       }
       
       // Verify the user
-      await storage.verifyUser(user.id);
+      await db.verifyUser(user.id);
       
       // Send welcome email
       await sendWelcomeEmail(user);
       
       // If user is already logged in, update their session
       if (req.isAuthenticated() && req.user.id === user.id) {
-        const verifiedUser = await storage.getUser(user.id);
+        const verifiedUser = await db.getUser(user.id);
         if (verifiedUser) {
           req.login(verifiedUser, (err) => {
             if (err) return next(err);
@@ -221,7 +221,7 @@ export function setupAuth(app: Express) {
       const tokenExpiry = generateTokenExpiry();
       
       // Update user with new verification token and expiry
-      const updatedUser = await storage.setVerificationToken(user.id, verificationToken, tokenExpiry);
+      const updatedUser = await db.setVerificationToken(user.id, verificationToken, tokenExpiry);
       
       // Send verification email
       const emailSent = await sendVerificationEmail(updatedUser, verificationToken);

@@ -45,7 +45,7 @@ declare module 'express-session' {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication with Passport
-  setupAuth(app);
+  setupAuth(app, db);
 
   // Authentication middleware with improved type safety
   const isAuthenticated = (req: Request, res: Response, next: Function) => {
