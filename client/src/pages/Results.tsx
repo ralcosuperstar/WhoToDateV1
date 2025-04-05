@@ -16,7 +16,9 @@ import {
   BarChart4,
   Heart, 
   Send, 
-  CreditCard 
+  CreditCard,
+  Share2,
+  Users
 } from "lucide-react";
 import FullReportView from "@/components/reports/FullReportView";
 import { downloadPDFReport } from "@/lib/pdfGenerator";
@@ -519,15 +521,25 @@ const Results = () => {
     }
   }, [answers, toast, user, report, existingQuiz]);
   
-  // Show full report directly (all reports are now free)
+  // All reports are now free, so we'll show the full report directly
+  useEffect(() => {
+    // If we have a profile, show the full report immediately
+    if (profile) {
+      // Skip all modals and show the premium report directly
+      setIsPremiumReportVisible(true);
+    }
+  }, [profile]);
+  
+  // This is kept for backward compatibility but not used in the main flow anymore
   const handleGetFullReport = () => {
-    // Since reports are free, show success modal directly
-    setIsSuccessModalOpen(true);
+    // Show full report immediately
+    setIsPremiumReportVisible(true);
   };
   
+  // These handlers are kept for backward compatibility
   const handlePaymentSuccess = () => {
     setIsPaymentModalOpen(false);
-    setIsSuccessModalOpen(true);
+    setIsPremiumReportVisible(true);
   };
   
   const handleViewOnline = () => {
@@ -598,14 +610,48 @@ const Results = () => {
         {isPremiumReportVisible ? (
           <div>
             <FullReportView profile={profile} />
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={() => downloadPDFReport(profile)}
-                className="py-3 px-6 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
-              >
-                <Download className="h-5 w-5 mr-2" />
-                Download PDF Report
-              </button>
+            <div className="mt-8 space-y-4">
+              {/* Download PDF Button */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => downloadPDFReport(profile)}
+                  className="py-3 px-6 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Download PDF Report
+                </button>
+              </div>
+              
+              {/* Share and Refer Buttons */}
+              <div className="flex flex-col md:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url).then(() => {
+                      toast({
+                        title: "Link copied!",
+                        description: "Share your results link with friends",
+                      });
+                    });
+                  }}
+                  className="py-2 px-4 bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share Results
+                </button>
+                
+                <button
+                  onClick={() => {
+                    const subject = "Check out my WhoToDate compatibility profile!";
+                    const body = "I just got my relationship compatibility profile from WhoToDate and thought you might enjoy taking the quiz too! It's quick, free, and gives you surprising insights into your relationship style. Check it out at: " + window.location.origin;
+                    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  }}
+                  className="py-2 px-4 bg-green-600 text-white font-medium rounded-lg flex items-center justify-center"
+                >
+                  <Users className="h-4 w-4 mr-2" />
+                  Refer a Friend
+                </button>
+              </div>
             </div>
           </div>
         ) : (
