@@ -1,6 +1,6 @@
 import { CompatibilityProfile } from "./compatibilityAnalysis";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import autoTable from 'jspdf-autotable';
 
 // Add the autotable type to jsPDF
 declare module "jspdf" {
@@ -97,7 +97,7 @@ export const generatePDFReport = (profile: CompatibilityProfile): jsPDF => {
     return [trait.charAt(0).toUpperCase() + trait.slice(1), `${score}%`];
   });
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [["Trait", "Score"]],
     body: personalityTraits,
@@ -119,7 +119,7 @@ export const generatePDFReport = (profile: CompatibilityProfile): jsPDF => {
   const challengesData = profile.strengthsWeaknesses.challenges.map(challenge => [challenge]);
   
   // Strengths table
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [["Your Relationship Strengths"]],
     body: strengthsData,
@@ -130,7 +130,7 @@ export const generatePDFReport = (profile: CompatibilityProfile): jsPDF => {
   yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : yPos + 60;
   
   // Challenges table
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPos,
     head: [["Your Relationship Challenges"]],
     body: challengesData,
@@ -147,7 +147,7 @@ export const generatePDFReport = (profile: CompatibilityProfile): jsPDF => {
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(22);
-  doc.text("Premium Compatibility Insights", margin, 25);
+  doc.text("Comprehensive Compatibility Insights", margin, 25);
   
   yPos = 60;
   
