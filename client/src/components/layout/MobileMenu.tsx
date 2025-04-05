@@ -134,17 +134,17 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
               </div>
             ) : (
               <div className="space-y-3">
-                <Link href="/login" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+                <Link href="/auth?tab=login" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
                   <span className="emoji mr-2">🔑</span>
                   <span>Login</span>
                 </Link>
-                <Link href="/register" onClick={handleLinkClick} className="bg-primary/10 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary/10 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2">
                   <span className="emoji mr-2">✨</span>
                   <span>Create Account</span>
                 </Link>
-                <Link href="/quiz" onClick={handleLinkClick} className="bg-primary text-white w-full flex items-center justify-center py-3 rounded-lg font-medium">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary text-white w-full flex items-center justify-center py-3 rounded-lg font-medium">
                   <span className="emoji mr-2">🧪</span>
-                  <span>Take Quiz</span>
+                  <span>Try Free</span>
                 </Link>
               </div>
             )}

@@ -36,6 +36,20 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />
       
+      {/* Auth redirects - for backward compatibility */}
+      <Route path="/login">
+        {() => window.location.href = "/auth?tab=login"}
+      </Route>
+      <Route path="/register">
+        {() => window.location.href = "/auth?tab=register"}
+      </Route>
+      <Route path="/sign-in">
+        {() => window.location.href = "/auth?tab=login"}
+      </Route>
+      <Route path="/sign-up">
+        {() => window.location.href = "/auth?tab=register"}
+      </Route>
+      
       {/* Protected Routes */}
       <ProtectedRoute path="/quiz" component={Quiz} />
       <ProtectedRoute path="/results" component={Results} />

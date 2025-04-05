@@ -77,11 +77,11 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <Link href="/login" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
+            <Link href="/auth" className="hidden md:block text-neutral-dark hover:text-primary font-medium">
               Login
             </Link>
           )}
-          <Link href={user ? "/quiz" : "/register"} className="bg-primary hover:bg-primary/90 text-white font-medium px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg transition">
+          <Link href={user ? "/quiz" : "/auth?tab=register"} className="bg-primary hover:bg-primary/90 text-white font-medium px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg transition">
             {user ? "Take Quiz" : "Try Free"}
           </Link>
           <button 
