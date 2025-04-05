@@ -18,7 +18,8 @@ import {
   Send, 
   CreditCard,
   Share2,
-  Users
+  Users,
+  ArrowRight
 } from "lucide-react";
 import FullReportView from "@/components/reports/FullReportView";
 import { downloadPDFReport } from "@/lib/pdfGenerator";
@@ -162,8 +163,8 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
                   {previewData.previewGrowthRecommendation}
                 </p>
                 <p className="text-xs text-purple-700/70 mt-2 flex items-center">
-                  <Lock className="h-3 w-3 mr-1 inline" />
-                  Full growth plan available in premium report
+                  <ArrowRight className="h-3 w-3 mr-1 inline" />
+                  View your full report for complete insights
                 </p>
               </div>
             </div>
@@ -194,50 +195,46 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
           </div>
         </div>
 
-        {/* Premium Banner */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-5 mb-6">
+        {/* Free Full Report Banner */}
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5 mb-6">
           <div className="flex items-start">
-            <div className="rounded-full bg-primary/10 p-2 mr-3 mt-1">
-              <Lock className="h-5 w-5 text-primary" />
+            <div className="rounded-full bg-blue-500/10 p-2 mr-3 mt-1">
+              <BarChart4 className="h-5 w-5 text-blue-600" />
             </div>
             <div>
-              <h3 className="font-bold mb-1">Unlock Your Full Premium Report</h3>
+              <h3 className="font-bold mb-1">Access Your Full Report (It's Free!)</h3>
               <p className="text-sm opacity-80 mb-4">
-                Get complete insights, relationship tips, and all compatibility details in a downloadable PDF.
+                Get complete insights, relationship tips, and all compatibility details that can help you understand yourself better.
               </p>
               <ul className="space-y-2 mb-4">
                 <li className="flex text-sm items-start">
-                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Detailed analysis of all 5 personality dimensions</span>
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Visual analysis of all personality dimensions</span>
                 </li>
                 <li className="flex text-sm items-start">
-                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Personalized growth recommendations for personal development</span>
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Personal growth recommendations for relationship success</span>
                 </li>
                 <li className="flex text-sm items-start">
-                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Ideal partner summary based on your personality profile</span>
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Ideal partner insights based on your unique profile</span>
                 </li>
                 <li className="flex text-sm items-start">
-                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Actionable dating experiences to try in real life</span>
-                </li>
-                <li className="flex text-sm items-start">
-                  <CheckCircle2 className="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Shareable PDF you can save or print</span>
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Practical dating advice to try in real life</span>
                 </li>
               </ul>
             </div>
           </div>
           
           <motion.button
-            className="w-full py-3 px-4 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+            className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center"
             onClick={onGetFullReport}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
           >
-            <CreditCard className="h-5 w-5 mr-2" />
-            Get Full Report (₹499 only)
+            <BarChart4 className="h-5 w-5 mr-2" />
+            View My Full Report
           </motion.button>
         </div>
 
@@ -259,144 +256,9 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
   );
 };
 
-const PaymentModal = ({ 
-  isOpen, 
-  onClose, 
-  onSuccess 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  onSuccess: () => void;
-}) => {
-  const [isProcessing, setIsProcessing] = useState(false);
-  
-  if (!isOpen) return null;
-  
-  const handlePayment = () => {
-    setIsProcessing(true);
-    // Simulate payment process
-    setTimeout(() => {
-      setIsProcessing(false);
-      onSuccess();
-    }, 2000);
-  };
-  
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-        <div className="p-6">
-          <h3 className="text-xl font-bold mb-4">Complete Your Payment</h3>
-          <p className="mb-6 text-neutral-dark/70">
-            Secure one-time payment to unlock your full compatibility report.
-          </p>
-          
-          <div className="space-y-4 mb-6">
-            <div className="border border-neutral-200 rounded-lg p-4">
-              <div className="flex justify-between mb-2">
-                <span className="font-medium">Full Compatibility Report</span>
-                <span className="font-bold">₹499</span>
-              </div>
-              <p className="text-sm text-neutral-dark/70">Lifetime access and PDF download</p>
-            </div>
-            
-            <div className="border border-neutral-200 rounded-lg p-4">
-              <p className="text-sm font-medium mb-2">Payment Methods</p>
-              <div className="flex space-x-2">
-                <div className="border border-neutral-200 rounded-lg p-2 flex-1 flex items-center justify-center">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Razorpay_logo.svg" alt="Razorpay" className="h-6" />
-                </div>
-                <div className="border border-neutral-200 rounded-lg p-2 flex-1 flex items-center justify-center">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm" className="h-6" />
-                </div>
-                <div className="border border-neutral-200 rounded-lg p-2 flex-1 flex items-center justify-center">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/UPI-Logo-vector.svg" alt="UPI" className="h-6" />
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex space-x-3">
-            <button 
-              className="flex-1 py-2 px-4 border border-neutral-300 text-neutral-dark rounded-lg"
-              onClick={onClose}
-              disabled={isProcessing}
-            >
-              Cancel
-            </button>
-            
-            <button 
-              className="flex-1 py-2 px-4 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
-              onClick={handlePayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <span className="mr-2">Processing...</span>
-                  <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
-                </>
-              ) : (
-                "Pay ₹499"
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Payment modal removed as reports are now free
 
-const SuccessModal = ({ 
-  isOpen, 
-  onClose,
-  profile,
-  onViewOnline
-}: { 
-  isOpen: boolean; 
-  onClose: () => void;
-  profile: CompatibilityProfile | null;
-  onViewOnline: () => void;
-}) => {
-  if (!isOpen || !profile) return null;
-  
-  const handleDownload = () => {
-    downloadPDFReport(profile);
-    onClose();
-  };
-  
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-        <div className="p-6 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 className="h-8 w-8 text-green-500" />
-          </div>
-          
-          <h3 className="text-xl font-bold mb-2">Payment Successful!</h3>
-          <p className="mb-6 text-neutral-dark/70">
-            Your full compatibility report is ready to view and download.
-          </p>
-          
-          <div className="space-y-3">
-            <button 
-              className="w-full py-3 px-4 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
-              onClick={handleDownload}
-            >
-              <Download className="h-5 w-5 mr-2" />
-              Download Full Report
-            </button>
-            
-            <button 
-              className="w-full py-3 px-4 border border-neutral-300 text-neutral-dark rounded-lg"
-              onClick={onViewOnline}
-            >
-              View Online
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Success modal removed as reports are now free
 
 const Results = () => {
   // Initialize hooks first
@@ -407,8 +269,6 @@ const Results = () => {
   // All useState calls
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
   // All data fetching queries
@@ -536,16 +396,7 @@ const Results = () => {
     setIsPremiumReportVisible(true);
   };
   
-  // These handlers are kept for backward compatibility
-  const handlePaymentSuccess = () => {
-    setIsPaymentModalOpen(false);
-    setIsPremiumReportVisible(true);
-  };
-  
-  const handleViewOnline = () => {
-    setIsSuccessModalOpen(false);
-    setIsPremiumReportVisible(true);
-  };
+  // All handlers related to payment/premium were removed as reports are now free
   
   // Check for authentication
   if (isUserLoading) {
@@ -626,13 +477,25 @@ const Results = () => {
               <div className="flex flex-col md:flex-row gap-3 justify-center">
                 <button
                   onClick={() => {
-                    const url = window.location.href;
-                    navigator.clipboard.writeText(url).then(() => {
-                      toast({
-                        title: "Link copied!",
-                        description: "Share your results link with friends",
+                    // Create a personalized share message based on the profile
+                    const strengthText = profile.strengthsWeaknesses.strengths[0] || "";
+                    const challengeText = profile.strengthsWeaknesses.challenges[0] || "";
+                    
+                    const shareText = `I just took the WhoToDate compatibility assessment! It says my relationship strength is "${strengthText}" and I should work on "${challengeText}". This free tool helps you understand what kind of relationships suit you best. Try it yourself at: ${window.location.origin}`;
+                    
+                    // Share via WhatsApp if on mobile, otherwise copy to clipboard
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                      // Mobile device - open WhatsApp
+                      window.open(`whatsapp://send?text=${encodeURIComponent(shareText)}`);
+                    } else {
+                      // Desktop - copy to clipboard
+                      navigator.clipboard.writeText(shareText).then(() => {
+                        toast({
+                          title: "Share message copied!",
+                          description: "Paste and share with your friends",
+                        });
                       });
-                    });
+                    }
                   }}
                   className="py-2 px-4 bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center"
                 >
@@ -642,14 +505,26 @@ const Results = () => {
                 
                 <button
                   onClick={() => {
-                    const subject = "Check out my WhoToDate compatibility profile!";
-                    const body = "I just got my relationship compatibility profile from WhoToDate and thought you might enjoy taking the quiz too! It's quick, free, and gives you surprising insights into your relationship style. Check it out at: " + window.location.origin;
+                    // Create a personalized message based on profile
+                    const subject = `My ${profile.overallColor} compatibility profile from WhoToDate!`;
+                    
+                    // Get a tip to share
+                    const randomTip = profile.relationshipTips[Math.floor(Math.random() * profile.relationshipTips.length)] || "Understanding your relationship style helps find better matches";
+                    
+                    const body = `Hey! I just discovered my relationship compatibility type on WhoToDate. 
+                    
+My profile says I'm a ${profile.attachmentStyle} attachment style with ${profile.mbtiStyle} personality type. One relationship tip I got was: "${randomTip}"
+
+This free tool gives you insights into your relationship patterns and helps you understand what kind of relationships will suit you best. It takes about 5 minutes to complete.
+
+Try it yourself at: ${window.location.origin}`;
+                    
                     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                   }}
                   className="py-2 px-4 bg-green-600 text-white font-medium rounded-lg flex items-center justify-center"
                 >
                   <Users className="h-4 w-4 mr-2" />
-                  Refer a Friend
+                  Email to a Friend
                 </button>
               </div>
             </div>
@@ -660,19 +535,6 @@ const Results = () => {
             onGetFullReport={handleGetFullReport} 
           />
         )}
-        
-        <PaymentModal 
-          isOpen={isPaymentModalOpen} 
-          onClose={() => setIsPaymentModalOpen(false)} 
-          onSuccess={handlePaymentSuccess} 
-        />
-        
-        <SuccessModal 
-          isOpen={isSuccessModalOpen} 
-          onClose={() => setIsSuccessModalOpen(false)}
-          profile={profile}
-          onViewOnline={handleViewOnline} 
-        />
       </div>
     </div>
   );
