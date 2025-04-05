@@ -147,10 +147,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       log(`Creating report for user: ${req.user.id}`);
       
-      // Validate required fields
-      if (!req.body.quizId || !req.body.compatibilityProfile) {
+      // Log what we received in the request body for debugging
+      console.log("Received report request body:", JSON.stringify(req.body, null, 2));
+      
+      // Validate required fields - we need a quizId at minimum
+      if (!req.body.quizId) {
         return res.status(400).json({ 
-          message: "Missing required fields: quizId and compatibilityProfile are required"
+          message: "Missing required field: quizId is required"
+        });
+      }
+      
+      // Also make sure there's some kind of profile data
+      if (!req.body.compatibilityProfile && !req.body.report) {
+        return res.status(400).json({
+          message: "Missing required profile data"
         });
       }
       
@@ -169,11 +179,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Now validate and create the report
+      // Prepare the report data with values for required fields
+      // Simplify by accepting existing fields but ensuring all required fields are present
       const reportData = insertReportSchema.parse({
-        ...req.body,
         userId: req.user.id,
-        quizId: quiz.id // Use the verified quiz ID from the database
+        quizId: quiz.id, // Use the verified quiz ID from the database
+        
+        // Use directly provided report or compatibilityProfile
+        report: req.body.report || req.body.compatibilityProfile || {},
+        
+        // Use the provided compatibilityColor or extract from profile
+        compatibilityColor: req.body.compatibilityColor || 
+          (req.body.compatibilityProfile && req.body.compatibilityProfile.overallColor) || 
+          (req.body.report && req.body.report.overallColor) || 
+          'green',
+          
+        isPaid: true // All reports are free
       });
       
       // Check if a report already exists for this user

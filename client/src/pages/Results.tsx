@@ -434,7 +434,9 @@ const Results = () => {
   const createReportMutation = useMutation({
     mutationFn: async (data: { 
       quizId: number;
-      compatibilityProfile: CompatibilityProfile;
+      compatibilityProfile?: CompatibilityProfile; // Optional but useful for the server
+      report: CompatibilityProfile; // Required by schema
+      compatibilityColor: string; // Required by schema
       isPaid: boolean;
     }) => {
       const res = await apiRequest("POST", "/api/report", data);
@@ -487,9 +489,21 @@ const Results = () => {
             (existingQuiz as any).id : null;
           
           if (quizId) {
+            // Debugging to see what we're sending
+            console.log("Sending data to /api/report:", {
+              quizId,
+              compatibilityProfile, // Field required by server.routes.ts
+              isPaid: true 
+            });
+            
+            // Send the report data with proper structure
             createReportMutation.mutate({
               quizId,
+              // Use the actual compatibilityProfile structure for the server to access it
               compatibilityProfile,
+              // Add these fields to satisfy the schema requirements directly
+              report: compatibilityProfile,
+              compatibilityColor: compatibilityProfile.overallColor, 
               isPaid: true // All reports are free
             });
           }
