@@ -34,32 +34,38 @@ const SectionInfo = ({ section, questionNumber }: { section: string; questionNum
   let title = '';
   let description = '';
   let icon = '';
+  let sectionNumber = 0;
   
   switch(section) {
     case 'personality':
       title = 'Personality Traits';
       description = 'These questions help us understand your natural tendencies and how you interact with the world.';
       icon = '👤';
+      sectionNumber = 1;
       break;
     case 'emotional':
       title = 'Emotional Intelligence & Attachment';
       description = 'These questions explore how you connect emotionally and handle relationships.';
       icon = '❤️';
+      sectionNumber = 2;
       break;
     case 'values':
       title = 'Values & Beliefs';
       description = 'These questions help us understand what matters most to you in life and relationships.';
       icon = '⚖️';
+      sectionNumber = 3;
       break;
     case 'physical':
       title = 'Intimacy & Boundaries';
       description = 'These questions explore your attitudes toward physical and emotional intimacy.';
       icon = '🔐';
+      sectionNumber = 4;
       break;
     default:
       title = 'Compatibility Assessment';
       description = 'Answer honestly for the most accurate results.';
       icon = '🧪';
+      sectionNumber = 0;
   }
   
   return (
@@ -68,7 +74,7 @@ const SectionInfo = ({ section, questionNumber }: { section: string; questionNum
       <h2 className="text-xl font-heading font-bold mb-1">{title}</h2>
       <p className="text-neutral-dark/70 text-sm">{description}</p>
       <div className="mt-3 text-xs text-primary font-medium">
-        Section {getSectionNumber(section)} of 4 • Question {questionNumber} of 40
+        Section {sectionNumber} of 4 • Question {questionNumber} of 40
       </div>
     </div>
   );
@@ -214,7 +220,7 @@ const QuizIntro = ({ onStart }: { onStart: () => void }) => {
           </li>
           <li className="flex items-start">
             <span className="h-5 w-5 text-blue-500 mr-2">•</span>
-            <span>A free basic compatibility profile with the option to unlock the full analysis</span>
+            <span>A comprehensive compatibility profile with personalized insights and recommendations</span>
           </li>
           <li className="flex items-start">
             <span className="h-5 w-5 text-blue-500 mr-2">•</span>
@@ -249,6 +255,20 @@ const QuizIntro = ({ onStart }: { onStart: () => void }) => {
   );
 };
 
+// Honesty reminder messages
+const honestyReminders = [
+  "Remember, there are no 'right' answers—only honest ones that help you understand yourself better.",
+  "Take a moment to reflect on how you actually behave, not how you wish you would behave.",
+  "The most insightful results come from honest self-reflection, not idealized answers.",
+  "Being honest with yourself now leads to more meaningful connections later.",
+  "This is a judgment-free zone—answer based on your true feelings, not societal expectations.",
+  "Your authentic answers will help you understand your unique relationship patterns.",
+  "Think about your actual patterns in relationships, not theoretical scenarios.",
+  "The more honest you are, the more accurate your compatibility insights will be.",
+  "Recognize your true self—both strengths and growth areas—for the most helpful results.",
+  "True compatibility starts with self-awareness. Answer honestly to discover your authentic patterns."
+];
+
 const Quiz = () => {
   const [, navigate] = useLocation();
   const { toast } = useToast();
@@ -259,6 +279,7 @@ const Quiz = () => {
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [lastReminderQuestion, setLastReminderQuestion] = useState(0);
   
   // Get user data
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
@@ -371,6 +392,11 @@ const Quiz = () => {
   // Start the quiz
   const handleStartQuiz = () => {
     setShowIntro(false);
+    // Show initial honesty reminder
+    toast({
+      title: "💭 Honesty Matters",
+      description: "Remember, there are no 'right' answers—only honest ones that help you understand yourself better.",
+    });
   };
   
   // Handle answer selection
@@ -416,6 +442,16 @@ const Quiz = () => {
       } else {
         // Go to next question
         setCurrentQuestionId(currentQuestion.id + 1);
+        
+        // Show honesty reminder periodically (every ~5-8 questions)
+        if (currentQuestion.id >= lastReminderQuestion + 5 + Math.floor(Math.random() * 4)) {
+          const reminderIndex = Math.floor(Math.random() * honestyReminders.length);
+          toast({
+            title: "💭 Honesty Check",
+            description: honestyReminders[reminderIndex],
+          });
+          setLastReminderQuestion(currentQuestion.id);
+        }
         
         // Show section change toast when moving to a new section
         const currentSection = currentQuestion.section;
