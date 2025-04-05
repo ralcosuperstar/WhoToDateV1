@@ -2,17 +2,24 @@ import nodemailer from 'nodemailer';
 import { randomBytes } from 'crypto';
 import { User } from '@shared/schema';
 
-// Create a testing transporter for development
-// In production, you would configure this with actual SMTP settings
-const createDevTransporter = () => {
+// Create a testing transporter for development that uses Ethereal Email
+// This creates a temporary test account for development
+const createDevTransporter = async () => {
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+  let testAccount = await nodemailer.createTestAccount();
+  console.log('Created Ethereal test account:', testAccount.user);
+  console.log('Ethereal password:', testAccount.pass);
+
+  // Create a transporter using the test account
   return nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
+    host: "smtp.ethereal.email",
     port: 587,
-    secure: false,
+    secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.ETHEREAL_EMAIL || 'test@ethereal.email',
-      pass: process.env.ETHEREAL_PASSWORD || 'password'
-    }
+      user: testAccount.user, // generated ethereal user
+      pass: testAccount.pass, // generated ethereal password
+    },
   });
 };
 
@@ -30,10 +37,23 @@ const createProdTransporter = () => {
   });
 };
 
-// Choose transporter based on environment
-const transporter = process.env.NODE_ENV === 'production' 
-  ? createProdTransporter()
-  : createDevTransporter();
+// Initialize transporter
+let transporter: nodemailer.Transporter;
+
+// Initialize the transporter asynchronously
+async function initializeTransporter() {
+  if (process.env.NODE_ENV === 'production') {
+    transporter = createProdTransporter();
+  } else {
+    transporter = await createDevTransporter();
+  }
+  return transporter;
+}
+
+// Initialize immediately
+initializeTransporter().catch(err => {
+  console.error('Failed to initialize email transporter:', err);
+});
 
 // Create a verification token
 export const generateVerificationToken = (): string => {
@@ -53,6 +73,11 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
   const verificationUrl = `${baseUrl}/api/verify?token=${token}`;
   
   try {
+    // Make sure the transporter is initialized
+    if (!transporter) {
+      await initializeTransporter();
+    }
+    
     const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM || '"WhoToDate" <noreply@whotodate.com>',
       to: user.email,
@@ -96,7 +121,12 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
 // Send a welcome email after verification
 export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
   try {
-    await transporter.sendMail({
+    // Make sure the transporter is initialized
+    if (!transporter) {
+      await initializeTransporter();
+    }
+    
+    const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM || '"WhoToDate" <noreply@whotodate.com>',
       to: user.email,
       subject: 'Welcome to WhoToDate!',
@@ -126,6 +156,12 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
         </div>
       `
     });
+    
+    // For development, log the preview URL provided by Ethereal
+    if (process.env.NODE_ENV !== 'production' && info.messageId) {
+      console.log('Welcome email preview URL: %s', nodemailer.getTestMessageUrl(info));
+    }
+    
     return true;
   } catch (error) {
     console.error('Error sending welcome email:', error);
