@@ -13,7 +13,9 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Loader2, Heart, Mail, Lock, User } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Heart, Mail, Lock, User, Calendar, UserRound } from "lucide-react";
 
 // Define our validation schemas
 const loginSchema = z.object({
@@ -24,6 +26,17 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  dateOfBirth: z.string().refine(value => {
+    // Basic date validation, further validation could be added
+    return /^\d{4}-\d{2}-\d{2}$/.test(value);
+  }, {
+    message: "Date of birth must be in the format YYYY-MM-DD"
+  }),
+  gender: z.enum(["male", "female", "other", "prefer-not-to-say"], {
+    errorMap: () => ({ message: "Please select a gender" })
+  }),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Please confirm your password"),
 }).refine(data => data.password === data.confirmPassword, {
@@ -65,6 +78,10 @@ export default function AuthPage() {
     defaultValues: {
       username: "",
       email: "",
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      gender: "prefer-not-to-say",
       password: "",
       confirmPassword: ""
     }
@@ -269,6 +286,101 @@ export default function AuthPage() {
                           </FormItem>
                         )}
                       />
+                      
+                      {/* First Name Field */}
+                      <FormField
+                        control={registerForm.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <UserRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                <Input 
+                                  placeholder="John" 
+                                  className="pl-10" 
+                                  {...field} 
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {/* Last Name Field */}
+                      <FormField
+                        control={registerForm.control}
+                        name="lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <UserRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                <Input 
+                                  placeholder="Doe" 
+                                  className="pl-10" 
+                                  {...field} 
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {/* Date of Birth Field */}
+                      <FormField
+                        control={registerForm.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Date of Birth</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                <Input 
+                                  type="date" 
+                                  className="pl-10" 
+                                  {...field} 
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {/* Gender Field */}
+                      <FormField
+                        control={registerForm.control}
+                        name="gender"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Gender</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select your gender" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="male">Male</SelectItem>
+                                <SelectItem value="female">Female</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
                       <FormField
                         control={registerForm.control}
                         name="password"

@@ -5,12 +5,16 @@ import { z } from "zod";
 // Users table - for authentication and profiles
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  clerkId: text("clerk_id").unique(), // Clerk user ID for authentication
+  clerkId: text("clerk_id").unique(), // Clerk user ID for authentication (legacy)
   username: text("username").notNull().unique(),
-  password: text("password"), // Optional now as Clerk handles auth
+  password: text("password").notNull(),
   email: text("email").notNull().unique(),
-  fullName: text("full_name"),
-  imageUrl: text("image_url"), // Profile image from Clerk
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  fullName: text("full_name"), // Legacy field
+  dateOfBirth: text("date_of_birth"),
+  gender: text("gender"),
+  imageUrl: text("image_url"), // Profile image
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -64,7 +68,11 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   email: true,
-  fullName: true,
+  firstName: true,
+  lastName: true,
+  fullName: true, 
+  dateOfBirth: true,
+  gender: true,
   imageUrl: true,
 });
 
