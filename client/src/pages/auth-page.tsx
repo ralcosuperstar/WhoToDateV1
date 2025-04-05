@@ -132,10 +132,10 @@ export default function AuthPage() {
   }
   
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 pt-24 pb-12 mt-16 max-w-full overflow-x-hidden">
       <div className="grid gap-6 md:grid-cols-2 lg:gap-12">
         {/* Left column: Auth forms */}
-        <div className="flex flex-col justify-center space-y-6">
+        <div className="flex flex-col justify-center space-y-6 w-full">
           <div className="space-y-2 text-center md:text-left">
             <h1 className="text-3xl font-bold tracking-tight">Welcome to WhoToDate</h1>
             <p className="text-gray-500">
