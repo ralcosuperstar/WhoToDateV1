@@ -3,8 +3,8 @@ import { useLocation, Link } from "wouter";
 import { Helmet } from "react-helmet";
 import { calculateCompatibilityProfile, generateProfilePreview, type CompatibilityProfile } from "@/lib/compatibilityAnalysis";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { 
   Download, 
@@ -397,23 +397,25 @@ const SuccessModal = ({
 };
 
 const Results = () => {
+  // Initialize hooks first
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const queryClientInstance = useQueryClient(); // Create instance but use imported queryClient for calls
   
+  // All useState calls
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
-  // Get user data
+  // All data fetching queries
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
     queryKey: ['/api/me'],
     retry: false,
     refetchOnWindowFocus: false
   });
   
-  // Get report data
   const { data: report, isLoading: isReportLoading, isError: isReportError } = useQuery({ 
     queryKey: ['/api/report'],
     enabled: !!user,
@@ -421,9 +423,42 @@ const Results = () => {
     refetchOnWindowFocus: false
   });
   
-  // Get answer data from session storage
+  const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({ 
+    queryKey: ['/api/quiz'],
+    enabled: !!user,
+    retry: false,
+    refetchOnWindowFocus: false
+  });
+  
+  // Create report mutation
+  const createReportMutation = useMutation({
+    mutationFn: async (data: { 
+      quizId: number;
+      compatibilityProfile: CompatibilityProfile;
+      isPaid: boolean;
+    }) => {
+      const res = await apiRequest("POST", "/api/report", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/report'] });
+      toast({
+        title: "Success!",
+        description: "Your compatibility report has been created."
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create your report. Please try again.",
+        variant: "destructive",
+      });
+      console.error("Report creation error:", error);
+    }
+  });
+  
+  // Load answers from session storage
   useEffect(() => {
-    // Try to load answers from session storage first
     const savedAnswers = sessionStorage.getItem('quizAnswers');
     if (savedAnswers) {
       try {
@@ -431,23 +466,34 @@ const Results = () => {
         setAnswers(parsedAnswers);
       } catch (e) {
         console.error('Failed to parse saved answers', e);
-        // redirect to quiz if we have no answers
         navigate('/quiz');
       }
     } else if (!user) {
-      // No saved answers and no user, send back to quiz
       navigate('/quiz');
     }
   }, [navigate, user]);
   
-  // Generate profile once we have answers
+  // Generate profile when answers are available
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       try {
-        // This generates the full compatibility profile
         const compatibilityProfile = calculateCompatibilityProfile(answers);
-        // Set the full profile directly
         setProfile(compatibilityProfile);
+        
+        // Create report if needed
+        if (user && !report && compatibilityProfile && existingQuiz) {
+          // Make sure existingQuiz has an id
+          const quizId = typeof existingQuiz === 'object' && existingQuiz && 'id' in existingQuiz ? 
+            (existingQuiz as any).id : null;
+          
+          if (quizId) {
+            createReportMutation.mutate({
+              quizId,
+              compatibilityProfile,
+              isPaid: true // All reports are free
+            });
+          }
+        }
       } catch (e) {
         console.error('Failed to generate profile', e);
         toast({
@@ -457,7 +503,7 @@ const Results = () => {
         });
       }
     }
-  }, [answers, toast]);
+  }, [answers, toast, user, report, existingQuiz]);
   
   // Show full report directly (all reports are now free)
   const handleGetFullReport = () => {
@@ -489,17 +535,27 @@ const Results = () => {
     );
   }
   
-  // Redirect if not authenticated
-  if (isUserError) {
-    useEffect(() => {
+  // Handle authentication and error redirects
+  useEffect(() => {
+    if (isUserError) {
       toast({
         title: "Login Required",
         description: "Please log in to view your compatibility report.",
         variant: "destructive",
       });
       navigate('/auth');
-    }, [toast, navigate]);
-    
+    } else if (isReportError) {
+      toast({
+        title: "Error Retrieving Report",
+        description: "We couldn't retrieve your report. Please try taking the quiz again.",
+        variant: "destructive",
+      });
+      navigate('/quiz');
+    }
+  }, [isUserError, isReportError, toast, navigate]);
+  
+  // Show loading states or redirect based on conditions
+  if (isUserError || isReportError) {
     return null;
   }
   
@@ -515,20 +571,6 @@ const Results = () => {
         </div>
       </div>
     );
-  }
-  
-  // Handle report fetch error
-  if (isReportError) {
-    useEffect(() => {
-      toast({
-        title: "Error Retrieving Report",
-        description: "We couldn't retrieve your report. Please try taking the quiz again.",
-        variant: "destructive",
-      });
-      navigate('/quiz');
-    }, [toast, navigate]);
-    
-    return null;
   }
   
   return (
