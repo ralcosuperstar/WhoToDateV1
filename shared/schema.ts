@@ -15,6 +15,9 @@ export const users = pgTable("users", {
   dateOfBirth: text("date_of_birth"),
   gender: text("gender"),
   imageUrl: text("image_url"), // Profile image
+  isVerified: boolean("is_verified").default(false), // Whether email has been verified
+  verificationToken: text("verification_token"), // Token for email verification
+  verificationTokenExpiry: timestamp("verification_token_expiry"), // Expiry for verification token
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -112,6 +115,7 @@ export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect & {
   // Non-persisted fields that may be sent from the API but are not in the database
   authToken?: string;
+  emailVerificationSent?: boolean;
 };
 
 export type InsertQuizAnswer = z.infer<typeof insertQuizAnswerSchema>;

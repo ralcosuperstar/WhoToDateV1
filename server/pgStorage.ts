@@ -90,6 +90,24 @@ export class PgStorage implements IStorage {
     return results[0];
   }
   
+  async getUserByVerificationToken(token: string): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    // Get the current date/time
+    const now = new Date();
+    
+    // Find user with matching token where the token has not expired
+    const results = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.verificationToken, token));
+    
+    // Filter in JS as Drizzle ORM doesn't have great timestamp comparison operators yet
+    return results.find((user: typeof users.$inferSelect) => 
+      user.verificationTokenExpiry && new Date(user.verificationTokenExpiry) > now
+    );
+  }
+  
   async updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User> {
     if (!this._db) throw new Error("Database connection not available");
     
@@ -124,8 +142,51 @@ export class PgStorage implements IStorage {
   
   async createUser(user: InsertUser): Promise<User> {
     if (!this._db) throw new Error("Database connection not available");
-    const result = await this._db.insert(users).values(user).returning();
+    // Set isVerified to false by default for new users
+    const result = await this._db.insert(users).values({
+      ...user,
+      isVerified: false
+    }).returning();
     return result[0];
+  }
+  
+  async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set({ 
+        verificationToken: token,
+        verificationTokenExpiry: expiry
+      })
+      .where(eq(users.id, userId))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
+  }
+  
+  async verifyUser(userId: number): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set({ 
+        isVerified: true,
+        verificationToken: null,
+        verificationTokenExpiry: null
+      })
+      .where(eq(users.id, userId))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
   }
   
   // Quiz operations

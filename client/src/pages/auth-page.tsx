@@ -15,7 +15,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Heart, Mail, Lock, User, Calendar, UserRound } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Loader2, Heart, Mail, Lock, User, Calendar, UserRound, AlertCircle } from "lucide-react";
 
 // Define our validation schemas
 const loginSchema = z.object({
@@ -51,11 +52,25 @@ export default function AuthPage() {
   // Get tab from URL query parameter
   const queryParams = new URLSearchParams(window.location.search);
   const tabParam = queryParams.get('tab');
+  const verifiedParam = queryParams.get('verified');
   
   const [activeTab, setActiveTab] = useState<string>(tabParam === 'register' ? 'register' : 'login');
   const [location, navigate] = useLocation();
   const { toast } = useToast();
   const { user, isLoading, loginMutation, registerMutation } = useAuth();
+  
+  // Show toast if the user just verified their email
+  useEffect(() => {
+    if (verifiedParam === 'true') {
+      toast({
+        title: "Email verified!",
+        description: "Your email has been successfully verified. You can now log in.",
+        variant: "default"
+      });
+      // Update URL without the verified parameter to prevent showing the toast on refresh
+      window.history.replaceState({}, document.title, location.split('?')[0] + '?tab=login');
+    }
+  }, []);
   
   // If already logged in, redirect to dashboard
   useEffect(() => {
@@ -87,18 +102,26 @@ export default function AuthPage() {
     }
   });
   
+  // State to track if login failed due to email verification
+  const [emailVerificationRequired, setEmailVerificationRequired] = useState<boolean>(false);
+
   // Handle login form submission
   async function onLoginSubmit(data: LoginFormValues) {
     try {
-      await loginMutation.mutateAsync(data);
+      setEmailVerificationRequired(false);
+      const response = await loginMutation.mutateAsync(data);
       toast({
         title: "Login successful!",
         description: "Welcome back to WhoToDate.",
         variant: "default"
       });
       navigate("/dashboard");
-    } catch (error) {
-      // Error handling is done in the mutation error callback in useAuth
+    } catch (error: any) {
+      // Check if error is due to email verification
+      if (error.message && error.message.includes('verify your email')) {
+        setEmailVerificationRequired(true);
+      }
+      // Other error handling is done in the mutation error callback in useAuth
       console.error(error);
     }
   }
@@ -109,13 +132,25 @@ export default function AuthPage() {
       // Remove confirmPassword field before sending to API
       const { confirmPassword, ...submitData } = data;
       
-      await registerMutation.mutateAsync(submitData);
-      toast({
-        title: "Registration successful!",
-        description: "Welcome to WhoToDate. Your account has been created.",
-        variant: "default"
-      });
-      navigate("/dashboard");
+      const response = await registerMutation.mutateAsync(submitData);
+      
+      // Check if email verification was sent
+      if (response.emailVerificationSent) {
+        toast({
+          title: "Registration successful!",
+          description: "Please check your email to verify your account before logging in.",
+          variant: "default"
+        });
+        // Set active tab to login
+        setActiveTab("login");
+      } else {
+        toast({
+          title: "Registration successful!",
+          description: "Your account has been created. You may need to verify your email.",
+          variant: "default"
+        });
+        navigate("/dashboard");
+      }
     } catch (error) {
       // Error handling is done in the mutation error callback in useAuth
       console.error(error);
@@ -159,6 +194,16 @@ export default function AuthPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
+                  {emailVerificationRequired && (
+                    <Alert className="mb-4 border-amber-500 text-amber-800 bg-amber-50">
+                      <AlertCircle className="h-4 w-4 text-amber-600" />
+                      <AlertTitle>Email verification required</AlertTitle>
+                      <AlertDescription>
+                        Please check your email inbox and click the verification link before logging in.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
                   <Form {...loginForm}>
                     <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                       <FormField
@@ -243,6 +288,14 @@ export default function AuthPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
+                  <Alert className="mb-4 border-blue-200 text-blue-800 bg-blue-50">
+                    <AlertCircle className="h-4 w-4 text-blue-600" />
+                    <AlertTitle>Email verification required</AlertTitle>
+                    <AlertDescription>
+                      After registration, you'll receive a verification email. Please click the link in the email to activate your account.
+                    </AlertDescription>
+                  </Alert>
+                  
                   <Form {...registerForm}>
                     <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                       <FormField

@@ -19,9 +19,12 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByClerkId(clerkId: string): Promise<User | undefined>;
+  getUserByVerificationToken(token: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User>;
   linkUserToClerk(userId: number, clerkId: string): Promise<User>;
+  setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
+  verifyUser(userId: number): Promise<User>;
   
   // Quiz operations
   getQuizAnswers(userId: number): Promise<QuizAnswer | undefined>;
@@ -105,6 +108,14 @@ export class MemStorage implements IStorage {
       (user) => user.clerkId === clerkId,
     );
   }
+  
+  async getUserByVerificationToken(token: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.verificationToken === token && 
+                user.verificationTokenExpiry && 
+                new Date(user.verificationTokenExpiry) > new Date()
+    );
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
@@ -121,7 +132,10 @@ export class MemStorage implements IStorage {
       fullName: insertUser.fullName || null,
       dateOfBirth: insertUser.dateOfBirth || null,
       gender: insertUser.gender || null,
-      imageUrl: insertUser.imageUrl || null
+      imageUrl: insertUser.imageUrl || null,
+      isVerified: false,
+      verificationToken: null,
+      verificationTokenExpiry: null
     };
     this.users.set(id, user);
     return user;
@@ -147,6 +161,39 @@ export class MemStorage implements IStorage {
     }
     
     const updatedUser: User = { ...user, clerkId };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+  
+  async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
+    const user = await this.getUser(userId);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = { 
+      ...user, 
+      verificationToken: token,
+      verificationTokenExpiry: expiry
+    };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+  
+  async verifyUser(userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = { 
+      ...user, 
+      isVerified: true,
+      verificationToken: null,
+      verificationTokenExpiry: null
+    };
     this.users.set(userId, updatedUser);
     return updatedUser;
   }
