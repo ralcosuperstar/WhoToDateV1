@@ -320,7 +320,7 @@ const Quiz = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/report'] });
       
-      // Save answers to session storage for non-logged in users too
+      // Always save answers to session storage (for backup/recovery purposes)
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
       
       // Navigate to results
@@ -329,13 +329,20 @@ const Quiz = () => {
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to generate your report. Please try again.",
+        description: "Failed to generate your report. Please try again after logging in.",
         variant: "destructive",
       });
       
-      // Even if API fails, still store answers locally and redirect
+      // Store answers locally regardless
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
-      navigate('/results');
+      
+      // For logged-in users, redirect to results page anyway
+      // For guest users, redirect to authentication page
+      if (user) {
+        navigate('/results');
+      } else {
+        navigate('/auth');
+      }
     }
   });
   
@@ -398,9 +405,13 @@ const Quiz = () => {
             completed: true
           });
         } else {
-          // For non-logged in users, store in session and redirect
+          // For non-logged in users, store in session and redirect to auth
           sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
-          navigate('/results');
+          toast({
+            title: "Login Required",
+            description: "To view your personalized compatibility report, please create an account or log in.",
+          });
+          navigate('/auth');
         }
       } else {
         // Go to next question

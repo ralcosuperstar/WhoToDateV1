@@ -407,14 +407,14 @@ const Results = () => {
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
   // Get user data
-  const { data: user } = useQuery({ 
+  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
     queryKey: ['/api/me'],
     retry: false,
     refetchOnWindowFocus: false
   });
   
   // Get report data
-  const { data: report, isLoading: isReportLoading } = useQuery({ 
+  const { data: report, isLoading: isReportLoading, isError: isReportError } = useQuery({ 
     queryKey: ['/api/report'],
     enabled: !!user,
     retry: false,
@@ -459,20 +459,15 @@ const Results = () => {
     }
   }, [answers, toast]);
   
-  // Make payment
+  // Show full report directly (all reports are now free)
   const handleGetFullReport = () => {
-    setIsPaymentModalOpen(true);
+    // Since reports are free, show success modal directly
+    setIsSuccessModalOpen(true);
   };
   
   const handlePaymentSuccess = () => {
     setIsPaymentModalOpen(false);
     setIsSuccessModalOpen(true);
-    
-    // Save report as paid
-    if (user && report) {
-      // In a real app, this would make an API call to update payment status
-      // and save the complete report in the database
-    }
   };
   
   const handleViewOnline = () => {
@@ -480,7 +475,36 @@ const Results = () => {
     setIsPremiumReportVisible(true);
   };
   
-  if (!profile) {
+  // Check for authentication
+  if (isUserLoading) {
+    return (
+      <div className="pt-20 px-4 pb-12">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4"></div>
+            <p className="text-neutral-dark/70">Loading your data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Redirect if not authenticated
+  if (isUserError) {
+    useEffect(() => {
+      toast({
+        title: "Login Required",
+        description: "Please log in to view your compatibility report.",
+        variant: "destructive",
+      });
+      navigate('/auth');
+    }, [toast, navigate]);
+    
+    return null;
+  }
+  
+  // Show loading while fetching report or generating profile
+  if (isReportLoading || !profile) {
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
@@ -491,6 +515,20 @@ const Results = () => {
         </div>
       </div>
     );
+  }
+  
+  // Handle report fetch error
+  if (isReportError) {
+    useEffect(() => {
+      toast({
+        title: "Error Retrieving Report",
+        description: "We couldn't retrieve your report. Please try taking the quiz again.",
+        variant: "destructive",
+      });
+      navigate('/quiz');
+    }, [toast, navigate]);
+    
+    return null;
   }
   
   return (

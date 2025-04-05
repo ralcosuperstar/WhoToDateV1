@@ -145,22 +145,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Authentication required" });
       }
       
+      log(`Creating report for user: ${req.user.id}`);
+      
+      // Validate required fields
+      if (!req.body.quizId || !req.body.compatibilityProfile) {
+        return res.status(400).json({ 
+          message: "Missing required fields: quizId and compatibilityProfile are required"
+        });
+      }
+      
+      // First check if the quiz exists and belongs to this user
+      const quiz = await db.getQuizAnswers(req.user.id);
+      if (!quiz) {
+        return res.status(404).json({ 
+          message: "Quiz not found. Please complete the quiz before generating a report."
+        });
+      }
+      
+      // Ensure the quiz is actually completed
+      if (!quiz.completed) {
+        return res.status(400).json({
+          message: "Quiz is not complete. Please answer all questions before generating a report."
+        });
+      }
+      
+      // Now validate and create the report
       const reportData = insertReportSchema.parse({
         ...req.body,
-        userId: req.user.id
+        userId: req.user.id,
+        quizId: quiz.id // Use the verified quiz ID from the database
       });
       
-      // Create report - all reports are free now
+      // Check if a report already exists for this user
+      const existingReport = await db.getReportByUserId(req.user.id);
+      if (existingReport) {
+        log(`Report already exists for user: ${req.user.id}, returning existing report`);
+        return res.status(200).json(existingReport);
+      }
+      
+      // Create a new report - all reports are free now
+      log(`Creating new report for user: ${req.user.id}`);
       const report = await db.createReport({
         ...reportData,
         isPaid: true // Mark all reports as paid 
       });
+      
+      log(`Report created successfully: ${report.id}`);
       res.status(201).json(report);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: error.errors });
+        log(`Validation error creating report: ${JSON.stringify(error.errors)}`);
+        return res.status(400).json({ message: "Invalid report data", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create report" });
+      
+      log(`Error creating report: ${error instanceof Error ? error.message : String(error)}`);
+      res.status(500).json({ message: "Failed to create report. Please try again." });
     }
   });
 
