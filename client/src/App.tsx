@@ -85,11 +85,11 @@ function App() {
 
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.CLERK_PUBLISHABLE_KEY;
   
-  // Enable Clerk authentication when key is present
-  const useClerkAuth = !!clerkPubKey;
+  // Always enable Clerk auth in production, or when key is present in development
+  const useClerkAuth = import.meta.env.PROD || !!clerkPubKey;
   
-  if (!clerkPubKey) {
-    console.error('Clerk publishable key is missing. Please add CLERK_PUBLISHABLE_KEY to your environment variables.');
+  if (!clerkPubKey && !import.meta.env.PROD) {
+    console.warn('Clerk publishable key is missing in development mode.');
   }
   
   return (
