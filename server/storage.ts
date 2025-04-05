@@ -5,9 +5,15 @@ import {
   payments, type Payment, type InsertPayment,
   blogPosts, type BlogPost, type InsertBlogPost
 } from "@shared/schema";
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
 
 // Interface for all storage operations
 export interface IStorage {
+  // Session store for authentication
+  sessionStore: session.Store;
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -52,6 +58,8 @@ export class MemStorage implements IStorage {
   private currentReportId: number;
   private currentPaymentId: number;
   private currentBlogPostId: number;
+  
+  public sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -65,6 +73,11 @@ export class MemStorage implements IStorage {
     this.currentReportId = 1;
     this.currentPaymentId = 1;
     this.currentBlogPostId = 1;
+    
+    // Initialize session store
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    });
     
     // Add some sample blog posts
     this.initializeBlogPosts();

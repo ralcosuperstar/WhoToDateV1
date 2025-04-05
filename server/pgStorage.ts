@@ -28,11 +28,29 @@ import {
 // Import the database connection from db.ts
 import { db } from './db';
 
+// Import session for Store type
+import session from 'express-session';
+import { pool } from './db';
+import connectPgSimple from 'connect-pg-simple';
+
 export class PgStorage implements IStorage {
   // Make db a private class property using imported db
   private _db = db;
   
+  // Session store for auth persistence
+  public sessionStore: session.Store;
+  
   constructor() {
+    // Initialize session store
+    const PostgresStore = connectPgSimple(session);
+    this.sessionStore = new PostgresStore({
+      pool: pool as any,
+      tableName: 'user_sessions',
+      createTableIfMissing: true,
+      schemaName: 'public',
+      pruneSessionInterval: 60
+    });
+    
     // Only try to initialize if we have a database connection
     if (this._db) {
       // Initialize blog posts after a short delay
