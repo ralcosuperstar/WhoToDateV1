@@ -5,7 +5,6 @@ import { z } from "zod";
 // Users table - for authentication and profiles
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  clerkId: text("clerk_id").unique(), // Clerk user ID for authentication (legacy)
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
@@ -67,7 +66,6 @@ export const blogPosts = pgTable("blog_posts", {
 
 // Schemas for inserts
 export const insertUserSchema = createInsertSchema(users).pick({
-  clerkId: true,
   username: true,
   password: true,
   email: true,

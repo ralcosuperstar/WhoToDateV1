@@ -18,12 +18,9 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
-  getUserByClerkId(clerkId: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
-  updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User>;
-  linkUserToClerk(userId: number, clerkId: string): Promise<User>;
   setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
   verifyUser(userId: number): Promise<User>;
   
@@ -108,11 +105,7 @@ export class MemStorage implements IStorage {
     );
   }
   
-  async getUserByClerkId(clerkId: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.clerkId === clerkId,
-    );
-  }
+  // Removed getUserByClerkId - no longer needed
   
   async getUserByVerificationToken(token: string): Promise<User | undefined> {
     return Array.from(this.users.values()).find(
@@ -130,7 +123,6 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       createdAt,
-      clerkId: insertUser.clerkId || null,
       password: insertUser.password || '',
       firstName: insertUser.firstName || null,
       lastName: insertUser.lastName || null,
@@ -146,29 +138,9 @@ export class MemStorage implements IStorage {
     return user;
   }
   
-  async updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User> {
-    const user = await this.getUserByClerkId(clerkId);
-    
-    if (!user) {
-      throw new Error('User not found with the provided Clerk ID');
-    }
-    
-    const updatedUser: User = { ...user, ...userData };
-    this.users.set(user.id, updatedUser);
-    return updatedUser;
-  }
+  // Removed updateUserByClerkId - no longer needed
   
-  async linkUserToClerk(userId: number, clerkId: string): Promise<User> {
-    const user = await this.getUser(userId);
-    
-    if (!user) {
-      throw new Error('User not found');
-    }
-    
-    const updatedUser: User = { ...user, clerkId };
-    this.users.set(userId, updatedUser);
-    return updatedUser;
-  }
+  // Removed linkUserToClerk - no longer needed
   
   async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
     const user = await this.getUser(userId);

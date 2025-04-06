@@ -2,26 +2,20 @@ import { randomBytes } from 'crypto';
 import { User } from '@shared/schema';
 import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
-import type * as Mailgun from 'mailgun.js';
-import formData from 'form-data';
 
-// Email Service API keys
+// Email Service API key
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY;
-const MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN;
 
 // Email service clients
 let resendClient: Resend | null = null;
-let mailgunClient: any = null; // Mailgun client
 let useResend = false;
-let useMailgun = false;
 let transporter: nodemailer.Transporter; // Nodemailer for development/fallback
 
 // Initialize email service asynchronously
 async function initializeTransporter() {
   let emailServiceConfigured = false;
   
-  // 1. Try to initialize Resend (primary email service)
+  // Initialize Resend email service
   if (RESEND_API_KEY) {
     try {
       console.log('Initializing Resend with API key (first 4 chars):', RESEND_API_KEY.substring(0, 4) + '...');
@@ -40,35 +34,9 @@ async function initializeTransporter() {
     console.log('ℹ️ Resend API key not provided');
   }
   
-  // 2. Try to initialize Mailgun (backup email service)
-  if (MAILGUN_API_KEY && MAILGUN_DOMAIN) {
-    try {
-      console.log('Initializing Mailgun with domain:', MAILGUN_DOMAIN);
-      
-      // Dynamically import Mailgun to avoid issues if it's not installed
-      const { default: MailgunConstructor } = await import('mailgun.js');
-      const Mailgun = new MailgunConstructor(formData);
-      
-      mailgunClient = Mailgun.client({
-        username: 'api',
-        key: MAILGUN_API_KEY
-      });
-      
-      useMailgun = true;
-      emailServiceConfigured = true;
-      
-      console.log('✅ Mailgun email service initialized and ready to send emails');
-    } catch (error) {
-      console.error('Failed to initialize Mailgun:', error);
-      useMailgun = false;
-    }
-  } else {
-    console.log('ℹ️ Mailgun credentials not provided');
-  }
-  
   // If we're in production and no email service was configured, this is a critical warning
   if (process.env.NODE_ENV === 'production' && !emailServiceConfigured) {
-    console.error('⚠️ WARNING: No production email service (Resend or Mailgun) is configured!');
+    console.error('⚠️ WARNING: No production email service is configured!');
     console.error('Users will not be able to receive verification emails in production!');
   }
 
@@ -228,8 +196,7 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
       return true;
     }
     
-    // Production mode - try sending real emails
-    // First try Resend
+    // Production mode - send email using Resend
     if (useResend && resendClient) {
       console.log(`Attempting to send verification email via Resend to: ${user.email}`);
       
@@ -260,42 +227,13 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
       } catch (error) {
         console.error('Resend API Error:', error);
         console.error('Full error details:', JSON.stringify(error, null, 2));
-        
-        // Don't throw, try Mailgun as fallback
-        console.log('Resend failed, trying Mailgun as fallback...');
+        throw new Error('Failed to send verification email');
       }
-    }
-    
-    // Try Mailgun as fallback
-    if (useMailgun && mailgunClient && MAILGUN_DOMAIN) {
-      console.log(`Attempting to send verification email via Mailgun to: ${user.email}`);
-      
-      try {
-        const messageData = {
-          from: from,
-          to: user.email,
-          subject: 'Verify your email address',
-          text: text,
-          html: html
-        };
-        
-        const result = await mailgunClient.messages.create(MAILGUN_DOMAIN, messageData);
-        
-        console.log('✅ Verification email sent successfully via Mailgun:', result.id || 'Success');
-        return true;
-      } catch (error) {
-        console.error('Mailgun API Error:', error);
-        
-        // Both Resend and Mailgun failed, this is a critical error
-        throw new Error('All configured email services failed to send verification email');
-      }
-    } 
-    else if (!useResend) {
-      // Neither Resend nor Mailgun is available - this is a critical error
+    } else {
+      // No email service is available - this is a critical error
       throw new Error('No email service is properly configured for production use');
     }
     
-    // If we get here, it means Resend failed and Mailgun isn't configured
     return false;
   } catch (error) {
     console.error('Error sending verification email:', error);
@@ -380,8 +318,7 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
       return true;
     }
     
-    // Production mode - try sending real emails
-    // First try Resend
+    // Production mode - send welcome email using Resend
     if (useResend && resendClient) {
       console.log(`Attempting to send welcome email via Resend to: ${user.email}`);
       
@@ -412,42 +349,13 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
       } catch (error) {
         console.error('Resend API Error for welcome email:', error);
         console.error('Full error details:', JSON.stringify(error, null, 2));
-        
-        // Don't throw, try Mailgun as fallback
-        console.log('Resend failed, trying Mailgun as fallback for welcome email...');
+        throw new Error('Failed to send welcome email');
       }
-    }
-    
-    // Try Mailgun as fallback
-    if (useMailgun && mailgunClient && MAILGUN_DOMAIN) {
-      console.log(`Attempting to send welcome email via Mailgun to: ${user.email}`);
-      
-      try {
-        const messageData = {
-          from: from,
-          to: user.email,
-          subject: 'Welcome to WhoToDate!',
-          text: text,
-          html: html
-        };
-        
-        const result = await mailgunClient.messages.create(MAILGUN_DOMAIN, messageData);
-        
-        console.log('✅ Welcome email sent successfully via Mailgun:', result.id || 'Success');
-        return true;
-      } catch (error) {
-        console.error('Mailgun API Error for welcome email:', error);
-        
-        // Both Resend and Mailgun failed, this is a critical error
-        throw new Error('All configured email services failed to send welcome email');
-      }
-    } 
-    else if (!useResend) {
-      // Neither Resend nor Mailgun is available - this is a critical error
+    } else {
+      // No email service is available - this is a critical error
       throw new Error('No email service is properly configured for production use');
     }
     
-    // If we get here, it means Resend failed and Mailgun isn't configured
     return false;
   } catch (error) {
     console.error('Error sending welcome email:', error);
