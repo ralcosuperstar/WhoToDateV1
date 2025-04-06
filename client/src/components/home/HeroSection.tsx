@@ -103,7 +103,24 @@ const HeroSection = () => {
                 <span>Take The Free Quiz Now</span>
               </Link>
               
-              <p className="text-xs text-center mt-2 text-neutral-dark/70">Free basic results, premium insights available after</p>
+              <p className="text-xs text-center mt-2 text-neutral-dark/70">100% free comprehensive results and insights</p>
+            </div>
+
+            {/* Marriage and serious relationship focus */}
+            <div className="mb-5 bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-blue-100 shadow-sm">
+              <div className="flex items-start">
+                <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-3 mt-1 shrink-0">
+                  <span className="emoji text-xl">💍</span>
+                </div>
+                <div>
+                  <h3 className="font-medium text-base mb-1">For Serious Relationship Seekers</h3>
+                  <p className="text-sm text-neutral-dark/80">
+                    WhoToDate is designed for those seeking meaningful, long-term relationships with marriage in mind. 
+                    Our scientific approach helps you find genuine compatibility, not just casual connections. 
+                    We don't encourage hookups or predatory dating behaviors.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Trust elements */}
@@ -199,18 +216,18 @@ const HeroSection = () => {
                   </div>
                 </div>
                 
-                {/* Premium teaser */}
+                {/* Full report details */}
                 <div className="mt-4 bg-primary/5 rounded-lg p-3 border border-dashed border-primary/30">
                   <div className="flex justify-between items-center mb-1">
-                    <h4 className="font-medium text-sm">Unlock Full Report</h4>
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Premium</span>
+                    <h4 className="font-medium text-sm">Full Report Included</h4>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">100% Free</span>
                   </div>
-                  <p className="text-xs text-neutral-dark/70 mb-2">Get detailed insights + compatibility guidance</p>
+                  <p className="text-xs text-neutral-dark/70 mb-2">Get comprehensive compatibility insights & guidance</p>
                   <div className="flex justify-center">
-                    <span className="emoji text-2xl mr-1">🔒</span>
                     <span className="emoji text-2xl mr-1">📊</span>
                     <span className="emoji text-2xl mr-1">🚀</span>
-                    <span className="emoji text-2xl">💝</span>
+                    <span className="emoji text-2xl mr-1">💝</span>
+                    <span className="emoji text-2xl">🎁</span>
                   </div>
                 </div>
               </div>

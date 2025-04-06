@@ -124,7 +124,7 @@ const ReportPreviewSection = () => {
                         </svg>
                         Scientific Profile Report
                       </h3>
-                      <span className="text-xs bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full font-medium">Premium</span>
+                      <span className="text-xs bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full font-medium">Free</span>
                     </div>
                   </div>
 
