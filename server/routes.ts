@@ -263,6 +263,164 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Email verification endpoint
+  apiRouter.get("/verify", async (req, res) => {
+    try {
+      const { token } = req.query;
+      
+      if (!token || typeof token !== 'string') {
+        return res.status(400).json({ message: "Invalid verification token" });
+      }
+      
+      // Find user with this token
+      const user = await db.getUserByVerificationToken(token);
+      
+      if (!user) {
+        return res.status(404).json({ message: "Invalid or expired verification token" });
+      }
+      
+      // Check if token has expired
+      if (user.verificationTokenExpiry) {
+        const now = new Date();
+        const expiry = new Date(user.verificationTokenExpiry);
+        
+        if (now > expiry) {
+          return res.status(400).json({ message: "Verification token has expired" });
+        }
+      }
+      
+      // Verify the user
+      await db.verifyUser(user.id);
+      
+      // Redirect to login page with success message
+      res.redirect(`/?verified=true`);
+    } catch (error) {
+      log(`Error verifying email: ${error instanceof Error ? error.message : String(error)}`);
+      res.status(500).json({ message: "Failed to verify email" });
+    }
+  });
+  
+  // Debug endpoint to view all unverified users and their verification links
+  // Only available in development environment
+  apiRouter.get("/debug/verification-links", async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(404).json({ message: "Not found" });
+    }
+    
+    try {
+      // Log all verification links to console
+      await logAllVerificationLinks(db);
+      
+      // Return success message
+      res.json({ message: "Verification links have been logged to the console. Check server logs." });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to log verification links" });
+    }
+  });
+  
+  // Test email sending - development only
+  apiRouter.post("/debug/test-email", async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(404).json({ message: "Not found" });
+    }
+    
+    try {
+      const { email, forceResend } = req.body;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      // Import email functions
+      const { sendVerificationEmail, generateVerificationToken, generateTokenExpiry } = await import('./emailService');
+      
+      // Generate a test token
+      const token = generateVerificationToken();
+      
+      // Create mock user object with all required fields matching the User type
+      const mockUser = {
+        id: 0,
+        clerkId: null,
+        email: email,
+        username: 'testuser',
+        password: 'not-a-real-password',
+        firstName: null,
+        lastName: null,
+        fullName: null,
+        dateOfBirth: null,
+        gender: null,
+        imageUrl: null,
+        isVerified: false,
+        verificationToken: token,
+        verificationTokenExpiry: generateTokenExpiry(),
+        createdAt: new Date()
+      };
+      
+      // Temporarily override NODE_ENV if forceResend is true
+      // This will force using the real email service even in development
+      let originalNodeEnv;
+      if (forceResend) {
+        originalNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = 'production';
+        console.log('🚨 FORCING EMAIL SENDING IN DEV MODE - Using real email service');
+      }
+      
+      try {
+        // Send test email
+        const success = await sendVerificationEmail(mockUser, token);
+        
+        // Restore original NODE_ENV if we modified it
+        if (forceResend && originalNodeEnv !== undefined) {
+          process.env.NODE_ENV = originalNodeEnv;
+        }
+        
+        if (success) {
+          return res.json({ 
+            message: "Test email sent successfully", 
+            details: forceResend 
+              ? "Used real email service. Check recipient's inbox."
+              : "Check server logs for email preview or check recipient's inbox",
+            userEmail: email,
+            token: token,
+            expiresAt: mockUser.verificationTokenExpiry
+          });
+        } else {
+          return res.status(500).json({ message: "Failed to send test email" });
+        }
+      } finally {
+        // Make sure we always restore NODE_ENV
+        if (forceResend && originalNodeEnv !== undefined) {
+          process.env.NODE_ENV = originalNodeEnv;
+        }
+      }
+    } catch (error) {
+      log(`Error sending test email: ${error instanceof Error ? error.message : String(error)}`);
+      res.status(500).json({ message: "Failed to send test email" });
+    }
+  });
+  
+  // Check environment variables - development only
+  apiRouter.get("/debug/check-env", async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(404).json({ message: "Not found" });
+    }
+    
+    try {
+      // Only check if the keys exist, not their values
+      const resendAvailable = !!process.env.RESEND_API_KEY;
+      const mailgunAvailable = !!(process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN);
+      
+      res.json({
+        env: process.env.NODE_ENV || "development",
+        resend_available: resendAvailable,
+        mailgun_available: mailgunAvailable
+      });
+    } catch (error) {
+      log(`Error checking env vars: ${error instanceof Error ? error.message : String(error)}`);
+      res.status(500).json({ message: "Failed to check environment variables" });
+    }
+  });
+
   // Create HTTP server
   const httpServer = createServer(app);
   return httpServer;

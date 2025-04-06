@@ -24,6 +24,7 @@ import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/HowItWorks";
 import Science from "@/pages/Science";
 import AuthPage from "@/pages/auth-page";
+import EmailTest from "@/pages/EmailTest";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/email-test" component={EmailTest} />
       
       {/* Auth redirects - for backward compatibility */}
       <Route path="/login">
