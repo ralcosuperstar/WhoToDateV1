@@ -113,6 +113,36 @@ export class PgStorage implements IStorage {
     );
   }
   
+  async getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const results = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.phoneNumber, phoneNumber));
+      
+    return results[0];
+  }
+  
+  async setOTP(userId: number, otp: string, expiry: Date): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set({ 
+        otpCode: otp,
+        otpExpiry: expiry
+      })
+      .where(eq(users.id, userId))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
+  }
+  
   async updateUserByClerkId(clerkId: string, userData: Partial<InsertUser>): Promise<User> {
     if (!this._db) throw new Error("Database connection not available");
     
@@ -182,7 +212,9 @@ export class PgStorage implements IStorage {
       .set({ 
         isVerified: true,
         verificationToken: null,
-        verificationTokenExpiry: null
+        verificationTokenExpiry: null,
+        otpCode: null,
+        otpExpiry: null
       })
       .where(eq(users.id, userId))
       .returning();

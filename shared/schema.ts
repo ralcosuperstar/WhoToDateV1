@@ -21,6 +21,7 @@ export const users = pgTable("users", {
   verificationTokenExpiry: timestamp("verification_token_expiry"), // Expiry for verification token
   otpCode: text("otp_code"), // OTP code for SMS verification
   otpExpiry: timestamp("otp_expiry"), // Expiry time for OTP code
+  clerkId: text("clerk_id").unique(), // Legacy field for Clerk integration
   createdAt: timestamp("created_at").defaultNow(),
 });
 
