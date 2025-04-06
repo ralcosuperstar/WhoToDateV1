@@ -78,6 +78,11 @@ export class PgStorage implements IStorage {
     return results[0];
   }
   
+  async getAllUsers(): Promise<User[]> {
+    if (!this._db) throw new Error("Database connection not available");
+    return await this._db.select().from(users);
+  }
+  
   async getUserByEmail(email: string): Promise<User | undefined> {
     if (!this._db) throw new Error("Database connection not available");
     const results = await this._db.select().from(users).where(eq(users.email, email));

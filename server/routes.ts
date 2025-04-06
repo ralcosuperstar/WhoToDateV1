@@ -13,6 +13,7 @@ import {
 } from "@shared/schema";
 import { log } from "./vite";
 import { setupAuth } from "./auth";
+import { logAllVerificationLinks } from "./emailService";
 
 // Select appropriate storage implementation
 // Use PostgreSQL if DATABASE_URL is available and connection is successful, otherwise fallback to memory storage

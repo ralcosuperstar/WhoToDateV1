@@ -16,9 +16,20 @@ async function initializeTransporter() {
   // Check if Resend credentials are available
   if (RESEND_API_KEY) {
     try {
+      console.log('Initializing Resend with API key (first 4 chars):', RESEND_API_KEY.substring(0, 4) + '...');
       resendClient = new Resend(RESEND_API_KEY);
       useResend = true;
-      console.log('Resend email service initialized successfully');
+      
+      // Test the Resend API connection
+      try {
+        const domains = await resendClient.domains.list();
+        console.log('Resend domains:', JSON.stringify(domains));
+        console.log('Resend email service initialized and tested successfully');
+      } catch (domainError) {
+        console.error('Resend domain list test failed:', domainError);
+        console.log('Resend email service initialized but domain test failed');
+      }
+      
       return;
     } catch (error) {
       console.error('Failed to initialize Resend:', error);
@@ -68,6 +79,52 @@ export const generateTokenExpiry = (): Date => {
   return expiry;
 };
 
+// Import types for storage
+import { IStorage } from "./storage";
+
+// Development helper - logs all unverified users with their verification links
+export const logAllVerificationLinks = async (storage: IStorage): Promise<void> => {
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('This function should only be used in development!');
+    return;
+  }
+  
+  try {
+    // Get all unverified users
+    const allUsers = await storage.getAllUsers();
+    const unverifiedUsers = allUsers.filter(user => !user.isVerified && user.verificationToken);
+    
+    if (unverifiedUsers.length === 0) {
+      console.log('No unverified users found.');
+      return;
+    }
+    
+    console.log('\n======== UNVERIFIED USERS ========');
+    console.log(`Found ${unverifiedUsers.length} unverified users:`);
+    
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+    
+    for (const user of unverifiedUsers) {
+      const now = new Date();
+      const expiry = user.verificationTokenExpiry ? new Date(user.verificationTokenExpiry) : null;
+      const isExpired = expiry ? now > expiry : true;
+      
+      console.log(`\nUser: ${user.username} (${user.email})`);
+      console.log(`Token: ${user.verificationToken}`);
+      console.log(`Expires: ${expiry ? expiry.toLocaleString() : 'No expiry set'} ${isExpired ? '(EXPIRED)' : ''}`);
+      
+      if (!isExpired) {
+        const verificationUrl = `${baseUrl}/api/verify?token=${user.verificationToken}`;
+        console.log(`Verification Link: ${verificationUrl}`);
+      }
+    }
+    
+    console.log('================================\n');
+  } catch (error) {
+    console.error('Error logging verification links:', error);
+  }
+};
+
 // Send verification email
 export const sendVerificationEmail = async (user: User, token: string): Promise<boolean> => {
   const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
@@ -101,46 +158,77 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
   const text = `Welcome to WhoToDate! Please verify your email address by clicking the following link: ${verificationUrl}`;
   
   try {
-    // If Resend is initialized, use it to send the email
-    if (useResend && resendClient) {
-      console.log(`Sending verification email via Resend to: ${user.email}`);
+    // Check if we're in development environment (no need for actual email sending)
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    
+    // Development mode - just provide a direct verification link
+    if (isDevelopment) {
+      console.log('DEVELOPMENT MODE: Email would be sent to', user.email);
+      console.log('======== VERIFICATION LINK ========');
+      console.log(verificationUrl);
+      console.log('==================================');
       
-      const result = await resendClient.emails.send({
-        from: from,
-        to: user.email,
-        subject: 'Verify your email address',
-        text: text,
-        html: html
-      });
-      
-      console.log('Verification email sent successfully via Resend:', result.data?.id || 'Success');
-      return true;
-    } 
-    // Otherwise, fall back to Ethereal for development
-    else {
-      // Make sure the transporter is initialized
-      if (!transporter) {
-        await initializeTransporter();
-      }
-      
-      console.log(`Sending verification email via Ethereal to: ${user.email}`);
-      const info = await transporter.sendMail({
-        from: from,
-        to: user.email,
-        subject: 'Verify your email address',
-        text: text,
-        html: html
-      });
-      
-      // For development, log the preview URL provided by Ethereal
-      if (process.env.NODE_ENV !== 'production' && info.messageId) {
-        console.log('Email verification preview URL: %s', nodemailer.getTestMessageUrl(info));
+      // Try to use Ethereal for a preview if available
+      try {
+        if (!transporter) {
+          await initializeTransporter();
+        }
+        
+        const info = await transporter.sendMail({
+          from: from,
+          to: user.email,
+          subject: 'Verify your email address',
+          text: text,
+          html: html
+        });
+        
+        if (info.messageId) {
+          console.log('Email preview URL: %s', nodemailer.getTestMessageUrl(info));
+        }
+      } catch (error: any) {
+        console.log('Could not send Ethereal preview email:', error.message);
       }
       
       return true;
     }
+    
+    // Production mode - send real emails via Resend
+    if (useResend && resendClient) {
+      console.log(`Sending verification email via Resend to: ${user.email}`);
+      
+      try {
+        const result = await resendClient.emails.send({
+          from: from,
+          to: user.email,
+          subject: 'Verify your email address',
+          text: text,
+          html: html
+        });
+        
+        if (result.error) {
+          console.error('Resend API Error:', result.error);
+          throw new Error(result.error.message || 'Unknown Resend error');
+        }
+        
+        console.log('Verification email sent successfully via Resend:', result.data?.id || 'Success');
+        return true;
+      } catch (error) {
+        console.error('Resend API Error:', error);
+        throw error; // Re-throw to be caught by the outer try-catch
+      }
+    } 
+    else {
+      // We're in production but Resend is not available - this is a critical error
+      throw new Error('Email service not properly configured for production use');
+    }
   } catch (error) {
     console.error('Error sending verification email:', error);
+    
+    // In development, we still consider this a success since we've logged the verification link
+    if (process.env.NODE_ENV !== 'production') {
+      return true;
+    }
+    
     return false;
   }
 };
@@ -180,46 +268,78 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
   const text = `Thank you for verifying your email address. You can now log in and start using WhoToDate.`;
   
   try {
-    // If Resend is initialized, use it to send the email
-    if (useResend && resendClient) {
-      console.log(`Sending welcome email via Resend to: ${user.email}`);
+    // Check if we're in development environment
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    
+    // Development mode - just log welcome message (no need to send email)
+    if (isDevelopment) {
+      console.log('DEVELOPMENT MODE: Welcome email would be sent to', user.email);
+      console.log('======== WELCOME EMAIL CONTENT ========');
+      console.log(`Subject: Welcome to WhoToDate!`);
+      console.log(`Dashboard Link: ${baseUrl}/dashboard`);
+      console.log('======================================');
       
-      const result = await resendClient.emails.send({
-        from: from,
-        to: user.email,
-        subject: 'Welcome to WhoToDate!',
-        text: text,
-        html: html
-      });
-      
-      console.log('Welcome email sent successfully via Resend:', result.data?.id || 'Success');
-      return true;
-    } 
-    // Otherwise, fall back to Ethereal for development
-    else {
-      // Make sure the transporter is initialized
-      if (!transporter) {
-        await initializeTransporter();
-      }
-      
-      console.log(`Sending welcome email via Ethereal to: ${user.email}`);
-      const info = await transporter.sendMail({
-        from: from,
-        to: user.email,
-        subject: 'Welcome to WhoToDate!',
-        text: text,
-        html: html
-      });
-      
-      // For development, log the preview URL provided by Ethereal
-      if (process.env.NODE_ENV !== 'production' && info.messageId) {
-        console.log('Welcome email preview URL: %s', nodemailer.getTestMessageUrl(info));
+      // Try to use Ethereal for a preview if available
+      try {
+        if (!transporter) {
+          await initializeTransporter();
+        }
+        
+        const info = await transporter.sendMail({
+          from: from,
+          to: user.email,
+          subject: 'Welcome to WhoToDate!',
+          text: text,
+          html: html
+        });
+        
+        if (info.messageId) {
+          console.log('Welcome email preview URL: %s', nodemailer.getTestMessageUrl(info));
+        }
+      } catch (error: any) {
+        console.log('Could not send Ethereal preview welcome email:', error.message);
       }
       
       return true;
     }
+    
+    // Production mode - send real emails via Resend
+    if (useResend && resendClient) {
+      console.log(`Sending welcome email via Resend to: ${user.email}`);
+      
+      try {
+        const result = await resendClient.emails.send({
+          from: from,
+          to: user.email,
+          subject: 'Welcome to WhoToDate!',
+          text: text,
+          html: html
+        });
+        
+        if (result.error) {
+          console.error('Resend API Error for welcome email:', result.error);
+          throw new Error(result.error.message || 'Unknown Resend error');
+        }
+        
+        console.log('Welcome email sent successfully via Resend:', result.data?.id || 'Success');
+        return true;
+      } catch (error) {
+        console.error('Resend API Error for welcome email:', error);
+        throw error; // Re-throw to be caught by the outer try-catch
+      }
+    } 
+    else {
+      // We're in production but Resend is not available - this is a critical error
+      throw new Error('Email service not properly configured for production use');
+    }
   } catch (error) {
     console.error('Error sending welcome email:', error);
+    
+    // In development, we still consider this a success since we've logged the welcome message
+    if (process.env.NODE_ENV !== 'production') {
+      return true;
+    }
+    
     return false;
   }
 };
