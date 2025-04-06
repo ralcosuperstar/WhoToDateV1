@@ -1,36 +1,31 @@
 import { randomBytes } from 'crypto';
 import { User } from '@shared/schema';
-import FormData from 'form-data';
-import Mailgun from 'mailgun.js';
+import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 
-// Required Mailgun API key and domain
-const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY;
-const MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN;
+// Required Resend API key
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-// Initialize Mailgun client
-const mailgun = new Mailgun(FormData);
-
-// Initialize mailgun client or use fallback to Ethereal for development
-let mg: any = null;
-let useMailgun = false;
+// Initialize Resend client
+let resendClient: Resend | null = null;
+let useResend = false;
 let transporter: nodemailer.Transporter;
 
-// Initialize transporter asynchronously
+// Initialize email service asynchronously
 async function initializeTransporter() {
-  // Check if Mailgun credentials are available
-  if (MAILGUN_API_KEY && MAILGUN_DOMAIN) {
+  // Check if Resend credentials are available
+  if (RESEND_API_KEY) {
     try {
-      mg = mailgun.client({ username: 'api', key: MAILGUN_API_KEY });
-      useMailgun = true;
-      console.log('Mailgun initialized successfully for domain:', MAILGUN_DOMAIN);
+      resendClient = new Resend(RESEND_API_KEY);
+      useResend = true;
+      console.log('Resend email service initialized successfully');
       return;
     } catch (error) {
-      console.error('Failed to initialize Mailgun:', error);
-      useMailgun = false;
+      console.error('Failed to initialize Resend:', error);
+      useResend = false;
     }
   } else {
-    console.log('Mailgun credentials not provided, falling back to Ethereal');
+    console.log('Resend API key not provided, falling back to Ethereal');
   }
 
   // Fallback to Ethereal Email for development
@@ -77,7 +72,7 @@ export const generateTokenExpiry = (): Date => {
 export const sendVerificationEmail = async (user: User, token: string): Promise<boolean> => {
   const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
   const verificationUrl = `${baseUrl}/api/verify?token=${token}`;
-  const from = process.env.EMAIL_FROM || 'WhoToDate <noreply@whotodate.com>';
+  const from = process.env.EMAIL_FROM || 'WhoToDate <onboarding@resend.dev>';
   
   // Email HTML content
   const html = `
@@ -106,11 +101,11 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
   const text = `Welcome to WhoToDate! Please verify your email address by clicking the following link: ${verificationUrl}`;
   
   try {
-    // If Mailgun is initialized, use it to send the email
-    if (useMailgun && mg) {
-      console.log(`Sending verification email via Mailgun to: ${user.email}`);
+    // If Resend is initialized, use it to send the email
+    if (useResend && resendClient) {
+      console.log(`Sending verification email via Resend to: ${user.email}`);
       
-      const result = await mg.messages.create(MAILGUN_DOMAIN, {
+      const result = await resendClient.emails.send({
         from: from,
         to: user.email,
         subject: 'Verify your email address',
@@ -118,7 +113,7 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
         html: html
       });
       
-      console.log('Verification email sent successfully via Mailgun:', result.id);
+      console.log('Verification email sent successfully via Resend:', result.data?.id || 'Success');
       return true;
     } 
     // Otherwise, fall back to Ethereal for development
@@ -153,7 +148,7 @@ export const sendVerificationEmail = async (user: User, token: string): Promise<
 // Send a welcome email after verification
 export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
   const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
-  const from = process.env.EMAIL_FROM || 'WhoToDate <noreply@whotodate.com>';
+  const from = process.env.EMAIL_FROM || 'WhoToDate <onboarding@resend.dev>';
   
   // Email HTML content
   const html = `
@@ -185,11 +180,11 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
   const text = `Thank you for verifying your email address. You can now log in and start using WhoToDate.`;
   
   try {
-    // If Mailgun is initialized, use it to send the email
-    if (useMailgun && mg) {
-      console.log(`Sending welcome email via Mailgun to: ${user.email}`);
+    // If Resend is initialized, use it to send the email
+    if (useResend && resendClient) {
+      console.log(`Sending welcome email via Resend to: ${user.email}`);
       
-      const result = await mg.messages.create(MAILGUN_DOMAIN, {
+      const result = await resendClient.emails.send({
         from: from,
         to: user.email,
         subject: 'Welcome to WhoToDate!',
@@ -197,7 +192,7 @@ export const sendWelcomeEmail = async (user: User): Promise<boolean> => {
         html: html
       });
       
-      console.log('Welcome email sent successfully via Mailgun:', result.id);
+      console.log('Welcome email sent successfully via Resend:', result.data?.id || 'Success');
       return true;
     } 
     // Otherwise, fall back to Ethereal for development
