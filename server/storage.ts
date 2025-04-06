@@ -19,10 +19,13 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
+  getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
   setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
   verifyUser(userId: number): Promise<User>;
+  // OTP operations
+  setOTP(userId: number, otp: string, expiry: Date): Promise<User>;
   
   // Quiz operations
   getQuizAnswers(userId: number): Promise<QuizAnswer | undefined>;
@@ -114,6 +117,28 @@ export class MemStorage implements IStorage {
                 new Date(user.verificationTokenExpiry) > new Date()
     );
   }
+  
+  async getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.phoneNumber === phoneNumber
+    );
+  }
+  
+  async setOTP(userId: number, otp: string, expiry: Date): Promise<User> {
+    const user = await this.getUser(userId);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = { 
+      ...user, 
+      otpCode: otp,
+      otpExpiry: expiry
+    };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
@@ -124,6 +149,7 @@ export class MemStorage implements IStorage {
       id, 
       createdAt,
       password: insertUser.password || '',
+      phoneNumber: insertUser.phoneNumber || null,
       firstName: insertUser.firstName || null,
       lastName: insertUser.lastName || null,
       fullName: insertUser.fullName || null,
@@ -131,8 +157,11 @@ export class MemStorage implements IStorage {
       gender: insertUser.gender || null,
       imageUrl: insertUser.imageUrl || null,
       isVerified: false,
+      verificationMethod: insertUser.verificationMethod || 'sms', // Default to SMS verification
       verificationToken: null,
-      verificationTokenExpiry: null
+      verificationTokenExpiry: null,
+      otpCode: null,
+      otpExpiry: null
     };
     this.users.set(id, user);
     return user;
@@ -169,7 +198,9 @@ export class MemStorage implements IStorage {
       ...user, 
       isVerified: true,
       verificationToken: null,
-      verificationTokenExpiry: null
+      verificationTokenExpiry: null,
+      otpCode: null,
+      otpExpiry: null
     };
     this.users.set(userId, updatedUser);
     return updatedUser;

@@ -8,15 +8,19 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
+  phoneNumber: text("phone_number").unique(), // Phone number for SMS verification
   firstName: text("first_name"),
   lastName: text("last_name"),
   fullName: text("full_name"), // Legacy field
   dateOfBirth: text("date_of_birth"),
   gender: text("gender"),
   imageUrl: text("image_url"), // Profile image
-  isVerified: boolean("is_verified").default(false), // Whether email has been verified
+  isVerified: boolean("is_verified").default(false), // Whether user has been verified
+  verificationMethod: text("verification_method"), // "email" or "sms"
   verificationToken: text("verification_token"), // Token for email verification
   verificationTokenExpiry: timestamp("verification_token_expiry"), // Expiry for verification token
+  otpCode: text("otp_code"), // OTP code for SMS verification
+  otpExpiry: timestamp("otp_expiry"), // Expiry time for OTP code
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -69,12 +73,14 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   email: true,
+  phoneNumber: true,
   firstName: true,
   lastName: true,
   fullName: true, 
   dateOfBirth: true,
   gender: true,
   imageUrl: true,
+  verificationMethod: true,
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({

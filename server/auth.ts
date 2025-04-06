@@ -7,10 +7,21 @@ import { promisify } from "util";
 import { IStorage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
 import { generateVerificationToken, generateTokenExpiry, sendVerificationEmail, sendWelcomeEmail } from "./emailService";
+import { generateOTP, generateOTPExpiry, sendOTPViaSMS, verifyOTP } from "./twilioService";
 
 declare global {
   namespace Express {
     interface User extends SelectUser {}
+  }
+}
+
+// Extend session type definitions
+declare module 'express-session' {
+  interface SessionData {
+    pendingRegistrations?: Record<string, {
+      otp: string;
+      otpExpiry: Date;
+    }>;
   }
 }
 
@@ -232,6 +243,156 @@ export function setupAuth(app: Express, db: IStorage) {
         emailSent,
         message: "Verification email sent successfully."
       });
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // API endpoint to request OTP for mobile verification
+  app.post("/api/request-otp", async (req, res, next) => {
+    try {
+      const { phoneNumber } = req.body;
+      
+      if (!phoneNumber) {
+        return res.status(400).json({ error: "Phone number is required" });
+      }
+      
+      // Check if phone number already exists
+      const existingUser = await db.getUserByPhoneNumber(phoneNumber);
+      
+      // If we're in registration flow, we don't want an existing number
+      if (req.query.for === 'registration' && existingUser) {
+        return res.status(400).json({ 
+          error: "Phone number already registered",
+          message: "This phone number is already registered. Please login or use a different number."
+        });
+      }
+      
+      // If we're in login flow, we need the phone number to exist
+      if (req.query.for === 'login' && !existingUser) {
+        return res.status(400).json({ 
+          error: "Phone number not found",
+          message: "No account found with this phone number. Please register first."
+        });
+      }
+      
+      // Generate OTP and expiry
+      const otp = generateOTP();
+      const otpExpiry = generateOTPExpiry();
+      
+      // If it's a registration flow
+      if (req.query.for === 'registration') {
+        // Store OTP temporarily in session for validation later
+        if (!req.session.pendingRegistrations) {
+          req.session.pendingRegistrations = {};
+        }
+        req.session.pendingRegistrations[phoneNumber] = {
+          otp,
+          otpExpiry
+        };
+      } else if (existingUser) {
+        // For login or existing user, store OTP in user record
+        await db.setOTP(existingUser.id, otp, otpExpiry);
+      }
+      
+      // Send OTP via SMS
+      const smsSent = await sendOTPViaSMS(phoneNumber, otp);
+      
+      // Return success
+      return res.status(200).json({ 
+        success: true,
+        smsSent,
+        message: "OTP sent successfully to your phone"
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // API endpoint to verify OTP and complete registration/login
+  app.post("/api/verify-otp", async (req, res, next) => {
+    try {
+      const { phoneNumber, otp, userData } = req.body;
+      
+      if (!phoneNumber || !otp) {
+        return res.status(400).json({ error: "Phone number and OTP are required" });
+      }
+      
+      // For registration flow
+      if (userData && req.session.pendingRegistrations && 
+          req.session.pendingRegistrations[phoneNumber]) {
+        
+        // Validate OTP from session
+        const pendingOTP = req.session.pendingRegistrations[phoneNumber].otp;
+        const pendingExpiry = new Date(req.session.pendingRegistrations[phoneNumber].otpExpiry);
+        
+        if (otp !== pendingOTP || pendingExpiry < new Date()) {
+          return res.status(400).json({ 
+            error: "Invalid or expired OTP",
+            message: "The OTP you entered is incorrect or has expired. Please request a new one."
+          });
+        }
+        
+        // Create new user with the provided userData
+        const user = await db.createUser({
+          ...userData,
+          phoneNumber,
+          password: await hashPassword(userData.password || randomBytes(8).toString('hex')),
+          verificationMethod: 'sms'
+        });
+        
+        // Mark user as verified immediately
+        await db.verifyUser(user.id);
+        
+        // Clear pending registration from session
+        delete req.session.pendingRegistrations[phoneNumber];
+        
+        // Log in the user
+        req.login(user, (err) => {
+          if (err) return next(err);
+          res.status(201).json(user);
+        });
+      } 
+      // For login flow
+      else {
+        // Find user by phone number
+        const user = await db.getUserByPhoneNumber(phoneNumber);
+        
+        if (!user) {
+          return res.status(400).json({ 
+            error: "User not found",
+            message: "No account found with this phone number."
+          });
+        }
+        
+        // Verify OTP from database record
+        const isValid = await verifyOTP(db, user.id, otp);
+        
+        if (!isValid) {
+          return res.status(400).json({ 
+            error: "Invalid or expired OTP",
+            message: "The OTP you entered is incorrect or has expired. Please request a new one."
+          });
+        }
+        
+        // Mark user as verified if they weren't already
+        if (!user.isVerified) {
+          await db.verifyUser(user.id);
+        }
+        
+        // Get the updated user
+        const updatedUser = await db.getUser(user.id);
+        
+        if (!updatedUser) {
+          return res.status(500).json({ error: "Error retrieving user" });
+        }
+        
+        // Log in the user
+        req.login(updatedUser, (err) => {
+          if (err) return next(err);
+          res.status(200).json(updatedUser);
+        });
+      }
     } catch (error) {
       next(error);
     }
