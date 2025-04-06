@@ -20,15 +20,12 @@ async function initializeTransporter() {
       resendClient = new Resend(RESEND_API_KEY);
       useResend = true;
       
-      // Test the Resend API connection
-      try {
-        const domains = await resendClient.domains.list();
-        console.log('Resend domains:', JSON.stringify(domains));
-        console.log('Resend email service initialized and tested successfully');
-      } catch (domainError) {
-        console.error('Resend domain list test failed:', domainError);
-        console.log('Resend email service initialized but domain test failed');
-      }
+      // Don't test with domains.list() as it requires unrestricted API key
+      // We'll just log that Resend is initialized and assume it works for sending
+      console.log('Resend email service initialized and ready to send emails');
+      
+      // For additional safety, we could test with a simple operation in the future if needed
+      // But for now, we'll just trust that the API key is valid for sending emails
       
       return;
     } catch (error) {
