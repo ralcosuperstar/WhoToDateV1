@@ -106,23 +106,6 @@ const HeroSection = () => {
               <p className="text-xs text-center mt-2 text-neutral-dark/70">100% free comprehensive results and insights</p>
             </div>
 
-            {/* Marriage and serious relationship focus */}
-            <div className="mb-5 bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-blue-100 shadow-sm">
-              <div className="flex items-start">
-                <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-3 mt-1 shrink-0">
-                  <span className="emoji text-xl">💍</span>
-                </div>
-                <div>
-                  <h3 className="font-medium text-base mb-1">For Serious Relationship Seekers</h3>
-                  <p className="text-sm text-neutral-dark/80">
-                    WhoToDate is designed for those seeking meaningful, long-term relationships with marriage in mind. 
-                    Our scientific approach helps you find genuine compatibility, not just casual connections. 
-                    We don't encourage hookups or predatory dating behaviors.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Trust elements */}
             <div className="flex flex-wrap justify-center md:justify-start gap-2">
               <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
