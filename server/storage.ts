@@ -22,6 +22,7 @@ export interface IStorage {
   getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, userData: Partial<InsertUser>): Promise<User>;
   setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
   verifyUser(userId: number): Promise<User>;
   // OTP operations
@@ -170,6 +171,22 @@ export class MemStorage implements IStorage {
   // Removed updateUserByClerkId - no longer needed
   
   // Removed linkUserToClerk - no longer needed
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User> {
+    const user = await this.getUser(id);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = { 
+      ...user,
+      ...userData
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
   
   async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
     const user = await this.getUser(userId);

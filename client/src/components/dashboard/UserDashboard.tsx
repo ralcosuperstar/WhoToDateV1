@@ -4,6 +4,17 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle,
+  DialogFooter,
+  DialogClose
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { User, Report } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient"; 
@@ -11,12 +22,15 @@ import { useToast } from "@/hooks/use-toast";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [editFullName, setEditFullName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
   const [_, navigate] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: user, isLoading: isUserLoading } = useQuery<User>({ 
-    queryKey: ['/api/me']
+    queryKey: ['/api/user']
   });
 
   const { data: report, isLoading: isReportLoading } = useQuery<Report>({ 
@@ -24,11 +38,51 @@ const UserDashboard = () => {
     enabled: !!user
   });
   
+  // Handle opening the edit profile dialog
+  const handleEditProfileOpen = () => {
+    if (user) {
+      setEditFullName(user.fullName || '');
+      setEditEmail(user.email);
+      setIsEditProfileOpen(true);
+    }
+  };
+
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: { fullName: string; email: string }) => {
+      const res = await apiRequest('PUT', '/api/user/profile', data);
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+      setIsEditProfileOpen(false);
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been successfully updated",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "There was a problem updating your profile",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Handle profile update submission
+  const handleUpdateProfile = () => {
+    updateProfileMutation.mutate({
+      fullName: editFullName,
+      email: editEmail
+    });
+  };
+
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest('POST', '/api/logout'),
     onSuccess: () => {
       // Clear user data from cache
-      queryClient.invalidateQueries({ queryKey: ['/api/me'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
@@ -111,7 +165,7 @@ const UserDashboard = () => {
                 </div>
                 
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline">Edit Profile</Button>
+                  <Button variant="outline" onClick={handleEditProfileOpen}>Edit Profile</Button>
                   <Button 
                     variant="outline" 
                     className="text-red-500 hover:text-red-600"
@@ -248,6 +302,55 @@ const UserDashboard = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Edit Profile Dialog */}
+      <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogDescription>
+              Update your profile information below.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="fullName" className="text-right">
+                Full Name
+              </Label>
+              <Input
+                id="fullName"
+                value={editFullName}
+                onChange={(e) => setEditFullName(e.target.value)}
+                className="col-span-3"
+                placeholder="Enter your full name"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                value={editEmail}
+                onChange={(e) => setEditEmail(e.target.value)}
+                className="col-span-3"
+                placeholder="Enter your email address"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button 
+              onClick={handleUpdateProfile}
+              disabled={updateProfileMutation.isPending}
+            >
+              {updateProfileMutation.isPending ? 'Updating...' : 'Save Changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

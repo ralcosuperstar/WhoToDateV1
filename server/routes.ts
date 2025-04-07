@@ -80,6 +80,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     res.json(userWithoutPassword);
   });
+  
+  // Update user profile endpoint
+  apiRouter.put("/user/profile", isAuthenticated, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const { fullName, email } = req.body;
+      
+      // Validate input
+      if (email && !email.includes('@')) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+      
+      // Update user with provided fields
+      const updatedUser = await db.updateUser(req.user.id, { 
+        fullName: fullName || undefined,
+        email: email || undefined
+      });
+      
+      // Don't send the password back to the client
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
 
   // Quiz and report routes - access to these requires authentication
   apiRouter.post("/quiz", isAuthenticated, async (req, res) => {

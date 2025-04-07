@@ -175,6 +175,22 @@ export class PgStorage implements IStorage {
     return updatedUser;
   }
   
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User> {
+    if (!this._db) throw new Error("Database connection not available");
+    
+    const [updatedUser] = await this._db
+      .update(users)
+      .set(userData)
+      .where(eq(users.id, id))
+      .returning();
+      
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+    
+    return updatedUser;
+  }
+  
   async createUser(user: InsertUser): Promise<User> {
     if (!this._db) throw new Error("Database connection not available");
     // Set isVerified to false by default for new users
