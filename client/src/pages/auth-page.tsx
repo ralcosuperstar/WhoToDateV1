@@ -87,10 +87,10 @@ export default function AuthPage() {
     }
   });
   
-  // If already logged in, redirect to home
+  // If already logged in, redirect to dashboard
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }, [user, navigate]);
   
@@ -153,8 +153,8 @@ export default function AuthPage() {
       otpForm.reset();
       registrationForm.reset();
       
-      // Redirect to home page
-      navigate("/");
+      // Redirect to dashboard after login
+      navigate("/dashboard");
     },
     onError: (error: any) => {
       toast({
