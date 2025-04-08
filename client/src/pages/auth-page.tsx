@@ -1,89 +1,72 @@
-import { useState, useEffect, useCallback } from "react";
-import { useLocation, useRouter } from "wouter";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { InsertUser } from "@shared/schema";
 
 // UI Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, AlertCircle, Smartphone, User, Mail } from "lucide-react";
-
-// Phone input validation
-const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile number format
+import { Loader2, User, Mail, Lock, Phone } from "lucide-react";
 
 // Define validation schemas
-const phoneSchema = z.object({
-  phoneNumber: z.string()
-    .min(10, "Phone number must be 10 digits")
-    .max(10, "Phone number must be 10 digits")
-    .regex(phoneRegex, "Must be a valid Indian mobile number"),
+const loginSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const otpSchema = z.object({
-  otp: z.string().length(6, "OTP must be 6 digits"),
-});
-
-const registrationSchema = z.object({
+const registerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
+  phoneNumber: z.string().optional(),
   username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
-type PhoneFormValues = z.infer<typeof phoneSchema>;
-type OtpFormValues = z.infer<typeof otpSchema>;
-type RegistrationFormValues = z.infer<typeof registrationSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
   // Router
-  const [location, navigate] = useLocation();
+  const [, navigate] = useLocation();
   
   // Auth states
   const { toast } = useToast();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, loginMutation, registerMutation } = useAuth();
   
   // Flow states
   const [activeTab, setActiveTab] = useState<string>("login");
-  const [authStep, setAuthStep] = useState<"phone" | "otp" | "register">("phone");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [isExistingUser, setIsExistingUser] = useState<boolean | null>(null);
   
   // Form initialization
-  const phoneForm = useForm<PhoneFormValues>({
-    resolver: zodResolver(phoneSchema),
+  const loginForm = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      phoneNumber: "",
+      username: "",
+      password: "",
     }
   });
   
-  const otpForm = useForm<OtpFormValues>({
-    resolver: zodResolver(otpSchema),
-    defaultValues: {
-      otp: "",
-    }
-  });
-  
-  const registrationForm = useForm<RegistrationFormValues>({
-    resolver: zodResolver(registrationSchema),
+  const registerForm = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
-      username: ""
+      phoneNumber: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
     }
   });
   
@@ -94,116 +77,40 @@ export default function AuthPage() {
     }
   }, [user, navigate]);
   
-  // Request OTP mutation
-  const requestOtpMutation = useMutation({
-    mutationFn: async (data: PhoneFormValues) => {
-      const forFlow = activeTab === "login" ? "login" : "registration";
-      const res = await apiRequest("POST", `/api/request-otp?for=${forFlow}`, data);
-      return await res.json();
-    },
-    onSuccess: (data) => {
-      setPhoneNumber(phoneForm.getValues().phoneNumber);
-      setAuthStep("otp");
-      toast({
-        title: "OTP Sent",
-        description: "Enter the 6-digit code sent to your phone",
-      });
-    },
-    onError: (error: any) => {
-      // Handle specific errors
-      if (error.message?.includes("already registered")) {
-        setIsExistingUser(true);
-        toast({
-          title: "Phone number already registered",
-          description: "This phone number is already in use. Try logging in instead.",
-          variant: "destructive",
-        });
-      } else if (error.message?.includes("not found")) {
-        setIsExistingUser(false);
-        toast({
-          title: "Phone number not registered",
-          description: "No account found with this number. Register first.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error sending OTP",
-          description: error.message || "Please try again later",
-          variant: "destructive",
-        });
-      }
-    },
-  });
-  
-  // Verify OTP mutation
-  const verifyOtpMutation = useMutation({
-    mutationFn: async (data: { phoneNumber: string; otp: string; userData?: RegistrationFormValues }) => {
-      const res = await apiRequest("POST", "/api/verify-otp", data);
-      return await res.json();
-    },
-    onSuccess: (data) => {
-      toast({
-        title: activeTab === "login" ? "Login successful!" : "Registration complete!",
-        description: "Welcome to WhoToDate.",
-      });
-      // Reset all states and forms
-      setAuthStep("phone");
-      setPhoneNumber("");
-      phoneForm.reset();
-      otpForm.reset();
-      registrationForm.reset();
-      
-      // Redirect to dashboard after login
-      navigate("/dashboard");
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Verification failed",
-        description: error.message || "Please try again with a new OTP",
-        variant: "destructive",
-      });
-    },
-  });
-  
-  // Handle phone form submission
-  const onPhoneSubmit = (data: PhoneFormValues) => {
-    requestOtpMutation.mutate(data);
-  };
-  
-  // Handle OTP form submission
-  const onOtpSubmit = (data: OtpFormValues) => {
-    if (activeTab === "register" && authStep === "otp") {
-      // For registration flow, after OTP validation, show registration form
-      setAuthStep("register");
-    } else {
-      // For login flow, verify OTP directly
-      verifyOtpMutation.mutate({
-        phoneNumber: phoneNumber,
-        otp: data.otp
-      });
+  // Handle login form submission
+  const onLoginSubmit = async (data: LoginFormValues) => {
+    try {
+      await loginMutation.mutateAsync(data);
+      // Navigation will happen automatically due to the useEffect above
+    } catch (error) {
+      console.error("Login error:", error);
     }
   };
   
   // Handle registration form submission
-  const onRegistrationSubmit = (data: RegistrationFormValues) => {
-    // Combine registration data with phone and OTP
-    verifyOtpMutation.mutate({
-      phoneNumber: phoneNumber,
-      otp: otpForm.getValues().otp,
-      userData: data
-    });
+  const onRegisterSubmit = async (data: RegisterFormValues) => {
+    try {
+      // Remove the confirmPassword field as it's not needed in the API
+      const { confirmPassword, ...registrationData } = data;
+      
+      // Call the register mutation
+      await registerMutation.mutateAsync(registrationData as InsertUser);
+      // Navigation will happen automatically due to the useEffect above
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
   
-  // Handle tab change
+  // Reset flow when changing tabs
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    setAuthStep("phone");
-    setPhoneNumber("");
-    phoneForm.reset();
-    otpForm.reset();
-    registrationForm.reset();
+    if (value === 'login') {
+      loginForm.reset();
+    } else {
+      registerForm.reset();
+    }
   };
-  
+
   // If already logged in and waiting for redirect
   if (user || isLoading) {
     return (
@@ -212,329 +119,232 @@ export default function AuthPage() {
       </div>
     );
   }
-  
+
   return (
-    <div className="container mx-auto px-4 py-8 md:py-16 max-w-full overflow-x-hidden">
-      <div className="grid gap-6 md:grid-cols-2 lg:gap-12">
-        {/* Left column: Auth forms */}
-        <div className="flex flex-col justify-center space-y-6 w-full max-w-md mx-auto">
-          <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tight">Welcome to WhoToDate</h1>
-            <p className="text-muted-foreground">
-              Discover your relationship compatibility profile
-            </p>
-          </div>
+    <div className="flex min-h-screen">
+      {/* Left column - Auth form */}
+      <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-4 md:p-8">
+        <div className="w-full max-w-md">
+          <h1 className="text-3xl font-bold mb-2">WhotoDate</h1>
+          <p className="text-muted-foreground mb-8">
+            Discover your relationship compatibility profile
+          </p>
           
-          <Tabs defaultValue="login" value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+          <Tabs defaultValue={activeTab} onValueChange={handleTabChange}>
+            <TabsList className="grid w-full grid-cols-2 mb-8">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
             
-            {/* Login Tab */}
             <TabsContent value="login" className="space-y-4">
               <Card>
                 <CardHeader>
                   <CardTitle>Login to your account</CardTitle>
                   <CardDescription>
-                    Enter your phone number to receive a verification code.
+                    Enter your username and password to access your account
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {authStep === "phone" && (
-                    <Form {...phoneForm}>
-                      <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-4">
-                        <FormField
-                          control={phoneForm.control}
-                          name="phoneNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
-                              <FormControl>
-                                <div className="flex items-center">
-                                  <span className="bg-muted px-3 py-2 rounded-l-md text-muted-foreground">
-                                    +91
-                                  </span>
-                                  <div className="relative flex-1">
-                                    <Smartphone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                    <Input 
-                                      placeholder="9876543210" 
-                                      className="pl-10 rounded-l-none" 
-                                      maxLength={10}
-                                      {...field} 
-                                    />
-                                  </div>
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button 
-                          type="submit" 
-                          className="w-full" 
-                          disabled={requestOtpMutation.isPending}
-                        >
-                          {requestOtpMutation.isPending ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Sending OTP...
-                            </>
-                          ) : (
-                            "Send OTP"
-                          )}
-                        </Button>
-                      </form>
-                    </Form>
-                  )}
-                  
-                  {authStep === "otp" && (
-                    <Form {...otpForm}>
-                      <form onSubmit={otpForm.handleSubmit(onOtpSubmit)} className="space-y-4">
-                        <Alert className="mb-4 border-blue-200 text-blue-800 bg-blue-50">
-                          <AlertCircle className="h-4 w-4 text-blue-600" />
-                          <AlertTitle>OTP sent!</AlertTitle>
-                          <AlertDescription>
-                            Enter the 6-digit code sent to {phoneNumber}
-                          </AlertDescription>
-                        </Alert>
-                        
-                        <FormField
-                          control={otpForm.control}
-                          name="otp"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Verification Code</FormLabel>
-                              <FormControl>
-                                <InputOTP maxLength={6} {...field}>
-                                  <InputOTPGroup>
-                                    <InputOTPSlot index={0} />
-                                    <InputOTPSlot index={1} />
-                                    <InputOTPSlot index={2} />
-                                    <InputOTPSlot index={3} />
-                                    <InputOTPSlot index={4} />
-                                    <InputOTPSlot index={5} />
-                                  </InputOTPGroup>
-                                </InputOTP>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <div className="flex justify-between">
-                          <div className="flex gap-2">
-                            <Button 
-                              type="button" 
-                              variant="outline" 
-                              onClick={() => setAuthStep("phone")}
-                            >
-                              Back
-                            </Button>
-                            <Button 
-                              type="button" 
-                              variant="secondary" 
-                              onClick={() => otpForm.setValue("otp", "123456")}
-                              className="text-xs"
-                              size="sm"
-                            >
-                              Use Dev OTP
-                            </Button>
-                          </div>
-                          <Button 
-                            type="submit" 
-                            disabled={verifyOtpMutation.isPending}
-                          >
-                            {verifyOtpMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Verifying...
-                              </>
-                            ) : (
-                              "Verify"
-                            )}
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  )}
+                  <Form {...loginForm}>
+                    <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
+                      <FormField
+                        control={loginForm.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Username</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  placeholder="Enter your username" 
+                                  className="pl-10"
+                                  {...field} 
+                                  autoComplete="username"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={loginForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  type="password" 
+                                  placeholder="Enter your password"
+                                  className="pl-10" 
+                                  {...field} 
+                                  autoComplete="current-password"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <Button 
+                        type="submit" 
+                        className="w-full"
+                        disabled={loginMutation.isPending}
+                      >
+                        {loginMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Logging in...
+                          </>
+                        ) : (
+                          "Login"
+                        )}
+                      </Button>
+                    </form>
+                  </Form>
                 </CardContent>
               </Card>
             </TabsContent>
             
-            {/* Register Tab */}
             <TabsContent value="register" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create a new account</CardTitle>
+                  <CardTitle>Create an account</CardTitle>
                   <CardDescription>
-                    Register to discover your relationship compatibility profile.
+                    Fill in your details to create a new account
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {authStep === "phone" && (
-                    <Form {...phoneForm}>
-                      <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-4">
+                  <Form {...registerForm}>
+                    <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
-                          control={phoneForm.control}
-                          name="phoneNumber"
+                          control={registerForm.control}
+                          name="firstName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
+                              <FormLabel>First Name</FormLabel>
                               <FormControl>
-                                <div className="flex items-center">
-                                  <span className="bg-muted px-3 py-2 rounded-l-md text-muted-foreground">
-                                    +91
-                                  </span>
-                                  <div className="relative flex-1">
-                                    <Smartphone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                    <Input 
-                                      placeholder="9876543210" 
-                                      className="pl-10 rounded-l-none" 
-                                      maxLength={10}
-                                      {...field} 
-                                    />
-                                  </div>
-                                </div>
+                                <Input 
+                                  placeholder="First Name" 
+                                  {...field} 
+                                  autoComplete="given-name"
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        <Button 
-                          type="submit" 
-                          className="w-full" 
-                          disabled={requestOtpMutation.isPending}
-                        >
-                          {requestOtpMutation.isPending ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Sending OTP...
-                            </>
-                          ) : (
-                            "Continue"
-                          )}
-                        </Button>
-                      </form>
-                    </Form>
-                  )}
-                  
-                  {authStep === "otp" && (
-                    <Form {...otpForm}>
-                      <form onSubmit={otpForm.handleSubmit(onOtpSubmit)} className="space-y-4">
-                        <Alert className="mb-4 border-blue-200 text-blue-800 bg-blue-50">
-                          <AlertCircle className="h-4 w-4 text-blue-600" />
-                          <AlertTitle>OTP sent!</AlertTitle>
-                          <AlertDescription>
-                            Enter the 6-digit code sent to {phoneNumber}
-                          </AlertDescription>
-                        </Alert>
                         
                         <FormField
-                          control={otpForm.control}
-                          name="otp"
+                          control={registerForm.control}
+                          name="lastName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Verification Code</FormLabel>
+                              <FormLabel>Last Name</FormLabel>
                               <FormControl>
-                                <InputOTP maxLength={6} {...field}>
-                                  <InputOTPGroup>
-                                    <InputOTPSlot index={0} />
-                                    <InputOTPSlot index={1} />
-                                    <InputOTPSlot index={2} />
-                                    <InputOTPSlot index={3} />
-                                    <InputOTPSlot index={4} />
-                                    <InputOTPSlot index={5} />
-                                  </InputOTPGroup>
-                                </InputOTP>
+                                <Input 
+                                  placeholder="Last Name" 
+                                  {...field} 
+                                  autoComplete="family-name"
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        <div className="flex justify-between">
-                          <div className="flex gap-2">
-                            <Button 
-                              type="button" 
-                              variant="outline" 
-                              onClick={() => setAuthStep("phone")}
-                            >
-                              Back
-                            </Button>
-                            <Button 
-                              type="button" 
-                              variant="secondary" 
-                              onClick={() => otpForm.setValue("otp", "123456")}
-                              className="text-xs"
-                              size="sm"
-                            >
-                              Use Dev OTP
-                            </Button>
-                          </div>
-                          <Button 
-                            type="submit" 
-                            disabled={otpForm.getValues().otp.length !== 6}
-                          >
-                            Continue
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  )}
-                  
-                  {authStep === "register" && (
-                    <Form {...registrationForm}>
-                      <form onSubmit={registrationForm.handleSubmit(onRegistrationSubmit)} className="space-y-4">
-                        <Alert className="mb-4 border-green-200 text-green-800 bg-green-50">
-                          <AlertCircle className="h-4 w-4 text-green-600" />
-                          <AlertTitle>Phone Verified!</AlertTitle>
-                          <AlertDescription>
-                            Please complete your profile details
-                          </AlertDescription>
-                        </Alert>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <FormField
-                            control={registrationForm.control}
-                            name="firstName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>First Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="John" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={registrationForm.control}
-                            name="lastName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Last Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Doe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        
+                      </div>
+                      
+                      <FormField
+                        control={registerForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  placeholder="your.email@example.com"
+                                  className="pl-10" 
+                                  {...field} 
+                                  autoComplete="email"
+                                  type="email"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={registerForm.control}
+                        name="phoneNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number (Optional)</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  placeholder="Your phone number"
+                                  className="pl-10" 
+                                  {...field} 
+                                  autoComplete="tel"
+                                  type="tel"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={registerForm.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Username</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  placeholder="Choose a username"
+                                  className="pl-10" 
+                                  {...field} 
+                                  autoComplete="username"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
-                          control={registrationForm.control}
-                          name="username"
+                          control={registerForm.control}
+                          name="password"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Username</FormLabel>
+                              <FormLabel>Password</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                   <Input 
-                                    placeholder="johndoe" 
+                                    type="password" 
+                                    placeholder="Create a password"
                                     className="pl-10" 
                                     {...field} 
+                                    autoComplete="new-password"
                                   />
                                 </div>
                               </FormControl>
@@ -544,19 +354,20 @@ export default function AuthPage() {
                         />
                         
                         <FormField
-                          control={registrationForm.control}
-                          name="email"
+                          control={registerForm.control}
+                          name="confirmPassword"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>Confirm Password</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                   <Input 
-                                    type="email" 
-                                    placeholder="john.doe@example.com" 
+                                    type="password" 
+                                    placeholder="Confirm your password"
                                     className="pl-10" 
                                     {...field} 
+                                    autoComplete="new-password"
                                   />
                                 </div>
                               </FormControl>
@@ -564,89 +375,67 @@ export default function AuthPage() {
                             </FormItem>
                           )}
                         />
-                        
-                        <div className="flex justify-between">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => setAuthStep("otp")}
-                          >
-                            Back
-                          </Button>
-                          <Button 
-                            type="submit" 
-                            disabled={verifyOtpMutation.isPending}
-                          >
-                            {verifyOtpMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Creating Account...
-                              </>
-                            ) : (
-                              "Complete Registration"
-                            )}
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  )}
+                      </div>
+                      
+                      <Button 
+                        type="submit" 
+                        className="w-full"
+                        disabled={registerMutation.isPending}
+                      >
+                        {registerMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Creating Account...
+                          </>
+                        ) : (
+                          "Register"
+                        )}
+                      </Button>
+                    </form>
+                  </Form>
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
         </div>
-        
-        {/* Right column: Hero section */}
-        <div className="flex flex-col justify-center py-6 md:py-12 space-y-6 hidden md:flex">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold tracking-tight">
-              Discover Your Perfect Relationship Match
-            </h2>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white text-xs mr-3">1</span>
-                <div>
-                  <p className="font-medium">Take our scientific compatibility quiz</p>
-                  <p className="text-sm text-muted-foreground">
-                    Answer questions that analyze your personality traits, attachment style, and relationship values
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white text-xs mr-3">2</span>
-                <div>
-                  <p className="font-medium">Get your compatibility profile</p>
-                  <p className="text-sm text-muted-foreground">
-                    Receive a detailed Green, Yellow, or Red compatibility rating with personalized insights
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white text-xs mr-3">3</span>
-                <div>
-                  <p className="font-medium">Find better relationships</p>
-                  <p className="text-sm text-muted-foreground">
-                    Use your compatibility profile to identify ideal relationship matches and improve your dating life
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
+      </div>
+      
+      {/* Right column - Information */}
+      <div className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-8">
+        <div className="max-w-md">
+          <h2 className="text-3xl font-bold mb-4">Discover Your Compatibility Profile</h2>
+          <p className="mb-8">
+            Take our scientifically-backed compatibility assessment to learn what kind of relationship
+            dynamics work best for your unique personality type. 
+          </p>
           
-          <div className="rounded-lg bg-muted p-6">
-            <h3 className="text-lg font-medium mb-2">Why WhoToDate?</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Our scientific approach is based on years of relationship research analyzing thousands of successful couples across India.
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-md bg-background p-3">
-                <p className="text-3xl font-bold text-primary">96%</p>
-                <p className="text-xs text-muted-foreground">of users report better understanding of their relationship patterns</p>
-              </div>
-              <div className="rounded-md bg-background p-3">
-                <p className="text-3xl font-bold text-primary">83%</p>
-                <p className="text-xs text-muted-foreground">report improved compatibility with their partners</p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col space-y-2">
+              <div className="text-xl font-medium">Scientific Approach</div>
+              <p className="text-primary-foreground/80">
+                Our assessment is based on attachment theory, personality psychology and relationship science.
+              </p>
+            </div>
+            
+            <div className="flex flex-col space-y-2">
+              <div className="text-xl font-medium">Detailed Analysis</div>
+              <p className="text-primary-foreground/80">
+                Get insights into your attachment style, personality traits, and emotional patterns.
+              </p>
+            </div>
+            
+            <div className="flex flex-col space-y-2">
+              <div className="text-xl font-medium">Practical Advice</div>
+              <p className="text-primary-foreground/80">
+                Receive tailored recommendations to improve your relationships and communication.
+              </p>
+            </div>
+            
+            <div className="flex flex-col space-y-2">
+              <div className="text-xl font-medium">Free Report</div>
+              <p className="text-primary-foreground/80">
+                Your complete compatibility profile is 100% free - no hidden charges.
+              </p>
             </div>
           </div>
         </div>

@@ -7,21 +7,10 @@ import { promisify } from "util";
 import { IStorage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
 import { generateVerificationToken, generateTokenExpiry, sendVerificationEmail, sendWelcomeEmail } from "./emailService";
-import { generateOTP, generateOTPExpiry, sendOTPViaSMS, verifyOTP } from "./twilioService";
 
 declare global {
   namespace Express {
     interface User extends SelectUser {}
-  }
-}
-
-// Extend session type definitions
-declare module 'express-session' {
-  interface SessionData {
-    pendingRegistrations?: Record<string, {
-      otp: string;
-      otpExpiry: Date;
-    }>;
   }
 }
 
@@ -88,41 +77,53 @@ export function setupAuth(app: Express, db: IStorage) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
+      const { firstName, lastName, email, phoneNumber, username, password } = req.body;
+      
+      // Validate required fields
+      if (!firstName || !lastName || !email || !username || !password) {
+        return res.status(400).json({ 
+          error: "Missing required fields",
+          message: "Please provide all required fields: first name, last name, email, username, and password."
+        });
+      }
+
       // Check if username or email already exists
-      const existingUsername = await db.getUserByUsername(req.body.username);
+      const existingUsername = await db.getUserByUsername(username);
       if (existingUsername) {
         return res.status(400).json({ error: "Username already exists" });
       }
       
-      const existingEmail = await db.getUserByEmail(req.body.email);
+      const existingEmail = await db.getUserByEmail(email);
       if (existingEmail) {
         return res.status(400).json({ error: "Email already exists" });
       }
 
-      // Create new user with verification fields set by default (not verified)
-      const user = await db.createUser({
-        ...req.body,
-        password: await hashPassword(req.body.password),
-        clerkId: null
-      });
+      // Check for duplicate phone number if provided
+      if (phoneNumber) {
+        const existingPhone = await db.getUserByPhoneNumber(phoneNumber);
+        if (existingPhone) {
+          return res.status(400).json({ error: "Phone number already exists" });
+        }
+      }
 
-      // Generate verification token and expiry
-      const verificationToken = generateVerificationToken();
-      const tokenExpiry = generateTokenExpiry();
+      // Create new user directly
+      const user = await db.createUser({
+        username,
+        password: await hashPassword(password),
+        email,
+        phoneNumber,
+        firstName,
+        lastName,
+        verificationMethod: 'email'
+      });
       
-      // Update user with verification token and expiry
-      const updatedUser = await db.setVerificationToken(user.id, verificationToken, tokenExpiry);
+      // Mark user as verified immediately
+      await db.verifyUser(user.id);
       
-      // Send verification email
-      const emailSent = await sendVerificationEmail(updatedUser, verificationToken);
-      
-      // Log in the user, but note they're unverified
-      req.login(updatedUser, (err) => {
+      // Log in the user automatically after registration
+      req.login(user, (err) => {
         if (err) return next(err);
-        res.status(201).json({
-          ...updatedUser,
-          emailVerificationSent: emailSent
-        });
+        res.status(201).json(user);
       });
     } catch (err) {
       next(err);
@@ -133,14 +134,6 @@ export function setupAuth(app: Express, db: IStorage) {
     passport.authenticate("local", (err: any, user: Express.User | false, info: any) => {
       if (err) return next(err);
       if (!user) return res.status(401).json({ error: "Invalid credentials" });
-      
-      // Check if user's email is verified
-      if (!user.isVerified) {
-        return res.status(403).json({ 
-          error: "Email not verified", 
-          message: "Please verify your email before logging in."
-        });
-      }
       
       req.login(user, (err) => {
         if (err) return next(err);
@@ -165,236 +158,5 @@ export function setupAuth(app: Express, db: IStorage) {
   app.get("/api/me", (req, res) => {
     if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
     res.json(req.user);
-  });
-  
-  // API endpoint to verify email using token
-  app.get("/api/verify", async (req, res, next) => {
-    try {
-      const { token } = req.query;
-      
-      if (!token || typeof token !== 'string') {
-        return res.status(400).json({ error: "Invalid verification token" });
-      }
-      
-      // Find user with this verification token
-      const user = await db.getUserByVerificationToken(token);
-      
-      if (!user) {
-        return res.status(400).json({ 
-          error: "Invalid or expired verification token",
-          message: "The verification link is invalid or has expired. Please request a new verification email."
-        });
-      }
-      
-      // Verify the user
-      await db.verifyUser(user.id);
-      
-      // Send welcome email
-      await sendWelcomeEmail(user);
-      
-      // If user is already logged in, update their session
-      if (req.isAuthenticated() && req.user.id === user.id) {
-        const verifiedUser = await db.getUser(user.id);
-        if (verifiedUser) {
-          req.login(verifiedUser, (err) => {
-            if (err) return next(err);
-          });
-        }
-      }
-      
-      // Return success and redirect to login page
-      return res.redirect('/auth?verified=true');
-    } catch (error) {
-      next(error);
-    }
-  });
-  
-  // API endpoint to resend verification email
-  app.post("/api/resend-verification", async (req, res, next) => {
-    try {
-      // Must be authenticated
-      if (!req.isAuthenticated()) {
-        return res.status(401).json({ error: "Not authenticated" });
-      }
-      
-      const user = req.user;
-      
-      // Check if already verified
-      if (user.isVerified) {
-        return res.status(400).json({ 
-          error: "Already verified",
-          message: "Your email is already verified."
-        });
-      }
-      
-      // Generate new verification token and expiry
-      const verificationToken = generateVerificationToken();
-      const tokenExpiry = generateTokenExpiry();
-      
-      // Update user with new verification token and expiry
-      const updatedUser = await db.setVerificationToken(user.id, verificationToken, tokenExpiry);
-      
-      // Send verification email
-      const emailSent = await sendVerificationEmail(updatedUser, verificationToken);
-      
-      // Return success
-      return res.status(200).json({ 
-        success: true,
-        emailSent,
-        message: "Verification email sent successfully."
-      });
-    } catch (error) {
-      next(error);
-    }
-  });
-  
-  // API endpoint to request OTP for mobile verification
-  app.post("/api/request-otp", async (req, res, next) => {
-    try {
-      const { phoneNumber } = req.body;
-      
-      if (!phoneNumber) {
-        return res.status(400).json({ error: "Phone number is required" });
-      }
-      
-      // Check if phone number already exists
-      const existingUser = await db.getUserByPhoneNumber(phoneNumber);
-      
-      // If we're in registration flow, we don't want an existing number
-      if (req.query.for === 'registration' && existingUser) {
-        return res.status(400).json({ 
-          error: "Phone number already registered",
-          message: "This phone number is already registered. Please login or use a different number."
-        });
-      }
-      
-      // If we're in login flow, we need the phone number to exist
-      if (req.query.for === 'login' && !existingUser) {
-        return res.status(400).json({ 
-          error: "Phone number not found",
-          message: "No account found with this phone number. Please register first."
-        });
-      }
-      
-      // Generate OTP and expiry
-      const otp = generateOTP();
-      const otpExpiry = generateOTPExpiry();
-      
-      // If it's a registration flow
-      if (req.query.for === 'registration') {
-        // Store OTP temporarily in session for validation later
-        if (!req.session.pendingRegistrations) {
-          req.session.pendingRegistrations = {};
-        }
-        req.session.pendingRegistrations[phoneNumber] = {
-          otp,
-          otpExpiry
-        };
-      } else if (existingUser) {
-        // For login or existing user, store OTP in user record
-        await db.setOTP(existingUser.id, otp, otpExpiry);
-      }
-      
-      // Send OTP via SMS
-      const smsSent = await sendOTPViaSMS(phoneNumber, otp);
-      
-      // Return success
-      return res.status(200).json({ 
-        success: true,
-        smsSent,
-        message: "OTP sent successfully to your phone"
-      });
-    } catch (error) {
-      next(error);
-    }
-  });
-  
-  // API endpoint to verify OTP and complete registration/login
-  app.post("/api/verify-otp", async (req, res, next) => {
-    try {
-      const { phoneNumber, otp, userData } = req.body;
-      
-      if (!phoneNumber || !otp) {
-        return res.status(400).json({ error: "Phone number and OTP are required" });
-      }
-      
-      // For registration flow
-      if (userData && req.session.pendingRegistrations && 
-          req.session.pendingRegistrations[phoneNumber]) {
-        
-        // Validate OTP from session
-        const pendingOTP = req.session.pendingRegistrations[phoneNumber].otp;
-        const pendingExpiry = new Date(req.session.pendingRegistrations[phoneNumber].otpExpiry);
-        
-        if (otp !== pendingOTP || pendingExpiry < new Date()) {
-          return res.status(400).json({ 
-            error: "Invalid or expired OTP",
-            message: "The OTP you entered is incorrect or has expired. Please request a new one."
-          });
-        }
-        
-        // Create new user with the provided userData
-        const user = await db.createUser({
-          ...userData,
-          phoneNumber,
-          password: await hashPassword(userData.password || randomBytes(8).toString('hex')),
-          verificationMethod: 'sms'
-        });
-        
-        // Mark user as verified immediately
-        await db.verifyUser(user.id);
-        
-        // Clear pending registration from session
-        delete req.session.pendingRegistrations[phoneNumber];
-        
-        // Log in the user
-        req.login(user, (err) => {
-          if (err) return next(err);
-          res.status(201).json(user);
-        });
-      } 
-      // For login flow
-      else {
-        // Find user by phone number
-        const user = await db.getUserByPhoneNumber(phoneNumber);
-        
-        if (!user) {
-          return res.status(400).json({ 
-            error: "User not found",
-            message: "No account found with this phone number."
-          });
-        }
-        
-        // Verify OTP from database record
-        const isValid = await verifyOTP(db, user.id, otp);
-        
-        if (!isValid) {
-          return res.status(400).json({ 
-            error: "Invalid or expired OTP",
-            message: "The OTP you entered is incorrect or has expired. Please request a new one."
-          });
-        }
-        
-        // Mark user as verified if they weren't already
-        if (!user.isVerified) {
-          await db.verifyUser(user.id);
-        }
-        
-        // Get the updated user
-        const updatedUser = await db.getUser(user.id);
-        
-        if (!updatedUser) {
-          return res.status(500).json({ error: "Error retrieving user" });
-        }
-        
-        // Log in the user
-        req.login(updatedUser, (err) => {
-          if (err) return next(err);
-          res.status(200).json(updatedUser);
-        });
-      }
-    } catch (error) {
-      next(error);
-    }
   });
 }
