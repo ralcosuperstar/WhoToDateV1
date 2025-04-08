@@ -388,12 +388,19 @@ const AnalyticsDashboard = ({ report }: AnalyticsDashboardProps) => {
                   Relationship Strengths
                 </h4>
                 <ul className="space-y-2">
-                  {report.compatibilityDetails?.strengths.map((strength: string, index: number) => (
-                    <li key={index} className="flex items-start">
+                  {report.compatibilityDetails?.strengthsWeaknesses?.strengths ? (
+                    report.compatibilityDetails.strengthsWeaknesses.strengths.map((strength: string, index: number) => (
+                      <li key={index} className="flex items-start">
+                        <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full mt-1.5 mr-1.5 shrink-0"></span>
+                        <span>{strength}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="flex items-start">
                       <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full mt-1.5 mr-1.5 shrink-0"></span>
-                      <span>{strength}</span>
+                      <span>Strong emotional intelligence</span>
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
               <div>
@@ -402,12 +409,19 @@ const AnalyticsDashboard = ({ report }: AnalyticsDashboardProps) => {
                   Relationship Challenges
                 </h4>
                 <ul className="space-y-2">
-                  {report.compatibilityDetails?.challenges.map((challenge: string, index: number) => (
-                    <li key={index} className="flex items-start">
+                  {report.compatibilityDetails?.strengthsWeaknesses?.challenges ? (
+                    report.compatibilityDetails.strengthsWeaknesses.challenges.map((challenge: string, index: number) => (
+                      <li key={index} className="flex items-start">
+                        <span className="h-1.5 w-1.5 bg-amber-500 rounded-full mt-1.5 mr-1.5 shrink-0"></span>
+                        <span>{challenge}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="flex items-start">
                       <span className="h-1.5 w-1.5 bg-amber-500 rounded-full mt-1.5 mr-1.5 shrink-0"></span>
-                      <span>{challenge}</span>
+                      <span>Tendency to overthink relationships</span>
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
