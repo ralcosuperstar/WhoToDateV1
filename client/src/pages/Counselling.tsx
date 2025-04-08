@@ -193,11 +193,11 @@ const CounsellorCard = ({ counselor }: { counselor: typeof counselors[0] }) => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between p-4 pt-0 border-t border-gray-100 mt-4">
+      <CardFooter className="flex flex-col sm:flex-row sm:justify-between gap-3 p-4 pt-0 border-t border-gray-100 mt-4">
         <div className="text-lg font-semibold">
           ₹{counselor.price}<span className="text-sm font-normal text-gray-500">/session</span>
         </div>
-        <Button>Book Now</Button>
+        <Button className="w-full sm:w-auto">Book Now</Button>
       </CardFooter>
     </Card>
   );
@@ -223,7 +223,7 @@ const FeaturedCounsellor = () => {
   return (
     <div className="grid md:grid-cols-5 gap-6 bg-primary/5 p-6 rounded-xl">
       <div className="md:col-span-2">
-        <div className="relative">
+        <div className="relative max-w-[250px] mx-auto md:max-w-none">
           <img 
             src={featured.image} 
             alt={featured.name} 
@@ -237,14 +237,14 @@ const FeaturedCounsellor = () => {
         </div>
       </div>
       <div className="md:col-span-3">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
             <Badge className="mb-2 bg-primary hover:bg-primary">Featured Expert</Badge>
             <h2 className="text-2xl font-bold">{featured.name}</h2>
             <p className="text-gray-600">{featured.credentials}</p>
             <p className="text-gray-600">{featured.age} • {featured.location}</p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <StarRating rating={featured.rating} />
             <p className="text-xs text-gray-500">{featured.reviews} verified reviews</p>
           </div>
@@ -280,11 +280,11 @@ const FeaturedCounsellor = () => {
           ))}
         </div>
         
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
           <div>
             <p className="text-2xl font-bold">₹{featured.price}<span className="text-sm font-normal text-gray-500">/session ({featured.duration} min)</span></p>
           </div>
-          <Button size="lg">Book a Session</Button>
+          <Button size="lg" className="w-full sm:w-auto">Book a Session</Button>
         </div>
       </div>
     </div>
@@ -312,7 +312,7 @@ const Counselling = () => {
         <meta name="description" content="Connect with professional counsellors specialized in relationship issues, breakup recovery, and personal growth." />
       </Helmet>
       
-      <div className="min-h-screen bg-neutral-light pt-24 pb-16 px-4">
+      <div className="min-h-screen bg-neutral-light pt-28 md:pt-32 pb-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Professional Support For Your Relationship Journey</h1>
@@ -367,9 +367,9 @@ const Counselling = () => {
           
           {/* All Counsellors Section */}
           <section>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
               <h2 className="text-2xl font-bold">Our Counselling Experts</h2>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button 
                   variant={filter === null ? "default" : "outline"} 
                   onClick={() => setFilter(null)}
@@ -429,7 +429,7 @@ const Counselling = () => {
           <section className="mt-16">
             <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
             <Tabs defaultValue="about" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-6">
+              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-0 mb-6">
                 <TabsTrigger value="about">About Counselling</TabsTrigger>
                 <TabsTrigger value="process">What to Expect</TabsTrigger>
                 <TabsTrigger value="pricing">Pricing & Sessions</TabsTrigger>
@@ -476,7 +476,7 @@ const Counselling = () => {
             <p className="mb-6 max-w-2xl mx-auto">
               Connecting with a counsellor is a courageous step toward healing and growth. Our experts are ready to support you on your journey to healthier relationships and emotional wellbeing.
             </p>
-            <Button size="lg">Find Your Counsellor</Button>
+            <Button size="lg" className="w-full sm:w-auto px-6">Find Your Counsellor</Button>
           </section>
         </div>
       </div>
