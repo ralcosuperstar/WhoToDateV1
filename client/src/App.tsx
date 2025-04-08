@@ -23,6 +23,7 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/HowItWorks";
 import Science from "@/pages/Science";
+import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
 
 import NotFound from "@/pages/not-found";
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/how-it-works" component={HowItWorks} />
       <Route path="/science" component={Science} />
+      <Route path="/counselling" component={Counselling} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />

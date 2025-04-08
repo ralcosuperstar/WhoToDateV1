@@ -51,6 +51,9 @@ const Header = () => {
           <Link href="/science" className={`text-neutral-dark hover:text-primary font-medium ${location === '/science' ? 'text-primary' : ''}`}>
             The Science
           </Link>
+          <Link href="/counselling" className={`text-neutral-dark hover:text-primary font-medium ${location === '/counselling' ? 'text-primary' : ''}`}>
+            Counselling
+          </Link>
           <Link href="/#testimonials" className={`text-neutral-dark hover:text-primary font-medium ${location === '/#testimonials' ? 'text-primary' : ''}`}>
             Testimonials
           </Link>
