@@ -172,7 +172,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   apiRouter.post("/report", isAuthenticated, async (req, res) => {
     try {
+      console.log("==== POST /api/report - START ====");
       if (!req.user) {
+        console.log("No authenticated user found");
         return res.status(401).json({ message: "Authentication required" });
       }
       
@@ -196,62 +198,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // First check if the quiz exists and belongs to this user
+      console.log("Checking if quiz exists for user:", req.user.id);
       const quiz = await db.getQuizAnswers(req.user.id);
+      console.log("Quiz found:", !!quiz, quiz ? JSON.stringify(quiz, null, 2) : "null");
+      
       if (!quiz) {
+        console.log("Quiz not found for user", req.user.id);
         return res.status(404).json({ 
           message: "Quiz not found. Please complete the quiz before generating a report."
         });
       }
       
       // Ensure the quiz is actually completed
+      console.log("Checking if quiz is completed:", quiz.completed);
       if (!quiz.completed) {
+        console.log("Quiz is not completed for user", req.user.id);
         return res.status(400).json({
           message: "Quiz is not complete. Please answer all questions before generating a report."
         });
       }
       
       // Prepare the report data with values for required fields
-      // Simplify by accepting existing fields but ensuring all required fields are present
-      const reportData = insertReportSchema.parse({
-        userId: req.user.id,
-        quizId: quiz.id, // Use the verified quiz ID from the database
-        
-        // Use directly provided report or compatibilityProfile
-        report: req.body.report || req.body.compatibilityProfile || {},
-        
-        // Use the provided compatibilityColor or extract from profile
-        compatibilityColor: req.body.compatibilityColor || 
-          (req.body.compatibilityProfile && req.body.compatibilityProfile.overallColor) || 
-          (req.body.report && req.body.report.overallColor) || 
-          'green',
+      console.log("Preparing report data with Zod schema");
+      try {
+        // Simplify by accepting existing fields but ensuring all required fields are present
+        const reportData = insertReportSchema.parse({
+          userId: req.user.id,
+          quizId: quiz.id, // Use the verified quiz ID from the database
           
-        isPaid: true // All reports are free
-      });
-      
-      // Check if a report already exists for this user
-      const existingReport = await db.getReportByUserId(req.user.id);
-      if (existingReport) {
-        log(`Report already exists for user: ${req.user.id}, returning existing report`);
-        return res.status(200).json(existingReport);
+          // Use directly provided report or compatibilityProfile
+          report: req.body.report || req.body.compatibilityProfile || {},
+          
+          // Use the provided compatibilityColor or extract from profile
+          compatibilityColor: req.body.compatibilityColor || 
+            (req.body.compatibilityProfile && req.body.compatibilityProfile.overallColor) || 
+            (req.body.report && req.body.report.overallColor) || 
+            'green',
+            
+          isPaid: true // All reports are free
+        });
+        
+        console.log("Report data valid:", JSON.stringify({
+          userId: reportData.userId,
+          quizId: reportData.quizId,
+          hasReportData: !!reportData.report,
+          compatibilityColor: reportData.compatibilityColor,
+          isPaid: reportData.isPaid
+        }));
+        
+        // Check if a report already exists for this user
+        console.log("Checking for existing report for user:", req.user.id);
+        const existingReport = await db.getReportByUserId(req.user.id);
+        console.log("Existing report found:", !!existingReport);
+        
+        if (existingReport) {
+          log(`Report already exists for user: ${req.user.id}, returning existing report`);
+          console.log("==== POST /api/report - RETURNING EXISTING REPORT ====");
+          return res.status(200).json(existingReport);
+        }
+        
+        // Create a new report - all reports are free now
+        log(`Creating new report for user: ${req.user.id}`);
+        console.log("Creating report with data:", JSON.stringify({
+          userId: reportData.userId,
+          quizId: reportData.quizId,
+          hasReportData: !!reportData.report,
+          compatibilityColor: reportData.compatibilityColor,
+          isPaid: true
+        }));
+        
+        const report = await db.createReport({
+          ...reportData,
+          isPaid: true // Mark all reports as paid 
+        });
+        
+        log(`Report created successfully: ${report.id}`);
+        console.log("==== POST /api/report - SUCCESS ====");
+        res.status(201).json(report);
+      } catch (parseError) {
+        console.error("Error parsing report data:", parseError);
+        if (parseError instanceof z.ZodError) {
+          console.log("Zod validation errors:", JSON.stringify(parseError.errors));
+          return res.status(400).json({ message: "Invalid report data", errors: parseError.errors });
+        }
+        throw parseError; // Re-throw if it's not a ZodError
       }
-      
-      // Create a new report - all reports are free now
-      log(`Creating new report for user: ${req.user.id}`);
-      const report = await db.createReport({
-        ...reportData,
-        isPaid: true // Mark all reports as paid 
-      });
-      
-      log(`Report created successfully: ${report.id}`);
-      res.status(201).json(report);
     } catch (error) {
+      console.log("==== POST /api/report - ERROR CAUGHT ====");
+      console.error("Error details:", error);
+      
       if (error instanceof z.ZodError) {
         log(`Validation error creating report: ${JSON.stringify(error.errors)}`);
+        console.log("Zod validation errors:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Invalid report data", errors: error.errors });
       }
       
+      // Log stack trace for other errors
+      if (error instanceof Error && error.stack) {
+        console.error("Error stack trace:", error.stack);
+      }
+      
       log(`Error creating report: ${error instanceof Error ? error.message : String(error)}`);
-      res.status(500).json({ message: "Failed to create report. Please try again." });
+      console.error("Error creating report:", error instanceof Error ? error.message : String(error));
+      res.status(500).json({ 
+        message: "Failed to create report. Please try again.",
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 

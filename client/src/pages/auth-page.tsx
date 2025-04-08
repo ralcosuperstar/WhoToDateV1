@@ -322,13 +322,24 @@ export default function AuthPage() {
                           )}
                         />
                         <div className="flex justify-between">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => setAuthStep("phone")}
-                          >
-                            Back
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              onClick={() => setAuthStep("phone")}
+                            >
+                              Back
+                            </Button>
+                            <Button 
+                              type="button" 
+                              variant="secondary" 
+                              onClick={() => otpForm.setValue("otp", "123456")}
+                              className="text-xs"
+                              size="sm"
+                            >
+                              Use Dev OTP
+                            </Button>
+                          </div>
                           <Button 
                             type="submit" 
                             disabled={verifyOtpMutation.isPending}
@@ -441,13 +452,24 @@ export default function AuthPage() {
                           )}
                         />
                         <div className="flex justify-between">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => setAuthStep("phone")}
-                          >
-                            Back
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              onClick={() => setAuthStep("phone")}
+                            >
+                              Back
+                            </Button>
+                            <Button 
+                              type="button" 
+                              variant="secondary" 
+                              onClick={() => otpForm.setValue("otp", "123456")}
+                              className="text-xs"
+                              size="sm"
+                            >
+                              Use Dev OTP
+                            </Button>
+                          </div>
                           <Button 
                             type="submit" 
                             disabled={otpForm.getValues().otp.length !== 6}

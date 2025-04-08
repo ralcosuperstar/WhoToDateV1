@@ -301,10 +301,35 @@ const Results = () => {
       compatibilityColor: string; // Required by schema
       isPaid: boolean;
     }) => {
-      const res = await apiRequest("POST", "/api/report", data);
-      return res.json();
+      console.log("Starting report mutation with data:", {
+        quizId: data.quizId,
+        hasCompatibilityProfile: !!data.compatibilityProfile,
+        hasReport: !!data.report,
+        compatibilityColor: data.compatibilityColor,
+        isPaid: data.isPaid
+      });
+      
+      try {
+        console.log("Making API request to /api/report");
+        const res = await apiRequest("POST", "/api/report", data);
+        console.log("API response status:", res.status);
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("API error response:", errorText);
+          throw new Error(`API returned ${res.status}: ${errorText}`);
+        }
+        
+        const responseData = await res.json();
+        console.log("API response data:", responseData);
+        return responseData;
+      } catch (error) {
+        console.error("API request failed:", error);
+        throw error;
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Report creation success, invalidating queries");
       queryClient.invalidateQueries({ queryKey: ['/api/report'] });
       toast({
         title: "Success!",
@@ -312,12 +337,12 @@ const Results = () => {
       });
     },
     onError: (error) => {
+      console.error("Report creation error details:", error);
       toast({
         title: "Error",
         description: "Failed to create your report. Please try again.",
         variant: "destructive",
       });
-      console.error("Report creation error:", error);
     }
   });
   
@@ -339,22 +364,33 @@ const Results = () => {
   
   // Generate profile when answers are available
   useEffect(() => {
+    console.log("useEffect for profile generation triggered");
+    console.log("Answers available:", Object.keys(answers).length > 0);
+    console.log("User available:", !!user);
+    console.log("Report available:", !!report);
+    console.log("Quiz available:", !!existingQuiz);
+    
     if (Object.keys(answers).length > 0) {
       try {
+        console.log("Calculating compatibility profile...");
         const compatibilityProfile = calculateCompatibilityProfile(answers);
+        console.log("Profile calculated successfully:", !!compatibilityProfile);
         setProfile(compatibilityProfile);
         
         // Create report if needed
         if (user && !report && compatibilityProfile && existingQuiz) {
+          console.log("Conditions met for report creation");
           // Make sure existingQuiz has an id
           const quizId = typeof existingQuiz === 'object' && existingQuiz && 'id' in existingQuiz ? 
             (existingQuiz as any).id : null;
+          
+          console.log("Quiz ID extracted:", quizId);
           
           if (quizId) {
             // Debugging to see what we're sending
             console.log("Sending data to /api/report:", {
               quizId,
-              compatibilityProfile, // Field required by server.routes.ts
+              compatibilityProfile: !!compatibilityProfile, // Just log if it exists to avoid console clutter
               isPaid: true 
             });
             
@@ -368,7 +404,16 @@ const Results = () => {
               compatibilityColor: compatibilityProfile.overallColor, 
               isPaid: true // All reports are free
             });
+          } else {
+            console.error("Quiz ID is null or undefined, cannot create report");
           }
+        } else {
+          console.log("Skipping report creation because:", {
+            userExists: !!user,
+            reportExists: !!report,
+            profileExists: !!compatibilityProfile,
+            quizExists: !!existingQuiz
+          });
         }
       } catch (e) {
         console.error('Failed to generate profile', e);
@@ -379,7 +424,7 @@ const Results = () => {
         });
       }
     }
-  }, [answers, toast, user, report, existingQuiz]);
+  }, [answers, toast, user, report, existingQuiz, createReportMutation]);
   
   // All reports are now free, so we'll show the full report directly
   useEffect(() => {
