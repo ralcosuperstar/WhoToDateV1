@@ -33,9 +33,8 @@ const Report = () => {
         navigate("/login?redirect=report");
       } else if (!report) {
         navigate("/quiz");
-      } else if (!report.isPaid) {
-        navigate("/payment");
       }
+      // Removed isPaid check since reports are now free
     }
   }, [user, report, isUserLoading, isReportLoading, navigate]);
   
@@ -47,11 +46,11 @@ const Report = () => {
     );
   }
   
-  if (!user || !report || !report.isPaid) {
+  if (!user || !report) {
     return null; // Redirected by useEffect
   }
   
-  const reportData = report.report;
+  const reportData = report.report || {};
   
   return (
     <>
@@ -338,8 +337,7 @@ const Report = () => {
                 <div className="bg-neutral-light rounded-lg p-4">
                   <h4 className="font-heading font-semibold mb-3">Your Relationship Strengths</h4>
                   <ul className="space-y-3">
-                    {reportData.compatibilityDetails.strengthsWeaknesses && 
-                     reportData.compatibilityDetails.strengthsWeaknesses.strengths ? (
+                    {reportData.compatibilityDetails?.strengthsWeaknesses?.strengths ? (
                       reportData.compatibilityDetails.strengthsWeaknesses.strengths.map((strength, index) => (
                         <li key={index} className="flex items-start">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-emerald-500 mt-0.5 mr-2">
@@ -374,8 +372,7 @@ const Report = () => {
                 <div className="bg-neutral-light rounded-lg p-4">
                   <h4 className="font-heading font-semibold mb-3">Growth Areas</h4>
                   <ul className="space-y-3">
-                    {reportData.compatibilityDetails.strengthsWeaknesses && 
-                     reportData.compatibilityDetails.strengthsWeaknesses.challenges ? (
+                    {reportData.compatibilityDetails?.strengthsWeaknesses?.challenges ? (
                       reportData.compatibilityDetails.strengthsWeaknesses.challenges.map((challenge, index) => (
                         <li key={index} className="flex items-start">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-amber-500 mt-0.5 mr-2">
@@ -412,8 +409,7 @@ const Report = () => {
                 <h4 className="font-heading font-semibold mb-3">Most Compatible With</h4>
                 <p className="mb-4">Based on your profile, you tend to form strong connections with people who are:</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {reportData.compatibilityDetails && reportData.compatibilityDetails.compatibleTypes && 
-                   reportData.compatibilityDetails.compatibleTypes.mostCompatible ? (
+                  {reportData.compatibilityDetails?.compatibleTypes?.mostCompatible ? (
                     reportData.compatibilityDetails.compatibleTypes.mostCompatible.map((trait, index) => (
                       <div key={index} className="bg-white p-3 rounded-lg text-center">
                         <span className="font-medium">{trait}</span>
