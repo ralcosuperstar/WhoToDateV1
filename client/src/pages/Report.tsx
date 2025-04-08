@@ -1,16 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from 'react-helmet';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { Download, Share2, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import ReportSection from "@/components/report/ReportSection";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
 import AnalyticsDashboard from "@/components/dashboard/AnalyticsDashboard";
+import PersonalityTraitCards from "@/components/report/PersonalityTraitCards";
+import StrengthsAndChallenges from "@/components/report/StrengthsAndChallenges";
+import CompatibilityTypeCards from "@/components/report/CompatibilityTypeCards";
+import TipsAndInsights from "@/components/report/TipsAndInsights";
+import InteractiveMetric from "@/components/report/InteractiveMetric";
 
 const Report = () => {
   const [, navigate] = useLocation();
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
+    personality: true,
+    attachment: true,
+    emotional: true,
+    insights: true,
+    growth: true,
+    partner: true,
+    experiences: true,
+    analytics: false, // Analytics section starts collapsed for better performance
+  });
+  
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
   
   // Check if user is authenticated
   const { data: user, isLoading: isUserLoading } = useQuery({ 
@@ -127,6 +151,8 @@ const Report = () => {
           <div className="space-y-10">
             <ReportSection 
               title="Personality Overview" 
+              isExpanded={expandedSections.personality}
+              onToggle={() => toggleSection('personality')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -180,6 +206,8 @@ const Report = () => {
             
             <ReportSection 
               title="Attachment Style" 
+              isExpanded={expandedSections.attachment}
+              onToggle={() => toggleSection('attachment')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
@@ -288,6 +316,8 @@ const Report = () => {
             
             <ReportSection 
               title="Emotional Intelligence" 
+              isExpanded={expandedSections.emotional}
+              onToggle={() => toggleSection('emotional')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -327,6 +357,8 @@ const Report = () => {
             
             <ReportSection 
               title="Compatibility Insights" 
+              isExpanded={expandedSections.insights}
+              onToggle={() => toggleSection('insights')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
@@ -434,6 +466,8 @@ const Report = () => {
             
             <ReportSection 
               title="Growth Recommendation" 
+              isExpanded={expandedSections.growth}
+              onToggle={() => toggleSection('growth')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -453,6 +487,8 @@ const Report = () => {
             
             <ReportSection 
               title="Ideal Partner Summary" 
+              isExpanded={expandedSections.partner}
+              onToggle={() => toggleSection('partner')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
@@ -472,6 +508,8 @@ const Report = () => {
             
             <ReportSection 
               title="Real-Life Experiences to Try" 
+              isExpanded={expandedSections.experiences}
+              onToggle={() => toggleSection('experiences')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -491,6 +529,8 @@ const Report = () => {
             
             <ReportSection 
               title="Interactive Analytics" 
+              isExpanded={expandedSections.analytics}
+              onToggle={() => toggleSection('analytics')}
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-primary">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
