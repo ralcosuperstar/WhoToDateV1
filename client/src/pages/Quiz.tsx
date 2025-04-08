@@ -36,6 +36,7 @@ const SectionInfo = ({ section, questionNumber }: { section: string; questionNum
   let icon = '';
   let sectionNumber = 0;
   
+  // Determine which section we're in based on the section name
   switch(section) {
     case 'personality':
       title = 'Personality Traits';
@@ -68,13 +69,17 @@ const SectionInfo = ({ section, questionNumber }: { section: string; questionNum
       sectionNumber = 0;
   }
   
+  // Always get the correct section number based on the actual section name
+  // This ensures the section number is always correctly displayed
+  const currentSectionNumber = getSectionNumber(section);
+  
   return (
     <div className="mb-6 text-center">
       <span className="inline-block text-3xl mb-2">{icon}</span>
       <h2 className="text-xl font-heading font-bold mb-1">{title}</h2>
       <p className="text-neutral-dark/70 text-sm">{description}</p>
       <div className="mt-3 text-xs text-primary font-medium">
-        Section {sectionNumber} of 4 • Question {questionNumber} of 40
+        Section {currentSectionNumber} of 4 • Question {questionNumber} of 40
       </div>
     </div>
   );
