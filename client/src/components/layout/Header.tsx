@@ -38,7 +38,7 @@ const Header = () => {
     <header className="bg-white/95 shadow-md fixed w-full z-50 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 md:py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105">
+          <div className="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105 border-2 border-primary/30">
             <span className="text-white font-heading font-bold text-lg">W</span>
           </div>
           <span className="text-primary font-heading font-bold text-lg sm:text-xl transition-all group-hover:text-primary/90">WhoToDate</span>
