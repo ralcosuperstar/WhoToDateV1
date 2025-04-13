@@ -17,8 +17,21 @@
   body {
     @apply font-sans antialiased bg-background text-foreground overflow-x-hidden;
     font-family: 'Poppins', sans-serif;
-    color: #1a1a1a; /* Updated text color for better contrast */
+    color: #1a1a1a;
     background-color: #FCFCFD;
+  }
+
+  /* Enhanced button styles for better visibility */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all border border-primary/20;
+  }
+
+  .btn-white {
+    @apply bg-white hover:bg-gray-50 text-primary font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all border border-primary/20;
+  }
+
+  .btn-outline {
+    @apply bg-transparent hover:bg-primary/5 text-primary font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all border-2 border-primary;
   }
 
   .emoji {

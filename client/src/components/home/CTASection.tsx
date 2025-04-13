@@ -137,7 +137,7 @@ const CTASection = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               href="/register" 
-              className="px-8 py-4 bg-white text-primary font-semibold rounded-xl shadow-lg hover:bg-neutral-100 transition duration-300 inline-flex items-center justify-center" 
+              className="btn-white px-8 py-4 inline-flex items-center justify-center" 
               style={{animation: "pulse 4s infinite"}}
             >
               <span className="emoji mr-2">🧪</span>
