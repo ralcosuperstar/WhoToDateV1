@@ -21,21 +21,21 @@ const Footer = () => {
     }
   };
   return (
-    <footer className="bg-gradient-to-b from-[#292352] to-[#1a1a2e] text-white pt-16 pb-8 px-4 relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-[#2c0a18] to-[#1c0710] text-white pt-16 pb-8 px-4 relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/30 via-primary to-primary/30"></div>
-      <div className="absolute top-40 right-10 w-40 h-40 rounded-full primary-glow opacity-10"></div>
-      <div className="absolute bottom-60 left-10 w-60 h-60 rounded-full secondary-glow opacity-5"></div>
+      <div className="absolute top-40 right-10 w-40 h-40 rounded-full primary-glow opacity-20"></div>
+      <div className="absolute bottom-60 left-10 w-60 h-60 rounded-full secondary-glow opacity-15"></div>
       
       <div className="container mx-auto relative z-10">
         {/* Newsletter & Header Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-12 pb-12 border-b border-white/10">
           <div>
             <div className="flex items-center space-x-3 mb-5 group">
-              <div className="h-12 w-12 rounded-full bg-primary/30 flex items-center justify-center shadow-soft transition-all">
+              <div className="h-12 w-12 rounded-full bg-primary/40 flex items-center justify-center shadow-sm transition-all group-hover:scale-105 group-hover:bg-primary/50">
                 <span className="text-white font-heading font-bold text-2xl">W</span>
               </div>
-              <span className="text-white font-heading font-bold text-2xl group-hover:text-primary/90 transition-colors">WhoToDate</span>
+              <span className="text-white font-heading font-bold text-2xl group-hover:text-primary transition-colors">WhoToDate</span>
             </div>
             
             <p className="text-white/90 text-lg mb-6 max-w-md leading-relaxed">
@@ -75,8 +75,8 @@ const Footer = () => {
           </div>
           
           <div className="flex flex-col justify-center">
-            <h3 className="font-heading font-semibold text-xl mb-4">Stay Updated</h3>
-            <p className="text-white mb-5">Subscribe to our newsletter for relationship tips and compatibility insights.</p>
+            <h3 className="font-heading font-semibold text-xl mb-4 text-white">Stay Updated</h3>
+            <p className="text-white/90 mb-5">Subscribe to our newsletter for relationship tips and compatibility insights.</p>
             
             <form onSubmit={handleNewsletterSubscribe} className="flex flex-col sm:flex-row gap-3">
               <input 
@@ -84,12 +84,12 @@ const Footer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address" 
-                className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary/50 flex-grow"
+                className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary/40 flex-grow transition-all hover:bg-white/15"
                 required
               />
               <button 
                 type="submit"
-                className="bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-2.5 transition-colors whitespace-nowrap"
+                className="bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-2.5 transition-all whitespace-nowrap shadow-md hover:shadow-lg"
               >
                 {subscribed ? "Thank you! ✓" : "Subscribe"}
               </button>
@@ -210,8 +210,8 @@ const Footer = () => {
               Contact Us
             </h4>
             <ul className="space-y-4">
-              <li className="flex">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mr-3 flex-shrink-0">
+              <li className="flex group">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3 flex-shrink-0 transition-transform group-hover:scale-110 group-hover:bg-primary/30">
                   <Mail className="w-4 h-4 text-primary" />
                 </div>
                 <div>
@@ -219,8 +219,8 @@ const Footer = () => {
                   <a href="mailto:support@whotodate.com" className="text-white/80 hover:text-primary transition-colors">support@whotodate.com</a>
                 </div>
               </li>
-              <li className="flex">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mr-3 flex-shrink-0">
+              <li className="flex group">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3 flex-shrink-0 transition-transform group-hover:scale-110">
                   <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <div>
@@ -228,8 +228,8 @@ const Footer = () => {
                   <a href="tel:+919876543210" className="text-white/80 hover:text-primary transition-colors">+91 98765 43210</a>
                 </div>
               </li>
-              <li className="flex">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mr-3 flex-shrink-0">
+              <li className="flex group">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3 flex-shrink-0 transition-transform group-hover:scale-110">
                   <MapPin className="w-4 h-4 text-primary" />
                 </div>
                 <div>
@@ -243,9 +243,9 @@ const Footer = () => {
         
         {/* Bottom Section */}
         <div className="border-t border-white/10 pt-8 md:flex md:items-center md:justify-between">
-          <div className="flex items-center mb-6 md:mb-0">
-            <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3">
-              <Heart className="w-4 h-4 text-primary" />
+          <div className="flex items-center mb-6 md:mb-0 group">
+            <div className="w-8 h-8 bg-primary/25 rounded-full flex items-center justify-center mr-3 transition-transform group-hover:scale-110 group-hover:bg-primary/30">
+              <Heart className="w-4 h-4 text-primary group-hover:text-white transition-colors" />
             </div>
             <p className="text-white/80 text-sm">
               &copy; {new Date().getFullYear()} WhoToDate. All rights reserved.
@@ -253,10 +253,10 @@ const Footer = () => {
           </div>
           
           <div className="flex flex-wrap gap-x-8 gap-y-3">
-            <Link href="/privacy" className="text-white/80 hover:text-primary text-sm transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-white/80 hover:text-primary text-sm transition-colors">Terms of Service</Link>
-            <Link href="/cookies" className="text-white/80 hover:text-primary text-sm transition-colors">Cookie Policy</Link>
-            <Link href="/sitemap" className="text-white/80 hover:text-primary text-sm transition-colors">Sitemap</Link>
+            <Link href="/privacy" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Terms of Service</Link>
+            <Link href="/cookies" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Cookie Policy</Link>
+            <Link href="/sitemap" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Sitemap</Link>
           </div>
         </div>
       </div>
