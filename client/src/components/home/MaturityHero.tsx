@@ -24,12 +24,12 @@ const MaturityHero = () => {
               </span>
             </div>
 
-            <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-gray-800 leading-tight">
+            <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-gray-900 leading-tight">
               Unlock Your<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">Relationship DNA</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Relationship DNA</span>
             </h1>
 
-            <p className="text-gray-600 text-lg md:text-xl mb-8 max-w-lg">
+            <p className="text-gray-800 text-lg md:text-xl mb-8 max-w-lg">
               Our scientifically validated assessment reveals your unique attachment style, personality traits, and compatibility patterns. Gain deeper insights into who you truly connect with. 💕
             </p>
 
@@ -47,7 +47,7 @@ const MaturityHero = () => {
                 </div>
                 <div className="w-8 h-8 rounded-full bg-pink-100 border-2 border-pink-400 flex items-center justify-center text-xs font-bold text-pink-500">+</div>
               </div>
-              <p className="text-sm font-medium text-gray-600"><span className="text-primary font-bold">35,000+</span> users found love! 💘</p>
+              <p className="text-sm font-medium text-gray-800"><span className="text-primary font-bold">35,000+</span> users found love! 💘</p>
             </div>
 
             {/* Key value propositions */}
@@ -59,7 +59,7 @@ const MaturityHero = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-800 mb-1">Attachment Style Quiz</h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-700">
                       Discover if you're secure, anxious, or avoidant in relationships! 🔍
                     </p>
                   </div>
@@ -73,7 +73,7 @@ const MaturityHero = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-800 mb-1">Perfect Match Finder</h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-700">
                       Find who you'll click with based on your personality type! ✨
                     </p>
                   </div>
@@ -87,7 +87,7 @@ const MaturityHero = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-800 mb-1">Relationship Superpowers</h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-700">
                       Highlight your natural relationship gifts and special talents! 🌟
                     </p>
                   </div>
@@ -101,7 +101,7 @@ const MaturityHero = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-800 mb-1">Growth Journey</h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-700">
                       Level up your relationship skills and find lasting love! 💕
                     </p>
                   </div>
@@ -167,7 +167,7 @@ const MaturityHero = () => {
                     </div>
                     <div>
                       <p className="font-bold text-gray-800 text-lg">Secure Connector</p>
-                      <p className="text-sm text-gray-600">You form stable, trusting relationships with balanced boundaries</p>
+                      <p className="text-sm text-gray-700">You form stable, trusting relationships with balanced boundaries</p>
                     </div>
                   </div>
                 </div>
