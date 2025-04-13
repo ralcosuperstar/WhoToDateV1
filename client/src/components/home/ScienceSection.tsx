@@ -2,7 +2,7 @@ import { Link } from "wouter";
 
 const ScienceSection = () => {
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-neutral-50 px-4" id="compatibility-science">
+    <section className="py-16 bg-gradient-to-b from-slate-50 to-white px-4" id="compatibility-science">
       <div className="container mx-auto">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
@@ -11,8 +11,8 @@ const ScienceSection = () => {
                 <span className="emoji mr-2">🔬</span> Our Scientific Approach
               </span>
             </div>
-            <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-3 bg-gradient-to-r from-primary to-fuchsia-600 text-transparent bg-clip-text">The Science of Relationship Compatibility</h2>
-            <p className="text-base sm:text-lg mx-auto text-neutral-dark/80 max-w-2xl">
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-3 text-slate-900">The Science of Relationship Compatibility</h2>
+            <p className="text-base sm:text-lg mx-auto text-slate-700 max-w-2xl">
               WhoToDate integrates multiple psychological frameworks to provide personalized compatibility insights based on validated research
             </p>
           </div>
@@ -164,7 +164,7 @@ const ScienceSection = () => {
           {/* How the science works in practice */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden border border-neutral-100 mb-10 hover:shadow-lg transition-all">
             <div className="p-6">
-              <h3 className="font-heading font-semibold text-xl mb-4 flex items-center text-gradient bg-gradient-to-r from-primary to-fuchsia-600 bg-clip-text text-transparent">
+              <h3 className="font-heading font-semibold text-xl mb-4 flex items-center text-slate-800">
                 <span className="emoji mr-2">🧠</span> Our Scientific Assessment Process
               </h3>
               
@@ -174,7 +174,7 @@ const ScienceSection = () => {
                     <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center text-primary font-semibold text-sm mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform group-hover:bg-primary/20">1</div>
                     <div>
                       <h4 className="font-medium text-base group-hover:text-primary transition-colors">Questionnaire Design</h4>
-                      <p className="text-neutral-dark/80 text-sm mt-1">
+                      <p className="text-slate-700 text-sm mt-1">
                         Carefully crafted questions measure multiple dimensions of your relationship tendencies, based on validated psychological instruments
                       </p>
                     </div>
@@ -184,7 +184,7 @@ const ScienceSection = () => {
                     <div className="h-6 w-6 rounded-full bg-fuchsia-500/15 flex items-center justify-center text-fuchsia-600 font-semibold text-sm mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform group-hover:bg-fuchsia-500/20">2</div>
                     <div>
                       <h4 className="font-medium text-base group-hover:text-fuchsia-600 transition-colors">Algorithm Development</h4>
-                      <p className="text-neutral-dark/80 text-sm mt-1">
+                      <p className="text-slate-700 text-sm mt-1">
                         Our algorithms analyze response patterns against research-based compatibility models to identify your relationship profile
                       </p>
                     </div>
@@ -196,7 +196,7 @@ const ScienceSection = () => {
                     <div className="h-6 w-6 rounded-full bg-purple-500/15 flex items-center justify-center text-purple-600 font-semibold text-sm mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform group-hover:bg-purple-500/20">3</div>
                     <div>
                       <h4 className="font-medium text-base group-hover:text-purple-600 transition-colors">Multi-Dimensional Analysis</h4>
-                      <p className="text-neutral-dark/80 text-sm mt-1">
+                      <p className="text-slate-700 text-sm mt-1">
                         We examine interlocking factors across attachment, personality, values, and emotional intelligence to create a holistic profile
                       </p>
                     </div>
@@ -206,7 +206,7 @@ const ScienceSection = () => {
                     <div className="h-6 w-6 rounded-full bg-blue-500/15 flex items-center justify-center text-blue-600 font-semibold text-sm mr-3 mt-0.5 shrink-0 group-hover:scale-110 transition-transform group-hover:bg-blue-500/20">4</div>
                     <div>
                       <h4 className="font-medium text-base group-hover:text-blue-600 transition-colors">Actionable Insights</h4>
-                      <p className="text-neutral-dark/80 text-sm mt-1">
+                      <p className="text-slate-700 text-sm mt-1">
                         We translate complex psychological findings into clear, practical guidance for your relationship journey
                       </p>
                     </div>
@@ -245,7 +245,7 @@ const ScienceSection = () => {
               </div>
               <div>
                 <h4 className="font-medium text-sm sm:text-base group-hover:text-blue-700 transition-colors">Data-Driven Approach</h4>
-                <p className="text-neutral-dark/70 text-xs sm:text-sm mt-1">
+                <p className="text-slate-600 text-xs sm:text-sm mt-1">
                   Our assessment is constantly improved through outcome analysis and feedback loops
                 </p>
               </div>
@@ -257,7 +257,7 @@ const ScienceSection = () => {
               </div>
               <div>
                 <h4 className="font-medium text-sm sm:text-base group-hover:text-fuchsia-700 transition-colors">Indian Research Focus</h4>
-                <p className="text-neutral-dark/70 text-xs sm:text-sm mt-1">
+                <p className="text-slate-600 text-xs sm:text-sm mt-1">
                   Local research partnerships ensure relevance to Indian relationship contexts
                 </p>
               </div>
@@ -269,7 +269,7 @@ const ScienceSection = () => {
               </div>
               <div>
                 <h4 className="font-medium text-sm sm:text-base group-hover:text-pink-700 transition-colors">Ethical Analysis</h4>
-                <p className="text-neutral-dark/70 text-xs sm:text-sm mt-1">
+                <p className="text-slate-600 text-xs sm:text-sm mt-1">
                   Strict privacy protocols with data used only for assessment improvement
                 </p>
               </div>
