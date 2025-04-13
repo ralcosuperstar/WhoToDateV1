@@ -142,11 +142,11 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
                   <span className="emoji mr-2">🔑</span>
                   <span>Login</span>
                 </Link>
-                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary/15 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-primary/20">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-slate-200 text-slate-800 w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-slate-300 border border-slate-300">
                   <span className="emoji mr-2">✨</span>
                   <span>Create Account</span>
                 </Link>
-                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary text-white w-full flex items-center justify-center py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all hover:bg-primary/90">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-slate-900 text-white w-full flex items-center justify-center py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all hover:bg-slate-800 border-2 border-primary/20">
                   <span className="emoji mr-2">🧪</span>
                   <span>Try Free</span>
                 </Link>
