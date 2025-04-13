@@ -25,14 +25,44 @@
     line-height: 1;
   }
   
+  /* Enhanced gradients for different emotional states */
   .love-gradient {
-    background: linear-gradient(135deg, rgba(255,180,200,0.2) 0%, rgba(230,60,130,0.25) 100%);
+    background: linear-gradient(135deg, rgba(190,140,255,0.15) 0%, rgba(140,60,220,0.25) 100%);
   }
   
   .energy-gradient {
     background: linear-gradient(135deg, rgba(255,223,186,0.2) 0%, rgba(255,145,0,0.18) 100%);
   }
   
+  .harmony-gradient {
+    background: linear-gradient(135deg, rgba(220,240,255,0.25) 0%, rgba(100,150,240,0.15) 100%);
+  }
+  
+  .insight-gradient {
+    background: linear-gradient(135deg, rgba(150,225,220,0.15) 0%, rgba(80,190,180,0.25) 100%);
+  }
+  
+  /* Accent gradients for UI elements */
+  .primary-glow {
+    background: radial-gradient(circle at center, rgba(120,70,230,0.08) 0%, rgba(120,70,230,0) 70%);
+  }
+  
+  .secondary-glow {
+    background: radial-gradient(circle at center, rgba(255,100,230,0.05) 0%, rgba(255,100,230,0) 70%);
+  }
+  
+  /* Card gradients */
+  .card-gradient-1 {
+    background: linear-gradient(135deg, #f5f7ff 0%, #f0f0ff 100%);
+    border: 1px solid rgba(120,70,230,0.1);
+  }
+  
+  .card-gradient-2 {
+    background: linear-gradient(135deg, #f7f5ff 0%, #faf0ff 100%);
+    border: 1px solid rgba(160,70,230,0.1);
+  }
+  
+  /* Enhanced animations */
   .pulse-animation {
     animation: pulse 4s infinite;
   }
@@ -40,17 +70,17 @@
   @keyframes pulse {
     0% {
       transform: scale(0.98);
-      box-shadow: 0 0 0 0 rgba(230, 60, 130, 0.6);
+      box-shadow: 0 0 0 0 rgba(120, 70, 230, 0.6);
     }
     
     70% {
       transform: scale(1);
-      box-shadow: 0 0 0 10px rgba(230, 60, 130, 0);
+      box-shadow: 0 0 0 10px rgba(120, 70, 230, 0);
     }
     
     100% {
       transform: scale(0.98);
-      box-shadow: 0 0 0 0 rgba(230, 60, 130, 0);
+      box-shadow: 0 0 0 0 rgba(120, 70, 230, 0);
     }
   }
   
@@ -68,5 +98,54 @@
     100% {
       transform: translateY(0px);
     }
+  }
+  
+  .shine {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shine 6s infinite;
+  }
+  
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%) rotate(30deg);
+    }
+    20%, 100% {
+      transform: translateX(100%) rotate(30deg);
+    }
+  }
+  
+  /* Accent colors for sections */
+  .accent-top-purple {
+    border-top: 3px solid rgba(120,70,230,0.7);
+  }
+  
+  .accent-left-purple {
+    border-left: 3px solid rgba(120,70,230,0.7);
+  }
+  
+  /* Soft shadows */
+  .shadow-soft {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+  }
+  
+  .shadow-card {
+    box-shadow: 0 4px 20px rgba(120,70,230,0.08);
   }
 }

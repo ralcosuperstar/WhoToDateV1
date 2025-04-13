@@ -21,19 +21,24 @@ const Footer = () => {
     }
   };
   return (
-    <footer className="bg-gradient-to-b from-neutral-dark to-[#1a1a25] text-white pt-16 pb-8 px-4">
-      <div className="container mx-auto">
+    <footer className="bg-gradient-to-b from-[#292352] to-[#1a1a2e] text-white pt-16 pb-8 px-4 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/30 via-primary to-primary/30"></div>
+      <div className="absolute top-40 right-10 w-40 h-40 rounded-full primary-glow opacity-10"></div>
+      <div className="absolute bottom-60 left-10 w-60 h-60 rounded-full secondary-glow opacity-5"></div>
+      
+      <div className="container mx-auto relative z-10">
         {/* Newsletter & Header Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-12 pb-12 border-b border-white/10">
           <div>
-            <div className="flex items-center space-x-3 mb-5">
-              <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-primary font-heading font-bold text-xl">W</span>
+            <div className="flex items-center space-x-3 mb-5 group">
+              <div className="h-12 w-12 rounded-full bg-primary/30 flex items-center justify-center shadow-soft transition-all">
+                <span className="text-white font-heading font-bold text-2xl">W</span>
               </div>
-              <span className="text-white font-heading font-bold text-2xl">WhoToDate</span>
+              <span className="text-white font-heading font-bold text-2xl group-hover:text-primary/90 transition-colors">WhoToDate</span>
             </div>
             
-            <p className="text-white text-lg mb-6 max-w-md">
+            <p className="text-white/90 text-lg mb-6 max-w-md leading-relaxed">
               Discover your compatibility DNA and find meaningful connections based on personality, values, and emotional intelligence.
             </p>
             
