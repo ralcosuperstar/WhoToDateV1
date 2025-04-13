@@ -22,18 +22,15 @@ const MaturityHero = () => {
             </div>
 
             <h1 className="relative z-10 font-heading font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-gray-900 leading-tight">
-              <span className="relative inline-block">Unlock Your<br />
-              <span className="font-bold text-primary">Relationship DNA</span>
-              <div className="absolute -bottom-2 left-0 w-full h-3 bg-pink-200/70 -z-10 transform -skew-x-3"></div>
+              Unlock Your<br />
+              <span className="text-gray-900 font-bold relative inline-block">
+                Relationship DNA
+                <div className="absolute -bottom-3 left-0 w-full h-4 bg-pink-200 -z-10"></div>
               </span>
             </h1>
 
-            <p className="text-gray-900 text-lg md:text-xl mb-8 max-w-lg font-medium">
-              Our scientifically validated assessment reveals your 
-              <span className="inline-block bg-pink-100 px-1 mx-0.5 rounded border border-pink-200">unique attachment style</span>, 
-              <span className="inline-block bg-purple-100 px-1 mx-0.5 rounded border border-purple-200">personality traits</span>, and 
-              <span className="inline-block bg-indigo-100 px-1 mx-0.5 rounded border border-indigo-200">compatibility patterns</span>. 
-              Gain deeper insights into who you truly connect with. 💕
+            <p className="text-gray-800 text-lg md:text-xl mb-8 max-w-lg">
+              Our scientifically validated assessment reveals your unique attachment style, personality traits, and compatibility patterns. Gain deeper insights into who you truly connect with. 💕
             </p>
 
             {/* Social proof */}
@@ -146,61 +143,61 @@ const MaturityHero = () => {
           <div className="w-full md:w-1/2 md:pl-8">
             <div className="relative mx-auto max-w-lg">
               {/* Main display card */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-pink-200 mb-4 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+              <div className="bg-white rounded-2xl shadow-lg p-6 mb-4">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center">
-                    <div className="h-12 w-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-3 flex-shrink-0 border border-pink-200 text-xl">
+                    <div className="h-12 w-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-3 flex-shrink-0 text-xl">
                       ❤️
                     </div>
-                    <h3 className="font-semibold text-xl ml-3 text-gray-800">Your Love Profile</h3>
+                    <h3 className="font-semibold text-xl ml-1 text-gray-900">Your Love Profile</h3>
                   </div>
-                  <div className="bg-green-100 text-green-600 text-xs font-bold px-4 py-1.5 rounded-full flex items-center border border-green-200">
+                  <div className="bg-green-100 text-green-600 text-xs font-bold px-4 py-1.5 rounded-full flex items-center">
                     <span className="mr-1">😊</span> MATCH-READY
                   </div>
                 </div>
 
                 {/* Attachment style */}
-                <div className="mb-6 bg-pink-50 rounded-xl p-4 border border-pink-200">
-                  <h4 className="font-medium text-sm mb-3 text-gray-700 flex items-center">
+                <div className="mb-6 bg-pink-50 rounded-xl p-4">
+                  <h4 className="font-medium text-sm mb-3 text-gray-800 flex items-center">
                     <span className="mr-1">💞</span> Your Attachment Style:
                   </h4>
                   <div className="flex items-center">
-                    <div className="bg-white p-3 rounded-lg shadow-sm mr-3 flex-shrink-0 border border-pink-200">
+                    <div className="bg-white p-3 rounded-full shadow-sm mr-3 flex-shrink-0">
                       <span className="text-2xl">👩‍❤️‍👨</span>
                     </div>
                     <div>
-                      <p className="font-bold text-gray-800 text-lg">Secure Connector</p>
-                      <p className="text-sm bg-white px-2 py-1 rounded shadow-sm text-gray-900 border border-pink-100">You form stable, trusting relationships with balanced boundaries</p>
+                      <p className="font-bold text-gray-900 text-lg">Secure Connector</p>
+                      <p className="text-sm text-gray-700">You form stable, trusting relationships with balanced boundaries</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Compatibility matches */}
                 <div className="mb-6">
-                  <h4 className="font-medium text-sm mb-3 text-gray-700 flex items-center">
+                  <h4 className="font-medium text-sm mb-3 text-gray-800 flex items-center">
                     <span className="mr-1">✨</span> Your Perfect Matches:
                   </h4>
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-purple-50 rounded-xl p-3 border border-purple-200">
-                      <div className="flex items-center mb-2">
-                        <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-2 border border-purple-200">
+                    <div className="bg-purple-50 rounded-xl p-3">
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
                           <span className="text-base">💜</span>
                         </div>
                         <div>
-                          <p className="font-bold text-gray-800 text-sm">The Nurturer</p>
+                          <p className="font-bold text-gray-900 text-sm">The Nurturer</p>
                           <div className="flex">
                             <span className="text-purple-600 text-xs font-medium">94% Match</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-200">
-                      <div className="flex items-center mb-2">
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-2 border border-indigo-200">
+                    <div className="bg-indigo-50 rounded-xl p-3">
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
                           <span className="text-base">🌟</span>
                         </div>
                         <div>
-                          <p className="font-bold text-gray-800 text-sm">The Visionary</p>
+                          <p className="font-bold text-gray-900 text-sm">The Visionary</p>
                           <div className="flex">
                             <span className="text-indigo-600 text-xs font-medium">88% Match</span>
                           </div>
@@ -211,28 +208,28 @@ const MaturityHero = () => {
                 </div>
 
                 {/* Key insights preview */}
-                <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 border border-pink-200">
+                <div className="bg-pink-50 rounded-xl p-4">
                   <div className="flex justify-between items-center mb-3">
-                    <h4 className="font-medium text-gray-800 flex items-center">
+                    <h4 className="font-medium text-gray-900 flex items-center">
                       <span className="mr-1">💎</span> Key Insights
                     </h4>
-                    <span className="text-xs bg-pink-100 text-primary px-2 py-0.5 rounded-full font-medium border border-pink-200">Premium Preview</span>
+                    <span className="text-xs bg-pink-100 text-primary px-2 py-0.5 rounded-full font-medium">Premium Preview</span>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center">
-                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-2 flex-shrink-0 border border-pink-200">
+                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center mr-2 flex-shrink-0 text-pink-500">
                         <span className="text-xs">✓</span>
                       </div>
                       <p className="text-sm text-gray-700">Strong emotional intelligence and self-regulation</p>
                     </div>
                     <div className="flex items-center">
-                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-2 flex-shrink-0 border border-pink-200">
+                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center mr-2 flex-shrink-0 text-pink-500">
                         <span className="text-xs">✓</span>
                       </div>
                       <p className="text-sm text-gray-700">Natural ability to maintain healthy boundaries</p>
                     </div>
                     <div className="flex items-center opacity-80">
-                      <div className="h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mr-2 flex-shrink-0 border border-gray-200">
+                      <div className="h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center mr-2 flex-shrink-0 text-gray-400">
                         <span className="text-xs">+</span>
                       </div>
                       <p className="text-sm text-gray-500">7 more insights in full report... 💫</p>
@@ -241,9 +238,7 @@ const MaturityHero = () => {
                 </div>
               </div>
 
-              {/* Secondary cards for depth */}
-              <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-purple-50 rounded-xl border border-purple-200 shadow-xl transform -rotate-6 z-[-1]"></div>
-              <div className="absolute -top-6 -right-6 w-40 h-40 bg-pink-50 rounded-xl border border-pink-200 shadow-xl transform rotate-6 z-[-1]"></div>
+              {/* Clean design without secondary cards */}
             </div>
           </div>
         </div>
