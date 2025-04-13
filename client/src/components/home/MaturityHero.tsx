@@ -113,7 +113,7 @@ const MaturityHero = () => {
             <div>
               <Link 
                 href="/register" 
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold text-lg rounded-md shadow-md hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-gray-800 font-bold text-lg rounded-md shadow-md border border-primary/50 hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
               >
                 Take The Assessment
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
