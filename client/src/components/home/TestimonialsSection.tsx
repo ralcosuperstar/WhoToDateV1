@@ -152,7 +152,7 @@ const TestimonialsSection = () => {
             </svg>
             <span className="text-amber-800 text-sm font-medium">Limited time: Free comprehensive assessment</span>
           </div>
-          <a href="/quiz" className="inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition-all hover:shadow-lg hover:scale-105">
+          <a href="/quiz" className="inline-flex items-center justify-center px-8 py-4 bg-slate-900 text-white font-bold rounded-xl shadow-md hover:bg-slate-800 transition-all hover:shadow-lg hover:scale-105 border-2 border-primary/30">
             Get Your Compatibility Profile Now
           </a>
         </div>

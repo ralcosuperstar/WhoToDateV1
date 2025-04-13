@@ -91,7 +91,7 @@ const Header = () => {
           )}
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
-            className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all"
+            className="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 sm:px-7 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all border-2 border-primary/20"
           >
             {user ? "Take Quiz" : "Try Free"}
           </Link>

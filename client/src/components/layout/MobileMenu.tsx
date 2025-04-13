@@ -124,7 +124,7 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
                   <span className="emoji mr-2">📊</span>
                   <span>Analytics</span>
                 </Link>
-                <Link href="/quiz" onClick={handleLinkClick} className="bg-primary/15 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-primary/20">
+                <Link href="/quiz" onClick={handleLinkClick} className="bg-slate-900 text-white w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-slate-800 border-2 border-primary/20 shadow-md">
                   <span className="emoji mr-2">🧪</span>
                   <span>Take Quiz</span>
                 </Link>

@@ -103,7 +103,7 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <Link href="/register" className="w-full py-4 bg-primary text-white font-bold text-lg rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center pulse-animation">
+              <Link href="/register" className="w-full py-4 bg-slate-900 text-white font-bold text-lg rounded-xl shadow-md hover:bg-slate-800 transition duration-300 flex items-center justify-center pulse-animation border-2 border-primary/30">
                 <span className="emoji mr-2">🚀</span>
                 <span>Take The Free Quiz Now</span>
               </Link>
@@ -227,7 +227,7 @@ const HeroSection = () => {
 
             {/* Mobile CTA with enhanced styling */}
             <div className="mt-6 md:hidden">
-              <Link href="/register" className="w-full py-4 bg-primary text-white font-bold text-lg rounded-xl shadow-card hover:bg-primary/90 transition duration-300 flex items-center justify-center">
+              <Link href="/register" className="w-full py-4 bg-slate-900 text-white font-bold text-lg rounded-xl shadow-card hover:bg-slate-800 transition duration-300 flex items-center justify-center border-2 border-primary/30">
                 <span className="emoji mr-2">🚀</span>
                 <span>Start Free Quiz</span>
               </Link>

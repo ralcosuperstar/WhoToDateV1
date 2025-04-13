@@ -280,7 +280,7 @@ const ScienceSection = () => {
           <div className="mt-8 text-center">
             <Link 
               href="/register" 
-              className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-primary to-fuchsia-600 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105 transform"
+              className="inline-flex items-center justify-center px-8 py-4 bg-slate-900 text-white font-bold rounded-xl shadow-md hover:bg-slate-800 transition-all hover:shadow-lg hover:scale-105 transform border-2 border-primary/30"
             >
               <span className="emoji mr-2">🧪</span> Take the Scientific Assessment
             </Link>

@@ -137,7 +137,7 @@ const CTASection = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               href="/register" 
-              className="bg-white text-primary hover:bg-white/95 px-8 py-4 rounded-xl font-medium shadow-md hover:shadow-lg transition-all inline-flex items-center justify-center" 
+              className="bg-slate-900 text-white hover:bg-slate-800 px-8 py-4 rounded-xl font-medium shadow-md hover:shadow-lg transition-all inline-flex items-center justify-center border-2 border-white/20" 
               style={{animation: "pulse 4s infinite"}}
             >
               <span className="emoji mr-2">🧪</span>
@@ -146,7 +146,7 @@ const CTASection = () => {
             
             <Link 
               href="/how-it-works" 
-              className="px-6 py-4 bg-white/20 backdrop-blur-sm text-white font-medium rounded-xl hover:bg-white/25 transition-all inline-flex items-center justify-center border border-white/10 hover:border-white/20 shadow-md"
+              className="px-6 py-4 bg-slate-800/80 backdrop-blur-sm text-white font-medium rounded-xl hover:bg-slate-700/80 transition-all inline-flex items-center justify-center border-2 border-white/20 hover:border-white/30 shadow-md"
             >
               <span className="emoji mr-2">🧭</span>
               <span>Learn How It Works</span>
