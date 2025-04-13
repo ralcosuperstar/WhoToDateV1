@@ -3,11 +3,8 @@ import { Link } from "wouter";
 const MaturityHero = () => {
   return (
     <section className="pt-28 md:pt-32 pb-16 relative overflow-hidden bg-white">
-      {/* Subtle gradient overlays for visual depth */}
-      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-white to-purple-50 opacity-70"></div>
-      <div className="absolute top-0 left-0 w-full h-full opacity-30">
-        <div className="absolute top-0 left-0 w-full h-full transform rotate-180 scale-150 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent"></div>
-      </div>
+      {/* Solid background without opacity */}
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-white to-purple-50"></div>
 
       {/* Subtle animated particles */}
       <div className="absolute top-1/3 left-1/4 w-2 h-2 rounded-full bg-white/20 animate-ping" style={{animationDuration: '3s'}}></div>
@@ -24,13 +21,19 @@ const MaturityHero = () => {
               </span>
             </div>
 
-            <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-gray-900 leading-tight">
-              Unlock Your<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Relationship DNA</span>
+            <h1 className="relative z-10 font-heading font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-gray-900 leading-tight">
+              <span className="relative inline-block">Unlock Your<br />
+              <span className="font-bold text-primary">Relationship DNA</span>
+              <div className="absolute -bottom-2 left-0 w-full h-3 bg-pink-200/70 -z-10 transform -skew-x-3"></div>
+              </span>
             </h1>
 
-            <p className="text-gray-800 text-lg md:text-xl mb-8 max-w-lg">
-              Our scientifically validated assessment reveals your unique attachment style, personality traits, and compatibility patterns. Gain deeper insights into who you truly connect with. 💕
+            <p className="text-gray-900 text-lg md:text-xl mb-8 max-w-lg font-medium">
+              Our scientifically validated assessment reveals your 
+              <span className="inline-block bg-pink-100 px-1 mx-0.5 rounded border border-pink-200">unique attachment style</span>, 
+              <span className="inline-block bg-purple-100 px-1 mx-0.5 rounded border border-purple-200">personality traits</span>, and 
+              <span className="inline-block bg-indigo-100 px-1 mx-0.5 rounded border border-indigo-200">compatibility patterns</span>. 
+              Gain deeper insights into who you truly connect with. 💕
             </p>
 
             {/* Social proof */}
@@ -167,7 +170,7 @@ const MaturityHero = () => {
                     </div>
                     <div>
                       <p className="font-bold text-gray-800 text-lg">Secure Connector</p>
-                      <p className="text-sm text-gray-700">You form stable, trusting relationships with balanced boundaries</p>
+                      <p className="text-sm bg-white px-2 py-1 rounded shadow-sm text-gray-900 border border-pink-100">You form stable, trusting relationships with balanced boundaries</p>
                     </div>
                   </div>
                 </div>
