@@ -1,33 +1,29 @@
-import HeroSection from "@/components/home/HeroSection";
-import FeaturesSection from "@/components/home/FeaturesSection";
-import ScienceSection from "@/components/home/ScienceSection";
-import ReportPreviewSection from "@/components/home/ReportPreviewSection";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
-import BlogSection from "@/components/home/BlogSection";
-import CTASection from "@/components/home/CTASection";
+import SimpleHero from "@/components/home/SimpleHero";
+import SimpleFeaturesSection from "@/components/home/SimpleFeaturesSection";
+import SimpleHowItWorks from "@/components/home/SimpleHowItWorks";
+import SimpleTestimonialsSection from "@/components/home/SimpleTestimonialsSection";
+import SimpleCTASection from "@/components/home/SimpleCTASection";
 import { Helmet } from 'react-helmet';
 
 const Home = () => {
   return (
     <>
       <Helmet>
-        <title>WhoToDate - Discover Your Compatibility DNA</title>
-        <meta name="description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
-        <meta property="og:title" content="WhoToDate - Discover Your Compatibility DNA" />
-        <meta property="og:description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+        <title>WhoToDate - Find Your Perfect Match</title>
+        <meta name="description" content="WhoToDate helps you find people who are right for you through a fun quiz that's super easy to understand." />
+        <meta property="og:title" content="WhoToDate - Find Your Perfect Match" />
+        <meta property="og:description" content="WhoToDate helps you find people who are right for you through a fun quiz that's super easy to understand." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="WhoToDate - Discover Your Compatibility DNA" />
-        <meta name="twitter:description" content="WhoToDate helps you discover your relationship compatibility profile through a fun, scientific assessment tailored for Indian singles." />
+        <meta name="twitter:title" content="WhoToDate - Find Your Perfect Match" />
+        <meta name="twitter:description" content="WhoToDate helps you find people who are right for you through a fun quiz that's super easy to understand." />
       </Helmet>
       
-      <HeroSection />
-      <FeaturesSection />
-      <ScienceSection />
-      <ReportPreviewSection />
-      <TestimonialsSection />
-      <BlogSection />
-      <CTASection />
+      <SimpleHero />
+      <SimpleFeaturesSection />
+      <SimpleHowItWorks />
+      <SimpleTestimonialsSection />
+      <SimpleCTASection />
     </>
   );
 };
