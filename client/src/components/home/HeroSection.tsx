@@ -2,7 +2,7 @@ import { Link } from "wouter";
 
 const HeroSection = () => {
   return (
-    <section className="pt-28 sm:pt-32 md:pt-36 pb-16 relative overflow-hidden bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+    <section className="pt-28 sm:pt-32 md:pt-36 pb-16 relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-rose-50">
       {/* Enhanced background elements with primary-glow */}
       <div className="absolute top-0 right-0 -mt-5 -mr-10 w-60 h-60 sm:w-80 sm:h-80 primary-glow rounded-full opacity-80 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -mb-5 -ml-10 w-60 h-60 sm:w-80 sm:h-80 secondary-glow rounded-full opacity-80 blur-3xl"></div>
@@ -34,7 +34,7 @@ const HeroSection = () => {
               Stop Wasting Time With <span className="text-primary relative">
                 The Wrong People
                 <svg className="absolute -bottom-1 left-0 w-full h-2" viewBox="0 0 100 12" preserveAspectRatio="none">
-                  <path d="M0,0 Q50,12 100,0" fill="none" stroke="rgba(120,70,230,0.3)" strokeWidth="8" />
+                  <path d="M0,0 Q50,12 100,0" fill="none" stroke="rgba(230,50,85,0.3)" strokeWidth="8" />
                 </svg>
               </span>
             </h1>
@@ -113,19 +113,19 @@ const HeroSection = () => {
 
             {/* Trust elements - enhanced with new styles */}
             <div className="flex flex-wrap justify-center md:justify-start gap-2">
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-purple-100/30">
+              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
                 <span className="emoji mr-1">🔒</span>
                 <span className="text-xs">100% Private</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-purple-100/30">
+              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
                 <span className="emoji mr-1">⏱️</span>
                 <span className="text-xs">5 Minutes</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-purple-100/30">
+              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
                 <span className="emoji mr-1">🧠</span>
                 <span className="text-xs">Science-Based</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-purple-100/30">
+              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
                 <span className="emoji mr-1">📱</span>
                 <span className="text-xs">Mobile-Friendly</span>
               </div>
@@ -136,7 +136,7 @@ const HeroSection = () => {
           <div className="w-full md:w-1/2 md:pl-6">
             <div className="relative">
               {/* Main mockup of the personality report */}
-              <div className="bg-white rounded-xl shadow-card p-5 border border-purple-100 max-w-sm mx-auto">
+              <div className="bg-white rounded-xl shadow-card p-5 border border-pink-100 max-w-sm mx-auto">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center">
                     <div className="h-10 w-10 bg-primary/15 rounded-full flex items-center justify-center">
@@ -151,7 +151,7 @@ const HeroSection = () => {
                 </div>
                 
                 {/* Sample compatibility card with love gradient */}
-                <div className="mb-4 love-gradient rounded-lg p-3 border border-purple-100">
+                <div className="mb-4 love-gradient rounded-lg p-3 border border-pink-100">
                   <h4 className="font-medium text-sm mb-1">Your Personality Type:</h4>
                   <div className="flex items-center">
                     <div className="bg-white p-2 rounded-lg mr-2 shadow-soft">
