@@ -71,7 +71,7 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-white font-medium transition-colors duration-300">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
                 Discover Your Style
               </Link>
             </div>
@@ -132,7 +132,7 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-white font-medium transition-colors duration-300">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
                 Analyze Your Traits
               </Link>
             </div>
@@ -190,7 +190,7 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-white font-medium transition-colors duration-300">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
                 Find Your Matches
               </Link>
             </div>
@@ -198,16 +198,16 @@ const MaturityInsightsSection = () => {
         </div>
 
         {/* Comparison chart */}
-        <div className="max-w-4xl mx-auto bg-slate-900/50 rounded-2xl shadow-xl backdrop-blur-sm border border-indigo-900/30 overflow-hidden mb-12">
-          <div className="px-6 py-5 bg-gradient-to-r from-blue-600/20 to-indigo-600/10 border-b border-indigo-900/30">
-            <h3 className="font-bold text-xl text-white">Compatibility Profile Comparison</h3>
+        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-12">
+          <div className="px-6 py-5 bg-gradient-to-r from-blue-50 to-blue-100/40 border-b border-gray-200">
+            <h3 className="font-bold text-xl text-gray-800">Compatibility Profile Comparison</h3>
           </div>
 
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="bg-slate-800/70 rounded-xl p-4 border border-slate-700/50 text-center">
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
+                  <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center text-primary mr-3 flex-shrink-0 border border-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                       <circle cx="8.5" cy="7" r="4"></circle>
@@ -216,23 +216,23 @@ const MaturityInsightsSection = () => {
                     </svg>
                   </div>
                 </div>
-                <h4 className="font-bold text-white mb-1">Profile Type A</h4>
-                <p className="text-slate-400 text-sm mb-3">Secure Connector</p>
-                <ul className="text-slate-300 text-sm space-y-2 text-left">
+                <h4 className="font-bold text-gray-800 mb-1">Profile Type A</h4>
+                <p className="text-gray-600 text-sm mb-3">Secure Connector</p>
+                <ul className="text-gray-600 text-sm space-y-2 text-left">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     High emotional intelligence
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Stable relationships
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Clear communication
@@ -240,32 +240,32 @@ const MaturityInsightsSection = () => {
                 </ul>
               </div>
 
-              <div className="bg-slate-800/70 rounded-xl p-4 border border-slate-700/50 text-center">
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <div className="h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 border border-blue-500/30">
+                  <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center text-primary mr-3 flex-shrink-0 border border-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                       <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                   </div>
                 </div>
-                <h4 className="font-bold text-white mb-1">Profile Type B</h4>
-                <p className="text-slate-400 text-sm mb-3">Analytical Thinker</p>
-                <ul className="text-slate-300 text-sm space-y-2 text-left">
+                <h4 className="font-bold text-gray-800 mb-1">Profile Type B</h4>
+                <p className="text-gray-600 text-sm mb-3">Analytical Thinker</p>
+                <ul className="text-gray-600 text-sm space-y-2 text-left">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Thoughtful problem-solving
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Intellectual connection
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Values independence
@@ -273,32 +273,32 @@ const MaturityInsightsSection = () => {
                 </ul>
               </div>
 
-              <div className="bg-slate-800/70 rounded-xl p-4 border border-slate-700/50 text-center">
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 text-center">
                 <div className="flex items-center justify-center mb-2">
-                  <div className="h-12 w-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-500 border border-purple-500/30">
+                  <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center text-primary mr-3 flex-shrink-0 border border-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                       <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                   </div>
                 </div>
-                <h4 className="font-bold text-white mb-1">Profile Type C</h4>
-                <p className="text-slate-400 text-sm mb-3">Empathic Mediator</p>
-                <ul className="text-slate-300 text-sm space-y-2 text-left">
+                <h4 className="font-bold text-gray-800 mb-1">Profile Type C</h4>
+                <p className="text-gray-600 text-sm mb-3">Empathic Mediator</p>
+                <ul className="text-gray-600 text-sm space-y-2 text-left">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Deep emotional connection
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Highly supportive
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     Prioritizes harmony
@@ -307,21 +307,21 @@ const MaturityInsightsSection = () => {
               </div>
             </div>
 
-            <div className="bg-slate-800/70 rounded-2xl p-4 border border-slate-700/50">
-              <h4 className="font-medium text-white text-center mb-6">Compatibility Matrix</h4>
+            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+              <h4 className="font-medium text-gray-800 text-center mb-6">Compatibility Matrix</h4>
               
               <div className="grid grid-cols-3 gap-2">
-                <div className="bg-green-500/40 rounded-lg p-3 text-center border border-green-500/30">
-                  <span className="text-white font-medium">A + B</span>
-                  <p className="text-xs text-slate-300 mt-1">95% Compatible</p>
+                <div className="bg-green-50 rounded-lg p-3 text-center border border-green-200">
+                  <span className="text-gray-800 font-medium">A + B</span>
+                  <p className="text-xs text-gray-600 mt-1">95% Compatible</p>
                 </div>
-                <div className="bg-green-500/30 rounded-lg p-3 text-center border border-green-500/30">
-                  <span className="text-white font-medium">A + C</span>
-                  <p className="text-xs text-slate-300 mt-1">92% Compatible</p>
+                <div className="bg-green-50 rounded-lg p-3 text-center border border-green-200">
+                  <span className="text-gray-800 font-medium">A + C</span>
+                  <p className="text-xs text-gray-600 mt-1">92% Compatible</p>
                 </div>
-                <div className="bg-yellow-500/30 rounded-lg p-3 text-center border border-yellow-500/30">
-                  <span className="text-white font-medium">B + C</span>
-                  <p className="text-xs text-slate-300 mt-1">78% Compatible</p>
+                <div className="bg-yellow-50 rounded-lg p-3 text-center border border-yellow-200">
+                  <span className="text-gray-800 font-medium">B + C</span>
+                  <p className="text-xs text-gray-600 mt-1">78% Compatible</p>
                 </div>
               </div>
             </div>
@@ -332,7 +332,7 @@ const MaturityInsightsSection = () => {
         <div className="text-center">
           <Link 
             href="/register" 
-            className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold text-lg rounded-lg shadow-lg hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
+            className="inline-flex items-center justify-center px-8 py-4 bg-primary text-gray-800 font-bold text-lg rounded-lg shadow-lg border border-primary/50 hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
           >
             Get Your Complete Profile
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -340,7 +340,7 @@ const MaturityInsightsSection = () => {
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </Link>
-          <p className="mt-4 text-slate-400 text-sm">
+          <p className="mt-4 text-gray-600 text-sm">
             5-minute assessment • Scientifically validated • Instant results
           </p>
         </div>
