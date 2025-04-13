@@ -35,33 +35,33 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-soft fixed w-full z-50 backdrop-blur-sm bg-white/90">
+    <header className="bg-white/95 shadow-md fixed w-full z-50 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 md:py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-9 w-9 rounded-full bg-primary/95 flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:bg-primary">
+          <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105">
             <span className="text-white font-heading font-bold text-lg">W</span>
           </div>
           <span className="text-primary font-heading font-bold text-lg sm:text-xl transition-all group-hover:text-primary/90">WhoToDate</span>
         </Link>
         
         <nav className="hidden md:flex space-x-8">
-          <Link href="/how-it-works" className={`text-neutral-dark hover:text-primary font-medium transition-colors relative ${location === '/how-it-works' ? 'text-primary' : ''}`}>
+          <Link href="/how-it-works" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/how-it-works' ? 'text-primary font-semibold' : ''}`}>
             How It Works
             {location === '/how-it-works' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/science" className={`text-neutral-dark hover:text-primary font-medium transition-colors relative ${location === '/science' ? 'text-primary' : ''}`}>
+          <Link href="/science" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/science' ? 'text-primary font-semibold' : ''}`}>
             The Science
             {location === '/science' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/counselling" className={`text-neutral-dark hover:text-primary font-medium transition-colors relative ${location === '/counselling' ? 'text-primary' : ''}`}>
+          <Link href="/counselling" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/counselling' ? 'text-primary font-semibold' : ''}`}>
             Counselling
             {location === '/counselling' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/#testimonials" className={`text-neutral-dark hover:text-primary font-medium transition-colors relative ${location === '/#testimonials' ? 'text-primary' : ''}`}>
+          <Link href="/#testimonials" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/#testimonials' ? 'text-primary font-semibold' : ''}`}>
             Testimonials
             {location === '/#testimonials' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/blog" className={`text-neutral-dark hover:text-primary font-medium transition-colors relative ${location.startsWith('/blog') ? 'text-primary' : ''}`}>
+          <Link href="/blog" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location.startsWith('/blog') ? 'text-primary font-semibold' : ''}`}>
             Blog
             {location.startsWith('/blog') && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
@@ -70,10 +70,10 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <Link href="/dashboard" className="hidden md:block text-neutral-dark hover:text-primary font-medium transition-colors">
+              <Link href="/dashboard" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
                 Dashboard
               </Link>
-              <Link href="/analytics" className="hidden md:block text-neutral-dark hover:text-primary font-medium transition-colors">
+              <Link href="/analytics" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
                 Analytics
               </Link>
               <button 
@@ -85,18 +85,18 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <Link href="/auth" className="hidden md:block text-neutral-dark hover:text-primary font-medium transition-colors">
+            <Link href="/auth" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
               Login
             </Link>
           )}
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
-            className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all border border-primary/20"
+            className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all"
           >
             {user ? "Take Quiz" : "Try Free"}
           </Link>
           <button 
-            className="md:hidden text-neutral-dark hover:text-primary transition-colors" 
+            className="md:hidden text-gray-700 hover:text-primary transition-colors" 
             onClick={toggleMenu}
             aria-label="Toggle mobile menu"
           >

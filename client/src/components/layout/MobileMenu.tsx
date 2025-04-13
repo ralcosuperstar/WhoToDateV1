@@ -83,28 +83,28 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="md:hidden bg-white w-full pb-4 px-6 shadow-md border-t border-pink-100">
+    <div className="md:hidden bg-white w-full pb-4 px-6 shadow-md border-t border-gray-100">
       <nav className="flex flex-col divide-y divide-gray-100">
         <div className="py-3">
-          <span className="text-xs uppercase text-neutral-dark/60 font-medium">Navigate</span>
+          <span className="text-xs uppercase text-gray-500 font-medium tracking-wider">Navigate</span>
           <div className="mt-2 grid grid-cols-2 gap-y-2">
-            <Link href="/how-it-works" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/how-it-works" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
               <span className="emoji mr-2">🧭</span>
               <span>How It Works</span>
             </Link>
-            <Link href="/science" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/science" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
               <span className="emoji mr-2">🧠</span>
               <span>The Science</span>
             </Link>
-            <Link href="/counselling" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/counselling" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
               <span className="emoji mr-2">👩‍⚕️</span>
               <span>Counselling</span>
             </Link>
-            <Link href="/#testimonials" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/#testimonials" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
               <span className="emoji mr-2">💬</span>
               <span>Testimonials</span>
             </Link>
-            <Link href="/blog" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+            <Link href="/blog" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
               <span className="emoji mr-2">📝</span>
               <span>Blog</span>
             </Link>
@@ -112,25 +112,25 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
         </div>
         
         <div className="py-3">
-          <span className="text-xs uppercase text-neutral-dark/60 font-medium">Account</span>
+          <span className="text-xs uppercase text-gray-500 font-medium tracking-wider">Account</span>
           <div className="mt-2">
             {user ? (
-              <div className="space-y-1">
-                <Link href="/dashboard" onClick={handleDashboardClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+              <div className="space-y-2">
+                <Link href="/dashboard" onClick={handleDashboardClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
                   <span className="emoji mr-2">👤</span>
                   <span>Dashboard</span>
                 </Link>
-                <Link href="/analytics" onClick={handleAnalyticsClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+                <Link href="/analytics" onClick={handleAnalyticsClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
                   <span className="emoji mr-2">📊</span>
                   <span>Analytics</span>
                 </Link>
-                <Link href="/quiz" onClick={handleLinkClick} className="bg-primary/10 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2">
+                <Link href="/quiz" onClick={handleLinkClick} className="bg-primary/15 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-primary/20">
                   <span className="emoji mr-2">🧪</span>
                   <span>Take Quiz</span>
                 </Link>
                 <button 
                   onClick={handleLogout} 
-                  className="w-full text-red-500 hover:text-red-600 flex items-center py-2 mt-2 border-t border-gray-100 pt-3"
+                  className="w-full text-red-500 hover:text-red-600 flex items-center py-2 mt-2 border-t border-gray-100 pt-3 transition-colors"
                 >
                   <span className="emoji mr-2">🚪</span>
                   <span>Log Out</span>
@@ -138,15 +138,15 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
               </div>
             ) : (
               <div className="space-y-3">
-                <Link href="/auth?tab=login" onClick={handleLinkClick} className="flex items-center text-neutral-dark hover:text-primary py-2">
+                <Link href="/auth?tab=login" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-primary py-2 transition-colors">
                   <span className="emoji mr-2">🔑</span>
                   <span>Login</span>
                 </Link>
-                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary/10 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary/15 text-primary w-full flex items-center justify-center py-3 rounded-lg font-medium mt-2 transition-colors hover:bg-primary/20">
                   <span className="emoji mr-2">✨</span>
                   <span>Create Account</span>
                 </Link>
-                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary text-white w-full flex items-center justify-center py-3 rounded-lg font-medium">
+                <Link href="/auth?tab=register" onClick={handleLinkClick} className="bg-primary text-white w-full flex items-center justify-center py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all hover:bg-primary/90">
                   <span className="emoji mr-2">🧪</span>
                   <span>Try Free</span>
                 </Link>
