@@ -8,8 +8,8 @@ const TestimonialsSection = () => {
       quote: "The compatibility assessment revealed our attachment styles and how they influence our communication. Understanding these patterns helped us resolve conflicts that used to repeat endlessly.",
       impact: "Stronger communication",
       timeframe: "Together for 2 years",
-      bgColor: "bg-pink-50",
-      iconColor: "text-pink-500",
+      bgColor: "bg-pink-100",
+      iconColor: "text-primary",
       icon: "❤️",
       rating: 5
     },
@@ -21,8 +21,8 @@ const TestimonialsSection = () => {
       quote: "After three failed relationships following the same unhealthy pattern, WhoToDate's scientific assessment showed me why I kept attracting the wrong partners. Now I've found someone truly compatible.",
       impact: "Breaking negative cycles",
       timeframe: "Found compatible match",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-500",
+      bgColor: "bg-fuchsia-100", 
+      iconColor: "text-fuchsia-600",
       icon: "🔍",
       rating: 5
     },
@@ -34,8 +34,8 @@ const TestimonialsSection = () => {
       quote: "Our report highlighted our complementary emotional intelligence strengths. This helped us navigate the cultural differences in our families and set healthy boundaries together.",
       impact: "Family harmony",
       timeframe: "Engaged after 1 year",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-500",
+      bgColor: "bg-purple-100",
+      iconColor: "text-purple-600",
       icon: "✨",
       rating: 5
     }
@@ -45,12 +45,12 @@ const TestimonialsSection = () => {
     <section className="py-16 px-4 bg-gradient-to-b from-white to-neutral-50" id="testimonials">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-block mb-3 py-1.5 px-4 bg-primary/10 rounded-full">
+          <div className="inline-block mb-3 py-1.5 px-4 bg-primary/15 rounded-full">
             <span className="text-primary font-medium text-sm flex items-center justify-center">
               <span className="emoji mr-2">💯</span> Proven Results
             </span>
           </div>
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">Science-Based Success Stories</h2>
+          <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4 bg-gradient-to-r from-primary to-fuchsia-600 text-transparent bg-clip-text">Science-Based Success Stories</h2>
           <p className="text-base sm:text-lg mx-auto text-neutral-dark/80 max-w-2xl">
             See how our psychological assessment helped these individuals find compatible relationships
           </p>
@@ -60,13 +60,13 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial) => (
             <div 
               key={testimonial.id} 
-              className={`${testimonial.bgColor} rounded-2xl overflow-hidden shadow-md transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg`}
+              className={`${testimonial.bgColor} rounded-2xl overflow-hidden shadow-md transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group`}
             >
               <div className="p-6">
                 {/* Profile badge */}
                 <div className="flex justify-between items-start mb-5">
                   <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full ${testimonial.bgColor} border-2 border-white flex items-center justify-center ${testimonial.iconColor} text-xl`}>
+                    <div className={`w-10 h-10 rounded-full ${testimonial.bgColor} border-2 border-white flex items-center justify-center ${testimonial.iconColor} text-xl group-hover:scale-110 transition-transform`}>
                       <span className="emoji">{testimonial.icon}</span>
                     </div>
                     <div className="ml-3">
@@ -74,13 +74,13 @@ const TestimonialsSection = () => {
                       <p className="text-neutral-dark/70 text-sm">{testimonial.location}</p>
                     </div>
                   </div>
-                  <span className="text-xs bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full font-medium text-neutral-dark/70">
+                  <span className="text-xs bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full font-medium text-neutral-dark/70 border border-white/40 shadow-sm">
                     {testimonial.timeframe}
                   </span>
                 </div>
 
                 {/* Scientific profile type */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg py-2 px-3 mb-4 inline-block">
+                <div className="bg-white/70 backdrop-blur-sm rounded-lg py-2 px-3 mb-4 inline-block border border-white/40 group-hover:bg-white/80 transition-colors shadow-sm">
                   <span className="text-sm font-medium">{testimonial.profile}</span>
                 </div>
 
@@ -95,7 +95,7 @@ const TestimonialsSection = () => {
                       <svg 
                         key={i} 
                         xmlns="http://www.w3.org/2000/svg" 
-                        className={`h-5 w-5 ${i < testimonial.rating ? 'text-amber-400' : 'text-gray-300'}`} 
+                        className={`h-5 w-5 ${i < testimonial.rating ? 'text-amber-500' : 'text-gray-300'} group-hover:scale-105 transition-transform`} 
                         viewBox="0 0 20 20" 
                         fill="currentColor"
                       >
@@ -103,7 +103,7 @@ const TestimonialsSection = () => {
                       </svg>
                     ))}
                   </div>
-                  <div className="bg-white/70 backdrop-blur-sm px-3 py-1 rounded-lg">
+                  <div className="bg-white/70 backdrop-blur-sm px-3 py-1 rounded-lg border border-white/40 shadow-sm">
                     <span className="text-xs font-medium text-green-600 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -118,25 +118,25 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Success metrics */}
-        <div className="mt-16 bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="mt-16 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
           <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="p-6 text-center border-b md:border-b-0 md:border-r border-neutral-100">
-              <div className="text-4xl font-bold text-primary mb-2">87%</div>
-              <div className="text-lg font-medium mb-1">Improved Communication</div>
+            <div className="p-6 text-center border-b md:border-b-0 md:border-r border-neutral-100 hover:bg-pink-50 transition-colors group">
+              <div className="text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">87%</div>
+              <div className="text-lg font-medium mb-1 group-hover:text-primary transition-colors">Improved Communication</div>
               <p className="text-neutral-dark/70 text-sm">
                 Users report significantly better understanding of their partner's needs
               </p>
             </div>
-            <div className="p-6 text-center border-b md:border-b-0 md:border-r border-neutral-100">
-              <div className="text-4xl font-bold text-primary mb-2">92%</div>
-              <div className="text-lg font-medium mb-1">Report Satisfaction</div>
+            <div className="p-6 text-center border-b md:border-b-0 md:border-r border-neutral-100 hover:bg-fuchsia-50 transition-colors group">
+              <div className="text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">92%</div>
+              <div className="text-lg font-medium mb-1 group-hover:text-fuchsia-600 transition-colors">Report Satisfaction</div>
               <p className="text-neutral-dark/70 text-sm">
                 Users find their compatibility insights accurate and helpful
               </p>
             </div>
-            <div className="p-6 text-center">
-              <div className="text-4xl font-bold text-primary mb-2">76%</div>
-              <div className="text-lg font-medium mb-1">Relationship Success</div>
+            <div className="p-6 text-center hover:bg-purple-50 transition-colors group">
+              <div className="text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">76%</div>
+              <div className="text-lg font-medium mb-1 group-hover:text-purple-600 transition-colors">Relationship Success</div>
               <p className="text-neutral-dark/70 text-sm">
                 Users report more satisfying relationships after applying insights
               </p>
@@ -146,13 +146,13 @@ const TestimonialsSection = () => {
 
         {/* Call to action */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center bg-white/70 backdrop-blur-sm rounded-lg py-2 px-4 mb-4">
+          <div className="inline-flex items-center bg-amber-50 backdrop-blur-sm rounded-lg py-2 px-4 mb-4 border border-amber-100 shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <span className="text-neutral-dark/70 text-sm font-medium">Limited time: Free comprehensive assessment</span>
+            <span className="text-amber-800 text-sm font-medium">Limited time: Free comprehensive assessment</span>
           </div>
-          <a href="/quiz" className="inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition">
+          <a href="/quiz" className="inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition-all hover:shadow-lg hover:scale-105">
             Get Your Compatibility Profile Now
           </a>
         </div>
