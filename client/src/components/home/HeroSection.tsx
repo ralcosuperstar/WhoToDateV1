@@ -89,7 +89,7 @@ const HeroSection = () => {
             </div>
 
             {/* Strong primary CTA with enhanced design */}
-            <div className="card-gradient-2 backdrop-blur-sm rounded-xl p-4 shadow-card mb-6">
+            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm mb-6">
               <div className="flex items-center justify-center md:justify-start mb-2">
                 <div className="flex items-center">
                   <div className="flex">
@@ -99,7 +99,7 @@ const HeroSection = () => {
                     <span className="text-amber-400">★</span>
                     <span className="text-amber-400">★</span>
                   </div>
-                  <span className="text-sm font-medium ml-2">4.9/5 from 2,000+ users</span>
+                  <span className="text-sm font-medium ml-2 text-gray-800">4.9/5 from 2,000+ users</span>
                 </div>
               </div>
               
@@ -108,26 +108,26 @@ const HeroSection = () => {
                 <span>Take The Free Quiz Now</span>
               </Link>
               
-              <p className="text-xs text-center mt-2 text-neutral-dark/70">100% free comprehensive results and insights</p>
+              <p className="text-xs text-center mt-2 text-gray-600">100% free comprehensive results and insights</p>
             </div>
 
             {/* Trust elements - enhanced with new styles */}
             <div className="flex flex-wrap justify-center md:justify-start gap-2">
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
+              <div className="flex items-center bg-white rounded-full px-3 py-1.5 shadow-sm border border-gray-200">
                 <span className="emoji mr-1">🔒</span>
-                <span className="text-xs">100% Private</span>
+                <span className="text-xs text-gray-700">100% Private</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
+              <div className="flex items-center bg-white rounded-full px-3 py-1.5 shadow-sm border border-gray-200">
                 <span className="emoji mr-1">⏱️</span>
-                <span className="text-xs">5 Minutes</span>
+                <span className="text-xs text-gray-700">5 Minutes</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
+              <div className="flex items-center bg-white rounded-full px-3 py-1.5 shadow-sm border border-gray-200">
                 <span className="emoji mr-1">🧠</span>
-                <span className="text-xs">Science-Based</span>
+                <span className="text-xs text-gray-700">Science-Based</span>
               </div>
-              <div className="flex items-center bg-white/70 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-soft border border-pink-100/30">
+              <div className="flex items-center bg-white rounded-full px-3 py-1.5 shadow-sm border border-gray-200">
                 <span className="emoji mr-1">📱</span>
-                <span className="text-xs">Mobile-Friendly</span>
+                <span className="text-xs text-gray-700">Mobile-Friendly</span>
               </div>
             </div>
           </div>
@@ -151,66 +151,66 @@ const HeroSection = () => {
                 </div>
                 
                 {/* Sample compatibility card with love gradient */}
-                <div className="mb-4 love-gradient rounded-lg p-3 border border-pink-100">
-                  <h4 className="font-medium text-sm mb-1">Your Personality Type:</h4>
+                <div className="mb-4 bg-pink-50 rounded-lg p-3 border border-pink-100">
+                  <h4 className="font-medium text-sm mb-1 text-gray-800">Your Personality Type:</h4>
                   <div className="flex items-center">
-                    <div className="bg-white p-2 rounded-lg mr-2 shadow-soft">
+                    <div className="bg-white p-2 rounded-lg mr-2 shadow-sm">
                       <span className="emoji text-2xl">😊</span>
                     </div>
                     <div>
-                      <p className="font-bold text-base">The Supportive Partner</p>
-                      <p className="text-xs text-neutral-dark/70">You're attentive, emotionally connected, and create secure relationships</p>
+                      <p className="font-bold text-base text-gray-800">The Supportive Partner</p>
+                      <p className="text-xs text-gray-600">You're attentive, emotionally connected, and create secure relationships</p>
                     </div>
                   </div>
                 </div>
                 
                 {/* Perfect match section with enhanced styling */}
                 <div className="mb-4">
-                  <h4 className="font-medium text-sm mb-2">Your Perfect Match:</h4>
+                  <h4 className="font-medium text-sm mb-2 text-gray-800">Your Perfect Match:</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="harmony-gradient border border-blue-100 p-2 rounded-lg text-center shadow-soft">
+                    <div className="bg-blue-50 border border-blue-100 p-2 rounded-lg text-center shadow-sm">
                       <span className="emoji block text-2xl mb-1">🌟</span>
-                      <span className="text-xs font-medium">The Confident Leader</span>
+                      <span className="text-xs font-medium text-gray-800">The Confident Leader</span>
                     </div>
-                    <div className="energy-gradient border border-orange-100 p-2 rounded-lg text-center shadow-soft">
+                    <div className="bg-amber-50 border border-amber-100 p-2 rounded-lg text-center shadow-sm">
                       <span className="emoji block text-2xl mb-1">🔥</span>
-                      <span className="text-xs font-medium">The Passionate Creator</span>
+                      <span className="text-xs font-medium text-gray-800">The Passionate Creator</span>
                     </div>
                   </div>
                 </div>
                 
                 {/* Relationship strengths preview with updated colors */}
                 <div>
-                  <h4 className="font-medium text-sm mb-2">Your Relationship Strengths:</h4>
+                  <h4 className="font-medium text-sm mb-2 text-gray-800">Your Relationship Strengths:</h4>
                   <div className="space-y-2">
                     <div className="flex items-center">
-                      <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center text-primary mr-2 flex-shrink-0">
+                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-2 flex-shrink-0">
                         <span className="emoji text-xs">💯</span>
                       </div>
-                      <p className="text-xs">Strong emotional connection abilities</p>
+                      <p className="text-xs text-gray-700">Strong emotional connection abilities</p>
                     </div>
                     <div className="flex items-center">
-                      <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center text-primary mr-2 flex-shrink-0">
+                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-2 flex-shrink-0">
                         <span className="emoji text-xs">🤝</span>
                       </div>
-                      <p className="text-xs">Natural harmony with complementary types</p>
+                      <p className="text-xs text-gray-700">Natural harmony with complementary types</p>
                     </div>
                     <div className="flex items-center">
-                      <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center text-primary mr-2 flex-shrink-0">
+                      <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-2 flex-shrink-0">
                         <span className="emoji text-xs">🧠</span>
                       </div>
-                      <p className="text-xs">Excellent communication skills</p>
+                      <p className="text-xs text-gray-700">Excellent communication skills</p>
                     </div>
                   </div>
                 </div>
                 
                 {/* Full report details with updated colors */}
-                <div className="mt-4 insight-gradient rounded-lg p-3 border border-dashed border-primary/30">
+                <div className="mt-4 bg-green-50 rounded-lg p-3 border border-dashed border-green-200">
                   <div className="flex justify-between items-center mb-1">
-                    <h4 className="font-medium text-sm">Full Report Included</h4>
+                    <h4 className="font-medium text-sm text-gray-800">Full Report Included</h4>
                     <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">100% Free</span>
                   </div>
-                  <p className="text-xs text-neutral-dark/70 mb-2">Get comprehensive compatibility insights & guidance</p>
+                  <p className="text-xs text-gray-600 mb-2">Get comprehensive compatibility insights & guidance</p>
                   <div className="flex justify-center">
                     <span className="emoji text-2xl mr-1">📊</span>
                     <span className="emoji text-2xl mr-1">🚀</span>
@@ -234,7 +234,7 @@ const HeroSection = () => {
             </div>
             
             {/* Testimonial with enhanced styling */}
-            <div className="mt-6 card-gradient-1 rounded-xl p-4 shadow-card max-w-sm mx-auto">
+            <div className="mt-6 bg-white rounded-xl p-4 shadow-sm border border-gray-200 max-w-sm mx-auto">
               <div className="flex mb-2">
                 <div className="flex flex-shrink-0">
                   <span className="text-amber-400">★</span>
@@ -244,12 +244,12 @@ const HeroSection = () => {
                   <span className="text-amber-400">★</span>
                 </div>
               </div>
-              <p className="text-sm italic mb-2">"I finally understand why my past relationships didn't work! This quiz helped me find someone who truly complements me. It's like having a relationship coach in your pocket."</p>
+              <p className="text-sm italic mb-2 text-gray-700">"I finally understand why my past relationships didn't work! This quiz helped me find someone who truly complements me. It's like having a relationship coach in your pocket."</p>
               <div className="flex items-center">
                 <div className="h-8 w-8 bg-primary/20 rounded-full mr-2"></div>
                 <div>
-                  <p className="text-xs font-bold">Priya S.</p>
-                  <p className="text-xs text-neutral-dark/70">Mumbai, 26</p>
+                  <p className="text-xs font-bold text-gray-800">Priya S.</p>
+                  <p className="text-xs text-gray-600">Mumbai, 26</p>
                 </div>
               </div>
             </div>
