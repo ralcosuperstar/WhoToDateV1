@@ -2,11 +2,11 @@ import { Link } from "wouter";
 
 const MaturityHero = () => {
   return (
-    <section className="pt-28 md:pt-32 pb-16 relative overflow-hidden bg-gradient-to-br from-[#292352] to-[#1a1a2e]">
+    <section className="pt-28 md:pt-32 pb-16 relative overflow-hidden bg-slate-900">
       {/* Subtle gradient overlays for visual depth */}
-      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-transparent to-black/30 mix-blend-overlay"></div>
-      <div className="absolute top-0 left-0 w-full h-full opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full transform rotate-180 scale-150 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent"></div>
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-slate-900 to-indigo-950/80 opacity-90"></div>
+      <div className="absolute top-0 left-0 w-full h-full opacity-20">
+        <div className="absolute top-0 left-0 w-full h-full transform rotate-180 scale-150 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-500/30 via-transparent to-transparent"></div>
       </div>
 
       {/* Subtle animated particles */}
@@ -46,9 +46,9 @@ const MaturityHero = () => {
 
             {/* Key value propositions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="bg-slate-800/90 rounded-xl p-4 border border-indigo-800/30 hover:bg-indigo-900/40 transition-colors shadow-md">
                 <div className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-3 flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-primary/30 flex items-center justify-center text-primary mr-3 flex-shrink-0 border border-primary/30">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
                     </svg>
@@ -62,9 +62,9 @@ const MaturityHero = () => {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="bg-slate-800/90 rounded-xl p-4 border border-blue-800/30 hover:bg-blue-900/40 transition-colors shadow-md">
                 <div className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-blue-400/20 flex items-center justify-center text-blue-400 mr-3 flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-blue-500/30 flex items-center justify-center text-blue-400 mr-3 flex-shrink-0 border border-blue-500/30">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                       <circle cx="9" cy="7" r="4"></circle>
@@ -81,9 +81,9 @@ const MaturityHero = () => {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="bg-slate-800/90 rounded-xl p-4 border border-purple-800/30 hover:bg-purple-900/40 transition-colors shadow-md">
                 <div className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-purple-400/20 flex items-center justify-center text-purple-400 mr-3 flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-400 mr-3 flex-shrink-0 border border-purple-500/30">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
@@ -97,9 +97,9 @@ const MaturityHero = () => {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="bg-slate-800/90 rounded-xl p-4 border border-green-800/30 hover:bg-green-900/40 transition-colors shadow-md">
                 <div className="flex items-start">
-                  <div className="h-10 w-10 rounded-full bg-green-400/20 flex items-center justify-center text-green-400 mr-3 flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-green-500/30 flex items-center justify-center text-green-400 mr-3 flex-shrink-0 border border-green-500/30">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                     </svg>
@@ -128,25 +128,25 @@ const MaturityHero = () => {
               </Link>
 
               <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-4">
-                <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-3 py-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-300 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div className="flex items-center bg-slate-800/90 border border-indigo-900/30 rounded-full px-3 py-1.5 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
-                  <span className="text-xs text-slate-300">5 Minutes</span>
+                  <span className="text-xs text-white font-medium">5 Minutes</span>
                 </div>
-                <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-3 py-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-300 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div className="flex items-center bg-slate-800/90 border border-indigo-900/30 rounded-full px-3 py-1.5 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-400 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                     <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                   </svg>
-                  <span className="text-xs text-slate-300">Free Results</span>
+                  <span className="text-xs text-white font-medium">Free Results</span>
                 </div>
-                <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-3 py-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-300 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div className="flex items-center bg-slate-800/90 border border-indigo-900/30 rounded-full px-3 py-1.5 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                   </svg>
-                  <span className="text-xs text-slate-300">Privacy Protected</span>
+                  <span className="text-xs text-white font-medium">Privacy Protected</span>
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@ const MaturityHero = () => {
           <div className="w-full md:w-1/2 md:pl-8">
             <div className="relative mx-auto max-w-lg">
               {/* Main display card */}
-              <div className="bg-[#1e1e3a] rounded-2xl shadow-2xl p-6 border border-slate-700 mb-4 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+              <div className="bg-slate-800 rounded-2xl shadow-2xl p-6 border border-indigo-900/50 mb-4 transform rotate-1 hover:rotate-0 transition-transform duration-300">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center">
                     <div className="h-10 w-10 bg-primary/30 rounded-full flex items-center justify-center text-primary border border-primary/20">
@@ -264,8 +264,8 @@ const MaturityHero = () => {
               </div>
 
               {/* Secondary cards for depth */}
-              <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-[#1e1e3a]/80 rounded-xl border border-slate-700 shadow-xl transform -rotate-6 z-[-1]"></div>
-              <div className="absolute -top-6 -right-6 w-40 h-40 bg-[#1e1e3a]/80 rounded-xl border border-slate-700 shadow-xl transform rotate-6 z-[-1]"></div>
+              <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-slate-800/90 rounded-xl border border-indigo-900/30 shadow-xl transform -rotate-6 z-[-1]"></div>
+              <div className="absolute -top-6 -right-6 w-40 h-40 bg-slate-800/90 rounded-xl border border-indigo-900/30 shadow-xl transform rotate-6 z-[-1]"></div>
             </div>
           </div>
         </div>

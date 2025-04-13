@@ -1,8 +1,8 @@
-import MaturityHero from "@/components/home/MaturityHero";
-import MaturityInsightsSection from "@/components/home/MaturityInsightsSection";
-import MaturityMethodologySection from "@/components/home/MaturityMethodologySection";
-import MaturityTestimonialsSection from "@/components/home/MaturityTestimonialsSection";
-import MaturityCTASection from "@/components/home/MaturityCTASection";
+import MaturityHero from "../components/home/MaturityHero";
+import MaturityInsightsSection from "../components/home/MaturityInsightsSection";
+import MaturityMethodologySection from "../components/home/MaturityMethodologySection";
+import MaturityTestimonialsSection from "../components/home/MaturityTestimonialsSection";
+import MaturityCTASection from "../components/home/MaturityCTASection";
 import { Helmet } from 'react-helmet';
 
 const Home = () => {
