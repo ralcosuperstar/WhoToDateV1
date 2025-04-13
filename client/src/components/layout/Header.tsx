@@ -35,13 +35,13 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white/95 shadow-md fixed w-full z-50 backdrop-blur-sm border-b border-gray-100">
+    <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-200">
       <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 md:py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105 border-2 border-primary/30">
+          <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105">
             <span className="text-white font-heading font-bold text-lg">W</span>
           </div>
-          <span className="text-primary font-heading font-bold text-lg sm:text-xl transition-all group-hover:text-primary/90">WhoToDate</span>
+          <span className="text-gray-800 font-heading font-bold text-lg sm:text-xl transition-all group-hover:text-primary">WhoToDate</span>
         </Link>
         
         <nav className="hidden md:flex space-x-8">
@@ -91,7 +91,7 @@ const Header = () => {
           )}
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
-            className="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 sm:px-7 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg shadow-md hover:shadow-lg transition-all border-2 border-primary/20"
+            className="bg-primary hover:bg-primary/90 text-white font-semibold px-5 sm:px-7 py-2 sm:py-2.5 text-sm sm:text-base rounded-md shadow-sm hover:shadow transition-all"
           >
             {user ? "Take Quiz" : "Try Free"}
           </Link>
