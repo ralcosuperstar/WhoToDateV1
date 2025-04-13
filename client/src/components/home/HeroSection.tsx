@@ -6,7 +6,7 @@ const HeroSection = () => {
       {/* Enhanced background elements with primary-glow */}
       <div className="absolute top-0 right-0 -mt-5 -mr-10 w-60 h-60 sm:w-80 sm:h-80 primary-glow rounded-full opacity-80 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -mb-5 -ml-10 w-60 h-60 sm:w-80 sm:h-80 secondary-glow rounded-full opacity-80 blur-3xl"></div>
-      
+
       {/* Decorative floating elements - adds movement and visual interest */}
       <div className="absolute top-1/4 left-10 w-8 h-8 rounded-full bg-purple-200/50 floating" style={{animationDelay: '0.5s'}}></div>
       <div className="absolute top-1/3 right-10 w-6 h-6 rounded-full bg-indigo-200/50 floating" style={{animationDelay: '1.2s'}}></div>
@@ -66,12 +66,12 @@ const HeroSection = () => {
                   <h3 className="font-medium text-base">Endless Dating Frustration</h3>
                 </div>
                 <ul className="space-y-1.5 pl-7">
-                  <li className="text-sm text-neutral-dark/80 list-disc">Wasting time with wrong matches</li>
-                  <li className="text-sm text-neutral-dark/80 list-disc">Repeating same relationship mistakes</li>
-                  <li className="text-sm text-neutral-dark/80 list-disc">Feeling confused about failed relationships</li>
+                  <li className="text-sm text-gray-700 list-disc">Wasting time with wrong matches</li>
+                  <li className="text-sm text-gray-700 list-disc">Repeating same relationship mistakes</li>
+                  <li className="text-sm text-gray-700 list-disc">Feeling confused about failed relationships</li>
                 </ul>
               </div>
-              
+
               <div className="bg-white rounded-xl p-3 shadow-card border border-green-100 relative">
                 <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-lg">
                   WITH US
@@ -81,9 +81,9 @@ const HeroSection = () => {
                   <h3 className="font-medium text-base">Find Your Perfect Match</h3>
                 </div>
                 <ul className="space-y-1.5 pl-7">
-                  <li className="text-sm text-neutral-dark/80 list-disc">Know exactly who's right for you</li>
-                  <li className="text-sm text-neutral-dark/80 list-disc">Understand your relationship patterns</li>
-                  <li className="text-sm text-neutral-dark/80 list-disc">Build healthier, happier relationships</li>
+                  <li className="text-sm text-gray-700 list-disc">Know exactly who's right for you</li>
+                  <li className="text-sm text-gray-700 list-disc">Understand your relationship patterns</li>
+                  <li className="text-sm text-gray-700 list-disc">Build healthier, happier relationships</li>
                 </ul>
               </div>
             </div>
@@ -102,13 +102,13 @@ const HeroSection = () => {
                   <span className="text-sm font-medium ml-2 text-gray-800">4.9/5 from 2,000+ users</span>
                 </div>
               </div>
-              
+
               <Link href="/register" className="w-full py-4 bg-primary text-white font-bold text-lg rounded-xl shadow-md hover:bg-primary/90 transition duration-300 flex items-center justify-center pulse-animation">
                 <span className="emoji mr-2">🚀</span>
                 <span>Take The Free Quiz Now</span>
               </Link>
-              
-              <p className="text-xs text-center mt-2 text-gray-600">100% free comprehensive results and insights</p>
+
+              <p className="text-xs text-center mt-2 text-gray-700">100% free comprehensive results and insights</p>
             </div>
 
             {/* Trust elements - enhanced with new styles */}
@@ -144,12 +144,12 @@ const HeroSection = () => {
                     </div>
                     <h3 className="font-semibold text-lg ml-2">Your Love Profile</h3>
                   </div>
-                  
+
                   <div className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center">
                     <span className="emoji mr-1">✅</span> GREEN
                   </div>
                 </div>
-                
+
                 {/* Sample compatibility card with love gradient */}
                 <div className="mb-4 bg-pink-50 rounded-lg p-3 border border-pink-100">
                   <h4 className="font-medium text-sm mb-1 text-gray-800">Your Personality Type:</h4>
@@ -159,11 +159,11 @@ const HeroSection = () => {
                     </div>
                     <div>
                       <p className="font-bold text-base text-gray-800">The Supportive Partner</p>
-                      <p className="text-xs text-gray-600">You're attentive, emotionally connected, and create secure relationships</p>
+                      <p className="text-xs text-gray-700">You're attentive, emotionally connected, and create secure relationships</p>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Perfect match section with enhanced styling */}
                 <div className="mb-4">
                   <h4 className="font-medium text-sm mb-2 text-gray-800">Your Perfect Match:</h4>
@@ -178,7 +178,7 @@ const HeroSection = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Relationship strengths preview with updated colors */}
                 <div>
                   <h4 className="font-medium text-sm mb-2 text-gray-800">Your Relationship Strengths:</h4>
@@ -203,14 +203,14 @@ const HeroSection = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Full report details with updated colors */}
                 <div className="mt-4 bg-green-50 rounded-lg p-3 border border-dashed border-green-200">
                   <div className="flex justify-between items-center mb-1">
                     <h4 className="font-medium text-sm text-gray-800">Full Report Included</h4>
                     <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">100% Free</span>
                   </div>
-                  <p className="text-xs text-gray-600 mb-2">Get comprehensive compatibility insights & guidance</p>
+                  <p className="text-xs text-gray-700 mb-2">Get comprehensive compatibility insights & guidance</p>
                   <div className="flex justify-center">
                     <span className="emoji text-2xl mr-1">📊</span>
                     <span className="emoji text-2xl mr-1">🚀</span>
@@ -219,12 +219,12 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-              
+
               {/* Enhanced decorative elements with subtle animations */}
               <div className="absolute -top-2 -right-2 h-full w-full bg-amber-100/30 rounded-xl -z-10 rotate-2 floating" style={{animationDuration: '6s'}}></div>
               <div className="absolute -bottom-2 -left-2 h-full w-full bg-primary/10 rounded-xl -z-20 -rotate-1 floating" style={{animationDuration: '7s'}}></div>
             </div>
-            
+
             {/* Mobile CTA with enhanced styling */}
             <div className="mt-6 md:hidden">
               <Link href="/register" className="w-full py-4 bg-primary text-white font-bold text-lg rounded-xl shadow-card hover:bg-primary/90 transition duration-300 flex items-center justify-center">
@@ -232,7 +232,7 @@ const HeroSection = () => {
                 <span>Start Free Quiz</span>
               </Link>
             </div>
-            
+
             {/* Testimonial with enhanced styling */}
             <div className="mt-6 bg-white rounded-xl p-4 shadow-sm border border-gray-200 max-w-sm mx-auto">
               <div className="flex mb-2">
@@ -249,7 +249,7 @@ const HeroSection = () => {
                 <div className="h-8 w-8 bg-primary/20 rounded-full mr-2"></div>
                 <div>
                   <p className="text-xs font-bold text-gray-800">Priya S.</p>
-                  <p className="text-xs text-gray-600">Mumbai, 26</p>
+                  <p className="text-xs text-gray-700">Mumbai, 26</p>
                 </div>
               </div>
             </div>
