@@ -90,7 +90,7 @@ const MaturityInsightsSection = () => {
               </div>
 
               <p className="text-gray-600 mb-6">
-                Based on the Big Five model, we analyze your openness, conscientiousness, extraversion, agreeableness, and neuroticism to predict relationship compatibility.
+                Based on the Big Five model, we analyze your unique personality dimensions to help you understand your relationship patterns and communication style.
               </p>
 
               <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100 mb-1">
@@ -159,7 +159,7 @@ const MaturityInsightsSection = () => {
               </p>
 
               <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100">
-                <h4 className="font-medium text-gray-700 mb-3 text-sm">Your Top Match Types:</h4>
+                <h4 className="font-medium text-gray-700 mb-3 text-sm">Your Complementary Types:</h4>
                 
                 <div className="space-y-2 mb-3">
                   <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-pink-100">
@@ -170,7 +170,7 @@ const MaturityInsightsSection = () => {
                       <span className="text-gray-800 font-medium">The Nurturer</span>
                     </div>
                     <span className="text-sm bg-green-50 text-green-600 px-2 py-0.5 rounded-full border border-green-100">
-                      94% Match
+                      94% Compatibility
                     </span>
                   </div>
                   
@@ -182,7 +182,7 @@ const MaturityInsightsSection = () => {
                       <span className="text-gray-800 font-medium">The Visionary</span>
                     </div>
                     <span className="text-sm bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full border border-purple-100">
-                      86% Match
+                      86% Compatibility
                     </span>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ const MaturityInsightsSection = () => {
         {/* Comparison chart */}
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-12">
           <div className="px-6 py-5 bg-gradient-to-r from-pink-50 to-purple-50/40 border-b border-pink-100">
-            <h3 className="font-bold text-xl text-gray-800">Compatibility Profile Comparison</h3>
+            <h3 className="font-bold text-xl text-gray-800">Personality Type Compatibility</h3>
           </div>
 
           <div className="p-6">
@@ -314,15 +314,15 @@ const MaturityInsightsSection = () => {
               <div className="grid grid-cols-3 gap-2">
                 <div className="bg-white rounded-lg p-3 text-center border border-pink-200 hover:border-primary transition-all">
                   <span className="text-gray-800 font-medium">Secure + Visionary</span>
-                  <p className="text-xs text-primary font-medium mt-1">95% Compatible</p>
+                  <p className="text-xs text-primary font-medium mt-1">95% Compatibility</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 text-center border border-pink-200 hover:border-primary transition-all">
                   <span className="text-gray-800 font-medium">Secure + Nurturer</span>
-                  <p className="text-xs text-primary font-medium mt-1">92% Compatible</p>
+                  <p className="text-xs text-primary font-medium mt-1">92% Compatibility</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 text-center border border-purple-200 hover:border-purple-500 transition-all">
                   <span className="text-gray-800 font-medium">Visionary + Nurturer</span>
-                  <p className="text-xs text-purple-500 font-medium mt-1">88% Compatible</p>
+                  <p className="text-xs text-purple-500 font-medium mt-1">88% Compatibility</p>
                 </div>
               </div>
             </div>
