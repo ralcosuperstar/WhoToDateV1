@@ -2,23 +2,23 @@ import { Link } from "wouter";
 
 const MaturityInsightsSection = () => {
   return (
-    <section className="py-16 bg-gradient-to-b from-pink-50/30 to-gray-50 relative overflow-hidden">
+    <section className="py-16 bg-white relative overflow-hidden">
       {/* Abstract background elements */}
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pink-100/30 rounded-full blur-3xl"></div>
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-100/20 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pink-100/20 rounded-full blur-3xl"></div>
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-100/10 rounded-full blur-3xl"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
           <div className="inline-block mb-4 py-1 px-3 bg-white rounded-full shadow-sm border border-pink-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🔍</span> Scientifically-Validated Analysis
+              <span className="mr-2">🧠</span> Expert Compatibility Analysis
             </span>
           </div>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-            Know Your <span className="text-primary">Relationship DNA</span>
+            Stop Guessing, Start <span className="text-primary">Knowing</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our comprehensive assessment reveals your unique personality traits, attachment style, emotional intelligence, and relationship values - all for FREE
+            Our scientifically validated algorithm reveals your exact compatibility patterns and matches you with partners who truly complement your personality
           </p>
         </div>
 

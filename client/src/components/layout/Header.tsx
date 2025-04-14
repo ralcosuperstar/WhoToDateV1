@@ -35,63 +35,55 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-200">
-      <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 md:py-4 flex justify-between items-center">
+    <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-100">
+      <div className="container mx-auto px-3 sm:px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center shadow-sm transition-all group-hover:shadow-md group-hover:scale-105">
-            <span className="text-white font-heading font-bold text-lg">W</span>
+          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white">
+            <span className="text-white font-heading font-bold text-sm">W</span>
           </div>
-          <span className="text-gray-800 font-heading font-bold text-lg sm:text-xl transition-all group-hover:text-primary">WhoToDate</span>
+          <span className="text-gray-800 font-heading font-bold text-lg transition-all group-hover:text-primary">WhoToDate</span>
         </Link>
         
-        <nav className="hidden md:flex space-x-8">
-          <Link href="/how-it-works" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/how-it-works' ? 'text-primary font-semibold' : ''}`}>
+        <nav className="hidden md:flex space-x-6">
+          <Link href="/how-it-works" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/how-it-works' ? 'text-primary font-semibold' : ''}`}>
             How It Works
-            {location === '/how-it-works' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/science" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/science' ? 'text-primary font-semibold' : ''}`}>
+          <Link href="/science" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/science' ? 'text-primary font-semibold' : ''}`}>
             The Science
-            {location === '/science' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/counselling" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/counselling' ? 'text-primary font-semibold' : ''}`}>
+          <Link href="/counselling" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/counselling' ? 'text-primary font-semibold' : ''}`}>
             Counselling
-            {location === '/counselling' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/#testimonials" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location === '/#testimonials' ? 'text-primary font-semibold' : ''}`}>
+          <Link href="/#testimonials" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/#testimonials' ? 'text-primary font-semibold' : ''}`}>
             Testimonials
-            {location === '/#testimonials' && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
-          <Link href="/blog" className={`text-gray-700 hover:text-primary font-medium transition-colors relative ${location.startsWith('/blog') ? 'text-primary font-semibold' : ''}`}>
+          <Link href="/blog" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location.startsWith('/blog') ? 'text-primary font-semibold' : ''}`}>
             Blog
-            {location.startsWith('/blog') && <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"></span>}
           </Link>
         </nav>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           {user ? (
             <>
-              <Link href="/dashboard" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
+              <Link href="/dashboard" className="hidden md:block text-gray-700 hover:text-primary font-medium text-sm transition-colors">
                 Dashboard
-              </Link>
-              <Link href="/analytics" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
-                Analytics
               </Link>
               <button 
                 onClick={handleLogout}
                 disabled={isLoading}
-                className="hidden md:block text-red-500 hover:text-red-600 font-medium transition-colors"
+                className="hidden md:block text-gray-500 hover:text-red-500 font-medium text-sm transition-colors"
               >
                 {isLoading ? 'Logging out...' : 'Log Out'}
               </button>
             </>
           ) : (
-            <Link href="/auth" className="hidden md:block text-gray-700 hover:text-primary font-medium transition-colors">
+            <Link href="/auth" className="hidden md:block text-gray-700 hover:text-primary font-medium text-sm transition-colors">
               Login
             </Link>
           )}
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
-            className="bg-primary hover:bg-primary/90 text-white font-semibold px-5 sm:px-7 py-2 sm:py-2.5 text-sm sm:text-base rounded-md shadow-sm hover:shadow transition-all"
+            className="bg-primary hover:bg-primary/90 text-white font-medium px-4 py-1.5 text-sm rounded-full shadow-sm hover:shadow transition-all"
           >
             {user ? "Take Quiz" : "Try Free"}
           </Link>
