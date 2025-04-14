@@ -79,7 +79,7 @@ const MaturityMethodologySection = () => {
             </div>
             <h3 className="font-bold text-xl text-gray-800 mb-3 text-center">Big Five Personality</h3>
             <p className="text-gray-600 text-center mb-4">
-              The scientifically validated personality model that predicts relationship success and compatibility
+              The scientifically validated personality model that helps you understand your relationship patterns and preferences
             </p>
             <div className="space-y-3">
               <div className="flex items-center bg-purple-50/50 rounded-lg p-3 border border-purple-100">
@@ -208,7 +208,7 @@ const MaturityMethodologySection = () => {
                   <div className="ml-12">
                     <h4 className="font-bold text-gray-800 mb-2">Instant Report Generation</h4>
                     <p className="text-sm text-gray-600">
-                      Receive your comprehensive compatibility report immediately, with actionable insights and personalized matching recommendations.
+                      Receive your comprehensive compatibility report immediately, with actionable insights and personalized relationship guidance.
                     </p>
                   </div>
                 </div>

@@ -47,7 +47,7 @@ const MaturityHero = () => {
                   <h3 className="font-bold text-gray-800">Endless Dating Frustration</h3>
                 </div>
                 <ul className="space-y-2 ml-6 list-disc text-gray-600 text-sm">
-                  <li>Wasting time with wrong matches</li>
+                  <li>Unclear about your relationship needs</li>
                   <li>Repeating same relationship mistakes</li>
                   <li>Feeling confused about failed relationships</li>
                 </ul>
@@ -147,9 +147,9 @@ const MaturityHero = () => {
                   </div>
                 </div>
 
-                {/* Perfect Match */}
+                {/* Complementary Types */}
                 <div className="mb-5">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Perfect Match:</h4>
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Compatible Types:</h4>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-blue-50 p-2 rounded-lg text-center">
                       <div className="text-2xl mb-1">☀️</div>
@@ -172,7 +172,7 @@ const MaturityHero = () => {
                     </div>
                     <div className="flex items-center">
                       <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center mr-2 text-pink-500 text-xs">✓</div>
-                      <p className="text-sm text-gray-600">Natural harmony with complementary types</p>
+                      <p className="text-sm text-gray-600">Understanding relationship dynamics</p>
                     </div>
                     <div className="flex items-center">
                       <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center mr-2 text-pink-500 text-xs">✓</div>
