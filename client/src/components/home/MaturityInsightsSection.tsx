@@ -69,7 +69,8 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md text-white font-medium transition-colors duration-300 border border-pink-200 hover:opacity-90"
+              style={{ backgroundColor: '#e83a8e' }}>
                 Discover Your Style
               </Link>
             </div>
@@ -130,7 +131,8 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md text-white font-medium transition-colors duration-300 border border-pink-200 hover:opacity-90"
+              style={{ backgroundColor: '#e83a8e' }}>
                 Analyze Your Traits
               </Link>
             </div>
@@ -188,7 +190,8 @@ const MaturityInsightsSection = () => {
             </div>
             
             <div className="px-6 pb-6">
-              <Link href="/register" className="block w-full text-center py-3 rounded-md bg-primary hover:bg-primary/90 text-gray-800 font-medium transition-colors duration-300 border border-primary/50">
+              <Link href="/register" className="block w-full text-center py-3 rounded-md text-white font-medium transition-colors duration-300 border border-pink-200 hover:opacity-90"
+              style={{ backgroundColor: '#e83a8e' }}>
                 Find Your Matches
               </Link>
             </div>

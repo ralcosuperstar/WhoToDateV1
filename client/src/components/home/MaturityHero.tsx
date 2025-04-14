@@ -80,7 +80,8 @@ const MaturityHero = () => {
               
               <Link 
                 href="/register" 
-                className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold text-lg rounded-md shadow-md hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
+                className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-md shadow-md hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
+                style={{ backgroundColor: '#e83a8e' }}
               >
                 <span className="mr-2">🚀</span>
                 Take The Free Quiz Now
