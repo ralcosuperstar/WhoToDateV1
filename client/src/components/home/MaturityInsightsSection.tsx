@@ -3,9 +3,7 @@ import { Link } from "wouter";
 const MaturityInsightsSection = () => {
   return (
     <section className="py-16 bg-white relative overflow-hidden">
-      {/* Abstract background elements */}
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pink-100/20 rounded-full blur-3xl"></div>
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-100/10 rounded-full blur-3xl"></div>
+      {/* Removed background blur elements that were causing text visibility issues */}
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">

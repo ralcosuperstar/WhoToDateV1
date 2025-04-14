@@ -2,10 +2,8 @@ import { Link } from "wouter";
 
 const MaturityMethodologySection = () => {
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-purple-50/30 relative overflow-hidden">
-      {/* Abstract shapes for visual interest */}
-      <div className="absolute -top-32 -right-32 w-64 h-64 bg-pink-100/30 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-100/30 rounded-full blur-3xl"></div>
+    <section className="py-16 bg-white relative overflow-hidden">
+      {/* Removed abstract shapes that were causing blur/visibility issues */}
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">

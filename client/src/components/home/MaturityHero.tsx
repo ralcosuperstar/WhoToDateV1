@@ -2,9 +2,8 @@ import { Link } from "wouter";
 
 const MaturityHero = () => {
   return (
-    <section className="pt-24 md:pt-28 pb-16 relative overflow-hidden bg-pink-50/30">
-      {/* Background */}
-      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-white to-pink-50/40"></div>
+    <section className="pt-24 md:pt-28 pb-16 relative overflow-hidden bg-white">
+      {/* Background - removed blur elements that were causing issues */}
 
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center">
