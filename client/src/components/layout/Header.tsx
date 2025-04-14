@@ -38,8 +38,8 @@ const Header = () => {
     <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-100">
       <div className="container mx-auto px-3 sm:px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-8 w-8 rounded-full bg-white border border-pink-400 flex items-center justify-center">
-            <span className="font-heading font-bold text-base" style={{ color: '#f364a2' }}>W</span>
+          <div className="h-8 w-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#e83a8e' }}>
+            <span className="font-heading font-bold text-base text-white">W</span>
           </div>
           <span className="text-gray-800 font-heading font-bold text-lg transition-all group-hover:text-primary">WhoToDate</span>
         </Link>
@@ -83,7 +83,8 @@ const Header = () => {
           )}
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
-            className="bg-primary hover:bg-primary/90 text-white font-medium px-4 py-1.5 text-sm rounded-full shadow-sm hover:shadow transition-all"
+            className="text-white font-medium px-4 py-1.5 text-sm rounded-full shadow-sm hover:shadow transition-all"
+            style={{ backgroundColor: '#e83a8e' }}
           >
             {user ? "Take Quiz" : "Try Free"}
           </Link>
