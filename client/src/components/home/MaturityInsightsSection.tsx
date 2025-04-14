@@ -9,7 +9,7 @@ const MaturityInsightsSection = () => {
         <div className="text-center mb-12">
           <div className="inline-block mb-4 py-1 px-3 bg-white rounded-full shadow-sm border border-pink-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🧠</span> Expert Compatibility Analysis
+              <span className="mr-2">🧠</span> Expert Relationship Analysis
             </span>
           </div>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-gray-800 mb-4">
@@ -37,7 +37,7 @@ const MaturityInsightsSection = () => {
               </div>
 
               <p className="text-gray-600 mb-6">
-                Discover whether you're secure, anxious, or avoidant in relationships based on established psychological theories that predict relationship success.
+                Discover whether you're secure, anxious, or avoidant in relationships based on established psychological theories that help you understand your relationship patterns.
               </p>
 
               <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100">

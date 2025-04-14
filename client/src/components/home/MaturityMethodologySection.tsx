@@ -253,7 +253,7 @@ const MaturityMethodologySection = () => {
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Our algorithm has been trained and refined on data from tens of thousands of relationships, continuously improving its ability to predict compatibility.
+                  Our algorithm has been developed using insights from tens of thousands of relationships, continuously improving its ability to provide meaningful relationship insights.
                 </p>
               </div>
 
@@ -266,8 +266,8 @@ const MaturityMethodologySection = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 text-sm">85% Accuracy Rate</h4>
-                    <p className="text-xs text-gray-600">In predicting long-term relationship satisfaction</p>
+                    <h4 className="font-bold text-gray-800 text-sm">85% Satisfaction Rate</h4>
+                    <p className="text-xs text-gray-600">Users report improved relationship understanding</p>
                   </div>
                 </div>
               </div>
