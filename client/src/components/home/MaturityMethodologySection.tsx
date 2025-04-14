@@ -172,10 +172,11 @@ const MaturityMethodologySection = () => {
             {/* Left side: timeline process */}
             <div className="border-r border-pink-200 pr-8">
               <div className="relative">
-                <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-primary/60"></div>
+                <div className="absolute top-0 bottom-0 left-4 w-0.5" style={{ backgroundColor: 'rgba(232, 58, 142, 0.6)' }}></div>
                 
                 <div className="relative mb-8">
-                  <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white absolute left-0 top-0">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center text-white absolute left-0 top-0"
+                  style={{ backgroundColor: '#e83a8e' }}>
                     <span className="font-bold">1</span>
                   </div>
                   <div className="ml-12">
@@ -187,7 +188,8 @@ const MaturityMethodologySection = () => {
                 </div>
                 
                 <div className="relative mb-8">
-                  <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white absolute left-0 top-0">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center text-white absolute left-0 top-0"
+                  style={{ backgroundColor: '#e83a8e' }}>
                     <span className="font-bold">2</span>
                   </div>
                   <div className="ml-12">
@@ -199,7 +201,8 @@ const MaturityMethodologySection = () => {
                 </div>
                 
                 <div className="relative">
-                  <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white absolute left-0 top-0">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center text-white absolute left-0 top-0"
+                  style={{ backgroundColor: '#e83a8e' }}>
                     <span className="font-bold">3</span>
                   </div>
                   <div className="ml-12">
@@ -282,7 +285,8 @@ const MaturityMethodologySection = () => {
           
           <Link 
             href="/register" 
-            className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-bold text-lg rounded-lg shadow-lg border border-primary/50 hover:bg-primary/90 transform hover:translate-y-[-2px] transition-all duration-300"
+            className="inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
+            style={{ backgroundColor: '#e83a8e' }}
           >
             Get Your FREE Compatibility Profile
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
