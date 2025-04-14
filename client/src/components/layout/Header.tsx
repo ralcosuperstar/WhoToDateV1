@@ -38,8 +38,8 @@ const Header = () => {
     <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-100">
       <div className="container mx-auto px-3 sm:px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white">
-            <span className="text-white font-heading font-bold text-sm">W</span>
+          <div className="h-8 w-8 rounded-full bg-white border border-primary flex items-center justify-center">
+            <span className="text-primary font-heading font-bold text-sm">W</span>
           </div>
           <span className="text-gray-800 font-heading font-bold text-lg transition-all group-hover:text-primary">WhoToDate</span>
         </Link>
