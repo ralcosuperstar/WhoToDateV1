@@ -13,10 +13,10 @@ const MaturityInsightsSection = () => {
             </span>
           </div>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-            Stop Guessing, Start <span className="text-primary">Knowing</span>
+            Understand Yourself, <span style={{ color: '#e83a8e' }}>Improve Your Relationships</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our scientifically validated algorithm reveals your exact compatibility patterns and matches you with partners who truly complement your personality
+            Our scientifically validated assessment reveals your unique compatibility traits, relationship patterns, and helps you understand what truly works for you in relationships
           </p>
         </div>
 
@@ -155,7 +155,7 @@ const MaturityInsightsSection = () => {
               </div>
 
               <p className="text-gray-600 mb-6">
-                Our proprietary algorithm identifies your most compatible match types based on complementary traits, values, and emotional intelligence.
+                Our research-backed assessment helps you understand what personality types complement your own, based on your unique traits, values, and emotional patterns.
               </p>
 
               <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100">
@@ -192,7 +192,7 @@ const MaturityInsightsSection = () => {
             <div className="px-6 pb-6">
               <Link href="/register" className="block w-full text-center py-3 rounded-md text-white font-medium transition-colors duration-300 border border-pink-200 hover:opacity-90"
               style={{ backgroundColor: '#e83a8e' }}>
-                Find Your Matches
+                Discover Compatible Types
               </Link>
             </div>
           </div>
