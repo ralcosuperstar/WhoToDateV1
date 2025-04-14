@@ -2,23 +2,23 @@ import { Link } from "wouter";
 
 const MaturityInsightsSection = () => {
   return (
-    <section className="py-16 bg-gray-50 relative overflow-hidden">
+    <section className="py-16 bg-gradient-to-b from-pink-50/30 to-gray-50 relative overflow-hidden">
       {/* Abstract background elements */}
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl"></div>
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pink-100/30 rounded-full blur-3xl"></div>
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-100/20 rounded-full blur-3xl"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <div className="inline-block mb-4 py-1 px-3 bg-white rounded-full shadow-sm border border-gray-200">
+          <div className="inline-block mb-4 py-1 px-3 bg-white rounded-full shadow-sm border border-pink-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🔍</span> Data-Driven Insights
+              <span className="mr-2">🔍</span> Scientifically-Validated Analysis
             </span>
           </div>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-            Discover Your <span className="text-primary">Compatibility Profile</span>
+            Know Your <span className="text-primary">Relationship DNA</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our assessment reveals your unique attachment style, personality traits, and relationship patterns
+            Our comprehensive assessment reveals your unique personality traits, attachment style, emotional intelligence, and relationship values - all for FREE
           </p>
         </div>
 
@@ -29,7 +29,7 @@ const MaturityInsightsSection = () => {
             <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
             <div className="p-6">
               <div className="mb-6 flex items-center">
-                <div className="h-12 w-12 rounded-lg bg-blue-50 flex items-center justify-center text-primary mr-4 border border-blue-100">
+                <div className="h-12 w-12 rounded-lg bg-pink-50 flex items-center justify-center text-primary mr-4 border border-pink-100">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
@@ -39,10 +39,10 @@ const MaturityInsightsSection = () => {
               </div>
 
               <p className="text-gray-600 mb-6">
-                Understand how your early relationships shape your adult connections. Your attachment style impacts how you form bonds and navigate intimacy.
+                Discover whether you're secure, anxious, or avoidant in relationships based on established psychological theories that predict relationship success.
               </p>
 
-              <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+              <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100">
                 <h4 className="font-medium text-gray-700 mb-3 text-sm">Your Attachment Style:</h4>
                 
                 <div className="space-y-2 mb-4">
@@ -60,10 +60,10 @@ const MaturityInsightsSection = () => {
                 </div>
 
                 <div className="flex items-center justify-between text-sm">
-                  <div className="bg-blue-50 rounded-full py-1 px-3 text-primary font-medium border border-blue-100">
+                  <div className="bg-pink-50 rounded-full py-1 px-3 text-primary font-medium border border-pink-100">
                     Secure Primary
                   </div>
-                  <div className="bg-blue-50 rounded-full py-1 px-3 text-blue-600 font-medium border border-blue-100">
+                  <div className="bg-purple-50 rounded-full py-1 px-3 text-purple-600 font-medium border border-purple-100">
                     Anxious Secondary
                   </div>
                 </div>
