@@ -11,16 +11,16 @@ const MaturityHero = () => {
           <div className="w-full md:w-1/2 text-center md:text-left mb-12 md:mb-0">
             <div className="inline-block mb-4 py-1.5 px-4 bg-yellow-50 rounded-full border border-yellow-200">
               <span className="text-gray-700 font-medium text-sm flex items-center">
-                <span className="mr-2">✨</span> Discover Your Perfect Match Type
+                <span className="mr-2">🧬</span> Discover Your Compatibility DNA
               </span>
             </div>
 
             <h1 className="relative z-10 font-heading font-bold text-3xl sm:text-4xl md:text-5xl mb-6 text-gray-900 leading-tight">
-              Stop Wasting Time With <span className="text-primary">The Wrong People</span>
+              Unlock Your <span style={{ color: '#e83a8e' }}>Relationship Blueprint</span>
             </h1>
 
             <p className="text-gray-700 text-lg mb-8 max-w-lg">
-              Our 5-minute quiz reveals exactly who you're naturally compatible with, based on your personality. It's like having a relationship coach in your pocket!
+              Our 5-minute scientific assessment reveals your unique compatibility profile based on psychology, not horoscopes. Understand yourself better, make smarter relationship choices.
             </p>
 
             {/* Social proof */}
@@ -58,13 +58,13 @@ const MaturityHero = () => {
                   <span className="inline-block bg-green-100 text-green-600 text-sm py-1 px-3 rounded-full font-medium">WITH US</span>
                 </div>
                 <div className="flex items-center mb-3">
-                  <span className="mr-2">🎯</span>
-                  <h3 className="font-bold text-gray-800">Find Your Perfect Match</h3>
+                  <span className="mr-2">🧠</span>
+                  <h3 className="font-bold text-gray-800">Relationship Self-Insight</h3>
                 </div>
                 <ul className="space-y-2 ml-6 list-disc text-gray-600 text-sm">
-                  <li>Know exactly who's right for you</li>
+                  <li>Discover your unique compatibility profile</li>
                   <li>Understand your relationship patterns</li>
-                  <li>Build healthier, happier relationships</li>
+                  <li>Make smarter romantic choices</li>
                 </ul>
               </div>
             </div>
@@ -80,43 +80,40 @@ const MaturityHero = () => {
               
               <Link 
                 href="/register" 
-                className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-md shadow-md hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
+                className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
                 style={{ backgroundColor: '#e83a8e' }}
               >
-                <span className="mr-2">🚀</span>
-                Take The Free Quiz Now
+                <span className="mr-2">🔍</span>
+                Get Your FREE Compatibility Profile
               </Link>
               
               <div className="mt-3 text-center md:text-left">
-                <span className="text-xs text-gray-600">100% free comprehensive results and insights</span>
+                <span className="text-xs font-medium text-gray-600 flex items-center justify-center md:justify-start">
+                  <svg className="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  100% free scientific assessment with comprehensive insights
+                </span>
               </div>
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6">
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-500">
-                  <span className="text-sm">🔒</span>
-                </div>
-                <span className="text-xs text-gray-600 font-medium">100% Private</span>
+            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-pink-100">
+                <span style={{ color: '#e83a8e' }} className="mr-2">🔒</span>
+                <span className="text-sm text-gray-700 font-medium">100% Private</span>
               </div>
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-500">
-                  <span className="text-sm">⏱️</span>
-                </div>
-                <span className="text-xs text-gray-600 font-medium">5 Minutes</span>
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-pink-100">
+                <span style={{ color: '#e83a8e' }} className="mr-2">⏱️</span>
+                <span className="text-sm text-gray-700 font-medium">5-Minute Quiz</span>
               </div>
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-500">
-                  <span className="text-sm">🧪</span>
-                </div>
-                <span className="text-xs text-gray-600 font-medium">Science-Based</span>
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-pink-100">
+                <span style={{ color: '#e83a8e' }} className="mr-2">🧠</span>
+                <span className="text-sm text-gray-700 font-medium">Psychology-Based</span>
               </div>
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-500">
-                  <span className="text-sm">📱</span>
-                </div>
-                <span className="text-xs text-gray-600 font-medium">Mobile-Friendly</span>
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-pink-100">
+                <span style={{ color: '#e83a8e' }} className="mr-2">🇮🇳</span>
+                <span className="text-sm text-gray-700 font-medium">Indian Singles Focus</span>
               </div>
             </div>
           </div>
@@ -128,8 +125,8 @@ const MaturityHero = () => {
               <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-6 mb-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
-                    <span className="mr-2 text-2xl">❤️</span>
-                    <h3 className="font-bold text-lg text-gray-800">Your Love Profile</h3>
+                    <span className="mr-2 text-2xl">🧬</span>
+                    <h3 className="font-bold text-lg text-gray-800">Your Compatibility DNA</h3>
                   </div>
                   <div className="bg-green-100 text-green-600 text-xs font-bold px-3 py-1 rounded-full">
                     <span className="mr-1">✓</span> GREEN
