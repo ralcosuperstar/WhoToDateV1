@@ -238,11 +238,8 @@ const FrameworkTabs = () => {
                     <div className="flex items-center">
                       <div className={`h-8 w-8 rounded-full ${frameworks.find(f => f.id === activeTab)?.bgColor} flex items-center justify-center mr-3`}>
                         {activeTab === "big-five" ? (
-                          <div className="h-1.5 w-10 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full ${frameworks.find(f => f.id === activeTab)?.color}`} 
-                              style={{ width: `${('score' in trait) ? trait.score : 50}%` }}
-                            ></div>
+                          <div className={`text-lg font-semibold ${frameworks.find(f => f.id === activeTab)?.color}`}>
+                            {trait.name.charAt(0)}
                           </div>
                         ) : (
                           <span className={`${frameworks.find(f => f.id === activeTab)?.color}`}>
