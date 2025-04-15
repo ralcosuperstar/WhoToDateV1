@@ -1,11 +1,41 @@
 import { Link } from "wouter";
-import { Brain, Heart, Sparkles, BookOpen, Target, ArrowRight, Users, Lightbulb, BarChart, Shield, ChevronRight, Check, BrainCircuit, Fingerprint, Crown, Gauge } from "lucide-react";
+import { Brain, Heart, Sparkles, BookOpen, Target, ArrowRight, Users, Lightbulb, BarChart, Shield, ChevronRight, Check, BrainCircuit, Fingerprint, Crown, Gauge, X } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { useState } from "react";
+
+// Simple modal for showing more information
+const InfoModal = ({ isOpen, onClose, content }: { isOpen: boolean; onClose: () => void; content: string }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 px-4">
+      <div className="bg-white rounded-lg shadow-xl p-5 max-w-sm w-full transform transition-all">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium text-gray-900">More Information</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-500">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="text-sm text-gray-600">{content}</div>
+        <div className="mt-4 flex justify-end">
+          <button 
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-white rounded-md"
+            style={{ backgroundColor: '#e83a8e' }}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Framework Tabs component with interactive selection
 const FrameworkTabs = () => {
   const [activeTab, setActiveTab] = useState("big-five");
+  const [modalInfo, setModalInfo] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
   
   const frameworks = [
     {
@@ -139,6 +169,13 @@ const FrameworkTabs = () => {
   
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+      {/* Modal for showing additional information */}
+      <InfoModal 
+        isOpen={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        content={modalInfo} 
+      />
+      
       <div className="flex flex-col md:flex-row">
         {/* Sidebar tabs */}
         <div className="md:w-1/4 bg-gray-50 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200">
@@ -219,14 +256,18 @@ const FrameworkTabs = () => {
                       </div>
                     </div>
                     {'moreInfo' in trait && (
-                      <div className="text-gray-400 hover:text-gray-700 cursor-pointer relative tooltip-container">
+                      <button 
+                        onClick={() => {
+                          setModalInfo(trait.moreInfo);
+                          setModalOpen(true);
+                        }} 
+                        className="text-gray-400 hover:text-gray-700 focus:outline-none"
+                        aria-label="More information"
+                      >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <div className="opacity-0 invisible tooltip-box transition-opacity duration-300 ease-in-out absolute top-0 right-0 z-50 transform translate-y-[-100%] translate-x-[-50%] sm:translate-x-0 mt-[-10px] w-56 sm:w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 text-sm text-gray-600">
-                          {trait.moreInfo}
-                        </div>
-                      </div>
+                      </button>
                     )}
                   </div>
                 </div>
