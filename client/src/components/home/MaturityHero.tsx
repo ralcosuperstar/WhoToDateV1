@@ -11,17 +11,57 @@ const MaturityHero = () => {
           <div className="w-full md:w-1/2 text-center md:text-left mb-12 md:mb-0">
             <div className="inline-block mb-4 py-1.5 px-4 bg-yellow-50 rounded-full border border-yellow-200">
               <span className="text-gray-700 font-medium text-sm flex items-center">
-                <span className="mr-2">🧬</span> Unlock Your Relationship Blueprint
+                <span className="mr-2">🧬</span> A 5-minute compatibility quiz
               </span>
             </div>
 
             <h1 className="relative z-10 font-heading font-bold text-3xl sm:text-4xl md:text-5xl mb-6 text-gray-900 leading-tight">
-              Unlock Your <span style={{ color: '#e83a8e' }}>Relationship Blueprint</span>
+              Find Who to Date – With <span style={{ color: '#e83a8e' }}>a Little Science</span> and a Lot of Fun
             </h1>
 
-            <p className="text-gray-700 text-lg mb-8 max-w-lg">
-              Our FREE 5-minute scientific assessment reveals your unique relationship blueprint based on psychology, not horoscopes. Understand your patterns and make more fulfilling relationship choices.
+            <p className="text-gray-700 text-lg mb-6 max-w-lg">
+              Take the guesswork out of dating. If you're feeling unsure or anxious about relationships, you're not alone. Modern dating can be overwhelming – our quiz helps you navigate it with confidence.
             </p>
+
+            {/* Benefits */}
+            <div className="mb-8">
+              <h3 className="font-medium text-gray-800 text-lg mb-4">In just 40 questions, you'll:</h3>
+              <ul className="space-y-3 ml-1">
+                <li className="flex items-start">
+                  <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-3 mt-0.5 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-800">Know Yourself Better:</span>
+                    <p className="text-sm text-gray-600">Uncover your personality traits, attachment style, and values – key factors that shape how you love and who you connect with.</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-3 mt-0.5 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-800">Find Out Who Fits You:</span>
+                    <p className="text-sm text-gray-600">Learn what kind of partner would harmonize with you best. No more wasting time on the wrong matches!</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="h-6 w-6 rounded-full bg-pink-100 flex items-center justify-center text-primary mr-3 mt-0.5 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-800">Get Science-Backed Insights:</span>
+                    <p className="text-sm text-gray-600">We use proven psychological frameworks (Big Five, MBTI, Attachment Theory) for our analysis.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
 
             {/* Social proof */}
             <div className="flex items-center justify-center md:justify-start mb-8">
@@ -33,58 +73,18 @@ const MaturityHero = () => {
                   <span>😊</span>
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-700"><span className="text-primary font-bold">50,000+</span> people took the test today</p>
+              <p className="text-sm font-medium text-gray-700"><span className="text-primary font-bold">50,000+</span> Indian singles have found clarity</p>
             </div>
 
-            {/* Two column comparison - Problems vs Solutions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-4">
-                  <span className="inline-block bg-red-100 text-red-600 text-sm py-1 px-3 rounded-full font-medium">WITHOUT US</span>
-                </div>
-                <div className="flex items-center mb-3">
-                  <span className="mr-2">😔</span>
-                  <h3 className="font-bold text-gray-800">Endless Dating Frustration</h3>
-                </div>
-                <ul className="space-y-2 ml-6 list-disc text-gray-600 text-sm">
-                  <li>Unclear about your relationship needs</li>
-                  <li>Repeating same relationship mistakes</li>
-                  <li>Feeling confused about failed relationships</li>
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-4">
-                  <span className="inline-block bg-green-100 text-green-600 text-sm py-1 px-3 rounded-full font-medium">WITH US</span>
-                </div>
-                <div className="flex items-center mb-3">
-                  <span className="mr-2">🧠</span>
-                  <h3 className="font-bold text-gray-800">Relationship Self-Insight</h3>
-                </div>
-                <ul className="space-y-2 ml-6 list-disc text-gray-600 text-sm">
-                  <li>Discover your unique relationship blueprint</li>
-                  <li>Understand your relationship patterns</li>
-                  <li>Make smarter romantic choices</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Rating and CTA */}
+            {/* CTA */}
             <div className="mb-6">
-              <div className="flex items-center justify-center md:justify-start mb-2">
-                <div className="flex text-yellow-400 mr-2">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <span className="text-sm font-medium text-gray-600">4.9/5 from 2,000+ users</span>
-              </div>
-              
               <Link 
                 href="/register" 
                 className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
                 style={{ backgroundColor: '#e83a8e' }}
               >
                 <span className="mr-2">🔍</span>
-                Create Your FREE Relationship Blueprint
+                Start My FREE Compatibility Quiz
               </Link>
               
               <div className="mt-3 text-center md:text-left">
@@ -92,7 +92,7 @@ const MaturityHero = () => {
                   <svg className="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  100% free scientific assessment with comprehensive insights
+                  No signup needed, just honest answers!
                 </span>
               </div>
             </div>
@@ -121,94 +121,61 @@ const MaturityHero = () => {
           {/* Right side: Visual representation of results */}
           <div className="w-full md:w-1/2 md:pl-8">
             <div className="relative mx-auto max-w-lg">
-              {/* Main display card */}
-              <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-6 mb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <span className="mr-2 text-2xl">🧬</span>
-                    <h3 className="font-bold text-lg text-gray-800">Your Relationship Blueprint</h3>
-                  </div>
-                  <div className="bg-green-100 text-green-600 text-xs font-bold px-3 py-1 rounded-full">
-                    <span className="mr-1">✓</span> GREEN
-                  </div>
-                </div>
-
-                {/* Personality Type */}
-                <div className="mb-5">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Personality Type:</h4>
-                  <div className="flex items-center bg-yellow-50 rounded-lg p-2 border border-yellow-100">
-                    <div className="mr-3 text-xl">
-                      <span>😊</span>
+              {/* Compatibility Badge Info */}
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 p-5 mb-5">
+                <h3 className="font-bold text-xl text-gray-800 mb-3 flex items-center">
+                  <span className="mr-2">🚦</span> Your Compatibility Badge
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Every report comes with a color-coded compatibility badge – kind of like a traffic light for your love life!
+                </p>
+                
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3 mt-0.5">
+                      <span>🟢</span>
                     </div>
                     <div>
-                      <h5 className="font-bold text-gray-800">The Supportive Partner</h5>
-                      <p className="text-xs text-gray-600">You're attentive, emotionally connected, and naturally nurturing in relationships</p>
+                      <h4 className="font-medium text-gray-800">Green: High Compatibility</h4>
+                      <p className="text-xs text-gray-600">Your traits and attitudes are well-aligned for relationship success.</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Complementary Types */}
-                <div className="mb-5">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Harmonious Types:</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-blue-50 p-2 rounded-lg text-center">
-                      <div className="text-2xl mb-1">☀️</div>
-                      <p className="text-sm font-medium text-gray-800">The Confident Leader</p>
+                  
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 h-6 w-6 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3 mt-0.5">
+                      <span>🟡</span>
                     </div>
-                    <div className="bg-red-50 p-2 rounded-lg text-center">
-                      <div className="text-2xl mb-1">🔥</div>
-                      <p className="text-sm font-medium text-gray-800">The Passionate Creator</p>
+                    <div>
+                      <h4 className="font-medium text-gray-800">Yellow: Moderate Compatibility</h4>
+                      <p className="text-xs text-gray-600">Proceed with awareness – some areas may need extra attention.</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Relationship Strengths */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Relationship Strengths:</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center mr-2 text-pink-500 text-xs">✓</div>
-                      <p className="text-sm text-gray-600">Strong emotional connection abilities</p>
+                  
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 h-6 w-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3 mt-0.5">
+                      <span>🔴</span>
                     </div>
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center mr-2 text-pink-500 text-xs">✓</div>
-                      <p className="text-sm text-gray-600">Understanding relationship dynamics</p>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center mr-2 text-pink-500 text-xs">✓</div>
-                      <p className="text-sm text-gray-600">Excellent communication skills</p>
+                    <div>
+                      <h4 className="font-medium text-gray-800">Red: Potential Challenges</h4>
+                      <p className="text-xs text-gray-600">Not a stop sign! Just flagging areas that need growth and attention.</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Report Status */}
-                <div className="flex items-center justify-between bg-gray-50 rounded-md p-2 mb-2">
-                  <span className="text-sm font-medium text-gray-700">Full Report Included</span>
-                  <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full font-bold">100% Free</span>
-                </div>
-
-                {/* Report Icons */}
-                <div className="flex justify-between text-2xl text-gray-400">
-                  <span>📊</span>
-                  <span>❤️</span>
-                  <span>🔍</span>
-                  <span>🎁</span>
                 </div>
               </div>
 
               {/* Testimonial */}
-              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-md">
-                <div className="flex text-yellow-400 mb-2">
+              <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-md">
+                <div className="flex text-yellow-400 mb-3">
                   <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
-                <p className="text-sm text-gray-600 italic mb-3">
-                  "I finally understand why my past relationships didn't work out and found someone who truly harmonizes with me. It's like having a relationship coach in your pocket!"
+                <p className="text-sm text-gray-600 italic mb-4">
+                  "I was skeptical at first, but the quiz blew me away. My report explained why my last relationship fell apart (turns out my anxious attachment and my ex's avoidant attachment were a recipe for chaos!). It also showed me I got a Yellow badge – fair, because I do have some things to work on. The best part? It gave me tips on how to communicate my needs. I feel so much more confident about dating now."
                 </p>
                 <div className="flex items-center">
-                  <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-700 font-medium text-xs">PS</div>
+                  <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-700 font-medium text-xs">AS</div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-700">Priya S.</p>
-                    <p className="text-xs text-gray-500">Mumbai, 28</p>
+                    <p className="text-sm font-semibold text-gray-700">Aditi S.</p>
+                    <p className="text-xs text-gray-500">Mumbai, 24</p>
                   </div>
                 </div>
               </div>

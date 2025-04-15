@@ -16,7 +16,7 @@ const MaturityMethodologySection = () => {
             The <span className="text-primary">Science</span> Behind Our Assessment
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our relationship assessment combines multiple validated psychological frameworks to give you accurate, meaningful insights into your relationship patterns
+            Dating might feel like magic, but there's a lot of science behind what makes two people click. Our quiz is built on established psychological frameworks
           </p>
         </div>
 
@@ -165,7 +165,7 @@ const MaturityMethodologySection = () => {
             </span>
           </div>
           <h3 className="font-bold text-2xl text-gray-800 mb-6 text-center">
-            How We Create Your <span className="text-primary">FREE</span> Relationship Blueprint
+            🎯 How Does It Work?
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -180,9 +180,9 @@ const MaturityMethodologySection = () => {
                     <span className="font-bold">1</span>
                   </div>
                   <div className="ml-12">
-                    <h4 className="font-bold text-gray-800 mb-2">Research-Based Assessment</h4>
+                    <h4 className="font-bold text-gray-800 mb-2">Take the Quiz</h4>
                     <p className="text-sm text-gray-600">
-                      Answer our scientifically validated questions about your personality, attachment style, and relationship preferences in just 5 minutes.
+                      Answer 40 simple questions about yourself – your habits, feelings, and preferences. There are no right or wrong answers, just be honest. The quiz is designed to be casual and insightful, not burdensome.
                     </p>
                   </div>
                 </div>
@@ -193,9 +193,9 @@ const MaturityMethodologySection = () => {
                     <span className="font-bold">2</span>
                   </div>
                   <div className="ml-12">
-                    <h4 className="font-bold text-gray-800 mb-2">Advanced Data Analysis</h4>
+                    <h4 className="font-bold text-gray-800 mb-2">Get Your Results</h4>
                     <p className="text-sm text-gray-600">
-                      Our algorithm processes your responses across multiple psychological dimensions to build your unique relationship profile.
+                      Immediately after, you'll see your <strong>Compatibility Report</strong>, including a color-coded badge and a detailed breakdown. You'll learn about your personality type, attachment style, emotional intelligence, core values, and more – plus what it all means for your love life.
                     </p>
                   </div>
                 </div>
@@ -206,9 +206,9 @@ const MaturityMethodologySection = () => {
                     <span className="font-bold">3</span>
                   </div>
                   <div className="ml-12">
-                    <h4 className="font-bold text-gray-800 mb-2">Instant Report Generation</h4>
+                    <h4 className="font-bold text-gray-800 mb-2">Use Your Insights</h4>
                     <p className="text-sm text-gray-600">
-                      Receive your comprehensive relationship blueprint immediately, with actionable insights and personalized relationship guidance.
+                      With your new self-knowledge, approach dating or relationships with fresh confidence. You'll know what you need, what to look for, and even get tips on how to communicate better. Many users share their results with potential partners to spark deeper conversations.
                     </p>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ const MaturityMethodologySection = () => {
         <div className="text-center">
           <div className="inline-block mb-4 py-1 px-3 bg-purple-50 rounded-full shadow-sm border border-purple-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🎁</span> Get Your Free Blueprint Now
+              <span className="mr-2">🎁</span> Take the Free 5-Minute Quiz
             </span>
           </div>
           
@@ -288,7 +288,7 @@ const MaturityMethodologySection = () => {
             className="inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
             style={{ backgroundColor: '#e83a8e' }}
           >
-            Create Your FREE Relationship Blueprint
+            Start My FREE Compatibility Quiz
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
