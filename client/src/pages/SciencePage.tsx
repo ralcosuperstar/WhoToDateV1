@@ -472,21 +472,19 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
   notes?: string;
 }) => {
   return (
-    <div className={`bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow h-full flex flex-col ${highlight}`}>
-      <div className="flex items-start">
-        <div className={`h-16 w-16 min-h-[4rem] min-w-[4rem] rounded-full ${color} flex items-center justify-center text-white mr-5 overflow-hidden shrink-0`} style={{ aspectRatio: '1/1' }}>
-          <div className="flex items-center justify-center w-full h-full">
-            {icon}
-          </div>
+    <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition-all h-full ${highlight}`} style={{ background: "linear-gradient(145deg, #ffffff, #f8f9fa)" }}>
+      <div className="flex items-center space-x-4">
+        <div className={`h-14 w-14 rounded-full ${color} flex items-center justify-center text-white shadow-md`}>
+          {icon}
         </div>
-        <div className="flex flex-col pt-1">
-          <div className="text-3xl font-bold text-gray-800 leading-none mb-1">{value}</div>
-          <div className="text-sm text-gray-600 leading-tight">{label}</div>
+        <div>
+          <div className="text-2xl font-bold text-gray-800">{value}</div>
+          <div className="text-sm text-gray-600">{label}</div>
+          {notes && (
+            <div className="text-xs text-gray-500 italic mt-1">{notes}</div>
+          )}
         </div>
       </div>
-      {notes && (
-        <div className="text-xs text-gray-500 italic mt-4 ml-auto">{notes}</div>
-      )}
     </div>
   );
 };
@@ -556,9 +554,9 @@ const Science = () => {
               </Link>
             </div>
             
-            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
               <StatisticItem 
-                icon={<Lightbulb className="h-8 w-8" />}
+                icon={<Lightbulb className="h-7 w-7" />}
                 value="5"
                 label="Scientific Frameworks"
                 color="bg-pink-500"
@@ -566,7 +564,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Target className="h-8 w-8" />}
+                icon={<Target className="h-7 w-7" />}
                 value="40"
                 label="Targeted Questions"
                 color="bg-purple-500"
@@ -575,7 +573,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Users className="h-8 w-8" />}
+                icon={<Users className="h-7 w-7" />}
                 value="69%"
                 label="of Gen Z Indians prefer love marriages"
                 color="bg-blue-500"
@@ -584,7 +582,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Gauge className="h-8 w-8" />}
+                icon={<Gauge className="h-7 w-7" />}
                 value="85%"
                 label="Compatibility Assessment Accuracy"
                 color="bg-green-500"
