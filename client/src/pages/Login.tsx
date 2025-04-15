@@ -8,7 +8,7 @@ import { SignIn, useClerk, useUser } from "@clerk/clerk-react";
 const Login = () => {
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  const { user, isLoading, error, syncUserWithClerk } = useAuth();
+  const { user, isLoading, error } = useAuth();
   const { isLoaded: clerkIsLoaded, isSignedIn: clerkIsSignedIn, user: clerkUser } = useUser();
   const { session } = useClerk();
   // Get redirect parameter from URL
@@ -66,8 +66,8 @@ const Login = () => {
         <div className="flex-1 flex items-center justify-center">
           <div className="w-full max-w-md">
             <div className="text-center mb-6">
-              <h1 className="text-3xl font-bold text-primary mb-2">Welcome Back</h1>
-              <p className="text-neutral-600">Sign in to access your compatibility profile</p>
+              <h1 className="text-3xl font-bold mb-2" style={{ color: '#e83a8e' }}>Welcome Back</h1>
+              <p className="text-neutral-600">Sign in to continue your relationship self-discovery journey</p>
             </div>
             
             <div className="bg-white rounded-lg shadow-lg p-1">

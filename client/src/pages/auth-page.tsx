@@ -125,9 +125,9 @@ export default function AuthPage() {
       {/* Left column - Auth form */}
       <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-4 md:p-8">
         <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-2">WhotoDate</h1>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: '#e83a8e' }}>WhotoDate</h1>
           <p className="text-muted-foreground mb-8">
-            Discover your relationship compatibility profile
+            Unlock your relationship blueprint and self-discovery journey
           </p>
           
           <Tabs defaultValue={activeTab} onValueChange={handleTabChange}>
@@ -403,10 +403,10 @@ export default function AuthPage() {
       {/* Right column - Information */}
       <div className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-8">
         <div className="max-w-md">
-          <h2 className="text-3xl font-bold mb-4">Discover Your Compatibility Profile</h2>
+          <h2 className="text-3xl font-bold mb-4">Unlock Your Relationship Blueprint</h2>
           <p className="mb-8">
-            Take our scientifically-backed compatibility assessment to learn what kind of relationship
-            dynamics work best for your unique personality type. 
+            Take our scientifically-backed self-discovery assessment to understand your relationship patterns
+            and learn what truly works for your unique personality. 
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -434,7 +434,7 @@ export default function AuthPage() {
             <div className="flex flex-col space-y-2">
               <div className="text-xl font-medium">Free Report</div>
               <p className="text-primary-foreground/80">
-                Your complete compatibility profile is 100% free - no hidden charges.
+                Your complete relationship blueprint is 100% free - no hidden charges.
               </p>
             </div>
           </div>

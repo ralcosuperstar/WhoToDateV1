@@ -37,8 +37,8 @@ const Register = () => {
       <div className="min-h-screen bg-neutral-light pt-12 pb-16 px-4 flex items-center justify-center">
         <div className="w-full max-w-md">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-primary mb-2">Start Your Journey</h1>
-            <p className="text-neutral-600">Create an account to discover your compatibility profile</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#e83a8e' }}>Start Your Self-Discovery Journey</h1>
+            <p className="text-neutral-600">Create an account to unlock your relationship blueprint</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-lg p-1">
