@@ -8,7 +8,7 @@ const MaturityHero = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center">
           {/* Left side: compelling messaging */}
-          <div className="w-full md:w-1/2 text-center md:text-left mb-12 md:mb-0">
+          <div className="w-full md:w-1/2 text-left mb-12 md:mb-0">
             <div className="inline-block mb-4 py-1.5 px-4 bg-yellow-50 rounded-full border border-yellow-200">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">🧬</span> A 5-minute compatibility quiz
@@ -64,7 +64,7 @@ const MaturityHero = () => {
             </div>
 
             {/* Social proof */}
-            <div className="flex items-center justify-center md:justify-start mb-8">
+            <div className="flex items-center justify-start mb-8">
               <div className="flex -space-x-1 mr-3">
                 <div className="w-8 h-8 rounded-full bg-blue-200"></div>
                 <div className="w-8 h-8 rounded-full bg-pink-200"></div>
@@ -87,8 +87,8 @@ const MaturityHero = () => {
                 Start My FREE Compatibility Quiz
               </Link>
               
-              <div className="mt-3 text-center md:text-left">
-                <span className="text-xs font-medium text-gray-600 flex items-center justify-center md:justify-start">
+              <div className="mt-3 text-left">
+                <span className="text-xs font-medium text-gray-600 flex items-center justify-start">
                   <svg className="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
@@ -98,7 +98,7 @@ const MaturityHero = () => {
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <div className="flex flex-wrap justify-start gap-4">
               <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-pink-100">
                 <span style={{ color: '#e83a8e' }} className="mr-2">🔒</span>
                 <span className="text-sm text-gray-700 font-medium">100% Private</span>
