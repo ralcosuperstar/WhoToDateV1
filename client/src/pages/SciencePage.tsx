@@ -473,13 +473,13 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
 }) => {
   return (
     <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition-all h-full ${highlight}`} style={{ background: "linear-gradient(145deg, #ffffff, #f8f9fa)" }}>
-      <div className="flex items-center space-x-4">
-        <div className={`h-14 w-14 rounded-full ${color} flex items-center justify-center text-white shadow-md`}>
+      <div className="flex items-center space-x-5">
+        <div className={`text-${color.replace('bg-', '')} flex items-center justify-center`}>
           {icon}
         </div>
         <div>
-          <div className="text-2xl font-bold text-gray-800">{value}</div>
-          <div className="text-sm text-gray-600">{label}</div>
+          <div className="text-3xl font-bold text-gray-800">{value}</div>
+          <div className="text-base text-gray-600">{label}</div>
           {notes && (
             <div className="text-xs text-gray-500 italic mt-1">{notes}</div>
           )}
@@ -556,7 +556,7 @@ const Science = () => {
             
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
               <StatisticItem 
-                icon={<Lightbulb className="h-7 w-7" />}
+                icon={<Lightbulb className="h-9 w-9" />}
                 value="5"
                 label="Scientific Frameworks"
                 color="bg-pink-500"
@@ -564,7 +564,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Target className="h-7 w-7" />}
+                icon={<Target className="h-9 w-9" />}
                 value="40"
                 label="Targeted Questions"
                 color="bg-purple-500"
@@ -573,7 +573,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Users className="h-7 w-7" />}
+                icon={<Users className="h-9 w-9" />}
                 value="69%"
                 label="of Gen Z Indians prefer love marriages"
                 color="bg-blue-500"
@@ -582,7 +582,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Gauge className="h-7 w-7" />}
+                icon={<Gauge className="h-9 w-9" />}
                 value="85%"
                 label="Compatibility Assessment Accuracy"
                 color="bg-green-500"
