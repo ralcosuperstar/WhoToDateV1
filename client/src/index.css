@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom tooltip styles */
+.tooltip-container:hover .tooltip-box {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Add animation for tooltip */
+.tooltip-box {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 @layer base {
   .break-words-mobile {
     word-wrap: break-word;

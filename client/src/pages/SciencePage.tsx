@@ -219,11 +219,11 @@ const FrameworkTabs = () => {
                       </div>
                     </div>
                     {'moreInfo' in trait && (
-                      <div className="text-gray-400 hover:text-gray-700 cursor-pointer group relative">
+                      <div className="text-gray-400 hover:text-gray-700 cursor-pointer relative tooltip-container">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <div className="absolute z-20 transform -translate-x-full md:translate-x-0 md:right-0 bottom-full md:bottom-auto mb-2 md:mb-0 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 hidden group-hover:block text-sm text-gray-600">
+                        <div className="opacity-0 invisible tooltip-box transition-opacity duration-300 ease-in-out absolute top-0 right-0 z-50 transform translate-y-[-100%] translate-x-[-50%] sm:translate-x-0 mt-[-10px] w-56 sm:w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 text-sm text-gray-600">
                           {trait.moreInfo}
                         </div>
                       </div>
