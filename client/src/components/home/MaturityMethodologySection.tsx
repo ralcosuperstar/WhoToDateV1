@@ -165,7 +165,7 @@ const MaturityMethodologySection = () => {
             </span>
           </div>
           <h3 className="font-bold text-2xl text-gray-800 mb-6 text-center">
-            How We Build Your <span className="text-primary">FREE</span> Compatibility Profile
+            How We Create Your <span className="text-primary">FREE</span> Relationship Blueprint
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -288,7 +288,7 @@ const MaturityMethodologySection = () => {
             className="inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
             style={{ backgroundColor: '#e83a8e' }}
           >
-            Get Your FREE Compatibility Profile
+            Create Your FREE Relationship Blueprint
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>

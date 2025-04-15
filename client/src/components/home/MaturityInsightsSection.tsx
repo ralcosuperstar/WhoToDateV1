@@ -16,7 +16,7 @@ const MaturityInsightsSection = () => {
             Understand Yourself, <span style={{ color: '#e83a8e' }}>Improve Your Relationships</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our scientifically validated assessment reveals your unique compatibility traits, relationship patterns, and helps you understand what truly works for you in relationships
+            Our FREE scientifically validated assessment reveals your unique relationship blueprint, helping you understand your patterns and what truly works for you in relationships
           </p>
         </div>
 
@@ -151,7 +151,7 @@ const MaturityInsightsSection = () => {
                     <line x1="15" y1="9" x2="15.01" y2="9"></line>
                   </svg>
                 </div>
-                <h3 className="font-bold text-xl text-gray-800">Compatibility Insights</h3>
+                <h3 className="font-bold text-xl text-gray-800">Relationship Insights</h3>
               </div>
 
               <p className="text-gray-600 mb-6">
@@ -201,7 +201,7 @@ const MaturityInsightsSection = () => {
         {/* Comparison chart */}
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-12">
           <div className="px-6 py-5 bg-gradient-to-r from-pink-50 to-purple-50/40 border-b border-pink-100">
-            <h3 className="font-bold text-xl text-gray-800">Personality Type Compatibility</h3>
+            <h3 className="font-bold text-xl text-gray-800">Personality Type Harmony</h3>
           </div>
 
           <div className="p-6">
