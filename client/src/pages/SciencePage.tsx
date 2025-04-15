@@ -472,18 +472,18 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
   notes?: string;
 }) => {
   return (
-    <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition-all h-full ${highlight}`} style={{ background: "linear-gradient(145deg, #ffffff, #f8f9fa)" }}>
-      <div className="flex items-center space-x-5">
-        <div className={`text-${color.replace('bg-', '')} flex items-center justify-center`}>
+    <div className={`bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all h-full ${highlight}`}>
+      <div className={`${color} py-4 flex justify-center`}>
+        <div className="text-white flex items-center justify-center">
           {icon}
         </div>
-        <div>
-          <div className="text-3xl font-bold text-gray-800">{value}</div>
-          <div className="text-base text-gray-600">{label}</div>
-          {notes && (
-            <div className="text-xs text-gray-500 italic mt-1">{notes}</div>
-          )}
-        </div>
+      </div>
+      <div className="p-4 text-center">
+        <div className="text-3xl font-bold text-gray-800 mb-1">{value}</div>
+        <div className="text-base text-gray-600">{label}</div>
+        {notes && (
+          <div className="text-xs text-gray-500 italic mt-2">{notes}</div>
+        )}
       </div>
     </div>
   );
