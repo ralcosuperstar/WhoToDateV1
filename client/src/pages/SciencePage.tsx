@@ -236,13 +236,13 @@ const FrameworkTabs = () => {
                 <div key={index} className="bg-white rounded-lg p-3 border border-gray-200 hover:border-gray-300 transition-all">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                      <div className={`h-8 w-8 rounded-full ${frameworks.find(f => f.id === activeTab)?.bgColor} flex items-center justify-center mr-3`}>
+                      <div className={`h-9 w-9 rounded-full ${frameworks.find(f => f.id === activeTab)?.bgColor} flex items-center justify-center mr-3`}>
                         {activeTab === "big-five" ? (
                           <div className={`text-lg font-semibold ${frameworks.find(f => f.id === activeTab)?.color}`}>
                             {trait.name.charAt(0)}
                           </div>
                         ) : (
-                          <span className={`${frameworks.find(f => f.id === activeTab)?.color}`}>
+                          <span className={`${frameworks.find(f => f.id === activeTab)?.color} text-base font-medium`}>
                             {index + 1}
                           </span>
                         )}
@@ -384,8 +384,8 @@ const CalculationMethod = () => {
       <div className="p-6">
         <div className="space-y-4">
           <div className="flex">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
-              <span className="font-bold">1</span>
+            <div className="flex-shrink-0 h-11 w-11 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
+              <span className="text-lg font-bold">1</span>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 mb-1">Question Mapping</h4>
@@ -396,8 +396,8 @@ const CalculationMethod = () => {
           </div>
           
           <div className="flex">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
-              <span className="font-bold">2</span>
+            <div className="flex-shrink-0 h-11 w-11 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
+              <span className="text-lg font-bold">2</span>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 mb-1">Scoring & Analysis</h4>
@@ -408,8 +408,8 @@ const CalculationMethod = () => {
           </div>
           
           <div className="flex">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
-              <span className="font-bold">3</span>
+            <div className="flex-shrink-0 h-11 w-11 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
+              <span className="text-lg font-bold">3</span>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 mb-1">Compatibility Formula</h4>
@@ -420,8 +420,8 @@ const CalculationMethod = () => {
           </div>
           
           <div className="flex">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
-              <span className="font-bold">4</span>
+            <div className="flex-shrink-0 h-11 w-11 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
+              <span className="text-lg font-bold">4</span>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 mb-1">Color Assignment</h4>
@@ -446,8 +446,8 @@ const CalculationMethod = () => {
           </div>
           
           <div className="flex">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
-              <span className="font-bold">5</span>
+            <div className="flex-shrink-0 h-11 w-11 rounded-full bg-gray-100 flex items-center justify-center text-blue-500 mr-3">
+              <span className="text-lg font-bold">5</span>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 mb-1">Detailed Reporting</h4>
