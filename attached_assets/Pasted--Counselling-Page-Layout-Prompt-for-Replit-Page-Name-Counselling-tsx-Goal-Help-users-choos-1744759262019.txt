@@ -1,0 +1,98 @@
+🧠 Counselling Page Layout Prompt for Replit
+📝 Page Name: Counselling.tsx
+🎯 Goal: Help users choose and book a counselor based on their emotional needs and budget
+🧩 Key Sections: Hero, Info Tabs (Types of Counselors), Filter & Sort, Cards Grid, FAQs, CTA
+🎨 Style: Soft colors, clean layout, rounded cards, icons for ease of understanding, accessible design for new-age Indian audience
+
+✅ COMPONENTS TO BUILD:
+1. Hero Section
+tsx
+Copy
+Edit
+// Component: <CounsellingHero />
+// Top of the page, full-width block
+
+- Heading: "Talk to Someone Who Gets It."
+- Subheading: "Feeling overwhelmed, confused, or just need to vent? Choose from verified counselors or listeners who are here to help – judgement-free."
+- CTA button: "Explore Counselors"
+- Optional: Soft background gradient or calming illustration (e.g., talking face, heart headset, mental health icon)
+2. Info Tabs – Two Types of Support
+tsx
+Copy
+Edit
+// Component: <CounsellingTabs />
+// Toggle between the two counselor types
+
+- Use tabs or segmented buttons to switch:
+  [ Psychology-Based Counselors ] [ Medical-Based Listeners ]
+
+On click, it filters the grid below accordingly.
+3. Filter + Sort Panel
+tsx
+Copy
+Edit
+// Component: <FilterPanel />
+// Horizontal filter bar with dropdowns
+
+- Filter by:
+  - Language (English, Hindi, Marathi, etc.)
+  - Topic (Anxiety, Breakup, Family Stress, Confidence, etc.)
+  - Gender (Any, Male, Female)
+  - Price Range (Slider or tags: ₹300–₹500, ₹700–₹1200, ₹1500+)
+- Sort by:
+  - Popularity
+  - Lowest Price
+  - Highest Rating
+  - Availability Soonest
+4. Counselor Cards Grid
+tsx
+Copy
+Edit
+// Component: <CounselorCard />
+// Grid view: 2 cards per row (mobile responsive)
+
+Each card should include:
+- Counselor Name
+- Type: “Psychologist” or “Doctor Listener”
+- Qualification: MA Psychology / MBBS / BAMS etc.
+- Duration: "45-90 mins" or "15–20 mins"
+- Languages: Icons or tags
+- Price: ₹XXX
+- Specialization Tags: “Breakups”, “Overthinking”, “Low Confidence”, “Loneliness”
+- Availability: "Available Today / Available Tomorrow" or next slot time
+- Book Button: “Book Now”
+- Optional: Ratings ★★★★☆ or testimonials preview
+5. FAQs Section
+tsx
+Copy
+Edit
+// Component: <CounselingFAQs />
+
+Show 4–6 FAQs like:
+- “What’s the difference between a counselor and a listener?”
+- “Can I talk anonymously?”
+- “What happens during a 15-minute call?”
+- “Is this a therapy session?”
+- “Can I switch if I feel uncomfortable?”
+- “Do I need to take the quiz before booking?”
+6. Bottom CTA Section (Reassurance)
+tsx
+Copy
+Edit
+// Component: <FinalCTA />
+
+Block with soft background color.
+
+- Heading: "Sometimes, all you need is a good listener."
+- Subtext: "Whether it’s relationship confusion, emotional burnout, or just needing to talk – we’ve got someone for you."
+- Buttons:
+   - "View Psychologists"
+   - "View Medical Listeners"
+🎨 Additional UI Notes:
+Use icons like 🎧, 🩺, 💬, 🧠 to denote type of counselor or experience.
+
+Use soft gradients (e.g., lavender, sky blue, blush pink) to make the page feel emotionally safe and calming.
+
+Use tags for languages, specializations.
+
+Use subtle hover effects on cards.
