@@ -22,7 +22,7 @@ import Dashboard from "@/pages/Dashboard";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
-import Science from "@/pages/Science";
+import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
 
