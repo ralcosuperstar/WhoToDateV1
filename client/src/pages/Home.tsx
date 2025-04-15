@@ -9,14 +9,14 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>WhoToDate - Unlock Your Relationship Blueprint</title>
-        <meta name="description" content="Take our FREE scientifically-validated assessment to understand your unique relationship style and create your personal relationship blueprint." />
-        <meta property="og:title" content="WhoToDate - Unlock Your Relationship Blueprint" />
-        <meta property="og:description" content="Take our FREE scientifically-validated assessment to understand your unique relationship style and create your personal relationship blueprint." />
+        <title>WhoToDate - Find Who to Date With Science and Fun</title>
+        <meta name="description" content="Take our FREE 5-minute compatibility quiz to boost your dating confidence. Discover your personality traits, attachment style, and who fits you best." />
+        <meta property="og:title" content="WhoToDate - Find Who to Date With Science and Fun" />
+        <meta property="og:description" content="Take our FREE 5-minute compatibility quiz to boost your dating confidence. Discover your personality traits, attachment style, and who fits you best." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="WhoToDate - Unlock Your Relationship Blueprint" />
-        <meta name="twitter:description" content="Take our FREE scientifically-validated assessment to understand your unique relationship style and create your personal relationship blueprint." />
+        <meta name="twitter:title" content="WhoToDate - Find Who to Date With Science and Fun" />
+        <meta name="twitter:description" content="Take our FREE 5-minute compatibility quiz to boost your dating confidence. Discover your personality traits, attachment style, and who fits you best." />
       </Helmet>
       
       <MaturityHero />
