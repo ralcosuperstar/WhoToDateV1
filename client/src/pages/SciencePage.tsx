@@ -474,8 +474,10 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
   return (
     <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-md transition-shadow ${highlight}`}>
       <div className="flex items-center mb-4">
-        <div className={`h-12 w-12 rounded-full ${color} flex items-center justify-center text-white mr-3`}>
-          {icon}
+        <div className={`h-14 w-14 min-h-[3.5rem] min-w-[3.5rem] rounded-full ${color} flex items-center justify-center text-white mr-3 overflow-hidden`} style={{ aspectRatio: '1/1' }}>
+          <div className="flex items-center justify-center w-full h-full">
+            {icon}
+          </div>
         </div>
         <div>
           <div className="text-2xl font-bold text-gray-800">{value}</div>
@@ -556,7 +558,7 @@ const Science = () => {
             
             <div className="md:col-span-2 grid grid-cols-2 gap-3">
               <StatisticItem 
-                icon={<Lightbulb className="h-6 w-6" />}
+                icon={<Lightbulb className="h-7 w-7" />}
                 value="5"
                 label="Scientific Frameworks"
                 color="bg-pink-500"
@@ -564,7 +566,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Target className="h-6 w-6" />}
+                icon={<Target className="h-7 w-7" />}
                 value="40"
                 label="Targeted Questions"
                 color="bg-purple-500"
@@ -573,7 +575,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Users className="h-6 w-6" />}
+                icon={<Users className="h-7 w-7" />}
                 value="69%"
                 label="of Gen Z Indians prefer love marriages"
                 color="bg-blue-500"
@@ -582,7 +584,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Gauge className="h-6 w-6" />}
+                icon={<Gauge className="h-7 w-7" />}
                 value="85%"
                 label="Compatibility Assessment Accuracy"
                 color="bg-green-500"
