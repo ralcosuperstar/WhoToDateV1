@@ -208,7 +208,7 @@ const MaturityMethodologySection = () => {
                   <div className="ml-12">
                     <h4 className="font-bold text-gray-800 mb-2">Instant Report Generation</h4>
                     <p className="text-sm text-gray-600">
-                      Receive your comprehensive compatibility report immediately, with actionable insights and personalized relationship guidance.
+                      Receive your comprehensive relationship blueprint immediately, with actionable insights and personalized relationship guidance.
                     </p>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ const MaturityMethodologySection = () => {
         <div className="text-center">
           <div className="inline-block mb-4 py-1 px-3 bg-purple-50 rounded-full shadow-sm border border-purple-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🎁</span> Get Your Free Report Now
+              <span className="mr-2">🎁</span> Get Your Free Blueprint Now
             </span>
           </div>
           
