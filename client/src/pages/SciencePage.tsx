@@ -472,20 +472,20 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
   notes?: string;
 }) => {
   return (
-    <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-md transition-shadow ${highlight}`}>
-      <div className="flex items-center mb-4">
-        <div className={`h-14 w-14 min-h-[3.5rem] min-w-[3.5rem] rounded-full ${color} flex items-center justify-center text-white mr-3 overflow-hidden`} style={{ aspectRatio: '1/1' }}>
+    <div className={`bg-white rounded-xl p-5 border border-gray-200 hover:shadow-md transition-shadow h-full flex flex-col ${highlight}`}>
+      <div className="flex items-center">
+        <div className={`h-16 w-16 min-h-[4rem] min-w-[4rem] rounded-full ${color} flex items-center justify-center text-white mr-4 overflow-hidden`} style={{ aspectRatio: '1/1' }}>
           <div className="flex items-center justify-center w-full h-full">
             {icon}
           </div>
         </div>
-        <div>
-          <div className="text-2xl font-bold text-gray-800">{value}</div>
-          <div className="text-sm text-gray-600">{label}</div>
+        <div className="flex flex-col">
+          <div className="text-2xl font-bold text-gray-800 leading-tight">{value}</div>
+          <div className="text-sm text-gray-600 mt-0.5 leading-snug">{label}</div>
         </div>
       </div>
       {notes && (
-        <div className="text-xs text-gray-500 italic">{notes}</div>
+        <div className="text-xs text-gray-500 italic mt-4">{notes}</div>
       )}
     </div>
   );
@@ -503,7 +503,7 @@ const Science = () => {
       {/* Hero section */}
       <section className="py-16 px-4 bg-gradient-to-br from-pink-50 via-pink-100/30 to-purple-50">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-5 gap-8 items-center">
+          <div className="grid md:grid-cols-5 gap-8 md:gap-10 items-center">
             <div className="md:col-span-3">
               <div className="inline-block mb-4 py-1.5 px-4 bg-white rounded-full shadow-sm">
                 <span className="text-gray-700 font-medium text-sm flex items-center">
@@ -511,11 +511,11 @@ const Science = () => {
                 </span>
               </div>
               
-              <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl mb-6 text-gray-800">
+              <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl mb-6 text-gray-800 leading-tight">
                 The Science Behind WhoToDate
               </h1>
               
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-lg text-gray-600 mb-6 max-w-2xl">
                 Dating might feel like magic, but there's a lot of science behind what makes two people click. WhoToDate isn't just a random quiz – it's built on five established psychological frameworks that researchers say play a huge role in compatibility.
               </p>
               
@@ -556,9 +556,9 @@ const Science = () => {
               </Link>
             </div>
             
-            <div className="md:col-span-2 grid grid-cols-2 gap-3">
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <StatisticItem 
-                icon={<Lightbulb className="h-7 w-7" />}
+                icon={<Lightbulb className="h-8 w-8" />}
                 value="5"
                 label="Scientific Frameworks"
                 color="bg-pink-500"
@@ -566,7 +566,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Target className="h-7 w-7" />}
+                icon={<Target className="h-8 w-8" />}
                 value="40"
                 label="Targeted Questions"
                 color="bg-purple-500"
@@ -575,7 +575,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Users className="h-7 w-7" />}
+                icon={<Users className="h-8 w-8" />}
                 value="69%"
                 label="of Gen Z Indians prefer love marriages"
                 color="bg-blue-500"
@@ -584,7 +584,7 @@ const Science = () => {
               />
               
               <StatisticItem 
-                icon={<Gauge className="h-7 w-7" />}
+                icon={<Gauge className="h-8 w-8" />}
                 value="85%"
                 label="Compatibility Assessment Accuracy"
                 color="bg-green-500"
