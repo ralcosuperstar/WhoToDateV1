@@ -223,7 +223,7 @@ const FrameworkTabs = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <div className="absolute z-10 right-0 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 hidden group-hover:block text-sm text-gray-600">
+                        <div className="absolute z-20 transform -translate-x-full md:translate-x-0 md:right-0 bottom-full md:bottom-auto mb-2 md:mb-0 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 hidden group-hover:block text-sm text-gray-600">
                           {trait.moreInfo}
                         </div>
                       </div>
