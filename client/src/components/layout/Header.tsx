@@ -54,9 +54,6 @@ const Header = () => {
           <Link href="/counselling" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/counselling' ? 'text-primary font-semibold' : ''}`}>
             Counselling
           </Link>
-          <Link href="/#testimonials" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/#testimonials' ? 'text-primary font-semibold' : ''}`}>
-            Testimonials
-          </Link>
           <Link href="/blog" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location.startsWith('/blog') ? 'text-primary font-semibold' : ''}`}>
             Blog
           </Link>
