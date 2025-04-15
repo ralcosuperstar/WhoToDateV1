@@ -194,7 +194,7 @@ export default function AuthPage() {
                       
                       <Button 
                         type="submit" 
-                        className="w-full"
+                        className="w-full bg-[#e83a8e] hover:bg-[#e83a8e]/90"
                         disabled={loginMutation.isPending}
                       >
                         {loginMutation.isPending ? (
@@ -379,7 +379,7 @@ export default function AuthPage() {
                       
                       <Button 
                         type="submit" 
-                        className="w-full"
+                        className="w-full bg-[#e83a8e] hover:bg-[#e83a8e]/90"
                         disabled={registerMutation.isPending}
                       >
                         {registerMutation.isPending ? (
@@ -401,12 +401,12 @@ export default function AuthPage() {
       </div>
       
       {/* Right column - Information */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-8">
+      <div className="hidden lg:flex lg:w-1/2 bg-[#e83a8e] text-white flex-col justify-center items-center p-8">
         <div className="max-w-md">
           <h2 className="text-3xl font-bold mb-4">Unlock Your Relationship Blueprint</h2>
           <p className="mb-8">
-            Take our scientifically-backed self-discovery assessment to understand your relationship patterns
-            and learn what truly works for your unique personality. 
+            Discover your unique relationship style with our FREE scientifically-backed assessment. 
+            Understand your patterns and learn what truly works for your personality. 
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

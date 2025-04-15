@@ -31,7 +31,7 @@ const Register = () => {
     <>
       <Helmet>
         <title>Register - WhoToDate</title>
-        <meta name="description" content="Create a new account to discover your compatibility profile and find meaningful connections." />
+        <meta name="description" content="Create a new account to unlock your relationship blueprint and begin your self-discovery journey." />
       </Helmet>
       
       <div className="min-h-screen bg-neutral-light pt-12 pb-16 px-4 flex items-center justify-center">
@@ -50,8 +50,8 @@ const Register = () => {
               afterSignUpUrl={redirectTo}
               appearance={{
                 elements: {
-                  formButtonPrimary: 'bg-primary hover:bg-primary/90',
-                  footerActionLink: 'text-primary hover:text-primary/90',
+                  formButtonPrimary: 'bg-[#e83a8e] hover:bg-[#e83a8e]/90',
+                  footerActionLink: 'text-[#e83a8e] hover:text-[#e83a8e]/90',
                 }
               }}
             />

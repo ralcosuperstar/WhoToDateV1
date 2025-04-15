@@ -28,12 +28,10 @@ const Login = () => {
         });
       }
       
-      // If signed in with Clerk but not with our backend, try to sync
+      // If signed in with Clerk but not with our backend
       if (clerkIsSignedIn && clerkUser && !user && !isLoading) {
-        console.log("Clerk user signed in but our backend doesn't recognize them - syncing...");
-        syncUserWithClerk().catch(err => {
-          console.error("Sync error:", err);
-        });
+        console.log("Clerk user signed in but our backend doesn't recognize them");
+        // We need to implement an appropriate sync method or direct the user to register
       }
     }
   }, [clerkIsLoaded, clerkIsSignedIn, clerkUser, session, user, isLoading]);
@@ -57,7 +55,7 @@ const Login = () => {
     <>
       <Helmet>
         <title>Login - WhoToDate</title>
-        <meta name="description" content="Log in to access your compatibility profile and report." />
+        <meta name="description" content="Log in to access your relationship blueprint and continue your self-discovery journey." />
       </Helmet>
       
       <div className="min-h-screen bg-neutral-light pt-12 pb-16 px-4 flex flex-col">
@@ -79,8 +77,8 @@ const Login = () => {
                 afterSignInUrl={redirectTo}
                 appearance={{
                   elements: {
-                    formButtonPrimary: 'bg-primary hover:bg-primary/90',
-                    footerActionLink: 'text-primary hover:text-primary/90',
+                    formButtonPrimary: 'bg-[#e83a8e] hover:bg-[#e83a8e]/90',
+                    footerActionLink: 'text-[#e83a8e] hover:text-[#e83a8e]/90',
                   }
                 }}
               />
