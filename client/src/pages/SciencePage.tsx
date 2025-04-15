@@ -473,17 +473,36 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
 }) => {
   return (
     <div className={`bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all h-full ${highlight}`}>
-      <div className={`${color} py-4 flex justify-center`}>
-        <div className="text-white flex items-center justify-center">
-          {icon}
+      {/* Desktop layout with icon on top */}
+      <div className="hidden sm:block">
+        <div className={`${color} py-4 flex justify-center`}>
+          <div className="text-white flex items-center justify-center">
+            {icon}
+          </div>
+        </div>
+        <div className="p-4 text-center">
+          <div className="text-3xl font-bold text-gray-800 mb-1">{value}</div>
+          <div className="text-base text-gray-600">{label}</div>
+          {notes && (
+            <div className="text-xs text-gray-500 italic mt-2">{notes}</div>
+          )}
         </div>
       </div>
-      <div className="p-4 text-center">
-        <div className="text-3xl font-bold text-gray-800 mb-1">{value}</div>
-        <div className="text-base text-gray-600">{label}</div>
-        {notes && (
-          <div className="text-xs text-gray-500 italic mt-2">{notes}</div>
-        )}
+      
+      {/* Mobile layout with icon on left */}
+      <div className="sm:hidden flex">
+        <div className={`${color} py-4 px-4 flex items-center justify-center`}>
+          <div className="text-white flex items-center justify-center">
+            {icon}
+          </div>
+        </div>
+        <div className="p-4 flex-1">
+          <div className="text-2xl font-bold text-gray-800 mb-1">{value}</div>
+          <div className="text-sm text-gray-600">{label}</div>
+          {notes && (
+            <div className="text-xs text-gray-500 italic mt-1">{notes}</div>
+          )}
+        </div>
       </div>
     </div>
   );
