@@ -11,7 +11,7 @@ const MaturityHero = () => {
           <div className="w-full md:w-1/2 text-center md:text-left mb-12 md:mb-0">
             <div className="inline-block mb-4 py-1.5 px-4 bg-yellow-50 rounded-full border border-yellow-200">
               <span className="text-gray-700 font-medium text-sm flex items-center">
-                <span className="mr-2">🧬</span> Discover Your Compatibility DNA
+                <span className="mr-2">🧬</span> Unlock Your Relationship Blueprint
               </span>
             </div>
 
@@ -20,7 +20,7 @@ const MaturityHero = () => {
             </h1>
 
             <p className="text-gray-700 text-lg mb-8 max-w-lg">
-              Our 5-minute scientific assessment reveals your unique compatibility profile based on psychology, not horoscopes. Understand yourself better, make smarter relationship choices.
+              Our FREE 5-minute scientific assessment reveals your unique relationship blueprint based on psychology, not horoscopes. Understand your patterns and make more fulfilling relationship choices.
             </p>
 
             {/* Social proof */}
@@ -84,7 +84,7 @@ const MaturityHero = () => {
                 style={{ backgroundColor: '#e83a8e' }}
               >
                 <span className="mr-2">🔍</span>
-                Get Your FREE Compatibility Profile
+                Create Your FREE Relationship Blueprint
               </Link>
               
               <div className="mt-3 text-center md:text-left">
@@ -126,7 +126,7 @@ const MaturityHero = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <span className="mr-2 text-2xl">🧬</span>
-                    <h3 className="font-bold text-lg text-gray-800">Your Compatibility DNA</h3>
+                    <h3 className="font-bold text-lg text-gray-800">Your Relationship Blueprint</h3>
                   </div>
                   <div className="bg-green-100 text-green-600 text-xs font-bold px-3 py-1 rounded-full">
                     <span className="mr-1">✓</span> GREEN
