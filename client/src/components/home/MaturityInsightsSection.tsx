@@ -170,7 +170,7 @@ const MaturityInsightsSection = () => {
                       <span className="text-gray-800 font-medium">The Nurturer</span>
                     </div>
                     <span className="text-sm bg-green-50 text-green-600 px-2 py-0.5 rounded-full border border-green-100">
-                      94% Compatibility
+                      94% Harmony
                     </span>
                   </div>
                   
@@ -182,7 +182,7 @@ const MaturityInsightsSection = () => {
                       <span className="text-gray-800 font-medium">The Visionary</span>
                     </div>
                     <span className="text-sm bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full border border-purple-100">
-                      86% Compatibility
+                      86% Harmony
                     </span>
                   </div>
                 </div>
@@ -309,20 +309,20 @@ const MaturityInsightsSection = () => {
             </div>
 
             <div className="bg-gradient-to-r from-pink-50/50 to-purple-50/50 rounded-xl p-4 border border-pink-100 shadow-sm">
-              <h4 className="font-medium text-gray-800 text-center mb-6">Compatibility Matrix</h4>
+              <h4 className="font-medium text-gray-800 text-center mb-6">Relationship Harmony Matrix</h4>
               
               <div className="grid grid-cols-3 gap-2">
                 <div className="bg-white rounded-lg p-3 text-center border border-pink-200 hover:border-primary transition-all">
                   <span className="text-gray-800 font-medium">Secure + Visionary</span>
-                  <p className="text-xs text-primary font-medium mt-1">95% Compatibility</p>
+                  <p className="text-xs text-primary font-medium mt-1">95% Harmony</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 text-center border border-pink-200 hover:border-primary transition-all">
                   <span className="text-gray-800 font-medium">Secure + Nurturer</span>
-                  <p className="text-xs text-primary font-medium mt-1">92% Compatibility</p>
+                  <p className="text-xs text-primary font-medium mt-1">92% Harmony</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 text-center border border-purple-200 hover:border-purple-500 transition-all">
                   <span className="text-gray-800 font-medium">Visionary + Nurturer</span>
-                  <p className="text-xs text-purple-500 font-medium mt-1">88% Compatibility</p>
+                  <p className="text-xs text-purple-500 font-medium mt-1">88% Harmony</p>
                 </div>
               </div>
             </div>
@@ -333,7 +333,7 @@ const MaturityInsightsSection = () => {
         <div className="text-center">
           <div className="inline-block mb-6 py-1 px-3 bg-purple-50 rounded-full shadow-sm border border-purple-100">
             <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">🎁</span> Free Compatibility Report
+              <span className="mr-2">🎁</span> Free Relationship Blueprint
             </span>
           </div>
           
@@ -342,7 +342,7 @@ const MaturityInsightsSection = () => {
             className="inline-flex items-center justify-center px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg border border-pink-200 hover:opacity-90 transform hover:translate-y-[-2px] transition-all duration-300"
             style={{ backgroundColor: '#e83a8e' }}
           >
-            Get Your FREE Profile Report
+            Get Your FREE Relationship Blueprint
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -371,7 +371,7 @@ const MaturityInsightsSection = () => {
                 <span className="text-xl">🎯</span>
               </div>
               <h4 className="font-medium text-gray-800 mb-1">Instant Results</h4>
-              <p className="text-sm text-gray-600">Get your comprehensive compatibility profile immediately after completion</p>
+              <p className="text-sm text-gray-600">Get your comprehensive relationship blueprint immediately after completion</p>
             </div>
           </div>
         </div>
