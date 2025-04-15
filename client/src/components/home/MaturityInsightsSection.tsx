@@ -155,11 +155,11 @@ const MaturityInsightsSection = () => {
               </div>
 
               <p className="text-gray-600 mb-6">
-                Our research-backed assessment helps you understand what personality types complement your own, based on your unique traits, values, and emotional patterns.
+                Our research-backed assessment helps you understand what personality types harmonize with your own, based on your unique traits, values, and emotional patterns.
               </p>
 
               <div className="bg-pink-50/60 rounded-xl p-4 border border-pink-100">
-                <h4 className="font-medium text-gray-700 mb-3 text-sm">Your Complementary Types:</h4>
+                <h4 className="font-medium text-gray-700 mb-3 text-sm">Your Harmonious Types:</h4>
                 
                 <div className="space-y-2 mb-3">
                   <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-pink-100">
@@ -192,7 +192,7 @@ const MaturityInsightsSection = () => {
             <div className="px-6 pb-6">
               <Link href="/register" className="block w-full text-center py-3 rounded-md text-white font-medium transition-colors duration-300 border border-pink-200 hover:opacity-90"
               style={{ backgroundColor: '#e83a8e' }}>
-                Discover Compatible Types
+                Discover Harmonious Types
               </Link>
             </div>
           </div>

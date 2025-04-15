@@ -62,7 +62,7 @@ const MaturityHero = () => {
                   <h3 className="font-bold text-gray-800">Relationship Self-Insight</h3>
                 </div>
                 <ul className="space-y-2 ml-6 list-disc text-gray-600 text-sm">
-                  <li>Discover your unique compatibility profile</li>
+                  <li>Discover your unique relationship blueprint</li>
                   <li>Understand your relationship patterns</li>
                   <li>Make smarter romantic choices</li>
                 </ul>
@@ -149,7 +149,7 @@ const MaturityHero = () => {
 
                 {/* Complementary Types */}
                 <div className="mb-5">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Compatible Types:</h4>
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">Your Harmonious Types:</h4>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-blue-50 p-2 rounded-lg text-center">
                       <div className="text-2xl mb-1">☀️</div>
@@ -202,7 +202,7 @@ const MaturityHero = () => {
                   <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
                 <p className="text-sm text-gray-600 italic mb-3">
-                  "I finally understand why my past relationships didn't work out and found someone who truly complements me. It's like having a relationship coach in your pocket!"
+                  "I finally understand why my past relationships didn't work out and found someone who truly harmonizes with me. It's like having a relationship coach in your pocket!"
                 </p>
                 <div className="flex items-center">
                   <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-700 font-medium text-xs">PS</div>

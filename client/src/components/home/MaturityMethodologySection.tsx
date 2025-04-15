@@ -16,7 +16,7 @@ const MaturityMethodologySection = () => {
             The <span className="text-primary">Science</span> Behind Our Assessment
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our compatibility assessment combines multiple validated psychological frameworks to give you accurate, meaningful insights into your relationships
+            Our relationship assessment combines multiple validated psychological frameworks to give you accurate, meaningful insights into your relationship patterns
           </p>
         </div>
 
