@@ -2,19 +2,23 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import MobileMenu from "./MobileMenu";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/use-auth";
+import { useSupabase } from "@/contexts/SupabaseContext";
 import { Heart } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { toast } = useToast();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, signOut } = useSupabase();
 
   const handleLogout = async () => {
     try {
-      // Let any auth system handle the logout
-      // For now, we'll just pretend it worked
+      // Use Supabase signOut method
+      const { error } = await signOut();
+      
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Logged out successfully",
@@ -23,6 +27,7 @@ const Header = () => {
       // Navigate to home page
       window.location.href = "/";
     } catch (error) {
+      console.error("Logout error:", error);
       toast({
         title: "Error logging out",
         description: "There was a problem logging out. Please try again.",

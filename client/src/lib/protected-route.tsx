@@ -1,6 +1,6 @@
-import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
-import { Redirect, Route } from "wouter";
+import { Route } from "wouter";
+import { useSupabase } from "@/contexts/SupabaseContext";
 
 export function ProtectedRoute({
   path,
@@ -9,7 +9,8 @@ export function ProtectedRoute({
   path: string;
   component: React.ComponentType;
 }) {
-  const { user, isLoading } = useAuth();
+  // Use Supabase hook instead of direct context access
+  const { user, isLoading } = useSupabase();
 
   return (
     <Route path={path}>
@@ -25,7 +26,9 @@ export function ProtectedRoute({
 
         // Redirect to auth page if not authenticated
         if (!user) {
-          return <Redirect to="/auth" />;
+          // Use window.location.href instead of Redirect to avoid potential loops
+          window.location.href = "/auth";
+          return null;
         }
 
         // Render the protected component if authenticated

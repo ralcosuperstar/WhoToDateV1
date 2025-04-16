@@ -75,7 +75,6 @@ export function SimpleAuthUI() {
       magicLink={true}
       view="sign_in"
       showLinks={true}
-      otpType="numeric"
       additionalData={{
         first_name: '',
         last_name: '',

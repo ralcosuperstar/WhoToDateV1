@@ -15,7 +15,7 @@ interface SupabaseContextType {
 }
 
 // Create the context with default values
-const SupabaseContext = createContext<SupabaseContextType>({
+export const SupabaseContext = createContext<SupabaseContextType>({
   isLoading: true,
   user: null,
   session: null,
