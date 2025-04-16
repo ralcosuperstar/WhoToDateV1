@@ -39,21 +39,20 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
-          <div className="md:w-2/5 flex justify-center md:justify-end">
-            <div className="relative w-40 h-40 md:w-48 md:h-48 overflow-hidden rounded-full border-4 border-white shadow-lg">
+          <div className="md:w-2/5 flex justify-center md:justify-end mt-4 md:mt-0">
+            <div className="relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full border-4 border-white shadow-lg">
               <img 
                 src={aanchalImg} 
                 alt="Professional Counselor" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/80 to-primary/0 text-center p-2 pt-6">
-                <span className="text-white text-xs font-semibold">Expert Support</span>
-              </div>
-              <div className="absolute -top-2 -right-2 bg-blue-600 rounded-lg shadow-lg px-2 py-1 z-10 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-                <span className="text-white text-xs font-semibold">Verified Professionals</span>
+              <div className="absolute bottom-0 left-0 right-0 bg-blue-600 text-center py-1">
+                <div className="flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
+                    <path d="M20 6L9 17l-5-5"></path>
+                  </svg>
+                  <span className="text-white text-xs font-semibold">Verified Professionals</span>
+                </div>
               </div>
             </div>
           </div>
