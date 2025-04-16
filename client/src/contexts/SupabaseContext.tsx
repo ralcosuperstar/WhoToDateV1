@@ -32,21 +32,33 @@ export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Initialize Supabase and fetch the current user/session
   useEffect(() => {
+    let subscription: { unsubscribe: () => void } | null = null;
+    
     async function initialize() {
       setIsLoading(true);
       try {
         // Initialize the supabase client
-        await initSupabase();
+        const client = await initSupabase();
         
         // Get the current session
-        const { session: currentSession } = await supabase.auth.getSession();
+        const { data: { session: currentSession } } = await client.auth.getSession();
         setSession(currentSession);
         
         // Get the current user
         if (currentSession) {
-          const { data: { user: currentUser } } = await supabase.auth.getUser();
+          const { data: { user: currentUser } } = await client.auth.getUser();
           setUser(currentUser);
         }
+        
+        // Subscribe to auth changes
+        const { data: authSubscription } = client.auth.onAuthStateChange(
+          (event, newSession) => {
+            setSession(newSession);
+            setUser(newSession?.user ?? null);
+          }
+        );
+        
+        subscription = authSubscription.subscription;
       } catch (error) {
         console.error('Error initializing Supabase:', error);
       } finally {
@@ -56,17 +68,11 @@ export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     initialize();
     
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-      }
-    );
-    
     // Clean up subscription
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 

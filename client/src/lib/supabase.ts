@@ -1,96 +1,129 @@
 import { createClient } from '@supabase/supabase-js';
+import type { AuthError, Session, SupabaseClient, User } from '@supabase/supabase-js';
 
-// Function to get Supabase configuration from the server
+// Create a global instance for the Supabase client
+let supabaseInstance: SupabaseClient | null = null;
+
+// Function to get the Supabase configuration
 async function getSupabaseConfig() {
-  // Try to get from localStorage first to avoid unnecessary API calls
-  const cachedConfig = localStorage.getItem('supabaseConfig');
-  if (cachedConfig) {
-    try {
-      return JSON.parse(cachedConfig);
-    } catch (e) {
-      console.error('Failed to parse cached supabase config:', e);
-    }
-  }
-  
-  // Fetch from API endpoint if not in localStorage
   try {
+    // Fetch the Supabase configuration from our backend
     const response = await fetch('/api/supabase-config');
     if (!response.ok) {
-      throw new Error('Failed to get Supabase configuration');
+      throw new Error('Failed to fetch Supabase configuration');
     }
-    
-    const config = await response.json();
-    
-    // Cache the config in localStorage
-    localStorage.setItem('supabaseConfig', JSON.stringify(config));
-    
-    return config;
-  } catch (e) {
-    console.error('Error fetching Supabase config:', e);
-    // Fallback to environment variables if available (might work in development)
-    return {
-      supabaseUrl: '',
-      supabaseAnonKey: '',
-    };
-  }
-}
-
-// Initialize Supabase with credentials (will be initialized properly in initSupabase)
-let supabase = createClient('', '');
-
-// Initialize Supabase with actual credentials
-export async function initSupabase() {
-  try {
-    const { supabaseUrl, supabaseAnonKey } = await getSupabaseConfig();
+    const { supabaseUrl, supabaseAnonKey } = await response.json();
     
     if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Supabase credentials not available');
+      throw new Error('Missing Supabase configuration');
     }
     
-    // Create the actual client
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-    console.log('Supabase client initialized successfully');
-    return true;
-  } catch (e) {
-    console.error('Failed to initialize Supabase client:', e);
-    return false;
+    return { supabaseUrl, supabaseAnonKey };
+  } catch (error) {
+    console.error('Error fetching Supabase configuration:', error);
+    throw error;
   }
 }
 
-// Export the client
-export { supabase };
+// Initialize the Supabase client
+export async function initSupabase() {
+  try {
+    // If the client is already initialized, return it
+    if (supabaseInstance) {
+      return supabaseInstance;
+    }
+    
+    // Get the configuration
+    const { supabaseUrl, supabaseAnonKey } = await getSupabaseConfig();
+    
+    // Create a new Supabase client
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+    
+    return supabaseInstance;
+  } catch (error) {
+    console.error('Error initializing Supabase client:', error);
+    throw error;
+  }
+}
 
-// Helper functions for authentication
+// Get the Supabase client instance
+export function getSupabaseClient() {
+  if (!supabaseInstance) {
+    throw new Error('Supabase client not initialized. Call initSupabase() first.');
+  }
+  return supabaseInstance;
+}
+
+// Helper function to ensure client is initialized
+async function ensureClient() {
+  if (!supabaseInstance) {
+    return await initSupabase();
+  }
+  return supabaseInstance;
+}
+
+// Sign up with email and password
 export const signUp = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-  
-  return { data, error };
+  try {
+    const client = await ensureClient();
+    return await client.auth.signUp({
+      email,
+      password,
+    });
+  } catch (error) {
+    console.error('Error signing up:', error);
+    throw error;
+  }
 };
 
+// Sign in with email and password
 export const signIn = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  
-  return { data, error };
+  try {
+    const client = await ensureClient();
+    return await client.auth.signInWithPassword({
+      email,
+      password,
+    });
+  } catch (error) {
+    console.error('Error signing in:', error);
+    throw error;
+  }
 };
 
+// Sign out
 export const signOut = async () => {
-  const { error } = await supabase.auth.signOut();
-  return { error };
+  try {
+    const client = await ensureClient();
+    return await client.auth.signOut();
+  } catch (error) {
+    console.error('Error signing out:', error);
+    throw error;
+  }
 };
 
+// Get the current user
 export const getCurrentUser = async () => {
-  const { data, error } = await supabase.auth.getUser();
-  return { user: data.user, error };
+  try {
+    const client = await ensureClient();
+    const { data: { user } } = await client.auth.getUser();
+    return { user };
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    throw error;
+  }
 };
 
-// Helper function to get user session
+// Get the current session
 export const getSession = async () => {
-  const { data, error } = await supabase.auth.getSession();
-  return { session: data.session, error };
+  try {
+    const client = await ensureClient();
+    const { data: { session } } = await client.auth.getSession();
+    return { session };
+  } catch (error) {
+    console.error('Error getting session:', error);
+    throw error;
+  }
 };
+
+// Export the current instance for direct access (but prefer using the async functions)
+export { supabaseInstance as supabase };

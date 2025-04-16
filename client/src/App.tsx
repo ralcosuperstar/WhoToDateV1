@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
+import { SupabaseProvider } from "@/contexts/SupabaseContext";
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -89,17 +90,19 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ScrollToTop />
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1">
-            <Router />
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
-      </AuthProvider>
+      <SupabaseProvider>
+        <AuthProvider>
+          <ScrollToTop />
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">
+              <Router />
+            </main>
+            <Footer />
+            <Toaster />
+          </div>
+        </AuthProvider>
+      </SupabaseProvider>
     </QueryClientProvider>
   );
 }
