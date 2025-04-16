@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Brain, Heart, Sparkles, BookOpen, Target, ArrowRight, Users, Lightbulb, BarChart, Shield, ChevronRight, Check, BrainCircuit, Fingerprint, Crown, Gauge, X } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { useState } from "react";
+import CounsellingPromotion from "@/components/shared/CounsellingPromotion";
 
 // Simple modal for showing more information
 const InfoModal = ({ isOpen, onClose, content }: { isOpen: boolean; onClose: () => void; content: string }) => {

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { BookOpen, Brain, CheckCircle, Clock, FileCheck, Heart, HeartHandshake, ArrowRight, Zap, Users, Lightbulb, Target, Shield } from "lucide-react";
+import CounsellingPromotion from "@/components/shared/CounsellingPromotion";
 
 // Process step component for the 3-step process
 const ProcessStep = ({ number, icon, title, description, iconColor, bgColor, borderColor }: { 
@@ -471,6 +472,30 @@ const HowItWorks = () => {
               answer="These badges aren't negative judgments - they're opportunities for growth! Yellow and Red badges highlight specific relationship challenges you might face, but also provide guidance on how to address these areas. Many successful relationships involve at least one person with a Yellow badge who's mindful of their growth areas."
             />
           </div>
+        </div>
+      </section>
+      
+      {/* Counselling Promotion */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-4 py-1.5 px-4 bg-pink-50 rounded-full shadow-sm">
+              <span className="text-gray-700 font-medium text-sm flex items-center">
+                <span className="mr-2">❤️</span> Professional Support
+              </span>
+            </div>
+            
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-4 text-gray-800">
+              Need Deeper Guidance? <span style={{ color: '#e83a8e' }}>We've Got You Covered</span>
+            </h2>
+            
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Sometimes you need more than a quiz. Our counselling service connects you with experienced 
+              relationship professionals who can help you navigate complex emotions and situations.
+            </p>
+          </div>
+          
+          <CounsellingPromotion variant="default" />
         </div>
       </section>
 
