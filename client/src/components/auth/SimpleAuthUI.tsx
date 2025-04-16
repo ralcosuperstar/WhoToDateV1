@@ -73,6 +73,45 @@ export function SimpleAuthUI() {
       providers={[]}
       redirectTo={window.location.origin}
       magicLink={true}
+      view="sign_in"
+      showLinks={true}
+      otpType={{
+        type: 'numeric',
+        options: {
+          length: 6
+        }
+      }}
+      additionalData={{
+        first_name: '',
+        last_name: '',
+        phone: ''
+      }}
+      localization={{
+        variables: {
+          sign_up: {
+            email_label: 'Email',
+            password_label: 'Password',
+            button_label: 'Sign up',
+            loading_button_label: 'Signing up...',
+            confirmation_text: 'Check your email for a verification code',
+            link_text: "Don't have an account? Sign up"
+          },
+          sign_in: {
+            email_label: 'Email',
+            password_label: 'Password',
+            button_label: 'Sign in',
+            loading_button_label: 'Signing in...',
+            link_text: 'Already have an account? Sign in'
+          },
+          forgotten_password: {
+            email_label: 'Email',
+            password_label: 'Password',
+            button_label: 'Send reset instructions',
+            loading_button_label: 'Sending reset instructions...',
+            confirmation_text: 'Check your email for a password reset link'
+          }
+        }
+      }}
     />
   );
 }
