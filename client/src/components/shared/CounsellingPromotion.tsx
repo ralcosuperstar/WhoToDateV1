@@ -15,12 +15,12 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
   if (variant === 'compact') {
     return (
       <div className={`bg-gradient-to-r from-[#fcf1f7] to-[#fff4f9] rounded-2xl overflow-hidden shadow-sm ${className}`}>
-        <div className="p-6 md:p-8 flex flex-col md:flex-row items-start gap-6">
-          <div className="md:w-3/5">
+        <div className="p-6 md:p-8 flex flex-col md:flex-row items-start gap-6 md:gap-2">
+          <div className="md:w-1/2">
             <h3 className="text-xl md:text-2xl font-heading font-bold text-gray-800 mb-3">
               Talk to Someone Who Gets It
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-4 text-sm md:text-base">
               Whether you're feeling stuck, overwhelmed, or need guidance on relationship issues, 
               our verified counselors are here to help you find clarity and emotional balance.
             </p>
@@ -40,13 +40,13 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
             </Link>
           </div>
           
-          <div className="flex flex-col items-center md:items-end mt-2 md:mt-0 self-center md:self-start">
-            <div className="flex items-center bg-blue-600 text-white px-3 py-1.5 rounded-full shadow-sm mb-3 text-sm">
+          <div className="flex flex-col items-center md:items-end mt-2 md:mt-0 self-center md:self-start md:ml-auto md:w-2/5">
+            <div className="flex items-center bg-blue-600 text-white px-3 py-1.5 rounded-full shadow-sm mb-4 text-sm">
               <BadgeCheck className="h-4 w-4 mr-1.5" />
               <span className="font-medium">Verified Professionals</span>
             </div>
             
-            <div className="w-28 h-28 overflow-hidden rounded-full border-4 border-white shadow-md">
+            <div className="w-36 h-36 md:w-44 md:h-44 overflow-hidden rounded-full border-4 border-white shadow-md">
               <img 
                 src={aanchalImg} 
                 alt="Professional Counselor" 
