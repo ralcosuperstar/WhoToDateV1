@@ -65,6 +65,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
   app.use("/api", apiRouter);
   
+  // Supabase configuration endpoint
+  apiRouter.get("/supabase-config", (req, res) => {
+    res.json({
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+    });
+  });
+  
   // User endpoint - get the current authenticated user
   apiRouter.get("/user", (req, res) => {
     // req.isAuthenticated is added by passport

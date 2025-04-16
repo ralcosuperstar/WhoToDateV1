@@ -1,14 +1,64 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Create a single supabase client for interacting with your database
-const supabaseUrl = import.meta.env.SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY || '';
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase URL or Anon Key is missing');
+// Function to get Supabase configuration from the server
+async function getSupabaseConfig() {
+  // Try to get from localStorage first to avoid unnecessary API calls
+  const cachedConfig = localStorage.getItem('supabaseConfig');
+  if (cachedConfig) {
+    try {
+      return JSON.parse(cachedConfig);
+    } catch (e) {
+      console.error('Failed to parse cached supabase config:', e);
+    }
+  }
+  
+  // Fetch from API endpoint if not in localStorage
+  try {
+    const response = await fetch('/api/supabase-config');
+    if (!response.ok) {
+      throw new Error('Failed to get Supabase configuration');
+    }
+    
+    const config = await response.json();
+    
+    // Cache the config in localStorage
+    localStorage.setItem('supabaseConfig', JSON.stringify(config));
+    
+    return config;
+  } catch (e) {
+    console.error('Error fetching Supabase config:', e);
+    // Fallback to environment variables if available (might work in development)
+    return {
+      supabaseUrl: '',
+      supabaseAnonKey: '',
+    };
+  }
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase with credentials (will be initialized properly in initSupabase)
+let supabase = createClient('', '');
+
+// Initialize Supabase with actual credentials
+export async function initSupabase() {
+  try {
+    const { supabaseUrl, supabaseAnonKey } = await getSupabaseConfig();
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase credentials not available');
+    }
+    
+    // Create the actual client
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+    console.log('Supabase client initialized successfully');
+    return true;
+  } catch (e) {
+    console.error('Failed to initialize Supabase client:', e);
+    return false;
+  }
+}
+
+// Export the client
+export { supabase };
 
 // Helper functions for authentication
 export const signUp = async (email: string, password: string) => {
