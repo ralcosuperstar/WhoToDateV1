@@ -196,8 +196,12 @@ const CounsellingHero = () => {
               Talk to Someone Who <span style={{ color: '#e83a8e' }}>Gets It</span>
             </h1>
             
-            <p className="text-lg text-gray-600 mb-8 max-w-xl">
-              Feeling overwhelmed, confused about relationships, or just need to vent? Choose from verified counselors or listeners who are here to help – completely judgment-free.
+            <p className="text-lg text-gray-600 mb-6 max-w-xl">
+              Because healing begins when you feel heard. Modern relationships can be confusing, overwhelming, and sometimes even painful. Whether you're stuck in overthinking, fresh out of a breakup, scared about commitment, or feeling physically drained from emotional stress — you don't have to go through it alone.
+            </p>
+            
+            <p className="text-md text-gray-700 mb-8 max-w-xl">
+              At WhoToDate, we've teamed up with a diverse group of verified mental wellness professionals and medical graduate listeners to support your emotional journey. No judgment, no pressure — just real people trained to help, right when you need it.
             </p>
             
             <div className="flex flex-wrap gap-4 mb-8">
@@ -226,37 +230,54 @@ const CounsellingHero = () => {
           </div>
           
           <div className="md:w-1/2 mt-10 md:mt-0">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-5 shadow-md border border-gray-100 transform hover:-translate-y-1 transition-transform">
-                <div className="bg-blue-100 p-3 inline-flex rounded-full mb-3">
-                  <Brain className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="font-bold text-lg text-gray-800 mb-2">Psychologists</h3>
-                <p className="text-gray-600 text-sm">In-depth sessions with certified therapists for lasting solutions</p>
-              </div>
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-5">
+              <h2 className="font-bold text-xl text-gray-800 mb-4">Two Types of Counselling Support</h2>
+              <p className="text-gray-600 mb-5">We know everyone's needs are different. That's why we offer two flexible options for emotional support:</p>
               
-              <div className="bg-white rounded-xl p-5 shadow-md border border-gray-100 transform hover:-translate-y-1 transition-transform">
-                <div className="bg-purple-100 p-3 inline-flex rounded-full mb-3">
-                  <Headphones className="h-6 w-6 text-purple-600" />
+              <div className="space-y-5">
+                <div className="bg-blue-50 rounded-xl p-5">
+                  <div className="flex items-start">
+                    <div className="bg-blue-100 p-3 rounded-full mr-4 flex-shrink-0">
+                      <Brain className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-800 mb-1">Psychology-Based Counselors</h3>
+                      <p className="text-sm text-gray-500 mb-2">M.A./B.A. in Psychology – Emotional Listeners & Mental Health Guides</p>
+                      <div className="flex items-center text-sm text-gray-700 mb-2">
+                        <Clock className="h-4 w-4 mr-1.5 text-gray-500" />
+                        <span>45 to 90 minute sessions</span>
+                      </div>
+                      <div className="text-sm text-gray-700 mb-3 font-medium">
+                        ₹700 – ₹2000
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Best for emotional overwhelm, anxious thoughts, talking through breakups, exploring relationship patterns
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-bold text-lg text-gray-800 mb-2">Doctor Listeners</h3>
-                <p className="text-gray-600 text-sm">Quick, affordable check-ins with medical professionals</p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-5 shadow-md border border-gray-100 transform hover:-translate-y-1 transition-transform">
-                <div className="bg-pink-100 p-3 inline-flex rounded-full mb-3">
-                  <Heart className="h-6 w-6 text-pink-600" />
+                
+                <div className="bg-purple-50 rounded-xl p-5">
+                  <div className="flex items-start">
+                    <div className="bg-purple-100 p-3 rounded-full mr-4 flex-shrink-0">
+                      <Stethoscope className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-800 mb-1">Medical Graduate Listeners</h3>
+                      <p className="text-sm text-gray-500 mb-2">MBBS, BAMS, BHMS, BDS – First Responders to Emotional & Psychosomatic Stress</p>
+                      <div className="flex items-center text-sm text-gray-700 mb-2">
+                        <Clock className="h-4 w-4 mr-1.5 text-gray-500" />
+                        <span>15 to 20 minute calls</span>
+                      </div>
+                      <div className="text-sm text-gray-700 mb-3 font-medium">
+                        ₹300 – ₹500
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Best for physical symptoms from emotional pain, sudden anxiety, needing quick support
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-bold text-lg text-gray-800 mb-2">Relationship Experts</h3>
-                <p className="text-gray-600 text-sm">Specialized advice for dating and relationship challenges</p>
-              </div>
-              
-              <div className="bg-white rounded-xl p-5 shadow-md border border-gray-100 transform hover:-translate-y-1 transition-transform">
-                <div className="bg-green-100 p-3 inline-flex rounded-full mb-3">
-                  <CircleCheck className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-lg text-gray-800 mb-2">100% Confidential</h3>
-                <p className="text-gray-600 text-sm">Private, secure conversations with no recording</p>
               </div>
             </div>
           </div>
@@ -272,6 +293,7 @@ const CounsellingTabs = ({ activeTab, setActiveTab }: { activeTab: string, setAc
     <div className="flex justify-center mb-10 max-w-xl mx-auto">
       <div className="bg-gray-100 p-2 rounded-xl flex w-full">
         <button
+          data-tab="all"
           className={`flex-1 py-3 px-4 rounded-lg flex justify-center items-center gap-2 ${
             activeTab === "all" ? "bg-white shadow-md font-medium text-gray-800" : "text-gray-600 hover:bg-gray-200"
           } transition-all`}
@@ -281,6 +303,7 @@ const CounsellingTabs = ({ activeTab, setActiveTab }: { activeTab: string, setAc
         </button>
         
         <button
+          data-tab="psychologist"
           className={`flex-1 py-3 px-4 rounded-lg flex justify-center items-center gap-2 ${
             activeTab === "psychologist" ? "bg-white shadow-md font-medium text-gray-800" : "text-gray-600 hover:bg-gray-200"
           } transition-all`}
@@ -291,6 +314,7 @@ const CounsellingTabs = ({ activeTab, setActiveTab }: { activeTab: string, setAc
         </button>
         
         <button
+          data-tab="doctor"
           className={`flex-1 py-3 px-4 rounded-lg flex justify-center items-center gap-2 ${
             activeTab === "doctor" ? "bg-white shadow-md font-medium text-gray-800" : "text-gray-600 hover:bg-gray-200"
           } transition-all`}
@@ -691,24 +715,113 @@ const FAQ = ({ question, answer }: { question: string, answer: string }) => {
 const CounsellingFAQs = () => {
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="container mx-auto max-w-3xl">
-        <div className="text-center mb-12">
-          <div className="inline-block mb-4 py-1.5 px-4 bg-purple-50 rounded-full">
-            <span className="text-gray-700 font-medium text-sm flex items-center">
-              <span className="mr-2">❓</span> Common Questions
-            </span>
+      <div className="container mx-auto max-w-4xl">
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div>
+            <div className="inline-block mb-4 py-1.5 px-4 bg-purple-50 rounded-full">
+              <span className="text-gray-700 font-medium text-sm flex items-center">
+                <span className="mr-2">❓</span> Common Questions
+              </span>
+            </div>
+            
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4 text-gray-800">
+              Frequently Asked Questions
+            </h2>
+            
+            <p className="text-gray-600 mb-8">
+              Everything you need to know about our counseling services
+            </p>
+            
+            <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+              <h3 className="font-bold text-lg text-gray-800 mb-2">How Do I Choose Which Support I Need?</h3>
+              <p className="text-gray-600 mb-4 text-sm">Here's a simple way to decide what's right for you:</p>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 text-left font-medium text-gray-700">Situation</th>
+                      <th className="px-4 py-2 text-left font-medium text-gray-700">Recommended Support</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You're feeling emotionally drained, stuck in overthinking, or confused about a relationship</td>
+                      <td className="px-4 py-3 font-medium text-blue-700">✅ Psychology-Based Counselor</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You're dealing with grief, heartbreak, self-doubt, or anxiety from dating/marriage pressure</td>
+                      <td className="px-4 py-3 font-medium text-blue-700">✅ Psychology-Based Counselor</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You want someone to deeply listen and guide you for 45+ minutes</td>
+                      <td className="px-4 py-3 font-medium text-blue-700">✅ Psychology-Based Counselor</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You're feeling chest pain, vomiting, breathlessness, dizziness, or physical discomfort after an emotional event</td>
+                      <td className="px-4 py-3 font-medium text-purple-700">✅ Medical Graduate Listener</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You're unsure what's happening, but your body feels "off" after emotional trauma</td>
+                      <td className="px-4 py-3 font-medium text-purple-700">✅ Medical Graduate Listener</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-600">You need to speak with someone quickly to calm your nerves</td>
+                      <td className="px-4 py-3 font-medium text-purple-700">✅ Medical Graduate Listener</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4 text-gray-800">
-            Frequently Asked Questions
-          </h2>
-          
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Everything you need to know about our counseling services
-          </p>
+          <div className="bg-white rounded-xl p-6 md:p-8 shadow-md border border-gray-200">
+            <h3 className="font-bold text-lg text-gray-800 mb-4">Why Does Talking Help?</h3>
+            <p className="text-gray-600 mb-6 text-sm">
+              When your heart is heavy, your thoughts spiral, or your body reacts to pain — keeping it all inside only makes it worse. Research shows that just talking to a trained listener can lower stress hormones, stabilize breathing, and reduce feelings of isolation.
+            </p>
+            
+            <div className="mb-6">
+              <p className="text-gray-700 font-medium mb-2">Whether you're:</p>
+              <ul className="space-y-2 text-sm text-gray-600 ml-5 list-disc">
+                <li>Crying over someone who ghosted you</li>
+                <li>Nervous before saying "yes" to marriage</li>
+                <li>Struggling to understand why love feels so hard</li>
+                <li>Or just need someone to listen...</li>
+              </ul>
+            </div>
+            
+            <div className="bg-blue-50 p-4 rounded-xl mb-6">
+              <p className="text-gray-700 font-medium">Counselling gives you space.</p>
+              <p className="text-sm text-gray-600">A space to feel heard.</p>
+              <p className="text-sm text-gray-600">A space to slow down.</p>
+              <p className="text-sm text-gray-600">A space to say, "I don't know what's wrong, but I need to talk."</p>
+              <p className="font-medium text-gray-700 mt-2">You deserve that.</p>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="font-bold text-lg text-gray-800 mb-4">Important Notes</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start">
+                  <div className="text-red-500 mr-2 mt-0.5">•</div>
+                  <p>No medical prescriptions or clinical diagnosis will be provided through WhoToDate.</p>
+                </li>
+                <li className="flex items-start">
+                  <div className="text-red-500 mr-2 mt-0.5">•</div>
+                  <p>All our listeners and counselors are verified, trained, and human-first.</p>
+                </li>
+                <li className="flex items-start">
+                  <div className="text-red-500 mr-2 mt-0.5">•</div>
+                  <p>If you're facing thoughts of harm or a severe mental health crisis, please reach out to emergency mental health helplines or local psychiatric services.</p>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
         
         <div className="bg-white rounded-xl p-6 md:p-8 shadow-md border border-gray-200">
+          <h3 className="font-bold text-lg text-gray-800 mb-4">Common Questions</h3>
+          
           <FAQ 
             question="What's the difference between a psychologist and a doctor listener?" 
             answer="Psychologists offer in-depth counseling sessions (45-90 minutes) and can provide comprehensive therapy for ongoing issues. Doctor Listeners are medical professionals who offer shorter consultations (15-30 minutes) ideal for quick advice, venting, or initial guidance. Both are qualified professionals, but have different session lengths and approaches."
@@ -730,8 +843,8 @@ const CounsellingFAQs = () => {
           />
           
           <FAQ 
-            question="Can I switch if I feel uncomfortable?" 
-            answer="Absolutely! Your comfort is our priority. If you don't connect with your counselor, you can end the session and book with someone else. We also offer a satisfaction guarantee for first-time users."
+            question="How does it work?" 
+            answer="Choose your support type, view counselor profiles and filter based on your preferences, book a session, receive your session link, and then speak freely in a safe, judgment-free environment with your chosen professional."
           />
           
           <FAQ 
@@ -745,34 +858,55 @@ const CounsellingFAQs = () => {
 };
 
 // FinalCTA Component
-const FinalCTA = () => {
+const FinalCTA = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   return (
     <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-purple-50">
       <div className="container mx-auto max-w-4xl text-center">
         <div className="bg-white rounded-xl p-8 shadow-md border border-blue-100">
           <h2 className="font-heading font-bold text-2xl sm:text-3xl mb-4 text-gray-800">
-            Sometimes, all you need is a good listener
+            You're Not Alone. We're Listening.
           </h2>
           
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Whether it's relationship confusion, emotional burnout, or just needing to talk – we've got someone for you. Book a session today and take the first step toward feeling better.
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            Sometimes, a little support can help you breathe again.<br/>
+            Sometimes, being heard is what heals.<br/>
+            And sometimes, a short call is all it takes to start feeling a little better.
+          </p>
+          
+          <p className="text-xl text-gray-700 font-medium mb-8">
+            So, who do you want to talk to today?
           </p>
           
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <button className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <a 
+              href="#counselors" 
+              onClick={() => setActiveTab("psychologist")}
+              className="px-6 py-3.5 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center"
+            >
               <Brain className="h-5 w-5 mr-2" />
-              View Psychologists
-            </button>
+              Explore Psychology Counselors
+            </a>
             
-            <button className="px-6 py-3 bg-purple-600 text-white font-medium rounded-lg shadow-md hover:bg-purple-700 transition-colors flex items-center justify-center">
-              <Headphones className="h-5 w-5 mr-2" />
-              View Doctor Listeners
-            </button>
+            <a 
+              href="#counselors" 
+              onClick={() => setActiveTab("doctor")}
+              className="px-6 py-3.5 bg-purple-600 text-white font-medium rounded-lg shadow-md hover:bg-purple-700 transition-colors flex items-center justify-center"
+            >
+              <Stethoscope className="h-5 w-5 mr-2" />
+              Explore Medical Listeners
+            </a>
           </div>
           
-          <div className="mt-8 flex items-center justify-center text-sm text-gray-600">
-            <Info className="h-4 w-4 mr-2 text-blue-500" />
-            <span>Still feeling unsure? Take our <Link href="/quiz" className="text-blue-600 font-medium hover:underline">compatibility quiz</Link> first to learn more about yourself</span>
+          <div className="mt-8 flex flex-col md:flex-row items-center justify-center text-sm text-gray-600 gap-4">
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-2 text-blue-500" />
+              <span>How It Works: Choose, Book, Connect in minutes</span>
+            </div>
+            
+            <div className="flex items-center">
+              <Info className="h-4 w-4 mr-2 text-blue-500" />
+              <span>Not sure? <Link href="/quiz" className="text-blue-600 font-medium hover:underline">Take our quiz</Link> first</span>
+            </div>
           </div>
         </div>
       </div>
@@ -851,7 +985,7 @@ const Counselling = () => {
       </section>
       
       <CounsellingFAQs />
-      <FinalCTA />
+      <FinalCTA setActiveTab={setActiveTab} />
     </div>
   );
 };
