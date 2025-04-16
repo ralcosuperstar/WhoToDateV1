@@ -70,8 +70,24 @@ export function CustomAuthUI() {
     }
   });
 
+  // Helper function to handle existing user flow
+  function handleExistingUser(userEmail: string) {
+    // Show more helpful message for existing users
+    toast({
+      title: 'Account already exists',
+      description: 'This email is already registered. Please sign in instead.',
+      variant: 'destructive'
+    });
+    
+    // Switch to sign-in tab
+    setActiveTab('sign-in');
+    
+    // Pre-fill the email field in the sign-in form
+    signInForm.setValue('email', userEmail);
+  }
+  
   // Handle sign up submission
-  const onSignUpSubmit = async (data: z.infer<typeof signUpSchema>) => {
+  const onSignUpSubmit = async (formData: z.infer<typeof signUpSchema>) => {
     if (!supabase) {
       toast({
         title: 'Authentication error',
@@ -84,10 +100,10 @@ export function CustomAuthUI() {
     setIsLoading(true);
     try {
       // Extract the data for signup
-      const { first_name, last_name, email, password, phone } = data;
+      const { first_name, last_name, email, password, phone } = formData;
 
       // Sign up with Supabase
-      const { error } = await supabase.auth.signUp({
+      const { data: signupData, error: signupError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -99,29 +115,30 @@ export function CustomAuthUI() {
         }
       });
 
-      if (error) {
-        // Check if the error indicates user already exists
-        if (error.message && (
-          error.message.includes('User already registered') || 
-          error.message.includes('already been registered')
+      console.log("Sign up response:", { data: signupData, error: signupError });
+      
+      // Check for explicit error about user already existing
+      if (signupError) {
+        if (signupError.message && (
+          signupError.message.includes('User already registered') || 
+          signupError.message.includes('already been registered')
         )) {
-          // Show more helpful message for existing users
-          toast({
-            title: 'Account already exists',
-            description: 'This email is already registered. Please sign in instead.',
-            variant: 'destructive'
-          });
-          
-          // Switch to sign-in tab
-          setActiveTab('sign-in');
-          
-          // Pre-fill the email field in the sign-in form
-          signInForm.setValue('email', email);
-          
+          handleExistingUser(email);
           return;
         }
-        
-        throw error;
+        throw signupError;
+      }
+      
+      // Supabase has a special case - when an existing user signs up,
+      // it may not return an error but instead return data with a null user
+      // or a data.user object with identities array of length 0
+      if (!signupData.user || 
+          (signupData.user.identities && signupData.user.identities.length === 0) ||
+          signupData.user?.email_confirmed_at) {
+          
+        console.log("Detected existing user from response data");
+        handleExistingUser(email);
+        return;
       }
 
       // Show success message and prepare for OTP verification
@@ -146,7 +163,7 @@ export function CustomAuthUI() {
   };
 
   // Handle sign in submission
-  const onSignInSubmit = async (data: z.infer<typeof signInSchema>) => {
+  const onSignInSubmit = async (formData: z.infer<typeof signInSchema>) => {
     if (!supabase) {
       toast({
         title: 'Authentication error',
@@ -159,13 +176,13 @@ export function CustomAuthUI() {
     setIsLoading(true);
     try {
       // Sign in with Supabase
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
       });
 
-      if (error) {
-        throw error;
+      if (signInError) {
+        throw signInError;
       }
 
       toast({
@@ -185,7 +202,7 @@ export function CustomAuthUI() {
   };
 
   // Handle OTP verification
-  const onOTPSubmit = async (data: z.infer<typeof otpSchema>) => {
+  const onOTPSubmit = async (formData: z.infer<typeof otpSchema>) => {
     if (!supabase) {
       toast({
         title: 'Authentication error',
@@ -198,14 +215,14 @@ export function CustomAuthUI() {
     setIsLoading(true);
     try {
       // Verify OTP
-      const { error } = await supabase.auth.verifyOtp({
+      const { error: otpError } = await supabase.auth.verifyOtp({
         email: verificationEmail,
-        token: data.otp,
+        token: formData.otp,
         type: 'signup'
       });
 
-      if (error) {
-        throw error;
+      if (otpError) {
+        throw otpError;
       }
 
       toast({
