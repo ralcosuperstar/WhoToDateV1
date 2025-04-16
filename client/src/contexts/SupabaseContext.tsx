@@ -7,6 +7,7 @@ interface SupabaseContextType {
   isLoading: boolean;
   user: User | null;
   session: Session | null;
+  supabase: any | null;
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<any>;
@@ -18,6 +19,7 @@ const SupabaseContext = createContext<SupabaseContextType>({
   isLoading: true,
   user: null,
   session: null,
+  supabase: null,
   signIn: () => Promise.resolve({}),
   signUp: () => Promise.resolve({}),
   signOut: () => Promise.resolve({}),
@@ -29,6 +31,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [supabaseClient, setSupabaseClient] = useState<any>(null);
 
   // Initialize Supabase and fetch the current user/session
   useEffect(() => {
@@ -39,6 +42,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
       try {
         // Initialize the supabase client
         const client = await initSupabase();
+        setSupabaseClient(client);
         
         // Get the current session
         const sessionData = await getSession();
@@ -91,6 +95,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     user,
     session,
+    supabase: supabaseClient,
     signIn: (email, password) => signIn(email, password),
     signUp: (email, password) => signUp(email, password),
     signOut: async () => {

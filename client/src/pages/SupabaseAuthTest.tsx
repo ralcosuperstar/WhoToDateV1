@@ -1,38 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useSupabase } from '@/contexts/SupabaseContext';
-import { SupabaseSignIn, SupabaseSignUp } from '@/components/auth/SupabaseAuthUI';
+import { useState } from 'react';
+import { SupabaseSignUpSimple } from '@/components/auth/SimpleAuthUI';
 import { SupabaseLogoutButton } from '@/components/auth/SupabaseAuth';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSupabase } from '@/contexts/SupabaseContext';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { InfoIcon } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SupabaseAuthTest() {
   const { user, isLoading } = useSupabase();
-  const [activeTab, setActiveTab] = useState('login');
-
-  // Switch to register tab if we're coming from a register link
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('tab') === 'register') {
-      setActiveTab('register');
-    }
-  }, []);
+  const [activeTab, setActiveTab] = useState<string>("status");
 
   return (
-    <div className="container max-w-md mx-auto py-24">
-      <h1 className="text-2xl font-bold mb-6 text-center">Supabase Auth UI Test</h1>
+    <div className="container max-w-3xl mx-auto py-24">
+      <h1 className="text-2xl font-bold mb-6 text-center">Supabase Auth Test</h1>
       
-      <div className="mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Authentication Status</CardTitle>
-            <CardDescription>Your current login status</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <p>Loading authentication status...</p>
-            ) : user ? (
+      {user ? (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Authentication Status</CardTitle>
+              <CardDescription>You are currently logged in</CardDescription>
+            </CardHeader>
+            <CardContent>
               <div>
                 <p className="mb-2">
                   <span className="font-medium">Email:</span> {user.email}
@@ -43,44 +31,37 @@ export default function SupabaseAuthTest() {
                 <p className="mb-2">
                   <span className="font-medium">Created At:</span> {new Date(user.created_at).toLocaleString()}
                 </p>
-                <p className="text-sm text-muted-foreground mt-4">You are currently logged in</p>
+                {user.user_metadata && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-medium">User Metadata</h3>
+                    <pre className="bg-muted p-2 rounded-md mt-2 text-xs overflow-auto">
+                      {JSON.stringify(user.user_metadata, null, 2)}
+                    </pre>
+                  </div>
+                )}
               </div>
-            ) : (
-              <p>You are not logged in</p>
-            )}
-          </CardContent>
-          {user && (
+            </CardContent>
             <CardFooter>
               <SupabaseLogoutButton />
             </CardFooter>
-          )}
-        </Card>
-      </div>
-      
-      {!user && (
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
-          </TabsList>
-          <TabsContent value="login" className="mt-4">
-            <SupabaseSignIn redirectTo="/supabase-auth-test" />
-          </TabsContent>
-          <TabsContent value="register" className="mt-4">
-            <SupabaseSignUp redirectTo="/supabase-auth-test" />
-          </TabsContent>
-        </Tabs>
+          </Card>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <Tabs defaultValue="login" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            <TabsContent value="login">
+              <SupabaseSignUpSimple />
+            </TabsContent>
+            <TabsContent value="signup">
+              <SupabaseSignUpSimple />
+            </TabsContent>
+          </Tabs>
+        </div>
       )}
-      
-      <div className="mt-6">
-        <Alert>
-          <InfoIcon className="h-4 w-4" />
-          <AlertTitle>Information</AlertTitle>
-          <AlertDescription>
-            This page uses the Supabase Auth UI components for simpler authentication, including magic link (passwordless) login.
-          </AlertDescription>
-        </Alert>
-      </div>
     </div>
   );
 }

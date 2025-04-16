@@ -28,6 +28,7 @@ import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
 import SupabaseTest from "@/pages/SupabaseTest";
 import SupabaseAuthTest from "@/pages/SupabaseAuthTest";
+import SimpleAuthTest from "@/pages/SimpleAuthTest";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -51,6 +52,7 @@ function Router() {
       <Route path="/auth" component={AuthPage} />
       <Route path="/supabase-test" component={SupabaseTest} />
       <Route path="/supabase-auth-test" component={SupabaseAuthTest} />
+      <Route path="/simple-auth-test" component={SimpleAuthTest} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />

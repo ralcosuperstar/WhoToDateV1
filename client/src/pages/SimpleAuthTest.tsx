@@ -1,27 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useSupabase } from '@/contexts/SupabaseContext';
-import { SupabaseLogoutButton } from '@/components/auth/SupabaseAuth';
 import { SimpleAuthUI } from '@/components/auth/SimpleAuthUI';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SupabaseLogoutButton } from '@/components/auth/SupabaseAuth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { InfoIcon } from 'lucide-react';
 
-export default function SupabaseTest() {
+export default function SimpleAuthTest() {
   const { user, isLoading } = useSupabase();
-  const [activeTab, setActiveTab] = useState('login');
-
-  // Switch to register tab if we're coming from a register link
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('tab') === 'register') {
-      setActiveTab('register');
-    }
-  }, []);
 
   return (
     <div className="container max-w-md mx-auto py-24">
-      <h1 className="text-2xl font-bold mb-6 text-center">Supabase Authentication Test</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Simple Auth UI Test</h1>
       
       <div className="mb-6">
         <Card>
@@ -58,36 +48,20 @@ export default function SupabaseTest() {
       </div>
       
       {!user && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Authentication</CardTitle>
-            <CardDescription>Sign in or create a new account</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
-              </TabsList>
-              <TabsContent value="login" className="mt-4">
-                <SimpleAuthUI />
-              </TabsContent>
-              <TabsContent value="register" className="mt-4">
-                <SimpleAuthUI />
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-          <CardFooter>
-            <Alert>
-              <InfoIcon className="h-4 w-4" />
-              <AlertTitle>Information</AlertTitle>
-              <AlertDescription>
-                This is a test page for Supabase authentication. Your data is stored securely.
-              </AlertDescription>
-            </Alert>
-          </CardFooter>
-        </Card>
+        <div>
+          <SimpleAuthUI />
+        </div>
       )}
+      
+      <div className="mt-6">
+        <Alert>
+          <InfoIcon className="h-4 w-4" />
+          <AlertTitle>Information</AlertTitle>
+          <AlertDescription>
+            This is a simplified version of the Supabase Auth UI that supports email/password login and magic link (passwordless) authentication.
+          </AlertDescription>
+        </Alert>
+      </div>
     </div>
   );
 }

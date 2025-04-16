@@ -5,19 +5,7 @@ import { initSupabase } from '@/lib/supabase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface SupabaseAuthUIProps {
-  redirectTo?: string;
-  appearance?: 'default' | 'minimal';
-  showMagicLink?: boolean;
-  view?: 'sign_in' | 'sign_up' | 'magic_link' | 'forgotten_password';
-}
-
-export function SupabaseAuthUI({
-  redirectTo,
-  appearance = 'default',
-  showMagicLink = true,
-  view,
-}: SupabaseAuthUIProps) {
+export function SimpleAuthUI() {
   const [isLoading, setIsLoading] = useState(true);
   const [supabaseClient, setSupabaseClient] = useState<any>(null);
 
@@ -82,29 +70,14 @@ export function SupabaseAuthUI({
           },
         },
       }}
-      theme={appearance}
-      redirectTo={redirectTo || window.location.origin}
-      magicLink={showMagicLink}
-      view={view}
-      localization={{
-        variables: {
-          sign_up: {
-            email_label: 'Email',
-            password_label: 'Password',
-            phone_label: 'Phone Number',
-            button_label: 'Create Account',
-            loading_button_label: 'Creating account...',
-            social_provider_text: 'Sign up with {{provider}}',
-            link_text: "Don't have an account? Sign up",
-            confirmation_text: 'Check your email for the confirmation link',
-          },
-        },
-      }}
+      providers={[]}
+      redirectTo={window.location.origin}
+      magicLink={true}
     />
   );
 }
 
-export function SupabaseSignUp({ redirectTo }: { redirectTo?: string }) {
+export function SupabaseSignUpSimple() {
   return (
     <Card>
       <CardHeader>
@@ -112,31 +85,7 @@ export function SupabaseSignUp({ redirectTo }: { redirectTo?: string }) {
         <CardDescription>Sign up to get started with WhoToDate</CardDescription>
       </CardHeader>
       <CardContent>
-        <SupabaseAuthUI 
-          redirectTo={redirectTo}
-          appearance="default"
-          showMagicLink={true}
-          view="sign_up"
-        />
-      </CardContent>
-    </Card>
-  );
-}
-
-export function SupabaseSignIn({ redirectTo }: { redirectTo?: string }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Welcome Back</CardTitle>
-        <CardDescription>Sign in to your WhoToDate account</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <SupabaseAuthUI 
-          redirectTo={redirectTo} 
-          appearance="default"
-          showMagicLink={true}
-          view="sign_in"
-        />
+        <SimpleAuthUI />
       </CardContent>
     </Card>
   );
