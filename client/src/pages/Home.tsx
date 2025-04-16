@@ -88,7 +88,7 @@ const Home = () => {
                 <div className="mt-3">
                   <p className="text-xs text-gray-500 flex items-center">
                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
-                    No signup needed, just honest answers!
+                    Just honest answers for accurate results!
                   </p>
                 </div>
               </div>
@@ -521,7 +521,7 @@ const Home = () => {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <div className="inline-flex items-center bg-white px-4 py-2 rounded-full shadow-sm">
                 <Check className="h-4 w-4 text-pink-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">No signup needed</span>
+                <span className="text-sm font-medium text-gray-700">Simple sign-up process</span>
               </div>
               
               <div className="inline-flex items-center bg-white px-4 py-2 rounded-full shadow-sm">
