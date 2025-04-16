@@ -22,7 +22,7 @@ import CounsellingPromotion from "@/components/shared/CounsellingPromotion";
 
 const Home = () => {
   return (
-    <>
+    <div className="pt-16 pb-20">
       <Helmet>
         <title>WhoToDate - Find Who to Date With Science and Fun</title>
         <meta name="description" content="Take our FREE 5-minute compatibility quiz to boost your dating confidence. Discover your personality traits, attachment style, and who fits you best." />
@@ -35,7 +35,7 @@ const Home = () => {
       </Helmet>
       
       {/* Hero Section */}
-      <section className="pt-16 md:pt-24 pb-16 bg-gradient-to-br from-pink-50 via-white to-purple-50 overflow-hidden">
+      <section className="py-16 bg-gradient-to-br from-pink-50 via-white to-purple-50 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left side content */}
@@ -542,7 +542,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
