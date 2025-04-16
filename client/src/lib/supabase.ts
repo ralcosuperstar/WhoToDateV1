@@ -36,8 +36,17 @@ export async function initSupabase() {
     // Get the configuration
     const { supabaseUrl, supabaseAnonKey } = await getSupabaseConfig();
     
+    console.log('Initializing Supabase with URL:', supabaseUrl);
+    
     // Create a new Supabase client
-    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true
+      }
+    });
+    
+    console.log('Supabase client initialized successfully');
     
     return supabaseInstance;
   } catch (error) {

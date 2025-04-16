@@ -27,14 +27,19 @@ export function SupabaseLoginForm() {
     setIsLoading(true);
     
     try {
-      const { error } = await signIn(email, password);
+      // Log the login attempt
+      console.log('Attempting login with Supabase:', email);
       
-      if (error) {
+      const response = await signIn(email, password);
+      console.log('Supabase login response:', response);
+      
+      if (response.error) {
         toast({
           variant: 'destructive',
           title: 'Login Failed',
-          description: error.message,
+          description: response.error.message || 'An error occurred during login',
         });
+        console.error('Login error from Supabase:', response.error);
       } else {
         toast({
           title: 'Login Successful',
@@ -43,6 +48,7 @@ export function SupabaseLoginForm() {
         // Redirect can be handled by the auth state in the parent component
       }
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         variant: 'destructive',
         title: 'Login Failed',
@@ -129,14 +135,19 @@ export function SupabaseRegisterForm() {
     setIsLoading(true);
     
     try {
-      const { error } = await signUp(email, password);
+      // Log the registration attempt
+      console.log('Attempting registration with Supabase:', email);
       
-      if (error) {
+      const response = await signUp(email, password);
+      console.log('Supabase registration response:', response);
+      
+      if (response.error) {
         toast({
           variant: 'destructive',
           title: 'Registration Failed',
-          description: error.message,
+          description: response.error.message || 'An error occurred during registration',
         });
+        console.error('Registration error from Supabase:', response.error);
       } else {
         toast({
           title: 'Registration Successful',
@@ -145,6 +156,7 @@ export function SupabaseRegisterForm() {
         // Redirect can be handled by the auth state in the parent component
       }
     } catch (error) {
+      console.error('Registration error:', error);
       toast({
         variant: 'destructive',
         title: 'Registration Failed',
