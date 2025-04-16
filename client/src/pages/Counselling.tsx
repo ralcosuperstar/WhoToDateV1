@@ -408,10 +408,10 @@ const FeaturedCounselorCard = ({ counselor }: { counselor: Counselor }) => {
       <div className="h-2 w-full bg-blue-500"></div>
       
       <div className="p-6">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Left column - image and booking info */}
-          <div className="md:w-1/4 mb-6 md:mb-0 flex flex-col items-center md:items-start">
-            <div className="relative mb-4 w-full max-w-[240px] mx-auto md:mx-0">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          {/* Left column - image and basic details */}
+          <div className="md:col-span-3 flex flex-col items-center md:items-start">
+            <div className="relative mb-4 w-full max-w-[200px] mx-auto md:mx-0">
               <div className="aspect-[3/4] relative rounded-lg shadow-md overflow-hidden">
                 <img 
                   src={counselor.imageUrl} 
@@ -425,219 +425,175 @@ const FeaturedCounselorCard = ({ counselor }: { counselor: Counselor }) => {
               </div>
             </div>
             
-            <h2 className="font-bold text-2xl text-gray-800 mb-1">{counselor.name}</h2>
-            
-            <div className="flex items-center text-sm text-gray-600 mb-3">
-              <Brain className="h-4 w-4 mr-1.5 text-blue-500" />
-              <span>{counselor.type}</span>
-            </div>
-            
-            <div className="flex items-center mb-3">
-              <div className="flex text-yellow-400 mr-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
-              <span className="text-sm font-medium text-gray-700">{counselor.rating}</span>
-              <span className="text-xs text-gray-500 ml-1">({counselor.reviewCount} reviews)</span>
-            </div>
-            
-            {age && (
-              <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium">Age:</span> {age} years
-              </div>
-            )}
-            
-            {counselor.experience && (
-              <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium">Experience:</span> {counselor.experience} {counselor.experience === 1 ? 'year' : 'years'}
-              </div>
-            )}
-            
-            {counselor.location && (
-              <div className="flex items-center text-sm text-gray-600 mb-2">
-                <MapPin className="h-4 w-4 mr-1.5 text-gray-500" />
-                {counselor.location}
-              </div>
-            )}
-            
-            <div className="text-sm text-gray-600 mb-2">
-              <span className="font-medium">Qualification:</span> {counselor.qualification}
-            </div>
-            
-            <div className="flex items-center text-sm text-gray-600 mb-2">
-              <Clock className="h-4 w-4 mr-1.5 text-gray-500" />
-              {counselor.duration}
-            </div>
-            
-            <div className="flex items-center text-sm text-gray-600 mb-2">
-              <Globe className="h-4 w-4 mr-1.5 text-gray-500" />
-              {counselor.languages.join(", ")}
-            </div>
-            
-            {counselor.modes && (
-              <div className="flex items-start text-sm text-gray-600 mb-5">
-                <div className="flex mt-0.5 mr-1.5">
-                  {counselor.modes.includes("Google Meet") && <Video className="h-4 w-4 text-gray-500" />}
-                  {counselor.modes.includes("Audio Call") && <Phone className="h-4 w-4 text-gray-500 ml-1" />}
-                </div>
-                <span>Available via: {counselor.modes.join(", ")}</span>
-              </div>
-            )}
-            
-            <div className="bg-blue-50 rounded-lg p-4 w-full mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <div className="text-sm text-gray-500">Session Price</div>
-                <div className={`text-sm ${
-                  counselor.availability.includes("Available") 
-                    ? "text-green-600" 
-                    : "text-gray-600"
-                }`}>
-                  {counselor.availability}
-                </div>
-              </div>
-              <div className="text-xl font-bold text-gray-800 mb-4">₹{counselor.price}</div>
+            <div className="text-center md:text-left w-full">
+              <h2 className="font-bold text-2xl text-gray-800 mb-1">{counselor.name}</h2>
               
-              {counselor.whatsappNumber && (
-                <a 
-                  href={generateWhatsAppLink(counselor.whatsappNumber)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-green-500 hover:bg-green-600 text-white text-center py-2.5 px-4 rounded-lg font-medium flex items-center justify-center shadow-sm transition-colors mb-2"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                  </svg>
-                  Book on WhatsApp
-                </a>
-              )}
+              <div className="flex justify-center md:justify-start items-center text-sm text-gray-600 mb-2">
+                <Brain className="h-4 w-4 mr-1.5 text-blue-500" />
+                <span>{counselor.type}</span>
+              </div>
+              
+              <div className="flex justify-center md:justify-start items-center mb-3">
+                <div className="flex text-yellow-400 mr-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <span className="text-sm font-medium text-gray-700">{counselor.rating}</span>
+                <span className="text-xs text-gray-500 ml-1">({counselor.reviewCount})</span>
+              </div>
+              
+              <div className="bg-blue-50 rounded-lg p-3 w-full mb-3">
+                <div className="flex justify-between items-center mb-1">
+                  <div className="text-sm text-gray-500">Price</div>
+                  <div className={`text-sm ${
+                    counselor.availability.includes("Available") 
+                      ? "text-green-600" 
+                      : "text-gray-600"
+                  }`}>
+                    {counselor.availability}
+                  </div>
+                </div>
+                <div className="text-xl font-bold text-gray-800 mb-3">₹{counselor.price}</div>
+                
+                {counselor.whatsappNumber && (
+                  <a 
+                    href={generateWhatsAppLink(counselor.whatsappNumber)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-green-500 hover:bg-green-600 text-white text-center py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    Book on WhatsApp
+                  </a>
+                )}
+              </div>
             </div>
           </div>
           
-          {/* Right column - detailed info */}
-          <div className="md:w-3/4 flex flex-col">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
-              <div>
-                <h2 className="font-bold text-2xl md:text-3xl text-gray-800 mb-1">{counselor.name}</h2>
-                
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <Brain className="h-4 w-4 mr-1.5 text-blue-500" />
-                  <span>{counselor.type}</span>
-                </div>
-                
-                <div className="flex items-center mb-2">
-                  <div className="flex text-yellow-400 mr-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">
-                    {counselor.rating} ({counselor.reviewCount} reviews)
-                  </span>
-                </div>
-              </div>
+          {/* Middle column - counselor info */}
+          <div className="md:col-span-4">
+            <div className="bg-gray-50 p-4 rounded-lg mb-4 h-full">
+              <h3 className="font-bold text-lg text-gray-800 mb-3">Professional Details</h3>
               
-              <div className="flex flex-wrap gap-2">
-                {counselor.specializations.slice(0, 3).map((spec, idx) => (
-                  <span 
-                    key={idx} 
-                    className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
-                  >
-                    {spec}
-                  </span>
-                ))}
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-5 mb-5">
               <div className="space-y-3">
-                <div className="flex">
-                  <MapPin className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start">
+                  <BadgeCheck className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-gray-600">
-                      <span className="font-medium text-gray-800">Location:</span> {counselor.location}
+                      <span className="font-medium text-gray-800">Qualification:</span><br/> 
+                      {counselor.qualification}
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex">
-                  <Users className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start">
+                  <Users className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-gray-600">
-                      <span className="font-medium text-gray-800">Experience:</span> {counselor.experience} {counselor.experience === 1 ? 'year' : 'years'}
+                      <span className="font-medium text-gray-800">Experience:</span><br/> 
+                      {counselor.experience} {counselor.experience === 1 ? 'year' : 'years'}
                     </p>
                   </div>
                 </div>
                 
                 {age && (
-                  <div className="flex">
-                    <Calendar className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
+                  <div className="flex items-start">
+                    <Calendar className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="text-gray-600">
-                        <span className="font-medium text-gray-800">Age:</span> {age} years
+                        <span className="font-medium text-gray-800">Age:</span><br/> 
+                        {age} years
                       </p>
                     </div>
                   </div>
                 )}
+                
+                <div className="flex items-start">
+                  <MapPin className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-gray-600">
+                      <span className="font-medium text-gray-800">Location:</span><br/> 
+                      {counselor.location}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <Globe className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-gray-600">
+                      <span className="font-medium text-gray-800">Languages:</span><br/> 
+                      {counselor.languages.join(', ')}
+                    </p>
+                  </div>
+                </div>
+                
+                {counselor.modes && (
+                  <div className="flex items-start">
+                    <Video className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-gray-600">
+                        <span className="font-medium text-gray-800">Session modes:</span><br/> 
+                        {counselor.modes.join(', ')}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="mt-4">
+                  <span className="font-medium text-gray-800 block mb-1">Specializes in:</span>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {counselor.specializations.slice(0, 5).map((spec, idx) => (
+                      <span 
+                        key={idx} 
+                        className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full"
+                      >
+                        {spec}
+                      </span>
+                    ))}
+                    {counselor.specializations.length > 5 && (
+                      <span className="text-xs text-gray-500 ml-1">+{counselor.specializations.length - 5} more</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right column - bio and specializations */}
+          <div className="md:col-span-5">
+            <div className="bg-white p-1 rounded-lg">
+              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                <h3 className="font-bold text-lg text-gray-800 mb-2">About {counselor.name.split(' ')[0]}</h3>
+                <p className="text-gray-600">
+                  {showFullBio ? counselor.fullBio : counselor.shortBio}
+                </p>
+                {counselor.fullBio && counselor.fullBio !== counselor.shortBio && (
+                  <button 
+                    onClick={() => setShowFullBio(!showFullBio)}
+                    className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
+                  >
+                    {showFullBio ? 'Show Less' : 'Read More'}
+                    <ChevronDown className={`h-4 w-4 ml-1 transform ${showFullBio ? 'rotate-180' : ''}`} />
+                  </button>
+                )}
               </div>
               
-              <div className="space-y-3">  
-                <div className="flex">
-                  <Globe className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium text-gray-800">Languages:</span> {counselor.languages.join(', ')}
-                    </p>
-                  </div>
+              <div>
+                <h3 className="font-bold text-lg text-gray-800 mb-2">All Specializations</h3>
+                <div className="flex flex-wrap gap-2">
+                  {counselor.specializations.map((spec, idx) => (
+                    <span 
+                      key={idx} 
+                      className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
+                    >
+                      {spec}
+                    </span>
+                  ))}
                 </div>
-                
-                <div className="flex">
-                  <Video className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium text-gray-800">Session modes:</span> {counselor.modes?.join(', ')}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex">
-                  <BadgeCheck className="h-5 w-5 text-blue-500 mr-3 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-600">
-                      <span className="font-medium text-gray-800">Qualification:</span> {counselor.qualification}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <h3 className="font-bold text-lg text-gray-800 mb-2">Bio</h3>
-              <p className="text-gray-600">
-                {showFullBio ? counselor.fullBio : counselor.shortBio}
-              </p>
-              {counselor.fullBio && counselor.fullBio !== counselor.shortBio && (
-                <button 
-                  onClick={() => setShowFullBio(!showFullBio)}
-                  className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
-                >
-                  {showFullBio ? 'Show Less' : 'Read More'}
-                  <ChevronDown className={`h-4 w-4 ml-1 transform ${showFullBio ? 'rotate-180' : ''}`} />
-                </button>
-              )}
-            </div>
-            
-            <div>
-              <h3 className="font-bold text-lg text-gray-800 mb-2">Specializations</h3>
-              <div className="flex flex-wrap gap-2">
-                {counselor.specializations.map((spec, idx) => (
-                  <span 
-                    key={idx} 
-                    className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
-                  >
-                    {spec}
-                  </span>
-                ))}
               </div>
             </div>
           </div>
