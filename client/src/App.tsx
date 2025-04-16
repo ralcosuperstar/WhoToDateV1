@@ -27,6 +27,7 @@ import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
 import SupabaseTest from "@/pages/SupabaseTest";
+import SupabaseAuthTest from "@/pages/SupabaseAuthTest";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -49,6 +50,7 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/supabase-test" component={SupabaseTest} />
+      <Route path="/supabase-auth-test" component={SupabaseAuthTest} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />
