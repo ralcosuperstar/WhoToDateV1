@@ -49,6 +49,12 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/80 to-primary/0 text-center p-2 pt-6">
                 <span className="text-white text-xs font-semibold">Aanchal S.</span>
               </div>
+              <div className="absolute -top-2 -right-2 bg-blue-600 rounded-lg shadow-lg px-2 py-1 z-10 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+                <span className="text-white text-xs font-semibold">Verified Professionals</span>
+              </div>
             </div>
           </div>
         </div>
@@ -131,8 +137,11 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
                   <div className="absolute -bottom-2 -right-2 bg-white rounded-full shadow-lg p-4 z-20">
                     <Heart className="text-primary h-6 w-6" />
                   </div>
-                  <div className="absolute -top-3 -left-3 bg-primary rounded-full shadow-lg px-3 py-1.5 z-20">
-                    <span className="text-white text-xs font-semibold">Verified Professional</span>
+                  <div className="absolute -top-3 -left-3 bg-blue-600 rounded-full shadow-lg px-3 py-1.5 z-20 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    <span className="text-white text-xs font-semibold">Verified Professionals</span>
                   </div>
                 </div>
               </div>
@@ -156,8 +165,11 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-2 right-0 bg-primary rounded-lg shadow-lg px-3 py-1.5 z-10">
-              <span className="text-white text-xs font-semibold">Psychology Expert</span>
+            <div className="absolute -top-3 -right-3 bg-blue-600 rounded-lg shadow-lg px-3 py-1.5 z-10 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
+                <path d="M20 6L9 17l-5-5"></path>
+              </svg>
+              <span className="text-white text-xs font-semibold">Verified Professionals</span>
             </div>
           </div>
         </div>
