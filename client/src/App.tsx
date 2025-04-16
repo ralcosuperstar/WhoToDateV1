@@ -11,7 +11,6 @@ import { SupabaseProvider } from "@/contexts/SupabaseContext";
 // Layout components
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import ScrollToTop from "@/components/layout/ScrollToTop";
 
 // Pages
 import Home from "@/pages/Home";
@@ -102,7 +101,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
         <AuthProvider>
-          <ScrollToTop />
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1">
