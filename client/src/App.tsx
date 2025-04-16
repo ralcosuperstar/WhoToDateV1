@@ -102,8 +102,7 @@ function App() {
       <SupabaseProvider>
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
-            {/* Temporarily removed Header to resolve auth conflicts */}
-            <div className="h-16"></div> {/* Spacer to replace header height */}
+            <Header />
             <main className="flex-1">
               <Router />
             </main>
