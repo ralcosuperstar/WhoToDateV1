@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { Heart, Users, Clock, ChevronRight } from "lucide-react";
-import aanchalImg from "@assets/Aanchal.jpg";
+import { Heart, Users, Clock, ChevronRight, BadgeCheck } from "lucide-react";
 
 interface CounsellingPromotionProps {
   variant?: 'default' | 'compact' | 'full';
@@ -41,13 +40,14 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
           </div>
           <div className="md:w-2/5 flex justify-center md:justify-end">
             <div className="relative w-40 h-40 md:w-48 md:h-48 overflow-hidden rounded-full border-4 border-white shadow-lg">
-              <img 
-                src={aanchalImg} 
-                alt="Professional Counselor" 
-                className="w-full h-full object-cover"
-              />
+              <div className="w-full h-full bg-blue-50 flex items-center justify-center">
+                <div className="text-center">
+                  <BadgeCheck className="h-10 w-10 text-blue-500 mx-auto mb-2" />
+                  <span className="text-blue-700 font-medium text-sm">Professional Counselor</span>
+                </div>
+              </div>
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/80 to-primary/0 text-center p-2 pt-6">
-                <span className="text-white text-xs font-semibold">Aanchal S.</span>
+                <span className="text-white text-xs font-semibold">Expert Support</span>
               </div>
               <div className="absolute -top-2 -right-2 bg-blue-600 rounded-lg shadow-lg px-2 py-1 z-10 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
@@ -128,11 +128,12 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
                 <div className="relative w-64 h-64 md:w-80 md:h-80">
                   <div className="absolute inset-2 bg-white rounded-full shadow-md"></div>
                   <div className="absolute inset-0 overflow-hidden rounded-full border-8 border-white shadow-lg z-10">
-                    <img 
-                      src={aanchalImg} 
-                      alt="Professional Counselor" 
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="w-full h-full bg-blue-50 flex items-center justify-center">
+                      <div className="text-center">
+                        <BadgeCheck className="h-16 w-16 text-blue-500 mx-auto mb-3" />
+                        <span className="text-blue-700 font-semibold text-lg">Professional Counselor</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="absolute -bottom-2 -right-2 bg-white rounded-full shadow-lg p-4 z-20">
                     <Heart className="text-primary h-6 w-6" />
@@ -159,11 +160,12 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
         <div className="md:w-1/3 flex justify-center md:justify-start order-1 md:order-none">
           <div className="relative w-48 h-48 md:w-56 md:h-56">
             <div className="absolute inset-0 overflow-hidden rounded-full border-4 border-white shadow-lg">
-              <img 
-                src={aanchalImg} 
-                alt="Professional Counselor" 
-                className="w-full h-full object-cover"
-              />
+              <div className="w-full h-full bg-blue-50 flex items-center justify-center">
+                <div className="text-center">
+                  <BadgeCheck className="h-12 w-12 text-blue-500 mx-auto mb-2" />
+                  <span className="text-blue-700 font-medium">Professional Counselor</span>
+                </div>
+              </div>
             </div>
             <div className="absolute -top-3 -right-3 bg-blue-600 rounded-lg shadow-lg px-3 py-1.5 z-10 flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
