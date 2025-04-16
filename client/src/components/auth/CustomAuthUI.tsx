@@ -100,6 +100,27 @@ export function CustomAuthUI() {
       });
 
       if (error) {
+        // Check if the error indicates user already exists
+        if (error.message && (
+          error.message.includes('User already registered') || 
+          error.message.includes('already been registered')
+        )) {
+          // Show more helpful message for existing users
+          toast({
+            title: 'Account already exists',
+            description: 'This email is already registered. Please sign in instead.',
+            variant: 'destructive'
+          });
+          
+          // Switch to sign-in tab
+          setActiveTab('sign-in');
+          
+          // Pre-fill the email field in the sign-in form
+          signInForm.setValue('email', email);
+          
+          return;
+        }
+        
         throw error;
       }
 
