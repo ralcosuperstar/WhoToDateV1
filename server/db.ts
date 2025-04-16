@@ -11,21 +11,22 @@ let dbPool: Pool | null = null;
 let dbClient: any = null;
 
 try {
-  // Check for DATABASE_URL environment variable
   const databaseUrl = process.env.DATABASE_URL;
   
   if (!databaseUrl) {
     console.warn("⚠️ DATABASE_URL not set. Using in-memory storage fallback.");
-    // We'll handle this by using the in-memory storage in storage.ts
   } else {
     console.log("✅ Connecting to PostgreSQL database...");
-    dbPool = new Pool({ connectionString: databaseUrl });
+    dbPool = new Pool({ 
+      connectionString: databaseUrl,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      connectionTimeoutMillis: 5000
+    });
     dbClient = drizzle({ client: dbPool, schema });
   }
 } catch (error) {
   console.error("❌ Database connection error:", error);
   console.warn("⚠️ Falling back to in-memory storage for development/testing.");
-  // Let the application continue without database
 }
 
 // Export for use in other modules
