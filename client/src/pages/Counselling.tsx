@@ -182,7 +182,7 @@ const counselors: Counselor[] = [
 // CounsellingHero Component
 const CounsellingHero = () => {
   return (
-    <section className="pt-16 md:pt-20 pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
+    <section className="pt-0 pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 md:pr-12">
@@ -927,7 +927,7 @@ const Counselling = () => {
   });
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-16 pb-20">
       <Helmet>
         <title>Talk to a Counselor | WhoToDate</title>
         <meta name="description" content="Feeling overwhelmed or need relationship advice? Connect with verified counselors and doctor listeners who understand your challenges. Book a session today." />
