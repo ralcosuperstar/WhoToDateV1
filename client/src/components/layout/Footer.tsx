@@ -260,6 +260,7 @@ const Footer = () => {
             <Link href="/privacy" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Privacy Policy</Link>
             <Link href="/terms" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Terms of Service</Link>
             <Link href="/cookies" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Cookie Policy</Link>
+            <Link href="/refund-policy" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Refund Policy</Link>
             <Link href="/sitemap" className="text-white/70 hover:text-primary transition-colors text-sm hover:underline">Sitemap</Link>
           </div>
         </div>

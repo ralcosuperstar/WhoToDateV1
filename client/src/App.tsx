@@ -26,6 +26,13 @@ import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
 
+// Policy Pages
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
+import CookiePolicy from "@/pages/CookiePolicy";
+import RefundPolicy from "@/pages/RefundPolicy";
+import Sitemap from "@/pages/Sitemap";
+
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -39,6 +46,13 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />
+      
+      {/* Policy Pages */}
+      <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/terms" component={TermsOfService} />
+      <Route path="/cookies" component={CookiePolicy} />
+      <Route path="/refund-policy" component={RefundPolicy} />
+      <Route path="/sitemap" component={Sitemap} />
       
       {/* Auth redirects - for backward compatibility */}
       <Route path="/login">
