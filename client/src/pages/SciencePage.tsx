@@ -649,6 +649,30 @@ const Science = () => {
           <CalculationMethod />
         </div>
       </section>
+      
+      {/* Counselling Promotion */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-4 py-1.5 px-4 bg-pink-50 rounded-full shadow-sm">
+              <span className="text-gray-700 font-medium text-sm flex items-center">
+                <span className="mr-2">❤️</span> Professional Guidance
+              </span>
+            </div>
+            
+            <h2 className="font-heading font-bold text-2xl sm:text-3xl md:text-4xl mb-4 text-gray-800">
+              Science is Just the Start <span style={{ color: '#e83a8e' }}>Let's Talk About You</span>
+            </h2>
+            
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Understanding the science behind relationships is important, but applying it to your unique situation
+              takes personalized guidance. Our counselors can help you navigate your relationship journey.
+            </p>
+          </div>
+          
+          <CounsellingPromotion variant="compact" />
+        </div>
+      </section>
 
       {/* Final CTA */}
       <section className="py-16 px-4 bg-gradient-to-br from-pink-50 to-purple-50">
