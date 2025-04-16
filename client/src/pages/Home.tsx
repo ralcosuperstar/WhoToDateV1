@@ -39,7 +39,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left side content */}
-            <div className="order-2 md:order-1">
+            <div className="order-1 md:order-1">
               <div className="inline-block mb-4 py-1.5 px-4 bg-pink-50 rounded-full shadow-sm">
                 <span className="text-gray-700 font-medium text-sm flex items-center">
                   <span className="mr-2">🧬</span> A 5-minute compatibility quiz
@@ -106,7 +106,7 @@ const Home = () => {
             </div>
             
             {/* Right side visual */}
-            <div className="order-1 md:order-2">
+            <div className="order-2 md:order-2">
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 relative">
                 {/* Color badges at top */}
                 <div className="flex justify-center space-x-4 mb-6">
