@@ -224,7 +224,7 @@ const Footer = () => {
                   <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-0.5">WhatsApp Business</p>
+                  <p className="text-white font-medium mb-0.5">WhatsApp/Call</p>
                   <a href="https://wa.me/919370922063" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-primary transition-colors">+91 9370922063</a>
                 </div>
               </li>
@@ -237,9 +237,8 @@ const Footer = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-0.5">Parent Company</p>
-                  <p className="text-white/80">InfyMark Solutions (OPC) Private Limited</p>
-                  <a href="https://infymark.com" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:text-primary text-sm transition-colors">infymark.com</a>
+                  <p className="text-white font-medium mb-0.5">Managed by</p>
+                  <a href="https://infymark.com" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-primary transition-colors">InfyMark Solutions</a>
                 </div>
               </li>
             </ul>
@@ -253,7 +252,7 @@ const Footer = () => {
               <Heart className="w-4 h-4 text-primary group-hover:text-white transition-colors" />
             </div>
             <p className="text-white/80 text-sm">
-              &copy; {new Date().getFullYear()} WhoToDate by InfyMark Solutions (OPC) Private Limited. All rights reserved.
+              &copy; {new Date().getFullYear()} WhoToDate. All rights reserved.
             </p>
           </div>
           
