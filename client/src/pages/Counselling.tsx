@@ -408,17 +408,20 @@ const FeaturedCounselorCard = ({ counselor }: { counselor: Counselor }) => {
       <div className="h-2 w-full bg-blue-500"></div>
       
       <div className="p-6">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Left column - basic info */}
           <div className="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-            <div className="relative mb-4">
-              <img 
-                src={counselor.imageUrl} 
-                alt={counselor.name} 
-                className="w-full h-64 object-cover rounded-lg shadow-md"
-              />
-              <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                Featured
+            <div className="relative mb-4 w-full max-w-[240px] mx-auto md:mx-0">
+              <div className="aspect-[3/4] relative rounded-lg shadow-md overflow-hidden">
+                <img 
+                  src={counselor.imageUrl} 
+                  alt={counselor.name} 
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/40 to-transparent opacity-40"></div>
+                <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  Featured
+                </div>
               </div>
             </div>
             
