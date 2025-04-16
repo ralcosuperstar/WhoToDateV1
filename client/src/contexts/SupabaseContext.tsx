@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase, initSupabase, signIn, signOut, signUp, getCurrentUser } from '@/lib/supabase';
+import { initSupabase, signIn, signOut, signUp, getCurrentUser, getSession } from '@/lib/supabase';
 
 // Define the context types
 interface SupabaseContextType {
@@ -25,7 +25,7 @@ const SupabaseContext = createContext<SupabaseContextType>({
 });
 
 // Create the provider component
-export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -41,13 +41,13 @@ export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         const client = await initSupabase();
         
         // Get the current session
-        const { data: { session: currentSession } } = await client.auth.getSession();
-        setSession(currentSession);
+        const sessionData = await getSession();
+        setSession(sessionData.session);
         
         // Get the current user
-        if (currentSession) {
-          const { data: { user: currentUser } } = await client.auth.getUser();
-          setUser(currentUser);
+        if (sessionData.session) {
+          const userData = await getCurrentUser();
+          setUser(userData.user);
         }
         
         // Subscribe to auth changes
@@ -109,7 +109,9 @@ export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       {children}
     </SupabaseContext.Provider>
   );
-};
+}
 
 // Create a custom hook to use the Supabase context
-export const useSupabase = () => useContext(SupabaseContext);
+export function useSupabase() {
+  return useContext(SupabaseContext);
+}

@@ -26,6 +26,7 @@ import HowItWorks from "@/pages/NewHowItWorks";
 import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
 import AuthPage from "@/pages/auth-page";
+import SupabaseTest from "@/pages/SupabaseTest";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -47,6 +48,7 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/supabase-test" component={SupabaseTest} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />
