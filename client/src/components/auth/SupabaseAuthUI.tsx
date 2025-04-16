@@ -91,7 +91,6 @@ export function SupabaseAuthUI({
           sign_up: {
             email_label: 'Email',
             password_label: 'Password',
-            phone_label: 'Phone Number',
             button_label: 'Create Account',
             loading_button_label: 'Creating account...',
             social_provider_text: 'Sign up with {{provider}}',
