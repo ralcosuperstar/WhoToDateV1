@@ -15,7 +15,7 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
   if (variant === 'compact') {
     return (
       <div className={`bg-gradient-to-r from-[#fcf1f7] to-[#fff4f9] rounded-2xl overflow-hidden shadow-sm ${className}`}>
-        <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+        <div className="p-6 md:p-8 flex flex-col md:flex-row items-start gap-6">
           <div className="md:w-3/5">
             <h3 className="text-xl md:text-2xl font-heading font-bold text-gray-800 mb-3">
               Talk to Someone Who Gets It
@@ -39,21 +39,19 @@ const CounsellingPromotion: React.FC<CounsellingPromotionProps> = ({
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
-          <div className="md:w-2/5 flex justify-center md:justify-end mt-4 md:mt-0">
-            <div className="relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full border-4 border-white shadow-lg">
+          
+          <div className="flex flex-col items-center md:items-end mt-2 md:mt-0 self-center md:self-start">
+            <div className="flex items-center bg-blue-600 text-white px-3 py-1.5 rounded-full shadow-sm mb-3 text-sm">
+              <BadgeCheck className="h-4 w-4 mr-1.5" />
+              <span className="font-medium">Verified Professionals</span>
+            </div>
+            
+            <div className="w-28 h-28 overflow-hidden rounded-full border-4 border-white shadow-md">
               <img 
                 src={aanchalImg} 
                 alt="Professional Counselor" 
                 className="w-full h-full object-cover object-top"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-blue-600 text-center py-1">
-                <div className="flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white mr-1">
-                    <path d="M20 6L9 17l-5-5"></path>
-                  </svg>
-                  <span className="text-white text-xs font-semibold">Verified Professionals</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
