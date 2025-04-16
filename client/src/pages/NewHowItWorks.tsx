@@ -201,7 +201,7 @@ const HowItWorks = () => {
       {/* Process section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
+          <div className="mb-12">
             <div className="inline-block mb-4 py-1.5 px-4 bg-pink-50 rounded-full">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">🚀</span> The Journey to Better Relationships
@@ -212,7 +212,7 @@ const HowItWorks = () => {
               How It Works - Your Path to Relationship Clarity
             </h2>
             
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl">
               We're not setting you up on dates. We're setting you up with insights that you can take into the real world.
             </p>
           </div>
@@ -265,7 +265,7 @@ const HowItWorks = () => {
       {/* Step 2: Compatibility Report Badges Section */}
       <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
+          <div className="mb-12">
             <div className="inline-block mb-4 py-1.5 px-4 bg-white rounded-full shadow-sm">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">🎯</span> Step 2: Your Compatibility Report
@@ -276,7 +276,7 @@ const HowItWorks = () => {
               Understanding Your Compatibility Badge
             </h2>
             
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl">
               Our easy-to-understand color system helps you quickly grasp your relationship outlook
             </p>
           </div>
@@ -348,7 +348,7 @@ const HowItWorks = () => {
       {/* Step 3: Apply Your Results */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
+          <div className="mb-12">
             <div className="inline-block mb-4 py-1.5 px-4 bg-purple-50 rounded-full">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">💡</span> Step 3: Apply Your Results
@@ -359,7 +359,7 @@ const HowItWorks = () => {
               Using Your Compatibility Profile in Real Life
             </h2>
             
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl">
               Knowledge is power - especially when it comes to relationships. Here's how to use your results effectively.
             </p>
           </div>
@@ -425,7 +425,7 @@ const HowItWorks = () => {
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
+          <div className="mb-12">
             <div className="inline-block mb-4 py-1.5 px-4 bg-white rounded-full shadow-sm">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">❓</span> Frequently Asked Questions
@@ -436,7 +436,7 @@ const HowItWorks = () => {
               Got Questions? We've Got Answers
             </h2>
             
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl">
               Everything you might want to know about our compatibility quiz and reports
             </p>
           </div>
@@ -478,7 +478,7 @@ const HowItWorks = () => {
       {/* Counselling Promotion */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
+          <div className="mb-12">
             <div className="inline-block mb-4 py-1.5 px-4 bg-pink-50 rounded-full shadow-sm">
               <span className="text-gray-700 font-medium text-sm flex items-center">
                 <span className="mr-2">❤️</span> Professional Support
@@ -489,7 +489,7 @@ const HowItWorks = () => {
               Need Deeper Guidance? <span style={{ color: '#e83a8e' }}>We've Got You Covered</span>
             </h2>
             
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl">
               Sometimes you need more than a quiz. Our counselling service connects you with experienced 
               relationship professionals who can help you navigate complex emotions and situations.
             </p>
