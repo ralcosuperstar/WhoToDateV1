@@ -216,7 +216,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-white font-medium mb-0.5">Email</p>
-                  <a href="mailto:support@whotodate.com" className="text-white/80 hover:text-primary transition-colors">support@whotodate.com</a>
+                  <a href="mailto:hello@whotodate.com" className="text-white/80 hover:text-primary transition-colors">hello@whotodate.com</a>
                 </div>
               </li>
               <li className="flex group">
@@ -224,17 +224,22 @@ const Footer = () => {
                   <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-0.5">Phone</p>
-                  <a href="tel:+919876543210" className="text-white/80 hover:text-primary transition-colors">+91 98765 43210</a>
+                  <p className="text-white font-medium mb-0.5">WhatsApp Business</p>
+                  <a href="https://wa.me/919370922063" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-primary transition-colors">+91 9370922063</a>
                 </div>
               </li>
               <li className="flex group">
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3 flex-shrink-0 transition-transform group-hover:scale-110">
-                  <MapPin className="w-4 h-4 text-primary" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.29 7 12 12 20.71 7"></polyline>
+                    <line x1="12" y1="22" x2="12" y2="12"></line>
+                  </svg>
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-0.5">Address</p>
-                  <p className="text-white/80">123 Tech Park, Bengaluru<br/>Karnataka, India - 560001</p>
+                  <p className="text-white font-medium mb-0.5">Parent Company</p>
+                  <p className="text-white/80">InfyMark Solutions (OPC) Private Limited</p>
+                  <a href="https://infymark.com" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:text-primary text-sm transition-colors">infymark.com</a>
                 </div>
               </li>
             </ul>
@@ -248,7 +253,7 @@ const Footer = () => {
               <Heart className="w-4 h-4 text-primary group-hover:text-white transition-colors" />
             </div>
             <p className="text-white/80 text-sm">
-              &copy; {new Date().getFullYear()} WhoToDate. All rights reserved.
+              &copy; {new Date().getFullYear()} WhoToDate by InfyMark Solutions (OPC) Private Limited. All rights reserved.
             </p>
           </div>
           
