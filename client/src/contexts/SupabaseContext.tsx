@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { initSupabase, signIn, signOut, signUp, getCurrentUser, getSession } from '@/lib/supabase';
+import { ensureUserExists } from '@/lib/supabaseUtils';
 
 // Define the context types
 interface SupabaseContextType {
@@ -64,6 +65,10 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
             // Sync with the server when a user signs in or is updated
             if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && newSession?.user) {
               try {
+                // First, ensure the user exists in the public.users table
+                await ensureUserExists(newSession.user);
+                
+                // Then sync with our server
                 console.log("Syncing session with server after", event);
                 const response = await fetch('/api/supabase-sync', {
                   method: 'POST',

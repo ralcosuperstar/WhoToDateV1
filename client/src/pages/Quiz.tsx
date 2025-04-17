@@ -9,6 +9,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
 import { useSupabase } from "@/contexts/SupabaseContext";
+import { ensureUserExists } from "@/lib/supabaseUtils";
 import { getSupabaseClient } from "@/lib/supabase";
 
 // Progress bar component
