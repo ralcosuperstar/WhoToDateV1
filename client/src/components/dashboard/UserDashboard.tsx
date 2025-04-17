@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +19,7 @@ import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { User, Report } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient"; 
 import { useToast } from "@/hooks/use-toast";
+import { useSupabase } from "@/contexts/SupabaseContext";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
