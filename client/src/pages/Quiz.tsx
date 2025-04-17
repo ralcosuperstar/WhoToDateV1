@@ -9,6 +9,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
 import { useSupabase } from "@/contexts/SupabaseContext";
+import { getSupabaseClient } from "@/lib/supabase";
 
 // Progress bar component
 const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: number; totalQuestions: number }) => {
@@ -307,32 +308,119 @@ const Quiz = () => {
     setIsUserLoading(isSupabaseLoading);
   }, [supabaseUser, isSupabaseLoading]);
   
-  // Check for existing quiz answers
-  const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({ 
-    queryKey: ['/api/quiz'],
-    enabled: !!localUser, // Only run this query if we have a user
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
+  // Check for existing quiz answers from Supabase
+  const [existingQuiz, setExistingQuiz] = useState<any>(null);
+  const [isQuizLoading, setIsQuizLoading] = useState(false);
+  
+  // Effect to load quiz answers from Supabase when user is authenticated
+  useEffect(() => {
+    const loadQuizAnswers = async () => {
+      if (!localUser) return;
+      
+      try {
+        setIsQuizLoading(true);
+        const supabase = getSupabaseClient();
+        
+        // Get the user's quiz answers
+        const { data: quizAnswers, error } = await supabase
+          .from('quiz_answers')
+          .select('*')
+          .eq('user_id', localUser.id)
+          .maybeSingle();
+        
+        if (error) throw error;
+        
+        if (quizAnswers) {
+          setExistingQuiz(quizAnswers);
+        }
+      } catch (error) {
+        console.error("Error loading quiz answers:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load your previous quiz answers.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsQuizLoading(false);
+      }
+    };
+    
+    loadQuizAnswers();
+  }, [localUser, toast]);
   
   // Find current question
   const currentQuestion = quizQuestions.find(q => q.id === currentQuestionId);
   
-  // Save quiz answers mutation
+  // Save quiz answers mutation using Supabase directly
   const saveQuizMutation = useMutation({
     mutationFn: async (data: { answers: Record<number, number>, completed: boolean }) => {
-      const res = await apiRequest("POST", "/api/quiz", data);
-      return res.json();
+      try {
+        // Get the Supabase client
+        const supabase = getSupabaseClient();
+        
+        // Check if user is authenticated
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          console.log("No active session, saving answers locally only");
+          return { id: 0, answers: data.answers, completed: data.completed };
+        }
+        
+        const userId = session.user.id;
+        
+        // Check if user already has quiz answers
+        const { data: existingAnswers } = await supabase
+          .from('quiz_answers')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        let result;
+        
+        if (existingAnswers) {
+          // Update existing quiz answers
+          const { data: updatedQuiz, error } = await supabase
+            .from('quiz_answers')
+            .update({
+              answers: data.answers,
+              completed: data.completed
+            })
+            .eq('id', existingAnswers.id)
+            .select()
+            .single();
+            
+          if (error) throw error;
+          result = updatedQuiz;
+        } else {
+          // Create new quiz answers
+          const { data: newQuiz, error } = await supabase
+            .from('quiz_answers')
+            .insert({
+              user_id: userId,
+              answers: data.answers,
+              completed: data.completed
+            })
+            .select()
+            .single();
+            
+          if (error) throw error;
+          result = newQuiz;
+        }
+        
+        return result;
+      } catch (error) {
+        console.error("Error saving quiz answers:", error);
+        throw error;
+      }
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/quiz'] });
+      // Update the existing quiz data in state instead of invalidating a query
+      setExistingQuiz(data);
       
       if (data.completed) {
         // Generate the compatibility profile
         const profile = calculateCompatibilityProfile(answers);
         
-        // Generate report with the calculated profile
+        // Generate report with the calculated profile using Supabase
         generateReportMutation.mutate({
           quizId: data.id,
           compatibilityProfile: profile,
@@ -341,6 +429,7 @@ const Quiz = () => {
       }
     },
     onError: (error) => {
+      console.error("Quiz save error:", error);
       toast({
         title: "Error",
         description: "Failed to save your answers. Please try again.",
@@ -349,14 +438,71 @@ const Quiz = () => {
     }
   });
   
-  // Generate report mutation
+  // Generate report mutation using Supabase directly
   const generateReportMutation = useMutation({
-    mutationFn: async (data: any) => {
-      const res = await apiRequest("POST", "/api/report", data);
-      return res.json();
+    mutationFn: async (data: { quizId: number, compatibilityProfile: any, isPaid: boolean }) => {
+      try {
+        // Get the Supabase client
+        const supabase = getSupabaseClient();
+        
+        // Check if user is authenticated
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          throw new Error("No active session");
+        }
+        
+        const userId = session.user.id;
+        
+        // Check if user already has a report
+        const { data: existingReport } = await supabase
+          .from('reports')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        let result;
+        
+        if (existingReport) {
+          // Update existing report
+          const { data: updatedReport, error } = await supabase
+            .from('reports')
+            .update({
+              quiz_id: data.quizId,
+              compatibility_profile: data.compatibilityProfile,
+              is_paid: data.isPaid
+            })
+            .eq('id', existingReport.id)
+            .select()
+            .single();
+            
+          if (error) throw error;
+          result = updatedReport;
+        } else {
+          // Create new report
+          const { data: newReport, error } = await supabase
+            .from('reports')
+            .insert({
+              user_id: userId,
+              quiz_id: data.quizId,
+              compatibility_profile: data.compatibilityProfile,
+              is_paid: data.isPaid
+            })
+            .select()
+            .single();
+            
+          if (error) throw error;
+          result = newReport;
+        }
+        
+        return result;
+      } catch (error) {
+        console.error("Error generating report:", error);
+        throw error;
+      }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/report'] });
+    onSuccess: (report) => {
+      // Store report in sessionStorage for easy access from results page
+      sessionStorage.setItem('compatibilityReport', JSON.stringify(report));
       
       // Always save answers to session storage (for backup/recovery purposes)
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
@@ -365,6 +511,7 @@ const Quiz = () => {
       navigate('/results');
     },
     onError: (error) => {
+      console.error("Report generation error:", error);
       toast({
         title: "Error",
         description: "Failed to generate your report. Please try again after logging in.",
