@@ -14,7 +14,46 @@ export function SimpleAuthUI() {
       try {
         console.log('Initializing Supabase for Auth UI...');
         const client = await initSupabase();
+        
+        // Set up auth state change listener
+        const { data: { subscription } } = client.auth.onAuthStateChange(
+          async (event, session) => {
+            console.log('Auth state changed:', event);
+            
+            // Only sync on sign_in or user_updated events
+            if (event === 'SIGNED_IN' && session?.user) {
+              console.log('User signed in, syncing with server...');
+              try {
+                // Call our sync endpoint
+                const response = await fetch('/api/supabase-sync', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: session.user.email,
+                    user_id: session.user.id
+                  }),
+                  credentials: 'include' // Important for cookies
+                });
+                
+                if (!response.ok) {
+                  console.error("Failed to sync with server after sign in:", await response.text());
+                } else {
+                  console.log("Successfully synced Supabase user with server");
+                }
+              } catch (syncError) {
+                console.error("Error syncing with server:", syncError);
+              }
+            }
+          }
+        );
+        
+        // Store the client
         setSupabaseClient(client);
+        
+        // Return cleanup function
+        return () => {
+          subscription.unsubscribe();
+        };
       } catch (error) {
         console.error('Error initializing Supabase for Auth UI:', error);
       } finally {

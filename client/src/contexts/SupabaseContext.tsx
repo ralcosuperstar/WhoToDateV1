@@ -56,9 +56,34 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
         
         // Subscribe to auth changes
         const { data: authSubscription } = client.auth.onAuthStateChange(
-          (event, newSession) => {
+          async (event, newSession) => {
+            console.log("Auth state changed in context:", event);
             setSession(newSession);
             setUser(newSession?.user ?? null);
+            
+            // Sync with the server when a user signs in or is updated
+            if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && newSession?.user) {
+              try {
+                console.log("Syncing session with server after", event);
+                const response = await fetch('/api/supabase-sync', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: newSession.user.email,
+                    user_id: newSession.user.id
+                  }),
+                  credentials: 'include' // Important for cookies
+                });
+                
+                if (!response.ok) {
+                  console.error("Failed to sync with server from context:", await response.text());
+                } else {
+                  console.log("Successfully synced with server from context");
+                }
+              } catch (syncError) {
+                console.error("Error syncing with server from context:", syncError);
+              }
+            }
           }
         );
         
