@@ -507,8 +507,8 @@ const Quiz = () => {
       // Always save answers to session storage (for backup/recovery purposes)
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
       
-      // Navigate to results
-      navigate('/results');
+      // Navigate to results using Supabase
+      navigate('/results-supabase');
     },
     onError: (error) => {
       console.error("Report generation error:", error);

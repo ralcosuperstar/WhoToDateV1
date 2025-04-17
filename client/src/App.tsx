@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { SupabaseProvider } from "@/contexts/SupabaseContext";
+import { SupabaseDbProvider } from "@/contexts/SupabaseDbContext";
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -15,6 +16,7 @@ import Footer from "@/components/layout/Footer";
 import Home from "@/pages/Home";
 import Quiz from "@/pages/Quiz";
 import Results from "@/pages/Results";
+import ResultsWithSupabase from "@/pages/ResultsWithSupabase";
 import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
@@ -82,6 +84,7 @@ function Router() {
       {/* Protected Routes */}
       <ProtectedRoute path="/quiz" component={Quiz} />
       <ProtectedRoute path="/results" component={Results} />
+      <ProtectedRoute path="/results-supabase" component={ResultsWithSupabase} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
@@ -101,14 +104,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1">
-            <Router />
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+        <SupabaseDbProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">
+              <Router />
+            </main>
+            <Footer />
+            <Toaster />
+          </div>
+        </SupabaseDbProvider>
       </SupabaseProvider>
     </QueryClientProvider>
   );

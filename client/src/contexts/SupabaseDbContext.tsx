@@ -33,11 +33,11 @@ interface SupabaseDbContextType {
   
   // Blog operations
   blogPosts: {
-    data: BlogPost[] | null;
+    data: any[] | null; // Using any to match the response from Supabase
     isLoading: boolean;
     error: Error | null;
-    getBySlug: (slug: string) => Promise<BlogPost | null>;
-    getById: (id: number) => Promise<BlogPost | null>;
+    getBySlug: (slug: string) => Promise<any | null>; // Using any to match the response from Supabase
+    getById: (id: number) => Promise<any | null>; // Using any to match the response from Supabase
   };
 }
 
@@ -407,7 +407,7 @@ export const SupabaseDbProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     blogPosts: {
-      data: blogPostsData,
+      data: blogPostsData ?? null,
       isLoading: isBlogPostsLoading,
       error: blogPostsError instanceof Error ? blogPostsError : null,
       getBySlug: getBlogPostBySlug,
