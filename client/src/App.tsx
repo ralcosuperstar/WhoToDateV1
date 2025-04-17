@@ -83,8 +83,8 @@ function Router() {
       
       {/* Protected Routes */}
       <ProtectedRoute path="/quiz" component={Quiz} allowGuests={true} />
-      <ProtectedRoute path="/results" component={Results} allowGuests={true} />
-      <ProtectedRoute path="/results-supabase" component={SimpleResults} />
+      <ProtectedRoute path="/results" component={SimpleResults} allowGuests={true} />
+      <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />

@@ -141,16 +141,31 @@ const ResultsPage = () => {
         // Try to save to database if user is logged in
         if (user && !report.data && compatibilityProfile && quiz.data) {
           try {
-            report.create({
-              quizId: quiz.data.id,
-              compatibilityProfile: enhancedProfile,
-              isPaid: false
-            });
-            console.log("Saved report to database");
+            // Check if we have a user record and user ID is available
+            if (user && user.id) {
+              console.log("User record verified:", true);
+              
+              // Attempt to save report to database
+              report.create({
+                quizId: quiz.data.id,
+                compatibilityProfile: enhancedProfile,
+                isPaid: false
+              });
+              console.log("Saved report to database");
+            } else {
+              console.warn("Cannot save report - missing user ID");
+            }
           } catch (err) {
             console.warn("Failed to save report to database:", err);
             // This is non-blocking - user can still see their report
           }
+        } else {
+          console.log("Skipping report creation because:", {
+            userExists: !!user,
+            reportExists: !!report.data,
+            profileExists: !!compatibilityProfile,
+            quizExists: !!quiz.data
+          });
         }
       } catch (e) {
         console.error('Failed to calculate profile', e);
