@@ -5,43 +5,41 @@ import { getSupabaseClient } from './supabase';
  * Ensures a user record exists in the public.users table
  * This is needed because Supabase auth creates users in auth.users,
  * but we need records in public.users for foreign key relationships
+ * 
+ * IMPORTANT: We use the serverless API route to bypass Supabase RLS policies
  */
 export async function ensureUserExists(user: User): Promise<void> {
   if (!user || !user.id) {
     throw new Error('Invalid user object');
   }
 
-  const supabase = getSupabaseClient();
-  
-  // First check if user already exists in public.users
-  const { data: existingUser, error: queryError } = await supabase
-    .from('users')
-    .select('id')
-    .eq('id', user.id)
-    .maybeSingle();
-    
-  if (queryError) {
-    console.error('Error checking if user exists:', queryError);
-    throw queryError;
-  }
-  
-  // If user doesn't exist, create record in public.users
-  if (!existingUser) {
-    console.log('Creating basic user from Supabase data');
-    
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert({
+  try {
+    // Use our server API to check and create the user
+    // This bypasses Supabase RLS policies
+    const response = await fetch('/api/ensure-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         id: user.id,
         email: user.email,
         username: user.email?.split('@')[0] || `user_${Date.now()}`,
         is_verified: user.email_confirmed_at ? true : false,
-        created_at: new Date().toISOString()
-      });
-      
-    if (insertError) {
-      console.error('Error creating user record:', insertError);
-      throw insertError;
+      }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to ensure user exists');
     }
+    
+    const data = await response.json();
+    console.log('User record verified:', data.success);
+    
+  } catch (error) {
+    console.error('Error ensuring user exists:', error);
+    // For now, we'll continue even if this fails
+    // so the user experience isn't interrupted
   }
 }

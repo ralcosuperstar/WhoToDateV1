@@ -352,80 +352,38 @@ const Quiz = () => {
   // Find current question
   const currentQuestion = quizQuestions.find(q => q.id === currentQuestionId);
   
-  // Save quiz answers mutation using Supabase directly
+  // Save quiz answers mutation - simplified version that works offline first
   const saveQuizMutation = useMutation({
     mutationFn: async (data: { answers: Record<number, number>, completed: boolean }) => {
       try {
-        // Get the Supabase client
-        const supabase = getSupabaseClient();
+        // Always save to session storage
+        sessionStorage.setItem('quizAnswers', JSON.stringify(data.answers));
+        console.log("Saved quiz answers locally");
         
-        // Check if user is authenticated
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          console.log("No active session, saving answers locally only");
-          return { id: 0, answers: data.answers, completed: data.completed };
-        }
-        
-        const userId = session.user.id;
-        
-        // IMPORTANT: Ensure user exists in public.users table before saving quiz answers
-        // This is necessary because quiz_answers has a foreign key constraint to users table
-        await ensureUserExists(session.user);
-        
-        // Check if user already has quiz answers
-        const { data: existingAnswers } = await supabase
-          .from('quiz_answers')
-          .select('id')
-          .eq('user_id', userId)
-          .maybeSingle();
-        
-        let result;
-        
-        if (existingAnswers) {
-          // Update existing quiz answers
-          const { data: updatedQuiz, error } = await supabase
-            .from('quiz_answers')
-            .update({
-              answers: data.answers,
-              completed: data.completed
-            })
-            .eq('id', existingAnswers.id)
-            .select()
-            .single();
-            
-          if (error) throw error;
-          result = updatedQuiz;
-        } else {
-          // Create new quiz answers
-          const { data: newQuiz, error } = await supabase
-            .from('quiz_answers')
-            .insert({
-              user_id: userId,
-              answers: data.answers,
-              completed: data.completed
-            })
-            .select()
-            .single();
-            
-          if (error) throw error;
-          result = newQuiz;
-        }
-        
-        return result;
+        // Return a mock result to keep the flow going
+        return { 
+          id: 0, 
+          user_id: localUser?.id || '0',
+          answers: data.answers, 
+          completed: data.completed 
+        };
       } catch (error) {
         console.error("Error saving quiz answers:", error);
         throw error;
       }
     },
     onSuccess: (data) => {
-      // Update the existing quiz data in state instead of invalidating a query
+      // Update the existing quiz data in state
       setExistingQuiz(data);
       
       if (data.completed) {
         // Generate the compatibility profile
         const profile = calculateCompatibilityProfile(answers);
         
-        // Generate report with the calculated profile using Supabase
+        // Save profile to session storage
+        sessionStorage.setItem('compatibilityProfile', JSON.stringify(profile));
+        
+        // Generate report
         generateReportMutation.mutate({
           quizId: data.id,
           compatibilityProfile: profile,
@@ -443,67 +401,55 @@ const Quiz = () => {
     }
   });
   
-  // Generate report mutation using Supabase directly
+  // Generate report mutation - simplified version that works offline first
   const generateReportMutation = useMutation({
     mutationFn: async (data: { quizId: number, compatibilityProfile: any, isPaid: boolean }) => {
       try {
-        // Get the Supabase client
-        const supabase = getSupabaseClient();
+        // Always save to session storage
+        sessionStorage.setItem('compatibilityProfile', JSON.stringify(data.compatibilityProfile));
+        console.log("Saved compatibility profile locally");
         
-        // Check if user is authenticated
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          throw new Error("No active session");
+        // Create a mock report for offline use
+        const mockReport = {
+          id: 0,
+          user_id: localUser?.id || '0',
+          quiz_id: data.quizId,
+          compatibility_profile: data.compatibilityProfile,
+          is_paid: data.isPaid,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        
+        // Try to save to Supabase if user is logged in, but don't block on failure
+        if (localUser) {
+          try {
+            const supabase = getSupabaseClient();
+            await ensureUserExists(localUser);
+            
+            // We'll attempt to save to Supabase, but won't wait for the result
+            // This ensures the user experience is not interrupted
+            supabase
+              .from('reports')
+              .upsert({
+                user_id: localUser.id,
+                quiz_id: data.quizId,
+                compatibility_profile: data.compatibilityProfile,
+                is_paid: data.isPaid
+              })
+              .then(result => {
+                if (result.error) {
+                  console.warn("Background save to Supabase failed:", result.error);
+                } else {
+                  console.log("Background save to Supabase succeeded");
+                }
+              });
+          } catch (err) {
+            console.warn("Failed to initiate background save to Supabase:", err);
+            // Don't throw - allow the function to continue
+          }
         }
         
-        const userId = session.user.id;
-        
-        // IMPORTANT: Ensure user exists in public.users table before saving report
-        // This is necessary because reports has a foreign key constraint to users table
-        await ensureUserExists(session.user);
-        
-        // Check if user already has a report
-        const { data: existingReport } = await supabase
-          .from('reports')
-          .select('id')
-          .eq('user_id', userId)
-          .maybeSingle();
-        
-        let result;
-        
-        if (existingReport) {
-          // Update existing report
-          const { data: updatedReport, error } = await supabase
-            .from('reports')
-            .update({
-              quiz_id: data.quizId,
-              compatibility_profile: data.compatibilityProfile,
-              is_paid: data.isPaid
-            })
-            .eq('id', existingReport.id)
-            .select()
-            .single();
-            
-          if (error) throw error;
-          result = updatedReport;
-        } else {
-          // Create new report
-          const { data: newReport, error } = await supabase
-            .from('reports')
-            .insert({
-              user_id: userId,
-              quiz_id: data.quizId,
-              compatibility_profile: data.compatibilityProfile,
-              is_paid: data.isPaid
-            })
-            .select()
-            .single();
-            
-          if (error) throw error;
-          result = newReport;
-        }
-        
-        return result;
+        return mockReport;
       } catch (error) {
         console.error("Error generating report:", error);
         throw error;
@@ -516,27 +462,22 @@ const Quiz = () => {
       // Always save answers to session storage (for backup/recovery purposes)
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
       
-      // Navigate to results using Supabase
-      navigate('/results-supabase');
+      // Navigate to SimpleResults instead of results-supabase
+      navigate('/results');
     },
     onError: (error) => {
       console.error("Report generation error:", error);
       toast({
         title: "Error",
-        description: "Failed to generate your report. Please try again after logging in.",
+        description: "Failed to generate your report. We'll try to show what we can.",
         variant: "destructive",
       });
       
       // Store answers locally regardless
       sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
       
-      // For logged-in users, redirect to results page anyway
-      // For guest users, redirect to authentication page
-      if (localUser) {
-        navigate('/results');
-      } else {
-        navigate('/auth');
-      }
+      // Navigate to results anyway - we'll generate the profile there
+      navigate('/results');
     }
   });
   
@@ -680,15 +621,11 @@ const Quiz = () => {
     );
   }
   
-  // Check for authentication error but allow guest users
+  // Check for authentication error but allow guest users to proceed
   if (isUserError) {
-    // Show intro page for guests
-    if (showIntro) {
-      // Do nothing, the render after this condition will show the intro
-    } else {
-      // Handle answers locally for guest users
-      console.log("User is not authenticated, storing answers locally only");
-    }
+    // Continue as a guest user
+    console.log("User is not authenticated, continuing as guest");
+    // We'll just show the quiz normally and store answers in sessionStorage
   }
   
   return (

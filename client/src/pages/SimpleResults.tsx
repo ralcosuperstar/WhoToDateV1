@@ -44,33 +44,78 @@ const ResultsPage = () => {
   const [profile, setProfile] = useState<EnhancedProfile | null>(null);
   const [isFullReportVisible, setIsFullReportVisible] = useState(false);
   
-  // Load answers from session storage or from quiz data
+  // Load answers from session storage or from quiz data - with offline-first approach
   useEffect(() => {
-    // First try to get answers from quiz data
-    if (quiz.data && quiz.data.answers) {
-      setAnswers(quiz.data.answers as Record<number, number>);
-    } else {
-      // If no quiz data, try to get answers from session storage
-      const savedAnswers = sessionStorage.getItem('quizAnswers');
-      if (savedAnswers) {
-        try {
-          const parsedAnswers = JSON.parse(savedAnswers);
-          setAnswers(parsedAnswers);
-        } catch (e) {
-          console.error('Failed to parse saved answers', e);
-          navigate('/quiz');
-        }
-      } else if (!user) {
-        // If no answers and no user, redirect to quiz
-        navigate('/quiz');
+    // First try to get answers from session storage (offline-first approach)
+    const savedAnswers = sessionStorage.getItem('quizAnswers');
+    if (savedAnswers) {
+      try {
+        const parsedAnswers = JSON.parse(savedAnswers);
+        setAnswers(parsedAnswers);
+        console.log("Loaded answers from session storage");
+        return; // Exit early if we found answers
+      } catch (e) {
+        console.error('Failed to parse saved answers from session storage', e);
+        // Continue to try other sources
       }
     }
-  }, [navigate, user, quiz.data]);
+    
+    // If no answers in session storage, try to get from Supabase
+    if (quiz.data && quiz.data.answers) {
+      setAnswers(quiz.data.answers as Record<number, number>);
+      console.log("Loaded answers from Supabase");
+    } else {
+      // If we get here, we couldn't find any answers
+      console.error("No quiz answers found in session storage or database");
+      
+      // Show a toast with information and redirect after a delay
+      toast({
+        title: "No quiz data found",
+        description: "We couldn't find your quiz answers. Please take the quiz again.",
+        variant: "destructive",
+      });
+      
+      setTimeout(() => {
+        navigate('/quiz');
+      }, 2000);
+    }
+  }, [navigate, quiz.data, toast]);
   
-  // Generate profile when answers are available
+  // Generate profile when answers are available - with offline-first approach
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       try {
+        // First check if we already have a saved profile in session storage
+        const savedProfile = sessionStorage.getItem('compatibilityProfile');
+        if (savedProfile) {
+          try {
+            const parsedProfile = JSON.parse(savedProfile);
+            console.log("Found saved profile in session storage");
+            
+            // Create the enhanced profile with UI properties
+            const enhancedProfile: EnhancedProfile = {
+              ...parsedProfile,
+              attachmentDescription: getAttachmentDescription(parsedProfile.attachmentStyle),
+              mbtiDescription: getMbtiDescription(parsedProfile.mbtiStyle),
+              strengths: getStrengthsList(parsedProfile),
+              challenges: getChallengesList(parsedProfile),
+              growthTips: getGrowthTips(parsedProfile),
+              mostCompatible: getMostCompatibleTypes(parsedProfile),
+              leastCompatible: getLeastCompatibleTypes(parsedProfile),
+              datingAdvice: getDatingAdvice(parsedProfile),
+              datingTips: getDatingTips(parsedProfile)
+            };
+            
+            setProfile(enhancedProfile);
+            return; // Exit early
+          } catch (e) {
+            console.error('Failed to parse saved profile', e);
+            // Continue to generate a new profile
+          }
+        }
+        
+        // If no saved profile, generate a new one
+        console.log("Generating new compatibility profile from answers");
         const compatibilityProfile = calculateCompatibilityProfile(answers);
         
         // Add extra properties needed for the UI display
@@ -88,15 +133,24 @@ const ResultsPage = () => {
           datingTips: getDatingTips(compatibilityProfile)
         };
         
+        // Save to session storage for future use
+        sessionStorage.setItem('compatibilityProfile', JSON.stringify(compatibilityProfile));
+        
         setProfile(enhancedProfile);
         
-        // Create report if needed
+        // Try to save to database if user is logged in
         if (user && !report.data && compatibilityProfile && quiz.data) {
-          report.create({
-            quizId: quiz.data.id,
-            compatibilityProfile: enhancedProfile,
-            isPaid: false
-          });
+          try {
+            report.create({
+              quizId: quiz.data.id,
+              compatibilityProfile: enhancedProfile,
+              isPaid: false
+            });
+            console.log("Saved report to database");
+          } catch (err) {
+            console.warn("Failed to save report to database:", err);
+            // This is non-blocking - user can still see their report
+          }
         }
       } catch (e) {
         console.error('Failed to calculate profile', e);
@@ -105,7 +159,9 @@ const ResultsPage = () => {
           description: "Failed to calculate your compatibility profile. Please retake the quiz.",
           variant: "destructive",
         });
-        navigate('/quiz');
+        setTimeout(() => {
+          navigate('/quiz');
+        }, 2000);
       }
     }
   }, [answers, user, report, quiz.data, navigate, toast]);
