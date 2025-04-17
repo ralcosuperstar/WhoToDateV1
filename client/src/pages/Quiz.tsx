@@ -9,8 +9,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
 import { useSupabase } from "@/contexts/SupabaseContext";
-import { ensureUserExists } from "@/lib/supabaseUtils";
 import { getSupabaseClient } from "@/lib/supabase";
+import { ensureUserExists } from "@/lib/supabaseUtils";
 
 // Progress bar component
 const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: number; totalQuestions: number }) => {
