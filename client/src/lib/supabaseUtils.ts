@@ -1,50 +1,47 @@
+import { User } from '@supabase/supabase-js';
 import { getSupabaseClient } from './supabase';
-import type { User } from '@supabase/supabase-js';
 
 /**
- * Ensures that a user record exists in the public.users table.
- * This is necessary because the auth.users table is managed by Supabase Auth,
- * but we need a record in our public.users table for foreign key constraints.
+ * Ensures a user record exists in the public.users table
+ * This is needed because Supabase auth creates users in auth.users,
+ * but we need records in public.users for foreign key relationships
  */
-export async function ensureUserExists(supabaseUser: User): Promise<boolean> {
-  try {
-    const supabase = getSupabaseClient();
+export async function ensureUserExists(user: User): Promise<void> {
+  if (!user || !user.id) {
+    throw new Error('Invalid user object');
+  }
+
+  const supabase = getSupabaseClient();
+  
+  // First check if user already exists in public.users
+  const { data: existingUser, error: queryError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('id', user.id)
+    .maybeSingle();
     
-    // Check if user exists in public.users table
-    const { data: existingUser, error: checkError } = await supabase
+  if (queryError) {
+    console.error('Error checking if user exists:', queryError);
+    throw queryError;
+  }
+  
+  // If user doesn't exist, create record in public.users
+  if (!existingUser) {
+    console.log('Creating basic user from Supabase data');
+    
+    const { error: insertError } = await supabase
       .from('users')
-      .select('id')
-      .eq('id', supabaseUser.id)
-      .single();
-    
-    // If we get a "not found" error, we need to create the user
-    if (checkError && !existingUser) {
-      console.log("Creating user record in Supabase public.users table");
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({
-          id: supabaseUser.id,
-          email: supabaseUser.email,
-          phone_number: supabaseUser.phone || null,
-          first_name: supabaseUser.user_metadata?.firstName || null,
-          last_name: supabaseUser.user_metadata?.lastName || null,
-          full_name: supabaseUser.user_metadata?.fullName || null,
-        });
-        
-      if (insertError) {
-        console.error("Failed to create user in public.users table:", insertError);
-        return false;
-      } else {
-        console.log("Successfully created user in public.users table");
-        return true;
-      }
-    } else {
-      // User already exists
-      console.log("User already exists in public.users table");
-      return true;
+      .insert({
+        id: user.id,
+        email: user.email,
+        username: user.email?.split('@')[0] || `user_${Date.now()}`,
+        is_verified: user.email_confirmed_at ? true : false,
+        created_at: new Date().toISOString()
+      });
+      
+    if (insertError) {
+      console.error('Error creating user record:', insertError);
+      throw insertError;
     }
-  } catch (error) {
-    console.error("Error checking/creating user in Supabase:", error);
-    return false;
   }
 }

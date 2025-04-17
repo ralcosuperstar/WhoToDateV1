@@ -368,6 +368,10 @@ const Quiz = () => {
         
         const userId = session.user.id;
         
+        // IMPORTANT: Ensure user exists in public.users table before saving quiz answers
+        // This is necessary because quiz_answers has a foreign key constraint to users table
+        await ensureUserExists(session.user);
+        
         // Check if user already has quiz answers
         const { data: existingAnswers } = await supabase
           .from('quiz_answers')
@@ -453,6 +457,10 @@ const Quiz = () => {
         }
         
         const userId = session.user.id;
+        
+        // IMPORTANT: Ensure user exists in public.users table before saving report
+        // This is necessary because reports has a foreign key constraint to users table
+        await ensureUserExists(session.user);
         
         // Check if user already has a report
         const { data: existingReport } = await supabase

@@ -16,7 +16,7 @@ import Footer from "@/components/layout/Footer";
 import Home from "@/pages/Home";
 import Quiz from "@/pages/Quiz";
 import Results from "@/pages/Results";
-import ResultsWithSupabase from "@/pages/ResultsWithSupabase";
+import SimpleResults from "@/pages/SimpleResults";
 import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
@@ -84,7 +84,7 @@ function Router() {
       {/* Protected Routes */}
       <ProtectedRoute path="/quiz" component={Quiz} />
       <ProtectedRoute path="/results" component={Results} />
-      <ProtectedRoute path="/results-supabase" component={ResultsWithSupabase} />
+      <ProtectedRoute path="/results-supabase" component={SimpleResults} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />

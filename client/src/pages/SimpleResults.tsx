@@ -20,6 +20,19 @@ import { useSupabase } from "@/contexts/SupabaseContext";
 import { useSupabaseDb } from "@/contexts/SupabaseDbContext";
 import { Loader2 } from "lucide-react";
 
+// Enhanced compatibility profile with UI properties
+interface EnhancedProfile extends CompatibilityProfile {
+  attachmentDescription: string;
+  mbtiDescription: string;
+  strengths: string[];
+  challenges: string[];
+  growthTips: string[];
+  mostCompatible: string[];
+  leastCompatible: string[];
+  datingAdvice: string;
+  datingTips: string[];
+}
+
 const ResultsPage = () => {
   const [, navigate] = useLocation();
   const { toast } = useToast();
@@ -28,14 +41,14 @@ const ResultsPage = () => {
   
   // State
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
+  const [profile, setProfile] = useState<EnhancedProfile | null>(null);
   const [isFullReportVisible, setIsFullReportVisible] = useState(false);
   
   // Load answers from session storage or from quiz data
   useEffect(() => {
     // First try to get answers from quiz data
     if (quiz.data && quiz.data.answers) {
-      setAnswers(quiz.data.answers);
+      setAnswers(quiz.data.answers as Record<number, number>);
     } else {
       // If no quiz data, try to get answers from session storage
       const savedAnswers = sessionStorage.getItem('quizAnswers');
@@ -61,7 +74,7 @@ const ResultsPage = () => {
         const compatibilityProfile = calculateCompatibilityProfile(answers);
         
         // Add extra properties needed for the UI display
-        const enhancedProfile = {
+        const enhancedProfile: EnhancedProfile = {
           ...compatibilityProfile,
           // Adding necessary UI display properties
           attachmentDescription: getAttachmentDescription(compatibilityProfile.attachmentStyle),
@@ -101,15 +114,15 @@ const ResultsPage = () => {
   const getAttachmentDescription = (style: string): string => {
     switch(style) {
       case 'secure':
-        return 'You form stable and trusting bonds with others. You're comfortable with intimacy and independence.';
+        return "You form stable and trusting bonds with others. You're comfortable with intimacy and independence.";
       case 'anxious':
-        return 'You seek close connections but may worry about abandonment. You value emotional closeness.';
+        return "You seek close connections but may worry about abandonment. You value emotional closeness.";
       case 'avoidant':
-        return 'You value independence and may find it challenging to fully open up emotionally.';
+        return "You value independence and may find it challenging to fully open up emotionally.";
       case 'fearful':
-        return 'You desire close relationships but find them difficult to trust and maintain.';
+        return "You desire close relationships but find them difficult to trust and maintain.";
       default:
-        return 'Your attachment pattern influences how you form emotional bonds in relationships.';
+        return "Your attachment pattern influences how you form emotional bonds in relationships.";
     }
   };
   
@@ -123,25 +136,25 @@ const ResultsPage = () => {
     
     // Generate strengths based on personality traits
     if (profile.personalityTraits.openness > 70) {
-      strengths.push('Open to new experiences and perspectives');
+      strengths.push("Open to new experiences and perspectives");
     }
     if (profile.personalityTraits.conscientiousness > 70) {
-      strengths.push('Reliable and organized in your approach to relationships');
+      strengths.push("Reliable and organized in your approach to relationships");
     }
     if (profile.personalityTraits.extraversion > 70) {
-      strengths.push('Socially engaging and energetic in relationships');
+      strengths.push("Socially engaging and energetic in relationships");
     }
     if (profile.personalityTraits.agreeableness > 70) {
-      strengths.push('Compassionate and considerate of others');
+      strengths.push("Compassionate and considerate of others");
     }
     if (profile.personalityTraits.neuroticism < 40) {
-      strengths.push('Emotionally stable and resilient under stress');
+      strengths.push("Emotionally stable and resilient under stress");
     }
     
     // Add attachment-based strengths
     if (profile.attachmentStyle === 'secure') {
-      strengths.push('Able to form healthy, balanced relationships');
-      strengths.push('Comfortable with both intimacy and independence');
+      strengths.push("Able to form healthy, balanced relationships");
+      strengths.push("Comfortable with both intimacy and independence");
     }
     
     // Add strengths based on emotional intelligence
@@ -149,81 +162,81 @@ const ResultsPage = () => {
       strengths.push("Strong ability to understand others' feelings and perspectives");
     }
     
-    return strengths.length > 0 ? strengths : ['Discovering your relationship strengths through self-awareness'];
+    return strengths.length > 0 ? strengths : ["Discovering your relationship strengths through self-awareness"];
   };
   
   const getChallengesList = (profile: CompatibilityProfile): string[] => {
-    const challenges = [];
+    const challenges: string[] = [];
     
     // Generate challenges based on personality traits
     if (profile.personalityTraits.openness < 30) {
-      challenges.push('May resist change or new relationship experiences');
+      challenges.push("May resist change or new relationship experiences");
     }
     if (profile.personalityTraits.conscientiousness < 30) {
-      challenges.push('May struggle with relationship consistency or reliability');
+      challenges.push("May struggle with relationship consistency or reliability");
     }
     if (profile.personalityTraits.agreeableness < 30) {
-      challenges.push('May find it difficult to compromise in relationships');
+      challenges.push("May find it difficult to compromise in relationships");
     }
     if (profile.personalityTraits.neuroticism > 70) {
-      challenges.push('May experience heightened emotional reactions to relationship stress');
+      challenges.push("May experience heightened emotional reactions to relationship stress");
     }
     
     // Add attachment-based challenges
     if (profile.attachmentStyle === 'anxious') {
-      challenges.push('May worry about abandonment or rejection');
+      challenges.push("May worry about abandonment or rejection");
     } else if (profile.attachmentStyle === 'avoidant') {
-      challenges.push('May struggle with emotional vulnerability and intimacy');
+      challenges.push("May struggle with emotional vulnerability and intimacy");
     } else if (profile.attachmentStyle === 'fearful') {
-      challenges.push('May have conflicting desires for closeness and distance');
+      challenges.push("May have conflicting desires for closeness and distance");
     }
     
-    return challenges.length > 0 ? challenges : ['Working through relationship patterns requires ongoing reflection'];
+    return challenges.length > 0 ? challenges : ["Working through relationship patterns requires ongoing reflection"];
   };
   
   const getGrowthTips = (profile: CompatibilityProfile): string[] => {
-    const tips = [];
+    const tips: string[] = [];
     
     // Add tips based on personality traits
     if (profile.personalityTraits.openness < 50) {
-      tips.push('Try new experiences with your partner to broaden your perspectives');
+      tips.push("Try new experiences with your partner to broaden your perspectives");
     }
     if (profile.personalityTraits.conscientiousness < 50) {
-      tips.push('Develop consistent relationship habits that build trust');
+      tips.push("Develop consistent relationship habits that build trust");
     }
     if (profile.personalityTraits.extraversion < 50) {
-      tips.push('Balance your need for solitude with quality time together');
+      tips.push("Balance your need for solitude with quality time together");
     }
     if (profile.personalityTraits.agreeableness < 50) {
-      tips.push('Practice active listening and validating your partner's feelings');
+      tips.push("Practice active listening and validating your partner's feelings");
     }
     if (profile.personalityTraits.neuroticism > 50) {
-      tips.push('Develop emotional regulation techniques for relationship stress');
+      tips.push("Develop emotional regulation techniques for relationship stress");
     }
     
     // Add attachment-based growth tips
     if (profile.attachmentStyle === 'anxious') {
-      tips.push('Work on self-validation rather than seeking constant reassurance');
+      tips.push("Work on self-validation rather than seeking constant reassurance");
     } else if (profile.attachmentStyle === 'avoidant') {
-      tips.push('Practice gradual emotional vulnerability in safe relationships');
+      tips.push("Practice gradual emotional vulnerability in safe relationships");
     } else if (profile.attachmentStyle === 'fearful') {
-      tips.push('Seek consistency and clarity in your relationship boundaries');
+      tips.push("Seek consistency and clarity in your relationship boundaries");
     }
     
-    return tips.length > 0 ? tips : ['Focus on self-awareness and honest communication in relationships'];
+    return tips.length > 0 ? tips : ["Focus on self-awareness and honest communication in relationships"];
   };
   
   const getMostCompatibleTypes = (profile: CompatibilityProfile): string[] => {
     // This would be based on a more complex compatibility algorithm
     // Here we're providing a simplified example
     if (profile.attachmentStyle === 'secure') {
-      return ['People with secure attachment styles', 'Those who value honest communication', 'Partners who respect boundaries'];
+      return ["People with secure attachment styles", "Those who value honest communication", "Partners who respect boundaries"];
     } else if (profile.attachmentStyle === 'anxious') {
-      return ['Secure individuals who provide consistency', 'Partners who express affection openly', 'Those who value emotional connection'];
+      return ["Secure individuals who provide consistency", "Partners who express affection openly", "Those who value emotional connection"];
     } else if (profile.attachmentStyle === 'avoidant') {
-      return ['Those who respect your independence', 'Partners who are patient with emotional pacing', 'People who communicate directly'];
+      return ["Those who respect your independence", "Partners who are patient with emotional pacing", "People who communicate directly"];
     } else {
-      return ['Secure, consistent partners', 'Those who practice healthy communication', 'People who are emotionally mature'];
+      return ["Secure, consistent partners", "Those who practice healthy communication", "People who are emotionally mature"];
     }
   };
   
@@ -231,47 +244,47 @@ const ResultsPage = () => {
     // This would be based on a more complex compatibility algorithm
     // Here we're providing a simplified example
     if (profile.attachmentStyle === 'secure') {
-      return ['Highly unstable relationship patterns', 'Inconsistent communication styles', 'Those unwilling to work on relationships'];
+      return ["Highly unstable relationship patterns", "Inconsistent communication styles", "Those unwilling to work on relationships"];
     } else if (profile.attachmentStyle === 'anxious') {
-      return ['Highly avoidant individuals', 'Those uncomfortable with emotional expression', 'Partners who are inconsistent or unpredictable'];
+      return ["Highly avoidant individuals", "Those uncomfortable with emotional expression", "Partners who are inconsistent or unpredictable"];
     } else if (profile.attachmentStyle === 'avoidant') {
-      return ['Highly anxious individuals seeking constant reassurance', 'Those who don't respect personal space', 'Partners who are emotionally demanding'];
+      return ["Highly anxious individuals seeking constant reassurance", "Those who don't respect personal space", "Partners who are emotionally demanding"];
     } else {
-      return ['Unstable or unpredictable relationship patterns', 'Those with poor communication skills', 'Partners who don't respect boundaries'];
+      return ["Unstable or unpredictable relationship patterns", "Those with poor communication skills", "Partners who don't respect boundaries"];
     }
   };
   
   const getDatingAdvice = (profile: CompatibilityProfile): string => {
     // Provide dating advice based on attachment style
     if (profile.attachmentStyle === 'secure') {
-      return 'Your secure attachment style positions you well for healthy relationships. Look for partners who also demonstrate emotional stability, clear communication, and respect for boundaries.';
+      return "Your secure attachment style positions you well for healthy relationships. Look for partners who also demonstrate emotional stability, clear communication, and respect for boundaries.";
     } else if (profile.attachmentStyle === 'anxious') {
-      return 'You value connection and closeness. Focus on developing self-validation and choose partners who are consistent, communicative, and emotionally available.';
+      return "You value connection and closeness. Focus on developing self-validation and choose partners who are consistent, communicative, and emotionally available.";
     } else if (profile.attachmentStyle === 'avoidant') {
-      return 'You value independence which is healthy, but relationships also require connection. Seek partners who respect your space while gently encouraging emotional openness.';
+      return "You value independence which is healthy, but relationships also require connection. Seek partners who respect your space while gently encouraging emotional openness.";
     } else {
-      return 'Building relationship security takes time. Focus on clear communication, consistent boundaries, and partners who demonstrate emotional maturity and stability.';
+      return "Building relationship security takes time. Focus on clear communication, consistent boundaries, and partners who demonstrate emotional maturity and stability.";
     }
   };
   
   const getDatingTips = (profile: CompatibilityProfile): string[] => {
-    const tips = [];
+    const tips: string[] = [];
     
     // General tips for everyone
-    tips.push('Be authentic rather than trying to present an idealized version of yourself');
-    tips.push('Pay attention to how potential partners treat others, not just you');
-    tips.push('Notice how you feel after spending time with someone—energized or drained');
+    tips.push("Be authentic rather than trying to present an idealized version of yourself");
+    tips.push("Pay attention to how potential partners treat others, not just you");
+    tips.push("Notice how you feel after spending time with someone—energized or drained");
     
     // Add attachment-specific tips
     if (profile.attachmentStyle === 'anxious') {
-      tips.push('Take time to evaluate new relationships rather than rushing in');
-      tips.push('Notice if you're compromising your values to maintain a connection');
+      tips.push("Take time to evaluate new relationships rather than rushing in");
+      tips.push("Notice if you're compromising your values to maintain a connection");
     } else if (profile.attachmentStyle === 'avoidant') {
-      tips.push('Be mindful if you're finding reasons to end promising relationships');
-      tips.push('Practice sharing your thoughts and feelings gradually');
+      tips.push("Be mindful if you're finding reasons to end promising relationships");
+      tips.push("Practice sharing your thoughts and feelings gradually");
     } else if (profile.attachmentStyle === 'fearful') {
-      tips.push('Start with friendship to build trust before romantic involvement');
-      tips.push('Consider professional support to work through relationship patterns');
+      tips.push("Start with friendship to build trust before romantic involvement");
+      tips.push("Consider professional support to work through relationship patterns");
     }
     
     return tips;
@@ -580,7 +593,7 @@ const ResultsPage = () => {
                     <div>
                       <h3 className="text-lg font-bold mb-4 text-purple-600">Growth Recommendations</h3>
                       <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
-                        <p className="mb-4">{profile.growthRecommendation}</p>
+                        <p className="mb-4">{profile.compatibilityInsights[0]}</p>
                         
                         <h4 className="font-medium mb-2">Practical Tips</h4>
                         <ul className="space-y-2">
