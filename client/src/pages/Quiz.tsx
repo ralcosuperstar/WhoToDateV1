@@ -376,7 +376,7 @@ const Quiz = () => {
       
       // For logged-in users, redirect to results page anyway
       // For guest users, redirect to authentication page
-      if (user) {
+      if (localUser) {
         navigate('/results');
       } else {
         navigate('/auth');
@@ -423,7 +423,7 @@ const Quiz = () => {
       setAnswers(newAnswers);
       
       // If user is logged in, save to database
-      if (user) {
+      if (localUser) {
         saveQuizMutation.mutate({
           answers: newAnswers,
           completed: false
@@ -442,7 +442,7 @@ const Quiz = () => {
         setQuizCompleted(true);
         
         // If user is logged in, complete the quiz in the database
-        if (user) {
+        if (localUser) {
           saveQuizMutation.mutate({
             answers,
             completed: true
