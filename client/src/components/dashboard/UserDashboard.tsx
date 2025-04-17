@@ -29,21 +29,82 @@ const UserDashboard = () => {
   const [_, navigate] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  const { data: user, isLoading: isUserLoading } = useQuery<User>({ 
-    queryKey: ['/api/user']
-  });
-
+  const { user: supabaseUser, isLoading: isSupabaseLoading, signOut } = useSupabase();
+  
+  // Local state to store the user profile
+  const [localUser, setLocalUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  
+  // Effect to fetch user details once we have Supabase auth
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (supabaseUser) {
+        try {
+          // First try to get user from the API
+          const response = await fetch('/api/user', {
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            setLocalUser(userData);
+          } else {
+            // If that fails, create a basic user object from Supabase data
+            console.log('Creating basic user from Supabase data');
+            // Create a minimal User object with required fields
+            const basicUser: User = {
+              id: 0, // We don't know the ID yet
+              username: supabaseUser.email?.split('@')[0] || 'user',
+              password: '', // Not used in frontend display
+              email: supabaseUser.email || '',
+              phoneNumber: supabaseUser.phone || null,
+              firstName: null,
+              lastName: null,
+              fullName: supabaseUser.user_metadata?.full_name || '',
+              dateOfBirth: null,
+              gender: null,
+              imageUrl: null,
+              isVerified: true,
+              verificationMethod: null,
+              verificationToken: null,
+              verificationTokenExpiry: null,
+              otpCode: null,
+              otpExpiry: null,
+              clerkId: supabaseUser.id,
+              createdAt: new Date(),
+            };
+            setLocalUser(basicUser);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to load user data',
+            variant: 'destructive'
+          });
+        } finally {
+          setIsUserLoading(false);
+        }
+      } else if (!isSupabaseLoading) {
+        setIsUserLoading(false);
+        setLocalUser(null);
+      }
+    };
+    
+    fetchUserData();
+  }, [supabaseUser, isSupabaseLoading, toast]);
+  
+  // Keep using the existing report query
   const { data: report, isLoading: isReportLoading } = useQuery<Report>({ 
     queryKey: ['/api/report'],
-    enabled: !!user
+    enabled: !!localUser
   });
   
   // Handle opening the edit profile dialog
   const handleEditProfileOpen = () => {
-    if (user) {
-      setEditFullName(user.fullName || '');
-      setEditEmail(user.email);
+    if (localUser) {
+      setEditFullName(localUser.fullName || '');
+      setEditEmail(localUser.email);
       setIsEditProfileOpen(true);
     }
   };
@@ -79,26 +140,30 @@ const UserDashboard = () => {
     });
   };
 
-  const logoutMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/logout'),
-    onSuccess: () => {
+  // Use Supabase signOut function directly
+  const handleLogout = async () => {
+    try {
+      await signOut();
       // Clear user data from cache
       queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/report'] });
+      
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
       });
+      
       // Navigate to home page
       window.location.href = "/";
-    },
-    onError: () => {
+    } catch (error) {
+      console.error('Error signing out:', error);
       toast({
         title: "Error logging out",
         description: "There was a problem logging out. Please try again.",
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (isUserLoading) {
     return (
@@ -108,7 +173,7 @@ const UserDashboard = () => {
     );
   }
 
-  if (!user) {
+  if (!localUser) {
     return (
       <div className="text-center py-12">
         <h2 className="font-heading font-bold text-xl mb-4">User not found</h2>
@@ -124,7 +189,7 @@ const UserDashboard = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-heading font-bold text-2xl sm:text-3xl mb-2">
-          Welcome, {user.fullName || user.username}!
+          Welcome, {localUser.fullName || localUser.username}!
         </h1>
         <p className="text-neutral-dark/70">
           Manage your profile and view your compatibility report.
@@ -154,15 +219,15 @@ const UserDashboard = () => {
               <div className="space-y-4">
                 <div>
                   <label className="text-sm font-medium">Username</label>
-                  <p className="rounded-lg border border-neutral-dark/10 p-2">{user.username}</p>
+                  <p className="rounded-lg border border-neutral-dark/10 p-2">{localUser.username}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Email</label>
-                  <p className="rounded-lg border border-neutral-dark/10 p-2">{user.email}</p>
+                  <p className="rounded-lg border border-neutral-dark/10 p-2">{localUser.email}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Full Name</label>
-                  <p className="rounded-lg border border-neutral-dark/10 p-2">{user.fullName || 'Not provided'}</p>
+                  <p className="rounded-lg border border-neutral-dark/10 p-2">{localUser.fullName || 'Not provided'}</p>
                 </div>
                 
                 <div className="flex gap-3 pt-4">
@@ -170,10 +235,9 @@ const UserDashboard = () => {
                   <Button 
                     variant="outline" 
                     className="text-red-500 hover:text-red-600"
-                    onClick={() => logoutMutation.mutate()}
-                    disabled={logoutMutation.isPending}
+                    onClick={handleLogout}
                   >
-                    {logoutMutation.isPending ? 'Logging out...' : 'Log Out'}
+                    Log Out
                   </Button>
                 </div>
               </div>
