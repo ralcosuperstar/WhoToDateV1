@@ -82,6 +82,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   gender: true,
   imageUrl: true,
   verificationMethod: true,
+  clerkId: true, // Added for Supabase integration
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({

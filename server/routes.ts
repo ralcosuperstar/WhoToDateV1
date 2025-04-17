@@ -89,6 +89,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(userWithoutPassword);
   });
   
+  // Supabase integration - convert Supabase auth to Express session
+  apiRouter.post("/supabase-sync", async (req, res) => {
+    try {
+      const { email, user_id } = req.body;
+      
+      if (!email || !user_id) {
+        return res.status(400).json({ 
+          error: "Bad request", 
+          message: "Email and user_id are required" 
+        });
+      }
+      
+      log(`Attempting to sync Supabase user: ${email} (${user_id})`);
+      
+      // Look up user by email
+      let user = await db.getUserByEmail(email);
+      
+      if (!user) {
+        // If user doesn't exist, create a new one
+        log(`User ${email} not found, creating new user record`);
+        
+        // Generate a random username based on email
+        const username = `user_${Math.random().toString(36).substring(2, 10)}`;
+        
+        // Create the user
+        user = await db.createUser({
+          email,
+          username,
+          password: Math.random().toString(36).substring(2, 15), // Temporary password, not used for Supabase login
+          fullName: email.split('@')[0], // Temporary name from email
+          clerkId: user_id // Store Supabase ID in clerkId field for now
+        });
+        
+        // Mark the user as verified
+        user = await db.verifyUser(user.id);
+      } else {
+        // If user exists, update if needed
+        log(`Found existing user: ${user.id} (${user.email})`);
+        
+        // Update the user with Supabase ID if needed
+        if (!user.clerkId) {
+          log(`Updating user ${user.id} with Supabase ID: ${user_id}`);
+          user = await db.updateUser(user.id, { 
+            clerkId: user_id
+          });
+          
+          // Also verify the user if they're not already verified
+          if (!user.isVerified) {
+            user = await db.verifyUser(user.id);
+          }
+        }
+      }
+      
+      // Establish the session
+      if (req.session) {
+        req.session.userId = user.id;
+        log(`Session established for user ${user.id}`);
+      }
+      
+      // Return the user without sensitive fields
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+      
+    } catch (error) {
+      console.error("Error syncing Supabase user:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  
   // Update user profile endpoint
   apiRouter.put("/user/profile", isAuthenticated, async (req, res) => {
     try {

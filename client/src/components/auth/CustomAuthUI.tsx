@@ -185,6 +185,36 @@ export function CustomAuthUI() {
         throw signInError;
       }
 
+      // Sync the Supabase authentication with our server
+      try {
+        // Get the current user after sign in
+        const { data: userData } = await supabase.auth.getUser();
+        
+        if (userData?.user) {
+          console.log("Syncing Supabase user with server:", userData.user.email);
+          
+          // Call our sync endpoint
+          const response = await fetch('/api/supabase-sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: userData.user.email,
+              user_id: userData.user.id
+            }),
+            credentials: 'include' // Important for cookies
+          });
+          
+          if (!response.ok) {
+            console.error("Failed to sync with server:", await response.text());
+          } else {
+            console.log("Successfully synced Supabase user with server");
+          }
+        }
+      } catch (syncError) {
+        console.error("Error syncing Supabase user with server:", syncError);
+        // Continue even if sync fails - we want the user to be able to use the app
+      }
+
       toast({
         title: 'Sign in successful',
         description: 'You have been signed in to your account.',
