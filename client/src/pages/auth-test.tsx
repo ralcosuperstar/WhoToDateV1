@@ -1,11 +1,10 @@
 import { AuthStatusTest } from '@/components/auth/AuthStatusTest';
 import { CustomAuthUI } from '@/components/auth/CustomAuthUI';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Container } from '@/components/ui/container';
 
 export default function AuthTestPage() {
   return (
-    <Container className="py-12">
+    <div className="container mx-auto py-12">
       <h1 className="text-2xl font-bold mb-6 text-center">Authentication Test</h1>
       
       <Tabs defaultValue="login" className="mx-auto max-w-md">
@@ -22,6 +21,6 @@ export default function AuthTestPage() {
           <AuthStatusTest />
         </TabsContent>
       </Tabs>
-    </Container>
+    </div>
   );
 }
