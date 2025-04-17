@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
+import { useSupabase } from "@/contexts/SupabaseContext";
 
 // Progress bar component
 const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: number; totalQuestions: number }) => {
@@ -286,19 +287,30 @@ const Quiz = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [lastReminderQuestion, setLastReminderQuestion] = useState(0);
   
-  // Get user data
-  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
-    queryKey: ['/api/me'],
-    retry: false,
-    refetchOnWindowFocus: false,
-    // Use default on401: "throw" so we get errors instead of retrying endlessly
-    staleTime: Infinity,
-  });
+  // Use Supabase authentication instead of API endpoint
+  const { user: supabaseUser, isLoading: isSupabaseLoading } = useSupabase();
+  
+  // Local user state to handle both Supabase and API authentication
+  const [localUser, setLocalUser] = useState<any>(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isUserError, setIsUserError] = useState(false);
+  
+  // Effect to sync Supabase auth state with local user state
+  useEffect(() => {
+    if (supabaseUser) {
+      setLocalUser(supabaseUser);
+      setIsUserError(false);
+    } else if (!isSupabaseLoading) {
+      setLocalUser(null);
+      setIsUserError(!supabaseUser);
+    }
+    setIsUserLoading(isSupabaseLoading);
+  }, [supabaseUser, isSupabaseLoading]);
   
   // Check for existing quiz answers
   const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({ 
     queryKey: ['/api/quiz'],
-    enabled: !!user, // Only run this query if we have a user
+    enabled: !!localUser, // Only run this query if we have a user
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
