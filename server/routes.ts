@@ -1,37 +1,72 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
-import { pool } from "./db";
-import { setupAuth } from "./auth";
-import { storage, IStorage } from "./storage";
-import { pgStorage } from "./pgStorage";
+import { supabaseStorage } from "./supabaseStorage";
 import { setupVite, serveStatic, log } from "./vite";
 import { generateVerificationToken, generateTokenExpiry, logAllVerificationLinks } from "./emailService";
 import { generateOTP, generateOTPExpiry } from "./twilioService";
-import { eq } from "drizzle-orm";
-import { users, insertUserSchema } from "../shared/schema";
+import { createClient } from '@supabase/supabase-js';
+import { IStorage } from "./storage";
 
-// Use PostgreSQL storage
-let db: IStorage = pgStorage;
+// Use Supabase storage
+const db: IStorage = supabaseStorage;
 
 // Session data interface
 declare module "express-session" {
   interface SessionData {
-    userId?: number;
+    userId?: string;
+    supabaseToken?: string;
   }
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware is responsible for setting up session
-  setupAuth(app, db);
+  // Set up session middleware
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'supersecret',
+    resave: false,
+    saveUninitialized: false,
+    store: db.sessionStore,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
+    }
+  }));
 
-  // Middleware to check if user is authenticated
-  const isAuthenticated = (req: Request, res: Response, next: Function) => {
-    if (req.isAuthenticated()) {
+  // Middleware to check if user is authenticated via Supabase JWT
+  const isAuthenticated = async (req: Request, res: Response, next: Function) => {
+    const authHeader = req.headers.authorization;
+    
+    // Check for JWT token in header
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_ANON_KEY!
+      );
+      
+      const { data: { user }, error } = await supabase.auth.getUser(token);
+      
+      if (error || !user) {
+        console.log("JWT authentication failed:", error?.message);
+        return res.status(401).json({ message: "Invalid token" });
+      }
+      
+      // Add user ID to request
+      req.user = await db.getUser(user.id);
       return next();
     }
-    console.log("isAuthenticated check:", req.isAuthenticated());
-    console.log("Authentication failed, not authenticated");
+    
+    // Check for session-based auth (fallback)
+    if (req.session.userId) {
+      const user = await db.getUser(req.session.userId);
+      if (user) {
+        req.user = user;
+        return next();
+      }
+    }
+    
+    console.log("Authentication failed: No valid token or session");
     res.status(401).json({ message: "Unauthorized" });
   };
 
@@ -48,7 +83,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   app.post("/api/ensure-user", async (req, res) => {
     try {
-      const { id, email, username, is_verified } = req.body;
+      const { id, email, username, isVerified } = req.body;
       
       if (!id || !email) {
         return res.status(400).json({ 
@@ -68,18 +103,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Create new user
+      // Create new user with UUID as id
       await db.createUser({
         id,
         email,
         username: username || email.split('@')[0],
-        is_verified: is_verified || false,
-        phone_number: null,
-        otp: null,
-        otp_expiry: null,
-        verification_token: null,
-        verification_token_expiry: null,
-        created_at: new Date().toISOString()
+        isVerified: isVerified || false,
       });
       
       res.json({ 

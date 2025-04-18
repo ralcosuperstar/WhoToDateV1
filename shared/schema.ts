@@ -1,12 +1,11 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Users table - for authentication and profiles
+// Users table - extends Supabase auth.users
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+  id: uuid("id").primaryKey(), // References auth.users(id) in Supabase
+  username: text("username").unique(),
   email: text("email").notNull().unique(),
   phoneNumber: text("phone_number").unique(), // Phone number for SMS verification
   firstName: text("first_name"),
@@ -18,43 +17,47 @@ export const users = pgTable("users", {
   isVerified: boolean("is_verified").default(false), // Whether user has been verified
   verificationMethod: text("verification_method"), // "email" or "sms"
   verificationToken: text("verification_token"), // Token for email verification
-  verificationTokenExpiry: timestamp("verification_token_expiry"), // Expiry for verification token
+  verificationTokenExpiry: timestamp("verification_token_expiry", { withTimezone: true }), // Expiry for verification token
   otpCode: text("otp_code"), // OTP code for SMS verification
-  otpExpiry: timestamp("otp_expiry"), // Expiry time for OTP code
+  otpExpiry: timestamp("otp_expiry", { withTimezone: true }), // Expiry time for OTP code
   clerkId: text("clerk_id").unique(), // Legacy field for Clerk integration
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Quiz answers - storing user responses
 export const quizAnswers = pgTable("quiz_answers", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  answers: jsonb("answers").notNull(), // JSON array of user answers
+  userId: uuid("user_id").notNull(), // References users.id
+  answers: jsonb("answers").notNull().default('{}'), // JSON object of user answers
   completed: boolean("completed").default(false),
-  startedAt: timestamp("started_at").defaultNow(),
-  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Compatibility reports table
 export const reports = pgTable("reports", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  quizId: integer("quiz_id").notNull(),
-  report: jsonb("report").notNull(), // Detailed report JSON
-  compatibilityColor: text("compatibility_color").notNull(), // green, yellow, red
+  userId: uuid("user_id").notNull(), // References users.id
+  quizId: integer("quiz_id"), // References quiz_answers.id
+  compatibilityProfile: jsonb("compatibility_profile").notNull().default('{}'), // Detailed profile JSON
   isPaid: boolean("is_paid").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Payments tracking
 export const payments = pgTable("payments", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  reportId: integer("report_id").notNull(),
-  amount: integer("amount").notNull(), // Amount in paise
-  razorpayPaymentId: text("razorpay_payment_id"),
-  status: text("status").notNull(), // success, failed, pending
-  createdAt: timestamp("created_at").defaultNow(),
+  userId: uuid("user_id").notNull(), // References users.id
+  reportId: integer("report_id").notNull(), // References reports.id
+  amount: integer("amount").notNull(), // Amount in cents/paise
+  currency: text("currency").default('INR'),
+  paymentMethod: text("payment_method"),
+  transactionId: text("transaction_id"),
+  status: text("status").default('pending'), // success, failed, pending
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Blog posts
@@ -62,17 +65,20 @@ export const blogPosts = pgTable("blog_posts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
-  excerpt: text("excerpt").notNull(),
   content: text("content").notNull(),
+  summary: text("summary"),
+  author: text("author"),
   imageUrl: text("image_url"),
-  category: text("category").notNull(),
-  publishedAt: timestamp("published_at").defaultNow(),
+  category: text("category"),
+  published: boolean("published").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Schemas for inserts
 export const insertUserSchema = createInsertSchema(users).pick({
+  id: true,
   username: true,
-  password: true,
   email: true,
   phoneNumber: true,
   firstName: true,
@@ -81,8 +87,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
   dateOfBirth: true,
   gender: true,
   imageUrl: true,
+  isVerified: true,
   verificationMethod: true,
-  clerkId: true, // Added for Supabase integration
+  clerkId: true,
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({
@@ -94,8 +101,7 @@ export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({
 export const insertReportSchema = createInsertSchema(reports).pick({
   userId: true,
   quizId: true,
-  report: true,
-  compatibilityColor: true,
+  compatibilityProfile: true,
   isPaid: true,
 });
 
@@ -103,17 +109,21 @@ export const insertPaymentSchema = createInsertSchema(payments).pick({
   userId: true,
   reportId: true,
   amount: true,
-  razorpayPaymentId: true,
+  currency: true,
+  paymentMethod: true,
+  transactionId: true,
   status: true,
 });
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
   title: true,
   slug: true,
-  excerpt: true,
   content: true,
+  summary: true,
+  author: true,
   imageUrl: true,
   category: true,
+  published: true,
 });
 
 // Types for frontend/backend usage
