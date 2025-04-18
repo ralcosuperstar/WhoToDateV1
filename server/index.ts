@@ -82,44 +82,52 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Try to use port 5000 first, then fall back to alternatives
-  const preferredPort = 5000;
-  const fallbackPorts = [3000, 8080, 8000, 4000];
+  // Try multiple ports until one works
+  const tryPorts = [3000, 3001, 5000, 8080, 8000];
   
-  // Function to try listening on a port
-  const tryListen = (port: number) => {
-    try {
-      server.listen({
-        port,
-        host: "0.0.0.0",
-        reusePort: true,
-      }, () => {
-        log(`serving on port ${port}`);
-      });
-      
-      // Add error handler to try fallback ports
-      server.on('error', (err: any) => {
-        if (err.code === 'EADDRINUSE' && fallbackPorts.length > 0) {
-          log(`Port ${port} already in use, trying fallback port`);
-          const nextPort = fallbackPorts.shift()!;
-          tryListen(nextPort);
-        } else {
-          console.error('Server error:', err);
-        }
-      });
-    } catch (error) {
-      console.error(`Failed to start server on port ${port}:`, error);
-      if (fallbackPorts.length > 0) {
-        const nextPort = fallbackPorts.shift()!;
-        log(`Trying fallback port ${nextPort}`);
-        tryListen(nextPort);
-      } else {
-        console.error('All ports are in use. Cannot start server.');
-        process.exit(1);
+  const startServer = async () => {
+    for (const port of tryPorts) {
+      try {
+        console.log(`Attempting to start server on port ${port}...`);
+        
+        // Create a promise that resolves when the server starts or rejects on error
+        await new Promise((resolve, reject) => {
+          // Set up error handler first to catch EADDRINUSE
+          const errorHandler = (err: any) => {
+            if (err.code === 'EADDRINUSE') {
+              console.log(`Port ${port} already in use, trying next port...`);
+              server.removeListener('error', errorHandler);
+              resolve(false); // Signal to try next port
+            } else {
+              reject(err); // Actual error
+            }
+          };
+          
+          server.once('error', errorHandler);
+          
+          // Try to start listening
+          server.listen({
+            port,
+            host: "0.0.0.0",
+          }, () => {
+            server.removeListener('error', errorHandler);
+            log(`Server running successfully on port ${port}`);
+            resolve(true); // Success!
+          });
+        });
+        
+        // If we get here with no errors, server started successfully
+        return;
+      } catch (error) {
+        console.error(`Error starting server on port ${port}:`, error);
+        // Continue to next port
       }
     }
+    
+    // If we reach here, all ports failed
+    console.error('Failed to start server on any port. Exiting.');
+    process.exit(1);
   };
   
-  // Start trying to listen on the preferred port
-  tryListen(preferredPort);
+  startServer();
 })();
