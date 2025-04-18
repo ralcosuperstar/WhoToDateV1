@@ -57,13 +57,12 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<number, User>;
+  private users: Map<string, User>;
   private quizAnswers: Map<number, QuizAnswer>;
   private reports: Map<number, Report>;
   private payments: Map<number, Payment>;
   private blogPosts: Map<number, BlogPost>;
   
-  private currentUserId: number;
   private currentQuizId: number;
   private currentReportId: number;
   private currentPaymentId: number;
@@ -78,7 +77,6 @@ export class MemStorage implements IStorage {
     this.payments = new Map();
     this.blogPosts = new Map();
     
-    this.currentUserId = 1;
     this.currentQuizId = 1;
     this.currentReportId = 1;
     this.currentPaymentId = 1;
@@ -94,7 +92,7 @@ export class MemStorage implements IStorage {
   }
 
   // User operations
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
   }
   

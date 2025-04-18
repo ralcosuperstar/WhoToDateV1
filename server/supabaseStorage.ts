@@ -19,12 +19,8 @@ export class SupabaseStorage implements IStorage {
   private devMode: boolean = false;
 
   constructor() {
-    // MIGRATION NOTE: Temporarily force development mode during migration
-    // This ensures the app will work even without Supabase credentials
-    const forceDevelopmentMode = true;
-    
-    // Check if environment variables are set
-    if (forceDevelopmentMode || !process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+    // Check if environment variables are set - no longer forcing development mode
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
       console.warn('⚠️ Running in DEVELOPMENT MODE with mock data');
       console.log('ℹ️ This is intentional during the Supabase migration phase');
       
@@ -47,7 +43,10 @@ export class SupabaseStorage implements IStorage {
             }
           }
         );
-        console.log('✅ Connected to Supabase successfully');
+        
+        // Log a connection attempt message - we'll test the connection on first use
+        console.log('✅ Connecting to Supabase...'); 
+        console.log('✅ Supabase client initialized successfully');
         
         // Set up session store with PostgreSQL if possible, otherwise use memory store
         if (process.env.DATABASE_URL) {
@@ -76,6 +75,34 @@ export class SupabaseStorage implements IStorage {
     }
   }
 
+  // Test the connection to Supabase
+  private async testConnection() {
+    if (this.devMode || !this.client) {
+      return false;
+    }
+    
+    try {
+      // Test connection by fetching a dummy record
+      const { error: testError } = await this.client
+        .from('users')
+        .select('count')
+        .limit(1);
+        
+      if (testError) {
+        console.error('❌ Failed to connect to Supabase database:', testError.message);
+        this.devMode = true;
+        return false;
+      }
+      
+      console.log('✅ Supabase connection verified successfully');
+      return true;
+    } catch (error) {
+      console.error('❌ Error testing Supabase connection:', error);
+      this.devMode = true;
+      return false;
+    }
+  }
+
   // User operations
   async getUser(id: string): Promise<User | undefined> {
     if (this.devMode) {
@@ -96,6 +123,9 @@ export class SupabaseStorage implements IStorage {
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
+    
+    // Test connection on first use
+    await this.testConnection();
     
     const { data, error } = await this.client
       .from('users')
@@ -868,7 +898,16 @@ export class SupabaseStorage implements IStorage {
 
   // Utility to close any connections
   async close() {
-    // No specific cleanup needed for Supabase
+    if (this.client) {
+      try {
+        // Close the Supabase connection if needed
+        console.log('Closing Supabase connection...');
+        // There's no explicit 'close' method for Supabase, so we just nullify the client
+        this.client = null;
+      } catch (error) {
+        console.error('Error closing Supabase connection:', error);
+      }
+    }
   }
 }
 

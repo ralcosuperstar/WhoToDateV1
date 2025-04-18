@@ -82,42 +82,61 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Try multiple ports until one works
-  const tryPorts = [3000, 3001, 5000, 8080, 8000];
+  // Try multiple ports until one works - include more ports in case of conflicts
+  const tryPorts = [3000, 3001, 3002, 3003, 5000, 5001, 8080, 8000, 8888, 9000];
   
   const startServer = async () => {
+    let serverStarted = false;
+    
     for (const port of tryPorts) {
+      // Skip this iteration if server already started
+      if (serverStarted) break;
+      
       try {
         console.log(`Attempting to start server on port ${port}...`);
         
         // Create a promise that resolves when the server starts or rejects on error
-        await new Promise((resolve, reject) => {
+        await new Promise<boolean>((resolve, reject) => {
+          let timeout: NodeJS.Timeout;
+          
           // Set up error handler first to catch EADDRINUSE
           const errorHandler = (err: any) => {
+            clearTimeout(timeout);
             if (err.code === 'EADDRINUSE') {
               console.log(`Port ${port} already in use, trying next port...`);
               server.removeListener('error', errorHandler);
               resolve(false); // Signal to try next port
             } else {
+              server.removeListener('error', errorHandler);
               reject(err); // Actual error
             }
           };
           
           server.once('error', errorHandler);
           
+          // Set timeout to avoid hanging
+          timeout = setTimeout(() => {
+            server.removeListener('error', errorHandler);
+            console.log(`Timeout waiting for port ${port}, trying next port...`);
+            resolve(false);
+          }, 3000); // 3 second timeout
+          
           // Try to start listening
           server.listen({
             port,
             host: "0.0.0.0",
           }, () => {
+            clearTimeout(timeout);
             server.removeListener('error', errorHandler);
             log(`Server running successfully on port ${port}`);
+            serverStarted = true;
             resolve(true); // Success!
           });
         });
         
-        // If we get here with no errors, server started successfully
-        return;
+        // If we get here with no errors and server started, we're done
+        if (serverStarted) return;
+        
       } catch (error) {
         console.error(`Error starting server on port ${port}:`, error);
         // Continue to next port

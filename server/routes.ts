@@ -7,6 +7,7 @@ import { generateVerificationToken, generateTokenExpiry, logAllVerificationLinks
 import { generateOTP, generateOTPExpiry } from "./twilioService";
 import { createClient } from '@supabase/supabase-js';
 import { IStorage } from "./storage";
+import { setupSupabaseRoutes } from "./routes/supabase";
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
@@ -15,7 +16,18 @@ const db: IStorage = supabaseStorage;
 declare module "express-session" {
   interface SessionData {
     userId?: string;
+    email?: string;
     supabaseToken?: string;
+    supabaseAuthenticated?: boolean;
+  }
+}
+
+// Add user property to Request interface
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
   }
 }
 
@@ -29,7 +41,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
     }
   }));
 
@@ -40,45 +53,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Check for JWT token in header
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      const supabase = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_ANON_KEY!
-      );
       
-      const { data: { user }, error } = await supabase.auth.getUser(token);
-      
-      if (error || !user) {
-        console.log("JWT authentication failed:", error?.message);
-        return res.status(401).json({ message: "Invalid token" });
+      try {
+        const supabase = createClient(
+          process.env.SUPABASE_URL || '',
+          process.env.SUPABASE_ANON_KEY || ''
+        );
+        
+        const { data: { user }, error } = await supabase.auth.getUser(token);
+        
+        if (error || !user) {
+          console.log("JWT authentication failed:", error?.message);
+          return res.status(401).json({ message: "Invalid token" });
+        }
+        
+        // Add user ID to request
+        req.user = await db.getUser(user.id);
+        return next();
+      } catch (error) {
+        console.error("Error verifying JWT token:", error);
+        return res.status(500).json({ message: "Authentication error" });
       }
-      
-      // Add user ID to request
-      req.user = await db.getUser(user.id);
-      return next();
     }
     
     // Check for session-based auth (fallback)
     if (req.session.userId) {
-      const user = await db.getUser(req.session.userId);
-      if (user) {
-        req.user = user;
-        return next();
+      try {
+        const user = await db.getUser(req.session.userId);
+        if (user) {
+          req.user = user;
+          return next();
+        }
+      } catch (error) {
+        console.error("Error fetching user from session:", error);
       }
+    }
+    
+    // Development mode fallback for testing
+    if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
+      console.warn("⚠️ Using development authentication bypass");
+      req.user = {
+        id: 'dev-user-id-1',
+        email: 'dev@example.com',
+        username: 'devuser',
+        isVerified: true
+      };
+      return next();
     }
     
     console.log("Authentication failed: No valid token or session");
     res.status(401).json({ message: "Unauthorized" });
   };
 
-  // Public routes that don't require authentication
-
-  // Get Supabase config
-  app.get("/api/supabase-config", (req, res) => {
-    res.json({
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
-    });
-  });
+  // Set up dedicated Supabase routes
+  setupSupabaseRoutes(app);
   
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   app.post("/api/ensure-user", async (req, res) => {
@@ -149,6 +177,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Quiz API
+  app.get("/api/quiz", isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const quizAnswers = await db.getQuizAnswers(userId);
+      if (!quizAnswers) {
+        return res.status(404).json({ message: "Quiz not found" });
+      }
+
+      res.json(quizAnswers);
+    } catch (error) {
+      console.error("Error fetching quiz:", error);
+      res.status(500).json({ message: "Failed to fetch quiz" });
+    }
+  });
+
+  app.post("/api/quiz", isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const { answers, completed } = req.body;
+      if (!answers) {
+        return res.status(400).json({ message: "Missing quiz answers" });
+      }
+
+      // Check if user already has quiz answers
+      const existingAnswers = await db.getQuizAnswers(userId);
+      
+      let quizAnswers;
+      if (existingAnswers) {
+        // Update existing answers
+        quizAnswers = await db.updateQuizAnswers(
+          existingAnswers.id,
+          answers,
+          completed || false
+        );
+      } else {
+        // Create new answers
+        quizAnswers = await db.createQuizAnswers({
+          userId,
+          answers,
+          completed: completed || false
+        });
+      }
+
+      res.json(quizAnswers);
+    } catch (error) {
+      console.error("Error saving quiz:", error);
+      res.status(500).json({ message: "Failed to save quiz" });
+    }
+  });
+
   // API routes for blog posts
   app.get("/api/blog-posts", async (req, res) => {
     try {
@@ -191,9 +278,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create HTTP server
   const server = createServer(app);
 
-  // Log all verification links in development
+  // Development helpers
   if (process.env.NODE_ENV !== "production") {
+    // Enable verification link logging if needed
     // await logAllVerificationLinks(db);
+    
+    // Log that we're in development mode
+    console.log("⚠️ Running in development mode");
   }
 
   return server;
