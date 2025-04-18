@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 import { 
   users, type User, type InsertUser,
   quizAnswers, type QuizAnswer, type InsertQuizAnswer,
@@ -128,7 +129,7 @@ export class MemStorage implements IStorage {
     );
   }
   
-  async setOTP(userId: number, otp: string, expiry: Date): Promise<User> {
+  async setOTP(userId: string, otp: string, expiry: Date): Promise<User> {
     const user = await this.getUser(userId);
     
     if (!user) {
@@ -145,14 +146,17 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
+    // Generate a UUID for the user
+    const id = insertUser.id || crypto.randomUUID();
     const createdAt = new Date();
+    const updatedAt = new Date();
     // Ensure all fields are properly initialized with null rather than undefined
     const user: User = { 
-      ...insertUser, 
       id, 
       createdAt,
-      password: insertUser.password || '',
+      updatedAt,
+      username: insertUser.username || null,
+      email: insertUser.email,
       phoneNumber: insertUser.phoneNumber || null,
       firstName: insertUser.firstName || null,
       lastName: insertUser.lastName || null,
@@ -165,7 +169,8 @@ export class MemStorage implements IStorage {
       verificationToken: null,
       verificationTokenExpiry: null,
       otpCode: null,
-      otpExpiry: null
+      otpExpiry: null,
+      clerkId: insertUser.clerkId || null
     };
     this.users.set(id, user);
     return user;
@@ -175,7 +180,7 @@ export class MemStorage implements IStorage {
   
   // Removed linkUserToClerk - no longer needed
   
-  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User> {
+  async updateUser(id: string, userData: Partial<InsertUser>): Promise<User> {
     const user = await this.getUser(id);
     
     if (!user) {
@@ -191,7 +196,7 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
+  async setVerificationToken(userId: string, token: string, expiry: Date): Promise<User> {
     const user = await this.getUser(userId);
     
     if (!user) {
@@ -207,7 +212,7 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  async verifyUser(userId: number): Promise<User> {
+  async verifyUser(userId: string): Promise<User> {
     const user = await this.getUser(userId);
     
     if (!user) {
@@ -227,7 +232,7 @@ export class MemStorage implements IStorage {
   }
   
   // Quiz operations
-  async getQuizAnswers(userId: number): Promise<QuizAnswer | undefined> {
+  async getQuizAnswers(userId: string): Promise<QuizAnswer | undefined> {
     return Array.from(this.quizAnswers.values()).find(
       (quiz) => quiz.userId === userId,
     );
@@ -235,14 +240,16 @@ export class MemStorage implements IStorage {
   
   async createQuizAnswers(insertQuizAnswer: InsertQuizAnswer): Promise<QuizAnswer> {
     const id = this.currentQuizId++;
-    const startedAt = new Date();
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    
     const quizAnswer: QuizAnswer = { 
       userId: insertQuizAnswer.userId,
       answers: insertQuizAnswer.answers,
       completed: insertQuizAnswer.completed || false,
       id, 
-      startedAt,
-      completedAt: insertQuizAnswer.completed ? new Date() : null 
+      createdAt,
+      updatedAt
     };
     this.quizAnswers.set(id, quizAnswer);
     return quizAnswer;
@@ -254,11 +261,13 @@ export class MemStorage implements IStorage {
       throw new Error('Quiz not found');
     }
     
+    const updatedAt = new Date();
+    
     const updatedQuiz: QuizAnswer = { 
       ...quiz, 
       answers, 
       completed,
-      completedAt: completed ? new Date() : (quiz.completedAt || null)
+      updatedAt
     };
     
     this.quizAnswers.set(id, updatedQuiz);
@@ -270,7 +279,7 @@ export class MemStorage implements IStorage {
     return this.reports.get(id);
   }
   
-  async getReportByUserId(userId: number): Promise<Report | undefined> {
+  async getReportByUserId(userId: string): Promise<Report | undefined> {
     return Array.from(this.reports.values()).find(
       (report) => report.userId === userId
     );
@@ -279,14 +288,15 @@ export class MemStorage implements IStorage {
   async createReport(insertReport: InsertReport): Promise<Report> {
     const id = this.currentReportId++;
     const createdAt = new Date();
+    const updatedAt = new Date();
     const report: Report = { 
       userId: insertReport.userId,
-      quizId: insertReport.quizId,
-      report: insertReport.report,
-      compatibilityColor: insertReport.compatibilityColor,
+      quizId: insertReport.quizId || null,
+      compatibilityProfile: insertReport.compatibilityProfile || {},
       isPaid: insertReport.isPaid || false,
       id, 
-      createdAt
+      createdAt,
+      updatedAt
     };
     this.reports.set(id, report);
     return report;
@@ -307,14 +317,18 @@ export class MemStorage implements IStorage {
   async createPayment(insertPayment: InsertPayment): Promise<Payment> {
     const id = this.currentPaymentId++;
     const createdAt = new Date();
+    const updatedAt = new Date();
     const payment: Payment = { 
       userId: insertPayment.userId,
       reportId: insertPayment.reportId,
       amount: insertPayment.amount,
-      status: insertPayment.status,
-      razorpayPaymentId: insertPayment.razorpayPaymentId || null,
+      status: insertPayment.status || 'pending',
+      currency: insertPayment.currency || 'INR',
+      paymentMethod: insertPayment.paymentMethod || null,
+      transactionId: insertPayment.transactionId || null,
       id, 
-      createdAt 
+      createdAt,
+      updatedAt
     };
     this.payments.set(id, payment);
     return payment;
@@ -341,9 +355,9 @@ export class MemStorage implements IStorage {
   async getAllBlogPosts(): Promise<BlogPost[]> {
     return Array.from(this.blogPosts.values()).sort(
       (a, b) => {
-        const aTime = a.publishedAt ? a.publishedAt.getTime() : 0;
-        const bTime = b.publishedAt ? b.publishedAt.getTime() : 0;
-        return bTime - aTime;
+        const aTime = a.createdAt ? a.createdAt.getTime() : 0;
+        const bTime = b.createdAt ? b.createdAt.getTime() : 0;
+        return bTime - aTime; // Sort newest first
       }
     );
   }
@@ -360,16 +374,21 @@ export class MemStorage implements IStorage {
   
   async createBlogPost(insertBlogPost: InsertBlogPost): Promise<BlogPost> {
     const id = this.currentBlogPostId++;
-    const publishedAt = new Date();
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    
     const blogPost: BlogPost = { 
       title: insertBlogPost.title,
       slug: insertBlogPost.slug,
-      excerpt: insertBlogPost.excerpt,
+      summary: insertBlogPost.summary || null,
       content: insertBlogPost.content,
-      category: insertBlogPost.category,
+      author: insertBlogPost.author || null,
+      category: insertBlogPost.category || null,
       imageUrl: insertBlogPost.imageUrl || null,
+      published: insertBlogPost.published || true,
       id, 
-      publishedAt
+      createdAt,
+      updatedAt
     };
     this.blogPosts.set(id, blogPost);
     return blogPost;
@@ -381,68 +400,85 @@ export class MemStorage implements IStorage {
       {
         title: "Understanding Attachment Styles: The Key to Better Relationships",
         slug: "understanding-attachment-styles",
-        excerpt: "Learn how your early life experiences shape your adult relationships and how to work with different attachment styles.",
+        summary: "Learn how your early life experiences shape your adult relationships and how to work with different attachment styles.",
         content: "# Understanding Attachment Styles\n\nAttachment theory, developed by John Bowlby and expanded by Mary Ainsworth, suggests that the bonds we form with our primary caregivers in infancy create a template for how we form relationships throughout life...",
         imageUrl: "https://via.placeholder.com/600x400/ff6b6b/ffffff?text=Attachment+Styles",
-        category: "Relationship Psychology"
+        category: "Relationship Psychology",
+        author: "Dr. Relationship Expert"
       },
       {
         title: "Navigating Family Expectations in Modern Indian Relationships",
         slug: "navigating-family-expectations",
-        excerpt: "Balancing personal choice with family values can be challenging. Here's how to find harmony without sacrificing your happiness.",
+        summary: "Balancing personal choice with family values can be challenging. Here's how to find harmony without sacrificing your happiness.",
         content: "# Navigating Family Expectations in Modern Indian Relationships\n\nIn Indian culture, relationships often extend beyond the couple to include both families. While this can provide a strong support system, it can also create unique challenges...",
         imageUrl: "https://via.placeholder.com/600x400/4ecdc4/ffffff?text=Family+Expectations",
-        category: "Cultural Insights"
+        category: "Cultural Insights",
+        author: "Family Counselor"
       },
       {
         title: "Green, Yellow, Red: Understanding Your Compatibility Profile",
         slug: "understanding-compatibility-profile",
-        excerpt: "What does your compatibility color mean? Discover the strengths and challenges of each profile and how to use this knowledge in your dating life.",
+        summary: "What does your compatibility color mean? Discover the strengths and challenges of each profile and how to use this knowledge in your dating life.",
         content: "# Green, Yellow, Red: Understanding Your Compatibility Profile\n\nAt MyDate, we classify compatibility profiles into three categories: Green, Yellow, and Red. Each represents different relationship dynamics and compatibility levels...",
         imageUrl: "https://via.placeholder.com/600x400/ff9f1c/ffffff?text=Compatibility+Profiles",
-        category: "Compatibility Guide"
+        category: "Compatibility Guide",
+        author: "Dating Coach"
       },
       {
         title: "Building Emotional Intelligence for Healthier Relationships",
         slug: "emotional-intelligence-relationships",
-        excerpt: "Discover how developing your emotional intelligence can lead to deeper connections and fewer conflicts.",
+        summary: "Discover how developing your emotional intelligence can lead to deeper connections and fewer conflicts.",
         content: "# Building Emotional Intelligence for Healthier Relationships\n\nEmotional intelligence (EQ) is the ability to understand, use, and manage your emotions in positive ways to relieve stress, communicate effectively, empathize with others, overcome challenges, and defuse conflict...",
         imageUrl: "https://via.placeholder.com/600x400/9c6644/ffffff?text=Emotional+Intelligence",
-        category: "Relationship Skills"
+        category: "Relationship Skills",
+        author: "Psychology Expert"
       },
       {
         title: "Dating in the Digital Age: Navigating Apps With Authenticity",
         slug: "dating-apps-authenticity",
-        excerpt: "How to stay true to yourself while using dating apps in India, and still find meaningful connections.",
+        summary: "How to stay true to yourself while using dating apps in India, and still find meaningful connections.",
         content: "# Dating in the Digital Age: Navigating Apps With Authenticity\n\nDating apps have transformed how young Indians meet potential partners. While they offer unprecedented access to new connections, they also present challenges to maintaining authenticity...",
         imageUrl: "https://via.placeholder.com/600x400/f9c74f/ffffff?text=Digital+Dating",
-        category: "Modern Dating"
+        category: "Modern Dating",
+        author: "Tech Relationship Specialist"
       },
       {
         title: "The Science Behind Why Opposites Don't Actually Attract",
         slug: "science-opposites-attract-myth",
-        excerpt: "Research shows that similarity, not opposition, predicts relationship success. Learn what science has to say about compatibility.",
+        summary: "Research shows that similarity, not opposition, predicts relationship success. Learn what science has to say about compatibility.",
         content: "# The Science Behind Why Opposites Don't Actually Attract\n\nContrary to popular belief, psychological research consistently shows that we are attracted to people who share our values, beliefs, and personality traits...",
         imageUrl: "https://via.placeholder.com/600x400/43aa8b/ffffff?text=Attraction+Science",
-        category: "Relationship Science"
+        category: "Relationship Science",
+        author: "Research Psychologist"
       }
     ];
     
     samplePosts.forEach(post => {
       const id = this.currentBlogPostId++;
-      const publishedAt = new Date();
+      const createdAt = new Date();
+      const updatedAt = new Date();
+      
       const blogPost: BlogPost = { 
         title: post.title,
         slug: post.slug,
-        excerpt: post.excerpt,
+        summary: post.summary || null,
         content: post.content,
-        category: post.category,
+        author: post.author || null,
+        category: post.category || null,
         imageUrl: post.imageUrl || null,
+        published: true,
         id,
-        publishedAt
+        createdAt,
+        updatedAt
       };
       this.blogPosts.set(id, blogPost);
     });
+  }
+  
+  async close(): Promise<void> {
+    // No resources to clean up for in-memory storage
+    console.log("MemStorage.close() called - no resources to clean up");
+    return Promise.resolve();
   }
 }
 

@@ -7,7 +7,9 @@ import { generateVerificationToken, generateTokenExpiry, logAllVerificationLinks
 import { generateOTP, generateOTPExpiry } from "./twilioService";
 import { createClient } from '@supabase/supabase-js';
 import { IStorage } from "./storage";
+import { User } from '@shared/schema';
 import { setupSupabaseRoutes } from "./routes/supabase";
+import { setupDatabaseTestRoutes } from "./routes/database-test";
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
@@ -26,7 +28,7 @@ declare module "express-session" {
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      user?: User;
     }
   }
 }
@@ -96,7 +98,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: 'dev-user-id-1',
         email: 'dev@example.com',
         username: 'devuser',
-        isVerified: true
+        phoneNumber: null,
+        firstName: 'Dev',
+        lastName: 'User',
+        fullName: 'Dev User',
+        dateOfBirth: null,
+        gender: null,
+        imageUrl: null,
+        isVerified: true,
+        verificationMethod: null,
+        verificationToken: null,
+        verificationTokenExpiry: null,
+        otpCode: null,
+        otpExpiry: null,
+        clerkId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       return next();
     }
@@ -107,6 +124,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Set up dedicated Supabase routes
   setupSupabaseRoutes(app);
+  
+  // Set up database test routes
+  setupDatabaseTestRoutes(app);
   
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   app.post("/api/ensure-user", async (req, res) => {

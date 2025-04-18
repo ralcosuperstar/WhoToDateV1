@@ -82,8 +82,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Try multiple ports until one works - include more ports in case of conflicts
-  const tryPorts = [3000, 3001, 3002, 3003, 5000, 5001, 8080, 8000, 8888, 9000];
+  // Try multiple ports until one works - try port 5000 first for Replit compatibility
+  const tryPorts = [5000, 3000, 3001, 3002, 3003, 5001, 8080, 8000, 8888, 9000];
   
   const startServer = async () => {
     let serverStarted = false;

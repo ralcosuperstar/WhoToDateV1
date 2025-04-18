@@ -29,6 +29,7 @@ import AuthPage from "@/pages/auth-page";
 import NewAuthPage from "@/pages/new-auth-page";
 import SupabaseTest from "@/pages/SupabaseTest";
 import SupabaseAuthTest from "@/pages/SupabaseAuthTest";
+import SupabaseDbTest from "@/pages/SupabaseDbTest";
 import SimpleAuthTest from "@/pages/SimpleAuthTest";
 import CustomAuthTest from "@/pages/CustomAuthTest";
 import AuthTest from "@/pages/auth-test";
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/old-auth" component={AuthPage} />
       <Route path="/supabase-test" component={SupabaseTest} />
       <Route path="/supabase-auth-test" component={SupabaseAuthTest} />
+      <Route path="/supabase-db-test" component={SupabaseDbTest} />
       <Route path="/simple-auth-test" component={SimpleAuthTest} />
       <Route path="/custom-auth-test" component={CustomAuthTest} />
       <Route path="/auth-test" component={AuthTest} />
