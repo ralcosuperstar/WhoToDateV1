@@ -32,13 +32,13 @@ export interface IStorage {
   setOTP(userId: number, otp: string, expiry: Date): Promise<User>;
   
   // Quiz operations
-  getQuizAnswers(userId: string): Promise<QuizAnswer | undefined>;
+  getQuizAnswers(userId: number): Promise<QuizAnswer | undefined>;
   createQuizAnswers(quizAnswer: InsertQuizAnswer): Promise<QuizAnswer>;
   updateQuizAnswers(id: number, answers: any, completed: boolean): Promise<QuizAnswer>;
   
   // Report operations
   getReport(id: number): Promise<Report | undefined>;
-  getReportByUserId(userId: string): Promise<Report | undefined>;
+  getReportByUserId(userId: number): Promise<Report | undefined>;
   createReport(report: InsertReport): Promise<Report>;
   updateReportPaymentStatus(id: number, isPaid: boolean): Promise<Report>;
   

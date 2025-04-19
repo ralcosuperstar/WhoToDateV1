@@ -29,7 +29,7 @@ export const users = pgTable("users", {
 // Quiz answers - storing user responses
 export const quizAnswers = pgTable("quiz_answers", {
   id: serial("id").primaryKey(),
-  userId: uuid("user_id").notNull(), // References users.id
+  userId: integer("user_id").notNull(), // References users.id (integer)
   answers: jsonb("answers").notNull().default('{}'), // JSON object of user answers
   completed: boolean("completed").default(false),
   startedAt: timestamp("started_at", { withTimezone: true }), // When the quiz was started
@@ -39,7 +39,7 @@ export const quizAnswers = pgTable("quiz_answers", {
 // Compatibility reports table
 export const reports = pgTable("reports", {
   id: serial("id").primaryKey(),
-  userId: uuid("user_id").notNull(), // References users.id
+  userId: integer("user_id").notNull(), // References users.id (integer)
   quizId: integer("quiz_id"), // References quiz_answers.id
   report: jsonb("report").notNull().default('{}'), // Full report data as JSON
   isPaid: boolean("is_paid").default(false),
@@ -50,7 +50,7 @@ export const reports = pgTable("reports", {
 // Payments tracking
 export const payments = pgTable("payments", {
   id: serial("id").primaryKey(),
-  userId: uuid("user_id").notNull(), // References users.id
+  userId: integer("user_id").notNull(), // References users.id (integer)
   reportId: integer("report_id").notNull(), // References reports.id
   amount: integer("amount").notNull(), // Amount in cents/paise
   status: text("status").default('pending'), // success, failed, pending
