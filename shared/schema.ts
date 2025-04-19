@@ -23,7 +23,7 @@ export const users = pgTable("users", {
   otpExpiry: timestamp("otp_expiry", { withTimezone: false }), // Expiry time for OTP code
   clerkId: text("clerk_id").unique(), // Legacy field for Clerk integration
   createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: false }).defaultNow(),
+  // removed updatedAt as it doesn't exist in the database
 });
 
 // Quiz answers - storing user responses
@@ -32,8 +32,8 @@ export const quizAnswers = pgTable("quiz_answers", {
   userId: uuid("user_id").notNull(), // References users.id
   answers: jsonb("answers").notNull().default('{}'), // JSON object of user answers
   completed: boolean("completed").default(false),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  startedAt: timestamp("started_at", { withTimezone: true }), // When the quiz was started
+  completedAt: timestamp("completed_at", { withTimezone: true }), // When the quiz was completed
 });
 
 // Compatibility reports table
@@ -41,10 +41,10 @@ export const reports = pgTable("reports", {
   id: serial("id").primaryKey(),
   userId: uuid("user_id").notNull(), // References users.id
   quizId: integer("quiz_id"), // References quiz_answers.id
-  compatibilityProfile: jsonb("compatibility_profile").notNull().default('{}'), // Detailed profile JSON
+  report: jsonb("report").notNull().default('{}'), // Full report data as JSON
   isPaid: boolean("is_paid").default(false),
+  compatibilityColor: text("compatibility_color"), // Color code for compatibility level
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Payments tracking
@@ -53,12 +53,9 @@ export const payments = pgTable("payments", {
   userId: uuid("user_id").notNull(), // References users.id
   reportId: integer("report_id").notNull(), // References reports.id
   amount: integer("amount").notNull(), // Amount in cents/paise
-  currency: text("currency").default('INR'),
-  paymentMethod: text("payment_method"),
-  transactionId: text("transaction_id"),
   status: text("status").default('pending'), // success, failed, pending
+  razorpayPaymentId: text("razorpay_payment_id"), // Payment gateway transaction ID
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 // Blog posts
@@ -67,13 +64,10 @@ export const blogPosts = pgTable("blog_posts", {
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   content: text("content").notNull(),
-  summary: text("summary"),
-  author: text("author"),
+  excerpt: text("excerpt"), // Short summary of the post
   imageUrl: text("image_url"),
   category: text("category"),
-  published: boolean("published").default(true),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
 });
 
 // Schemas for inserts
@@ -103,29 +97,27 @@ export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({
 export const insertReportSchema = createInsertSchema(reports).pick({
   userId: true,
   quizId: true,
-  compatibilityProfile: true,
+  report: true,
   isPaid: true,
+  compatibilityColor: true,
 });
 
 export const insertPaymentSchema = createInsertSchema(payments).pick({
   userId: true,
   reportId: true,
   amount: true,
-  currency: true,
-  paymentMethod: true,
-  transactionId: true,
   status: true,
+  razorpayPaymentId: true,
 });
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).pick({
   title: true,
   slug: true,
   content: true,
-  summary: true,
-  author: true,
+  excerpt: true,
   imageUrl: true,
   category: true,
-  published: true,
+  publishedAt: true,
 });
 
 // Types for frontend/backend usage
@@ -134,6 +126,7 @@ export type User = typeof users.$inferSelect & {
   // Non-persisted fields that may be sent from the API but are not in the database
   authToken?: string;
   emailVerificationSent?: boolean;
+  updatedAt?: Date | null; // Added for backward compatibility since it was removed from the schema
 };
 
 export type InsertQuizAnswer = z.infer<typeof insertQuizAnswerSchema>;
@@ -146,4 +139,7 @@ export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
 
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
-export type BlogPost = typeof blogPosts.$inferSelect;
+export type BlogPost = typeof blogPosts.$inferSelect & {
+  // Non-persisted field for backward compatibility
+  updatedAt?: Date | null; // Added for backward compatibility since it was removed from the schema
+};

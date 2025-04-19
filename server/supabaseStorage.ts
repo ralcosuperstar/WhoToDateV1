@@ -14,7 +14,7 @@ const MemoryStore = createMemoryStore(session);
 
 // Supabase storage implementation
 export class SupabaseStorage implements IStorage {
-  private client: SupabaseClient | null = null;
+  public client: SupabaseClient | null = null;
   public sessionStore: session.Store;
   private devMode: boolean = false;
 
@@ -51,9 +51,11 @@ export class SupabaseStorage implements IStorage {
         // Set up session store with PostgreSQL if possible, otherwise use memory store
         if (process.env.DATABASE_URL) {
           const PostgresSessionStore = connectPg(session);
+          
+          // Don't try to create the table automatically since it's causing conflicts
           this.sessionStore = new PostgresSessionStore({
             conString: process.env.DATABASE_URL,
-            createTableIfMissing: true
+            createTableIfMissing: false // Changed to false to avoid the "relation exists" error
           });
         } else {
           console.warn('⚠️ No DATABASE_URL found. Using in-memory session store.');
@@ -355,23 +357,37 @@ export class SupabaseStorage implements IStorage {
     try {
       console.log('Creating user in Supabase:', JSON.stringify(user, null, 2));
       
-      // Convert camelCase to snake_case for Supabase
+      // Accept either camelCase or snake_case property names
       // Make sure we have required fields
-      if (!user.username || !user.password || !user.email) {
-        throw new Error('Missing required fields: username, password, and email are required');
+      if (!user.username && !(user as any).username) {
+        throw new Error('Missing required field: username');
+      }
+      if (!user.password && !(user as any).password) {
+        throw new Error('Missing required field: password');
+      }
+      if (!user.email && !(user as any).email) {
+        throw new Error('Missing required field: email');
       }
       
+      // Support both camelCase and snake_case properties
       const supabaseUser = {
         // NOTE: id is auto-generated as integer in database
-        username: user.username,
-        password: user.password,
-        email: user.email,
-        phone_number: user.phoneNumber || null,
-        first_name: user.firstName || null,
-        last_name: user.lastName || null,
-        full_name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null,
-        is_verified: user.isVerified === undefined ? false : user.isVerified,
-        verification_method: user.verificationMethod || null
+        username: user.username || (user as any).username,
+        password: user.password || (user as any).password,
+        email: user.email || (user as any).email,
+        
+        // Handle both naming conventions
+        phone_number: user.phoneNumber || (user as any).phone_number || null,
+        first_name: user.firstName || (user as any).first_name || null,
+        last_name: user.lastName || (user as any).last_name || null,
+        full_name: user.fullName || (user as any).full_name || 
+          (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null) ||
+          ((user as any).first_name && (user as any).last_name ? `${(user as any).first_name} ${(user as any).last_name}` : null),
+        
+        is_verified: user.isVerified !== undefined ? user.isVerified : 
+          ((user as any).is_verified !== undefined ? (user as any).is_verified : false),
+        
+        verification_method: user.verificationMethod || (user as any).verification_method || null
       };
       
       console.log('Formatted user for Supabase:', JSON.stringify(supabaseUser, null, 2));
@@ -410,7 +426,31 @@ export class SupabaseStorage implements IStorage {
       }
       
       console.log('User created successfully:', data);
-      return data as User;
+      // Convert the returned database record to our User type
+      const createdUser: User = {
+        id: data.id,
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        phoneNumber: data.phone_number,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        fullName: data.full_name,
+        dateOfBirth: data.date_of_birth,
+        gender: data.gender,
+        imageUrl: data.image_url,
+        isVerified: data.is_verified,
+        verificationMethod: data.verification_method,
+        verificationToken: data.verification_token,
+        verificationTokenExpiry: data.verification_token_expiry ? new Date(data.verification_token_expiry) : null,
+        otpCode: data.otp_code,
+        otpExpiry: data.otp_expiry ? new Date(data.otp_expiry) : null,
+        clerkId: data.clerk_id,
+        createdAt: data.created_at ? new Date(data.created_at) : null,
+        updatedAt: new Date() // Adding this for backward compatibility
+      };
+      
+      return createdUser;
     } catch (error) {
       console.error('Unexpected error in createUser:', error);
       throw error;
@@ -565,7 +605,7 @@ export class SupabaseStorage implements IStorage {
     
     const { data, error } = await this.client
       .from('quiz_answers')
-      .update({ answers, completed, updatedAt: new Date().toISOString() })
+      .update({ answers, completed })
       .eq('id', id)
       .select()
       .single();
@@ -711,7 +751,7 @@ export class SupabaseStorage implements IStorage {
     
     const { data, error } = await this.client
       .from('reports')
-      .update({ isPaid, updatedAt: new Date().toISOString() })
+      .update({ isPaid })
       .eq('id', id)
       .select()
       .single();
@@ -809,7 +849,7 @@ export class SupabaseStorage implements IStorage {
     
     const { data, error } = await this.client
       .from('payments')
-      .update({ status, updatedAt: new Date().toISOString() })
+      .update({ status })
       .eq('id', id)
       .select()
       .single();
@@ -863,7 +903,14 @@ export class SupabaseStorage implements IStorage {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data as BlogPost[];
+    
+    // Convert to BlogPost type with backward compatibility field
+    const posts = data.map(post => ({
+      ...post,
+      updatedAt: new Date() // Add for backward compatibility
+    })) as BlogPost[];
+    
+    return posts;
   }
 
   async getBlogPostById(id: number): Promise<BlogPost | undefined> {
