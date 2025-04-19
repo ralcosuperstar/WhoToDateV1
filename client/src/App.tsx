@@ -33,6 +33,7 @@ import SupabaseDbTest from "@/pages/SupabaseDbTest";
 import SimpleAuthTest from "@/pages/SimpleAuthTest";
 import CustomAuthTest from "@/pages/CustomAuthTest";
 import AuthTest from "@/pages/auth-test";
+import TestApiPage from "@/pages/test-api-page";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/simple-auth-test" component={SimpleAuthTest} />
       <Route path="/custom-auth-test" component={CustomAuthTest} />
       <Route path="/auth-test" component={AuthTest} />
+      <Route path="/test-api" component={TestApiPage} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />

@@ -131,6 +131,17 @@ export async function registerRoutes(app: Express, apiRouter?: Express.Router): 
   // Set up database test routes
   setupDatabaseTestRoutes(app, router);
   
+  // Add a health check endpoint that bypasses auth
+  router.get("/health", (req, res) => {
+    console.log("Health check endpoint hit");
+    res.json({ 
+      status: "ok", 
+      time: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development',
+      server: 'main'
+    });
+  });
+  
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   router.post("/ensure-user", async (req, res) => {
     try {

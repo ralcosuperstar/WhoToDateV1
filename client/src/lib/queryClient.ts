@@ -1,97 +1,79 @@
-import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { QueryClient } from '@tanstack/react-query';
+import { apiClient } from './apiClient';
 
-async function throwIfResNotOk(res: Response) {
-  if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
-  }
-}
-
-// Helper to get auth token from localStorage or cookie
-export function getAuthToken(): string | null {
-  // Try to get from localStorage first
-  const token = localStorage.getItem("auth_token");
-  if (token) return token;
-  
-  // If not in localStorage, try to get from cookie
-  const cookies = document.cookie.split(';').map(c => c.trim());
-  const authCookie = cookies.find(c => c.startsWith('auth_token='));
-  if (authCookie) {
-    return authCookie.split('=')[1];
-  }
-  
-  return null;
-}
-
-export async function apiRequest(
-  method: string,
-  url: string,
-  data?: unknown | undefined,
-): Promise<Response> {
-  // Get auth token if available
-  const authToken = getAuthToken();
-  
-  // Setup headers
-  const headers: Record<string, string> = {};
-  if (data) {
-    headers["Content-Type"] = "application/json";
-  }
-  
-  // Add auth token if available
-  if (authToken) {
-    headers["Authorization"] = `Bearer ${authToken}`;
-  }
-  
-  const res = await fetch(url, {
-    method,
-    headers,
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
-  });
-
-  await throwIfResNotOk(res);
-  return res;
-}
-
-type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn: <T>(options: {
-  on401: UnauthorizedBehavior;
-}) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
-    // Get auth token if available
-    const authToken = getAuthToken();
-    
-    // Setup headers with auth token if available
-    const headers: Record<string, string> = {};
-    if (authToken) {
-      headers["Authorization"] = `Bearer ${authToken}`;
-    }
-    
-    const res = await fetch(queryKey[0] as string, {
-      credentials: "include",
-      headers
-    });
-
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
-    }
-
-    await throwIfResNotOk(res);
-    return await res.json();
-  };
-
+// Create a client
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: getQueryFn({ on401: "throw" }),
-      refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
-    },
-    mutations: {
-      retry: false,
+      staleTime: 10 * 1000, // 10 seconds
+      retry: 1,
+      refetchOnWindowFocus: false, // Disable auto refetch on window focus
     },
   },
 });
+
+// Default options for fetch
+type RequestOptions = {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: string;
+  on401?: 'throw' | 'returnNull';
+};
+
+export const apiRequest = async (
+  method: string,
+  endpoint: string,
+  body?: any,
+  headers: Record<string, string> = {}
+) => {
+  const options: RequestInit = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    credentials: 'include',
+  };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  // Use our apiClient instead of raw fetch
+  switch (method.toUpperCase()) {
+    case 'GET':
+      return await apiClient.get(endpoint, options);
+    case 'POST':
+      return await apiClient.post(endpoint, body, options);
+    case 'PUT':
+      return await apiClient.put(endpoint, body, options);
+    case 'PATCH':
+      return await apiClient.patch(endpoint, body, options);
+    case 'DELETE':
+      return await apiClient.delete(endpoint, options);
+    default:
+      throw new Error(`Unsupported method: ${method}`);
+  }
+};
+
+export const getQueryFn = (opts: RequestOptions = {}) => {
+  return async ({ queryKey }: { queryKey: (string | number)[] }) => {
+    try {
+      // Assume the first element in the queryKey is the endpoint
+      const endpoint = queryKey[0] as string;
+      const method = opts.method || 'GET';
+      
+      // For GET requests, we don't provide a body
+      if (method === 'GET') {
+        return await apiClient.get(endpoint);
+      } else {
+        throw new Error(`Unsupported method in getQueryFn: ${method}`);
+      }
+    } catch (error) {
+      if (error instanceof Response && error.status === 401 && opts.on401 === 'returnNull') {
+        return null;
+      }
+      throw error;
+    }
+  };
+};
