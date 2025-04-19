@@ -3,6 +3,14 @@ import { supabaseStorage } from "../supabaseStorage";
 import { dbStorage } from "../dbStorage";
 import * as crypto from "crypto";
 import { InsertUser } from "@shared/schema";
+// Database schema information for testing
+const COLUMN_MAP = {
+  users: ['id', 'username', 'password', 'email', 'phone_number', 'first_name', 'last_name', 'full_name', 'date_of_birth', 'gender', 'image_url', 'is_verified', 'verification_method', 'verification_token', 'verification_token_expiry', 'otp_code', 'otp_expiry', 'clerk_id', 'created_at'],
+  blog_posts: ['id', 'title', 'slug', 'content', 'excerpt', 'image_url', 'category', 'published_at'],
+  reports: ['id', 'user_id', 'quiz_id', 'report', 'is_paid', 'compatibility_color', 'created_at'],
+  payments: ['id', 'user_id', 'report_id', 'amount', 'razorpay_payment_id', 'status', 'created_at'],
+  quiz_answers: ['id', 'user_id', 'answers', 'completed', 'started_at', 'completed_at']
+};
 
 // Test routes for database functionality
 export function setupDatabaseTestRoutes(app: Express) {
@@ -11,79 +19,67 @@ export function setupDatabaseTestRoutes(app: Express) {
     try {
       console.log("🧪 Testing direct database connection...");
       
-      // Use direct SQL query to avoid any ORM issues
-      const { data: tableInfo, error: tableError } = await supabaseStorage.client?.rpc('test_db_connection');
+      // Log the location before and after each step to track where error occurs
+      console.log("🐛 Step 1: Starting database test");
       
-      if (tableError) {
-        // Try a simpler approach
-        console.log("🔄 Falling back to simple table count query");
-        const simpleResult = await supabaseStorage.client?.from('users').select('id', { count: 'exact', head: true });
-        
-        if (simpleResult?.error) {
-          throw new Error(`Direct query failed: ${simpleResult.error.message}`);
-        }
-        
-        res.json({
-          success: true,
-          message: "Basic database connection successful",
-          userCount: simpleResult?.count || 0
+      // DIRECT APPROACH: Skip ORM layers, use RPC call to avoid updated_at issues
+      console.log("🔄 Testing connection with safer stored procedure");
+      
+      if (!supabaseStorage.client) {
+        return res.status(500).json({
+          success: false,
+          message: "Supabase client not initialized",
+          error: "No database client available"
         });
-        return;
       }
       
-      res.json({
-        success: true,
-        message: "Database connection successful",
-        tableInfo: tableInfo
-      });
-    } catch (error) {
-      console.error("⚠️ Database test failed:", error);
+      console.log("🐛 Step 2: Client initialized, preparing to run queries");
       
-      // Try direct RPC call with our custom function
+      // SKIP THE PROBLEMATIC QUERIES
+      // Log Supabase URL and the fact we're using a valid token (don't log the actual token)
+      console.log("🔧 Using Supabase URL:", process.env.SUPABASE_URL);
+      console.log("🔧 Authentication:", process.env.SUPABASE_SERVICE_KEY ? "Using valid service key" : "No service key available");
+      
+      // Try our safer stored procedure
       try {
-        console.log("🔄 Attempting direct SQL query via fetchQuery...");
-        const queryResult = await fetch(`${process.env.SUPABASE_URL}/rest/v1/rpc/get_table_info`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': process.env.SUPABASE_ANON_KEY || '',
-            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY || ''}`
-          },
-          body: JSON.stringify({})
-        });
+        console.log("🔄 Trying test_db_connection stored procedure");
+        const procResult = await supabaseStorage.client.rpc('test_db_connection');
         
-        if (queryResult.ok) {
-          const data = await queryResult.json();
-          return res.json({
-            success: true, 
-            message: "Direct SQL query successful",
-            data
-          });
+        if (procResult.error) {
+          console.error("🔴 Stored procedure call failed:", procResult.error);
+          throw procResult.error;
         }
-      } catch (directError) {
-        console.error("🔴 Direct SQL query also failed:", directError);
+        
+        console.log("🟢 Stored procedure call successful");
+        return res.json({
+          success: true,
+          message: "Database connection successful with stored procedure",
+          method: "stored-procedure",
+          tables: procResult.data
+        });
+      } catch (procError) {
+        console.error("🔴 Stored procedure error:", procError);
       }
+      
+      // If all direct attempts failed, throw a general error
+      throw new Error("All database connection attempts failed");
+      
+    } catch (error) {
+      console.error("⚠️ All database tests failed:", error);
       
       // Log more details for debugging
       if (error && typeof error === 'object') {
-        console.error('🔴 Error details:');
         try {
-          console.error(JSON.stringify(error, null, 2));
+          console.error('Error details:', JSON.stringify(error, null, 2));
         } catch (e) {
-          console.error('Could not stringify error:', e);
-          console.error(Object.keys(error));
+          console.error('Could not stringify error:', Object.keys(error));
         }
       }
       
       res.status(500).json({
         success: false,
-        message: "Database test failed",
-        error: error instanceof Error ? error.message : String(error),
-        errorObject: error instanceof Error ? {
-          name: error.name,
-          stack: error.stack,
-          cause: error.cause
-        } : null
+        message: "Database connection test failed",
+        error: error instanceof Error ? error.message : String(error)
       });
     }
   });
@@ -232,9 +228,14 @@ export function setupDatabaseTestRoutes(app: Express) {
 async function testGetFirstBlogPost() {
   try {
     console.log("🧪 Testing direct query for blog posts with specific fields");
-    // Run a direct query to check database connection, specifying only the columns we know exist
+    
+    // Use only the columns we know exist in the database from our COLUMN_MAP
+    const selectColumns = COLUMN_MAP.blog_posts.join(', ');
+    console.log(`Selecting columns: ${selectColumns}`);
+    
+    // Run a direct query with our safe column list
     const result = await supabaseStorage.client?.from('blog_posts')
-      .select('id, title, slug, content')
+      .select(selectColumns)
       .limit(1);
     
     if (result?.error) {
@@ -263,12 +264,20 @@ async function testGetFirstBlogPost() {
       // Try to create a simple test post
       try {
         console.log("🧪 Attempting to create a test blog post");
-        const insertResult = await supabaseStorage.client?.from('blog_posts').insert([{
+        
+        // Create insert object with only valid columns
+        const insertData = {
           title: "Test Blog Post",
           slug: `test-post-${Date.now()}`,
           content: "This is a test blog post content.",
-          excerpt: "This is a test blog post excerpt."
-        }]).select('id, title, slug');
+          excerpt: "This is a test blog post excerpt.",
+          category: "Test",
+          published_at: new Date().toISOString()
+        };
+        
+        const insertResult = await supabaseStorage.client?.from('blog_posts')
+          .insert([insertData])
+          .select('id, title, slug');
         
         if (insertResult?.error) {
           console.error("🔴 Failed to create test blog post:", insertResult.error);

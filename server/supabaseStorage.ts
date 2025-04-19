@@ -128,8 +128,8 @@ export class SupabaseStorage implements IStorage {
         otpCode: null,
         otpExpiry: null,
         clerkId: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
+        // Note: updatedAt removed as it doesn't exist in the actual database
       } as User;
     }
     
@@ -160,7 +160,6 @@ export class SupabaseStorage implements IStorage {
           username,
           isVerified: true,
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: username === 'demouser' ? 'Demo' : 'Test',
           lastName: 'User',
           phoneNumber: '+919876543210'
@@ -194,7 +193,6 @@ export class SupabaseStorage implements IStorage {
           username: email.split('@')[0],
           isVerified: true,
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: 'Demo',
           lastName: 'User',
           phoneNumber: '+919876543210'
@@ -228,7 +226,6 @@ export class SupabaseStorage implements IStorage {
           username: 'verifyuser',
           isVerified: false,  // Not yet verified
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: 'Verify',
           lastName: 'User',
           phoneNumber: '+919876543210'
@@ -262,7 +259,6 @@ export class SupabaseStorage implements IStorage {
           username: 'phoneuser',
           isVerified: true,
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: 'Phone',
           lastName: 'User',
           phoneNumber: phoneNumber
@@ -296,7 +292,6 @@ export class SupabaseStorage implements IStorage {
           username: 'demouser',
           isVerified: true,
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: 'Demo',
           lastName: 'User',
           phoneNumber: '+919876543210'
@@ -307,7 +302,6 @@ export class SupabaseStorage implements IStorage {
           username: 'testuser',
           isVerified: true,
           createdAt: new Date(),
-          updatedAt: new Date(),
           firstName: 'Test',
           lastName: 'User',
           phoneNumber: '+919876543211'
@@ -343,8 +337,7 @@ export class SupabaseStorage implements IStorage {
         lastName: user.lastName,
         fullName: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null,
         isVerified: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as User;
       
       return newUser;
@@ -446,8 +439,7 @@ export class SupabaseStorage implements IStorage {
         otpCode: data.otp_code,
         otpExpiry: data.otp_expiry ? new Date(data.otp_expiry) : null,
         clerkId: data.clerk_id,
-        createdAt: data.created_at ? new Date(data.created_at) : null,
-        updatedAt: new Date() // Adding this for backward compatibility
+        createdAt: data.created_at ? new Date(data.created_at) : null // Adding this for backward compatibility
       };
       
       return createdUser;
@@ -473,8 +465,7 @@ export class SupabaseStorage implements IStorage {
         fullName: userData.firstName && userData.lastName ? 
           `${userData.firstName} ${userData.lastName}` : 'Updated User',
         isVerified: userData.isVerified || false,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as User;
     }
     
@@ -538,8 +529,7 @@ export class SupabaseStorage implements IStorage {
             interests: ['travel', 'reading', 'fitness'],
           },
           completed: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as QuizAnswer;
       }
       return undefined;
@@ -567,8 +557,7 @@ export class SupabaseStorage implements IStorage {
         userId: quizAnswer.userId,
         answers: quizAnswer.answers || {},
         completed: quizAnswer.completed || false,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as QuizAnswer;
     }
     
@@ -594,8 +583,7 @@ export class SupabaseStorage implements IStorage {
         userId: 'dev-user-id-1', // Mock user ID
         answers: answers,
         completed: completed,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as QuizAnswer;
     }
     
@@ -633,8 +621,7 @@ export class SupabaseStorage implements IStorage {
             recommendedPartnerTraits: ['empathetic', 'patient', 'expressive']
           },
           isPaid: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as Report;
       }
       return undefined;
@@ -672,8 +659,7 @@ export class SupabaseStorage implements IStorage {
             recommendedPartnerTraits: ['empathetic', 'patient', 'expressive']
           },
           isPaid: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as Report;
       }
       return undefined;
@@ -707,8 +693,7 @@ export class SupabaseStorage implements IStorage {
           compatibilityScore: 85
         },
         isPaid: report.isPaid || false,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as Report;
     }
     
@@ -740,8 +725,7 @@ export class SupabaseStorage implements IStorage {
           compatibilityScore: 85
         },
         isPaid: isPaid,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as Report;
     }
     
@@ -773,8 +757,7 @@ export class SupabaseStorage implements IStorage {
         paymentMethod: payment.paymentMethod || 'card',
         transactionId: 'dev-tx-' + Math.random().toString(36).substring(2, 10),
         status: payment.status || 'success',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as Payment;
     }
     
@@ -805,8 +788,7 @@ export class SupabaseStorage implements IStorage {
           paymentMethod: 'card',
           transactionId: 'dev-tx-123456',
           status: 'success',
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as Payment;
       }
       return undefined;
@@ -838,8 +820,7 @@ export class SupabaseStorage implements IStorage {
         paymentMethod: 'card',
         transactionId: 'dev-tx-123456',
         status: status,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as Payment;
     }
     
@@ -873,8 +854,7 @@ export class SupabaseStorage implements IStorage {
           author: 'Dr. Sharma',
           category: 'Relationship Science',
           published: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         },
         {
           id: 2,
@@ -886,8 +866,7 @@ export class SupabaseStorage implements IStorage {
           author: 'Priya Patel',
           category: 'Dating Tips',
           published: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         }
       ] as BlogPost[];
     }
@@ -906,8 +885,7 @@ export class SupabaseStorage implements IStorage {
     
     // Convert to BlogPost type with backward compatibility field
     const posts = data.map(post => ({
-      ...post,
-      updatedAt: new Date() // Add for backward compatibility
+      ...post // Add for backward compatibility
     })) as BlogPost[];
     
     return posts;
@@ -927,8 +905,7 @@ export class SupabaseStorage implements IStorage {
           author: 'Dr. Sharma',
           category: 'Relationship Science',
           published: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as BlogPost;
       }
       return undefined;
@@ -962,8 +939,7 @@ export class SupabaseStorage implements IStorage {
           author: 'Dr. Sharma',
           category: 'Relationship Science',
           published: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         } as BlogPost;
       }
       return undefined;
@@ -996,8 +972,7 @@ export class SupabaseStorage implements IStorage {
         author: blogPost.author || 'Admin',
         category: blogPost.category || 'General',
         published: blogPost.published ?? true,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date()
       } as BlogPost;
     }
     
