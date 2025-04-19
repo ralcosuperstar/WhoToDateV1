@@ -34,6 +34,7 @@ import SimpleAuthTest from "@/pages/SimpleAuthTest";
 import CustomAuthTest from "@/pages/CustomAuthTest";
 import AuthTest from "@/pages/auth-test";
 import TestApiPage from "@/pages/test-api-page";
+import SimpleApiTest from "@/pages/SimpleApiTest";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -63,6 +64,7 @@ function Router() {
       <Route path="/custom-auth-test" component={CustomAuthTest} />
       <Route path="/auth-test" component={AuthTest} />
       <Route path="/test-api" component={TestApiPage} />
+      <Route path="/simple-api-test" component={SimpleApiTest} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />
