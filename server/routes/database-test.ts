@@ -14,7 +14,50 @@ const COLUMN_MAP = {
 
 // Test routes for database functionality
 export function setupDatabaseTestRoutes(app: Express) {
-  // Endpoint to test the database connection
+  // Simple direct DB test with minimal query
+  app.get('/api/db-test/simple', async (req, res) => {
+    try {
+      console.log("🧪 Running very simple DB test");
+      
+      if (!supabaseStorage.client) {
+        return res.status(500).json({
+          success: false,
+          message: "Supabase client not initialized",
+          error: "No database client available"
+        });
+      }
+      
+      // Execute a very simple query with no joins or complex logic
+      const { data, error } = await supabaseStorage.client
+        .from('users')
+        .select('id') // Just select id to minimize issues
+        .limit(1);
+        
+      if (error) {
+        console.error("Error in simple query:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Simple database query failed",
+          error: error.message
+        });
+      }
+      
+      return res.json({
+        success: true,
+        message: "Simple database query succeeded",
+        count: data ? data.length : 0
+      });
+    } catch (error) {
+      console.error("Error in simple DB test:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Simple database test failed",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // Original complex test endpoint
   app.get('/api/db-test', async (req, res) => {
     try {
       console.log("🧪 Testing direct database connection...");
@@ -40,7 +83,35 @@ export function setupDatabaseTestRoutes(app: Express) {
       console.log("🔧 Using Supabase URL:", process.env.SUPABASE_URL);
       console.log("🔧 Authentication:", process.env.SUPABASE_SERVICE_KEY ? "Using valid service key" : "No service key available");
       
-      // Try our safer stored procedure
+      // Try explicitly selecting only columns that exist in the database schema
+      try {
+        console.log("🔄 Trying direct query with explicitly specified columns");
+        
+        // Use only columns that we know exist from our SQL metadata query
+        const userResult = await supabaseStorage.client
+          .from('users')
+          .select('id, username, email')
+          .limit(1);
+          
+        if (userResult.error) {
+          console.error("🔴 Direct users query failed:", userResult.error);
+          throw userResult.error;
+        }
+        
+        console.log("🟢 Direct users query successful with explicit columns:", 
+          userResult.data.length > 0 ? `Found ${userResult.data.length} users` : "No users found but query succeeded");
+          
+        return res.json({
+          success: true,
+          message: "Database connection successful with direct query",
+          method: "direct-select-query",
+          hasUsers: userResult.data.length > 0
+        });
+      } catch (userError) {
+        console.error("🔴 User query error:", userError);
+      }
+      
+      // Try our stored procedure as a fallback
       try {
         console.log("🔄 Trying test_db_connection stored procedure");
         const procResult = await supabaseStorage.client.rpc('test_db_connection');

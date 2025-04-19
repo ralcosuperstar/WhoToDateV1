@@ -1,4 +1,4 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import express, { type Express, type Router, type Request, type Response, type NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
 import { supabaseStorage } from "./supabaseStorage";
@@ -33,7 +33,10 @@ declare global {
   }
 }
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express, apiRouter?: Express.Router): Promise<Server> {
+  // Define the router to use - either the provided apiRouter or the main app
+  const router = apiRouter || app;
+  
   // Set up session middleware
   app.use(session({
     secret: process.env.SESSION_SECRET || 'supersecret',
@@ -123,13 +126,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // Set up dedicated Supabase routes
-  setupSupabaseRoutes(app);
+  setupSupabaseRoutes(app, router);
   
   // Set up database test routes
-  setupDatabaseTestRoutes(app);
+  setupDatabaseTestRoutes(app, router);
   
   // Ensure user exists in public.users table (bypassing Supabase RLS)
-  app.post("/api/ensure-user", async (req, res) => {
+  router.post("/ensure-user", async (req, res) => {
     try {
       const { id, email, username, isVerified } = req.body;
       
@@ -174,11 +177,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Protected routes that require authentication
-  app.get("/api/user", isAuthenticated, (req, res) => {
+  router.get("/user", isAuthenticated, (req, res) => {
     res.json(req.user);
   });
 
-  app.get("/api/report", isAuthenticated, async (req, res) => {
+  router.get("/report", isAuthenticated, async (req, res) => {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -198,7 +201,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Quiz API
-  app.get("/api/quiz", isAuthenticated, async (req, res) => {
+  router.get("/quiz", isAuthenticated, async (req, res) => {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -217,7 +220,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/quiz", isAuthenticated, async (req, res) => {
+  router.post("/quiz", isAuthenticated, async (req, res) => {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -257,7 +260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // API routes for blog posts
-  app.get("/api/blog-posts", async (req, res) => {
+  router.get("/blog-posts", async (req, res) => {
     try {
       const blogPosts = await db.getAllBlogPosts();
       res.json(blogPosts);
@@ -267,7 +270,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/blog-posts/:id", async (req, res) => {
+  router.get("/blog-posts/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const blogPost = await db.getBlogPostById(id);
@@ -281,7 +284,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/blog-posts/slug/:slug", async (req, res) => {
+  router.get("/blog-posts/slug/:slug", async (req, res) => {
     try {
       const slug = req.params.slug;
       const blogPost = await db.getBlogPostBySlug(slug);

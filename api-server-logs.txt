@@ -1,0 +1,27 @@
+✅ Connecting to Supabase...
+✅ Supabase client initialized successfully
+✅ Starting API test server...
+✅ API test server running on port 4000
+🩺 Health check endpoint hit
+🧪 Testing Drizzle ORM query...
+✅ Drizzle query successful: Result {
+  command: 'SELECT',
+  rowCount: 1,
+  oid: null,
+  rows: [ { time: '2025-04-19 11:47:40.110993+00' } ],
+  fields: [
+    Field {
+      name: 'time',
+      tableID: 0,
+      columnID: 0,
+      dataTypeID: 1184,
+      dataTypeSize: 8,
+      dataTypeModifier: -1,
+      format: 'text'
+    }
+  ],
+  _parsers: [ [Function (anonymous)] ],
+  _types: { getTypeParser: [Function: getTypeParser] },
+  RowCtor: null,
+  rowAsArray: false
+}

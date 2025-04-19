@@ -45,7 +45,7 @@ export async function ensureUserExists(authUser: User): Promise<void> {
           phone_number: metadata.phone || '',
           is_verified: authUser.email_confirmed_at ? true : false,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          // Note: updated_at column doesn't exist in the database schema
         });
         
       if (insertError) {
@@ -105,8 +105,8 @@ export async function updateUserProfile(userId: string, profileData: any) {
     const { data, error } = await supabase
       .from('users')
       .update({
-        ...profileData,
-        updated_at: new Date().toISOString()
+        ...profileData
+        // Note: updated_at column doesn't exist in the database schema
       })
       .eq('id', userId)
       .select()
@@ -165,8 +165,8 @@ export async function saveQuizAnswers(userId: string, answers: any, completed: b
         .from('quiz_answers')
         .update({
           answers,
-          completed,
-          updated_at: new Date().toISOString()
+          completed
+          // Note: updated_at column doesn't exist in the database schema
         })
         .eq('id', quizAnswers.id)
         .select()
@@ -186,8 +186,8 @@ export async function saveQuizAnswers(userId: string, answers: any, completed: b
           user_id: userId,
           answers,
           completed,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          created_at: new Date().toISOString()
+          // Note: updated_at column doesn't exist in the database schema
         })
         .select()
         .single();
@@ -244,8 +244,8 @@ export async function createUserReport(userId: string, quizId: number, compatibi
         quiz_id: quizId,
         compatibility_profile: compatibilityProfile,
         is_paid: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        created_at: new Date().toISOString()
+        // Note: updated_at column doesn't exist in the database schema
       })
       .select()
       .single();

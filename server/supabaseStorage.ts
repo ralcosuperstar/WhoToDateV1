@@ -52,10 +52,13 @@ export class SupabaseStorage implements IStorage {
         if (process.env.DATABASE_URL) {
           const PostgresSessionStore = connectPg(session);
           
-          // Don't try to create the table automatically since it's causing conflicts
+          // Configure the session store with specific table name and no auto-creation
           this.sessionStore = new PostgresSessionStore({
             conString: process.env.DATABASE_URL,
-            createTableIfMissing: false // Changed to false to avoid the "relation exists" error
+            createTableIfMissing: false, // Don't try to create the table
+            tableName: 'user_sessions', // Use the existing table name
+            schemaName: 'public',
+            disableTouch: true // Prevent updated_at attempts
           });
         } else {
           console.warn('⚠️ No DATABASE_URL found. Using in-memory session store.');

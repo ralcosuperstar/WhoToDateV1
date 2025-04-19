@@ -63,16 +63,44 @@ app.use((req, res, next) => {
   // No need to initialize database tables - Supabase handles this
   console.log('✅ Connecting to Supabase...');
 
-  const server = await registerRoutes(app);
+  // Create a separate router for API routes to ensure proper middleware order
+  const apiRouter = express.Router();
+  
+  // Debug middleware to help identify if API routes are being processed
+  apiRouter.use((req, res, next) => {
+    console.log('🔍 API Route accessed:', req.method, req.originalUrl);
+    // Continue to the actual route handler
+    next();
+  });
 
+  // Add a specific health check endpoint
+  apiRouter.get('/health', (req, res) => {
+    console.log('💖 Health check endpoint hit');
+    return res.json({ status: 'ok', time: new Date().toISOString() });
+  });
+  
+  // Configure Express to use the API router for all /api routes
+  app.use('/api', apiRouter);
+  
+  // Register all API routes using the apiRouter
+  const server = await registerRoutes(app, apiRouter);
+
+  // Error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    console.error('Error in request:', err);
   });
-
+  
+  // Add a fallback route that explicitly returns a proper API 404 for API routes
+  // This must come AFTER all other API routes but BEFORE Vite setup
+  apiRouter.use('*', (req, res) => {
+    console.log('⚠️ API route not found:', req.originalUrl);
+    return res.status(404).json({ error: 'API endpoint not found' });
+  });
+  
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
