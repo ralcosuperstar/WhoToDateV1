@@ -16,20 +16,20 @@ export interface IStorage {
   // Session store for authentication
   sessionStore: session.Store;
   
-  // User operations - now uses string IDs for UUID compatibility
-  getUser(id: string): Promise<User | undefined>;
+  // User operations - now uses number IDs for integer primary keys
+  getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
-  createUser(user: InsertUser): Promise<User>;
-  updateUser(id: string, userData: Partial<InsertUser>): Promise<User>;
-  setVerificationToken(userId: string, token: string, expiry: Date): Promise<User>;
-  verifyUser(userId: string): Promise<User>;
+  createUser(user: Partial<InsertUser>): Promise<User>;
+  updateUser(id: number, userData: Partial<InsertUser>): Promise<User>;
+  setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
+  verifyUser(userId: number): Promise<User>;
   
   // OTP operations
-  setOTP(userId: string, otp: string, expiry: Date): Promise<User>;
+  setOTP(userId: number, otp: string, expiry: Date): Promise<User>;
   
   // Quiz operations
   getQuizAnswers(userId: string): Promise<QuizAnswer | undefined>;

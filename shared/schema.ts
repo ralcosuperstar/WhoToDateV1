@@ -2,10 +2,11 @@ import { pgTable, text, serial, integer, boolean, jsonb, timestamp, uuid } from 
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Users table - extends Supabase auth.users
+// Users table - matches actual database structure
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(), // References auth.users(id) in Supabase
-  username: text("username").unique(),
+  id: serial("id").primaryKey(), // Integer primary key with auto-increment
+  username: text("username").notNull(),
+  password: text("password").notNull(), // Required password field
   email: text("email").notNull().unique(),
   phoneNumber: text("phone_number").unique(), // Phone number for SMS verification
   firstName: text("first_name"),
@@ -17,12 +18,12 @@ export const users = pgTable("users", {
   isVerified: boolean("is_verified").default(false), // Whether user has been verified
   verificationMethod: text("verification_method"), // "email" or "sms"
   verificationToken: text("verification_token"), // Token for email verification
-  verificationTokenExpiry: timestamp("verification_token_expiry", { withTimezone: true }), // Expiry for verification token
+  verificationTokenExpiry: timestamp("verification_token_expiry", { withTimezone: false }), // Expiry for verification token
   otpCode: text("otp_code"), // OTP code for SMS verification
-  otpExpiry: timestamp("otp_expiry", { withTimezone: true }), // Expiry time for OTP code
+  otpExpiry: timestamp("otp_expiry", { withTimezone: false }), // Expiry time for OTP code
   clerkId: text("clerk_id").unique(), // Legacy field for Clerk integration
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: false }).defaultNow(),
 });
 
 // Quiz answers - storing user responses
@@ -77,8 +78,9 @@ export const blogPosts = pgTable("blog_posts", {
 
 // Schemas for inserts
 export const insertUserSchema = createInsertSchema(users).pick({
-  id: true,
+  // Note: id is auto-generated, so we omit it from required fields
   username: true,
+  password: true, // Required password field
   email: true,
   phoneNumber: true,
   firstName: true,

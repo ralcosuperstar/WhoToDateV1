@@ -2,6 +2,7 @@ import { type Express } from "express";
 import { supabaseStorage } from "../supabaseStorage";
 import { dbStorage } from "../dbStorage";
 import * as crypto from "crypto";
+import { InsertUser } from "@shared/schema";
 
 // Test routes for database functionality
 export function setupDatabaseTestRoutes(app: Express) {
@@ -42,14 +43,27 @@ export function setupDatabaseTestRoutes(app: Express) {
       const timestamp = new Date().getTime();
       const testEmail = `test-user-${timestamp}@example.com`;
       
-      // Create a test user with the Supabase storage
-      const user = await supabaseStorage.createUser({
-        id: crypto.randomUUID(), // Add UUID for the user
+      console.log(`Creating test user with email: ${testEmail}`);
+      
+      // Prepare the user object to match insertUserSchema
+      const newUserData = {
+        username: `testuser${timestamp}`,
+        password: "TestPassword123",
         email: testEmail,
+        phoneNumber: `+91${Math.floor(1000000000 + Math.random() * 9000000000)}`,
         firstName: "Test",
         lastName: "User",
-        phoneNumber: `+91${Math.floor(1000000000 + Math.random() * 9000000000)}`,
-      });
+        fullName: "Test User",
+        isVerified: false,
+        verificationMethod: "email"
+      };
+      
+      console.log('User data being sent to Supabase:', JSON.stringify(newUserData, null, 2));
+      
+      // Create a test user with the Supabase storage
+      const user = await supabaseStorage.createUser(newUserData);
+      
+      console.log('User created successfully:', user);
       
       res.json({
         success: true,
@@ -58,10 +72,57 @@ export function setupDatabaseTestRoutes(app: Express) {
       });
     } catch (error) {
       console.error("Creating test user failed:", error);
+      
+      // Log detailed error properties
+      if (error && typeof error === 'object') {
+        console.error('Error object properties:');
+        for (const key in error) {
+          try {
+            console.error(`- ${key}:`, (error as Record<string, unknown>)[key]);
+          } catch (e) {
+            console.error(`- ${key}: [Unable to access property]`);
+          }
+        }
+        
+        // Check for PostgreSQL error format from Supabase
+        if ('code' in error && 'message' in error && 'details' in error) {
+          const pgError = error as Record<string, unknown>;
+          console.error('PostgreSQL error details:', {
+            code: pgError.code,
+            message: pgError.message,
+            details: pgError.details,
+            hint: pgError.hint || '[No hint]'
+          });
+        }
+      }
+      
+      // Try various methods to stringify the error
+      let errorDetails = 'Unknown error';
+      try {
+        if (error instanceof Error) {
+          errorDetails = `${error.name}: ${error.message}`;
+          if ('stack' in error) console.error('Stack:', error.stack);
+        } else if (error && typeof error === 'object') {
+          try {
+            errorDetails = JSON.stringify(error, Object.getOwnPropertyNames(error));
+          } catch (e) {
+            console.error('Failed to stringify error:', e);
+            errorDetails = 'Error object could not be serialized';
+          }
+        } else {
+          errorDetails = String(error);
+        }
+      } catch (e) {
+        console.error('Error while processing error object:', e);
+      }
+      
+      // Return the full error details for debugging
+      console.log('Final error details to return to client:', errorDetails);
+      
       res.status(500).json({
         success: false,
         message: "Creating test user failed",
-        error: error instanceof Error ? error.message : String(error)
+        error: typeof errorDetails === 'string' ? errorDetails : JSON.stringify(errorDetails)
       });
     }
   });

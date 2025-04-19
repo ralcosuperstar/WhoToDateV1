@@ -104,19 +104,30 @@ export class SupabaseStorage implements IStorage {
   }
 
   // User operations
-  async getUser(id: string): Promise<User | undefined> {
+  async getUser(id: number): Promise<User | undefined> {
     if (this.devMode) {
       console.log('⚠️ Development mode: Returning mock user data');
       return {
-        id,
-        email: 'demo@example.com',
+        id: id,
         username: 'demouser',
-        isVerified: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        password: 'hashedpassword123', // Required field
+        email: 'demo@example.com',
+        phoneNumber: '+919876543210',
         firstName: 'Demo',
         lastName: 'User',
-        phoneNumber: '+919876543210'
+        fullName: 'Demo User',
+        dateOfBirth: null,
+        gender: null,
+        imageUrl: null,
+        isVerified: true,
+        verificationMethod: 'email',
+        verificationToken: null,
+        verificationTokenExpiry: null,
+        otpCode: null,
+        otpExpiry: null,
+        clerkId: null,
+        createdAt: new Date(),
+        updatedAt: new Date()
       } as User;
     }
     
@@ -314,17 +325,21 @@ export class SupabaseStorage implements IStorage {
     return data as User[];
   }
 
-  async createUser(user: InsertUser): Promise<User> {
+  async createUser(user: Partial<InsertUser>): Promise<User> {
+    console.log('🐛 DEBUG: createUser called with:', JSON.stringify(user, null, 2));
+    
     if (this.devMode) {
       console.log('⚠️ Development mode: Creating mock user', user.email);
-      // Create a mock user with a random ID
-      const newUser: User = {
-        id: 'dev-user-id-' + Math.random().toString(36).substring(2, 10),
-        email: user.email,
-        username: user.username || user.email?.split('@')[0] || 'newuser',
+      // Create a mock user with a random ID (as a number now)
+      const newUser = {
+        id: Math.floor(Math.random() * 1000),
+        username: user.username || 'newuser',
+        password: user.password || 'devpassword',
+        email: user.email || 'dev@example.com',
         phoneNumber: user.phoneNumber,
         firstName: user.firstName,
         lastName: user.lastName,
+        fullName: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null,
         isVerified: false,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -337,32 +352,89 @@ export class SupabaseStorage implements IStorage {
       throw new Error('Supabase client not initialized');
     }
     
-    // Ensure we don't try to insert with auto-generated fields
-    const { data, error } = await this.client
-      .from('users')
-      .insert(user)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as User;
+    try {
+      console.log('Creating user in Supabase:', JSON.stringify(user, null, 2));
+      
+      // Convert camelCase to snake_case for Supabase
+      // Make sure we have required fields
+      if (!user.username || !user.password || !user.email) {
+        throw new Error('Missing required fields: username, password, and email are required');
+      }
+      
+      const supabaseUser = {
+        // NOTE: id is auto-generated as integer in database
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        phone_number: user.phoneNumber || null,
+        first_name: user.firstName || null,
+        last_name: user.lastName || null,
+        full_name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null,
+        is_verified: user.isVerified === undefined ? false : user.isVerified,
+        verification_method: user.verificationMethod || null
+      };
+      
+      console.log('Formatted user for Supabase:', JSON.stringify(supabaseUser, null, 2));
+      
+      // Test if we can read from the users table first
+      const testQuery = await this.client
+        .from('users')
+        .select('*')
+        .limit(1);
+        
+      console.log('Test query result:', testQuery.data, 'Error:', testQuery.error);
+      
+      if (testQuery.error) {
+        console.error('Error running test query on users table:', testQuery.error);
+        throw new Error(`Database error: ${testQuery.error.message}`);
+      }
+      
+      // Now attempt the insert
+      const { data, error } = await this.client
+        .from('users')
+        .insert(supabaseUser)
+        .select()
+        .single();
+      
+      if (error) {
+        console.error('Error inserting user:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        
+        throw new Error(`Failed to create user: ${error.message}`);
+      }
+      
+      if (!data) {
+        throw new Error('No data returned after user creation');
+      }
+      
+      console.log('User created successfully:', data);
+      return data as User;
+    } catch (error) {
+      console.error('Unexpected error in createUser:', error);
+      throw error;
+    }
   }
 
-  async updateUser(id: string, userData: Partial<InsertUser>): Promise<User> {
+  async updateUser(id: number | string, userData: Partial<InsertUser>): Promise<User> {
     if (this.devMode) {
       console.log('⚠️ Development mode: Updating mock user', id);
       // Simulate updating a user by creating a new mock object
+      const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
       return {
-        id,
-        email: userData.email || 'updated@example.com',
+        id: numericId,
         username: userData.username || 'updateduser',
+        password: 'mockpassword', // Required field
+        email: userData.email || 'updated@example.com',
         phoneNumber: userData.phoneNumber,
         firstName: userData.firstName || 'Updated',
         lastName: userData.lastName || 'User',
+        fullName: userData.firstName && userData.lastName ? 
+          `${userData.firstName} ${userData.lastName}` : 'Updated User',
         isVerified: userData.isVerified || false,
         createdAt: new Date(),
-        updatedAt: new Date(),
-        ...userData
+        updatedAt: new Date()
       } as User;
     }
     
@@ -381,7 +453,7 @@ export class SupabaseStorage implements IStorage {
     return data as User;
   }
 
-  async setVerificationToken(userId: string, token: string, expiry: Date): Promise<User> {
+  async setVerificationToken(userId: number, token: string, expiry: Date): Promise<User> {
     return this.updateUser(userId, {
       // Field names matching the database schema
       verification_token: token,
@@ -389,7 +461,7 @@ export class SupabaseStorage implements IStorage {
     } as any);
   }
 
-  async verifyUser(userId: string): Promise<User> {
+  async verifyUser(userId: number): Promise<User> {
     return this.updateUser(userId, {
       // Field names matching the database schema
       is_verified: true,
@@ -399,7 +471,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   // OTP operations
-  async setOTP(userId: string, otp: string, expiry: Date): Promise<User> {
+  async setOTP(userId: number, otp: string, expiry: Date): Promise<User> {
     return this.updateUser(userId, {
       // Field names matching the database schema
       otp_code: otp,
