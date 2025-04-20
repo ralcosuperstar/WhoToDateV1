@@ -377,23 +377,25 @@ const FixedQuiz = () => {
         setSaving(true);
         
         try {
-          // First, get the database integer user ID
-          const dbUserId = await userService.getDatabaseUserId(user);
+          // Use the Auth UUID directly - this is what the database now expects
+          const authUserId = user.id;
           
-          if (!dbUserId) {
-            console.error("Could not get database user ID for email:", user.email);
+          if (!authUserId) {
+            console.error("No auth user ID available");
             // Continue with local storage only
             return;
           }
           
+          console.log('Using Auth UUID for database operations:', authUserId);
+          
           // Use direct Supabase queries
           const supabase = await getSupabaseClient();
           
-          // Check if user already has quiz answers using the database ID
+          // Check if user already has quiz answers using the Auth UUID
           const { data: existingAnswers, error: checkError } = await supabase
             .from('quiz_answers')
             .select('id')
-            .eq('user_id', dbUserId)
+            .eq('user_id', authUserId)
             .maybeSingle();
             
           if (checkError) throw checkError;
