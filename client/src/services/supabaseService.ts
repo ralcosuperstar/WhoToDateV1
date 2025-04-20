@@ -149,6 +149,7 @@ export const userService = {
    */
   getUserByEmail: async (supabase: any, email: string) => {
     try {
+      console.log('Fetching user by email:', email);
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -160,6 +161,7 @@ export const userService = {
         return null;
       }
 
+      console.log('Found user by email:', data);
       return data;
     } catch (error) {
       console.error('Error in getUserByEmail:', error);
@@ -310,18 +312,54 @@ export const quizService = {
    * Get user's quiz answers
    */
   getQuizAnswers: async (supabase: any, userId: string) => {
-    const { data, error } = await supabase
-      .from('quiz_answers')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
+    console.log('Fetching quiz answers for user ID:', userId);
+    
+    try {
+      // First, try to fetch by user ID directly
+      const { data, error } = await supabase
+        .from('quiz_answers')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+        
+      if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+        console.error('Error fetching quiz answers by userId directly:', error);
+      } else if (data) {
+        console.log('Successfully found quiz answers');
+        return data as QuizAnswer;
+      }
       
-    if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-      console.error('Error fetching quiz answers:', error);
+      // If not found, try to fetch user by email first to get integer ID
+      const authUser = await authService.getCurrentUser();
+      if (authUser && authUser.email) {
+        console.log('Trying to get database user by email');
+        const dbUser = await userService.getUserByEmail(supabase, authUser.email);
+        
+        if (dbUser && dbUser.id) {
+          console.log('Found database user ID:', dbUser.id);
+          
+          // Try again with the database user ID
+          const { data: quizData, error: quizError } = await supabase
+            .from('quiz_answers')
+            .select('*')
+            .eq('user_id', dbUser.id)
+            .single();
+            
+          if (quizError && quizError.code !== 'PGRST116') {
+            console.error('Error fetching quiz answers with database ID:', quizError);
+          } else if (quizData) {
+            console.log('Found quiz answers with database ID');
+            return quizData as QuizAnswer;
+          }
+        }
+      }
+      
+      console.log('No quiz answers found for user');
+      return null;
+    } catch (error) {
+      console.error('Error in getQuizAnswers:', error);
       return null;
     }
-    
-    return data as QuizAnswer;
   },
 
   /**
@@ -416,18 +454,54 @@ export const reportService = {
    * Get user's report
    */
   getReport: async (supabase: any, userId: string) => {
-    const { data, error } = await supabase
-      .from('reports')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
+    console.log('Fetching report for user ID:', userId);
+    
+    try {
+      // First, try to fetch by user ID directly
+      const { data, error } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+        
+      if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+        console.error('Error fetching report by userId directly:', error);
+      } else if (data) {
+        console.log('Successfully found report');
+        return data as Report;
+      }
       
-    if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-      console.error('Error fetching report:', error);
+      // If not found, try to fetch user by email first to get integer ID
+      const authUser = await authService.getCurrentUser();
+      if (authUser && authUser.email) {
+        console.log('Trying to get database user by email');
+        const dbUser = await userService.getUserByEmail(supabase, authUser.email);
+        
+        if (dbUser && dbUser.id) {
+          console.log('Found database user ID:', dbUser.id);
+          
+          // Try again with the database user ID
+          const { data: reportData, error: reportError } = await supabase
+            .from('reports')
+            .select('*')
+            .eq('user_id', dbUser.id)
+            .single();
+            
+          if (reportError && reportError.code !== 'PGRST116') {
+            console.error('Error fetching report with database ID:', reportError);
+          } else if (reportData) {
+            console.log('Found report with database ID');
+            return reportData as Report;
+          }
+        }
+      }
+      
+      console.log('No report found for user');
+      return null;
+    } catch (error) {
+      console.error('Error in getReport:', error);
       return null;
     }
-    
-    return data as Report;
   },
 
   /**
@@ -458,26 +532,58 @@ export const reportService = {
     compatibilityColor: string;
     isPaid: boolean;
   }) => {
-    // Convert field names to snake_case for Supabase
-    const { data: createdReport, error } = await supabase
-      .from('reports')
-      .insert({
-        user_id: data.userId,
-        quiz_id: data.quizId,
-        report: data.report,
-        compatibility_color: data.compatibilityColor,
-        is_paid: data.isPaid,
-        created_at: new Date().toISOString()
-      })
-      .select()
-      .single();
+    console.log('Creating report with data:', data);
+    try {
+      // Make sure we have a valid user ID by checking if it's a number
+      let userId = data.userId;
       
-    if (error) {
-      console.error('Error creating report:', error);
+      // If the userId is a UUID (from auth), get the database user ID by email
+      if (typeof userId === 'string' && userId.includes('-')) {
+        console.log('Detected UUID user ID, fetching database user instead');
+        
+        // Get the auth user
+        const authUser = await authService.getCurrentUser();
+        if (authUser && authUser.email) {
+          const dbUser = await userService.getUserByEmail(supabase, authUser.email);
+          
+          if (dbUser && dbUser.id) {
+            console.log('Found database user ID:', dbUser.id);
+            userId = dbUser.id;
+          } else {
+            console.error('Could not find database user for auth user');
+            return null;
+          }
+        } else {
+          console.error('Auth user not found or has no email');
+          return null;
+        }
+      }
+      
+      // Convert field names to snake_case for Supabase
+      const { data: createdReport, error } = await supabase
+        .from('reports')
+        .insert({
+          user_id: userId,
+          quiz_id: data.quizId,
+          report: data.report,
+          compatibility_color: data.compatibilityColor,
+          is_paid: data.isPaid,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+        
+      if (error) {
+        console.error('Error creating report:', error);
+        return null;
+      }
+      
+      console.log('Successfully created report:', createdReport);
+      return createdReport as Report;
+    } catch (error) {
+      console.error('Error in createReport:', error);
       return null;
     }
-    
-    return createdReport as Report;
   },
 
   /**
