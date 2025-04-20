@@ -274,7 +274,7 @@ const Results = () => {
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
   // Use Supabase for authentication
-  const { supabase, user: supabaseUser, isLoading: isUserLoading } = useSupabase();
+  const { user: supabaseUser, isLoading: isUserLoading } = useSupabase();
   const isUserError = !supabaseUser && !isUserLoading;
   
   // Load DB user from Supabase using email
@@ -283,7 +283,8 @@ const Results = () => {
     queryFn: async () => {
       if (!supabaseUser?.email) throw new Error('User email not available');
       console.log("Loading database user for email:", supabaseUser.email);
-      return userService.getUserByEmail(supabase, supabaseUser.email);
+      const client = await authService.getClient();
+      return userService.getUserByEmail(client, supabaseUser.email);
     },
     enabled: !!supabaseUser?.email,
     refetchOnWindowFocus: false,
@@ -296,7 +297,8 @@ const Results = () => {
     queryFn: async () => {
       if (!dbUser?.id) throw new Error('Database user ID not available');
       console.log("Loading report for user ID:", dbUser.id);
-      return reportService.getReportByUserId(supabase, dbUser.id);
+      const client = await authService.getClient();
+      return reportService.getReportByUserId(client, dbUser.id);
     },
     enabled: !!dbUser?.id,
     refetchOnWindowFocus: false,
@@ -309,7 +311,8 @@ const Results = () => {
     queryFn: async () => {
       if (!dbUser?.id) throw new Error('Database user ID not available');
       console.log("Loading quiz for user ID:", dbUser.id);
-      return quizService.getQuizByUserId(supabase, dbUser.id);
+      const client = await authService.getClient();
+      return quizService.getQuizByUserId(client, dbUser.id);
     },
     enabled: !!dbUser?.id,
     retry: false,
