@@ -343,6 +343,16 @@ const SavedResults = () => {
                 </ReportSection>
               </TabsContent>
             </Tabs>
+            
+            {/* Add Retake Quiz button */}
+            <div className="mt-8 flex justify-center">
+              <Link href="/quiz">
+                <Button variant="outline" className="flex items-center space-x-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Retake Quiz</span>
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
       </div>
