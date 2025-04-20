@@ -6,6 +6,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { motion } from "framer-motion";
+import { reportService, quizService, userService } from "@/services/supabaseService";
+import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { 
   Download, 
   Lock, 
@@ -271,34 +273,57 @@ const Results = () => {
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
   
-  // All data fetching queries
-  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery({ 
-    queryKey: ['/api/me'],
+  // Use Supabase for authentication
+  const { supabase, user: supabaseUser, isLoading: isUserLoading } = useSupabase();
+  const isUserError = !supabaseUser && !isUserLoading;
+  
+  // Load DB user from Supabase using email
+  const { data: dbUser, isLoading: isDbUserLoading } = useQuery({
+    queryKey: ['dbUser', supabaseUser?.email],
+    queryFn: async () => {
+      if (!supabaseUser?.email) throw new Error('User email not available');
+      console.log("Loading database user for email:", supabaseUser.email);
+      return userService.getUserByEmail(supabase, supabaseUser.email);
+    },
+    enabled: !!supabaseUser?.email,
+    refetchOnWindowFocus: false,
+    retry: false
+  });
+  
+  // Load report directly from Supabase
+  const { data: report, isLoading: isReportLoading, isError: isReportError } = useQuery({
+    queryKey: ['report', dbUser?.id],
+    queryFn: async () => {
+      if (!dbUser?.id) throw new Error('Database user ID not available');
+      console.log("Loading report for user ID:", dbUser.id);
+      return reportService.getReportByUserId(supabase, dbUser.id);
+    },
+    enabled: !!dbUser?.id,
+    refetchOnWindowFocus: false,
+    retry: false
+  });
+  
+  // Load quiz directly from Supabase
+  const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({
+    queryKey: ['quiz', dbUser?.id],
+    queryFn: async () => {
+      if (!dbUser?.id) throw new Error('Database user ID not available');
+      console.log("Loading quiz for user ID:", dbUser.id);
+      return quizService.getQuizByUserId(supabase, dbUser.id);
+    },
+    enabled: !!dbUser?.id,
     retry: false,
     refetchOnWindowFocus: false
   });
   
-  const { data: report, isLoading: isReportLoading, isError: isReportError } = useQuery({ 
-    queryKey: ['/api/report'],
-    enabled: !!user,
-    retry: false,
-    refetchOnWindowFocus: false
-  });
+  // Create report mutation using Supabase directly
   
-  const { data: existingQuiz, isLoading: isQuizLoading } = useQuery({ 
-    queryKey: ['/api/quiz'],
-    enabled: !!user,
-    retry: false,
-    refetchOnWindowFocus: false
-  });
-  
-  // Create report mutation
   const createReportMutation = useMutation({
     mutationFn: async (data: { 
       quizId: number;
-      compatibilityProfile?: CompatibilityProfile; // Optional but useful for the server
-      report: CompatibilityProfile; // Required by schema
-      compatibilityColor: string; // Required by schema
+      compatibilityProfile?: CompatibilityProfile; 
+      report: CompatibilityProfile; 
+      compatibilityColor: string;
       isPaid: boolean;
     }) => {
       console.log("Starting report mutation with data:", {
@@ -310,27 +335,41 @@ const Results = () => {
       });
       
       try {
-        console.log("Making API request to /api/report");
-        const res = await apiRequest("POST", "/api/report", data);
-        console.log("API response status:", res.status);
-        
-        if (!res.ok) {
-          const errorText = await res.text();
-          console.error("API error response:", errorText);
-          throw new Error(`API returned ${res.status}: ${errorText}`);
+        if (!supabaseUser) {
+          throw new Error('User not authenticated');
         }
         
-        const responseData = await res.json();
-        console.log("API response data:", responseData);
-        return responseData;
+        console.log("Creating report with Supabase");
+        // Get database user ID from the email
+        const dbUser = await userService.getUserByEmail(supabase, supabaseUser.email || '');
+        
+        if (!dbUser || !dbUser.id) {
+          throw new Error('Unable to find database user ID');
+        }
+        
+        const userId = dbUser.id;
+        console.log("Found database user ID:", userId);
+        
+        // Create report using reportService
+        const report = await reportService.createReport(supabase, {
+          userId,
+          quizId: data.quizId,
+          report: data.report,
+          compatibilityColor: data.compatibilityColor,
+          isPaid: data.isPaid
+        });
+        
+        console.log("Report created successfully:", report);
+        return report;
       } catch (error) {
-        console.error("API request failed:", error);
+        console.error("Report creation failed:", error);
         throw error;
       }
     },
     onSuccess: (data) => {
-      console.log("Report creation success, invalidating queries");
-      queryClient.invalidateQueries({ queryKey: ['/api/report'] });
+      console.log("Report creation success");
+      // Invalidate the reports query to refresh data
+      queryClient.invalidateQueries({ queryKey: ['reports'] });
       toast({
         title: "Success!",
         description: "Your compatibility report has been created."
@@ -357,10 +396,10 @@ const Results = () => {
         console.error('Failed to parse saved answers', e);
         navigate('/quiz');
       }
-    } else if (!user) {
+    } else if (!supabaseUser) {
       navigate('/quiz');
     }
-  }, [navigate, user]);
+  }, [navigate, supabaseUser]);
   
   // Also try loading compatibility profile from session storage
   useEffect(() => {
@@ -382,7 +421,8 @@ const Results = () => {
   useEffect(() => {
     console.log("useEffect for profile generation triggered");
     console.log("Answers available:", Object.keys(answers).length > 0);
-    console.log("User available:", !!user);
+    console.log("User available:", !!supabaseUser);
+    console.log("Database user available:", !!dbUser);
     console.log("Report available:", !!report);
     console.log("Quiz available:", !!existingQuiz);
     
@@ -394,7 +434,7 @@ const Results = () => {
         setProfile(compatibilityProfile);
         
         // Create report if needed
-        if (user && !report && compatibilityProfile && existingQuiz) {
+        if (supabaseUser && dbUser && !report && compatibilityProfile && existingQuiz) {
           console.log("Conditions met for report creation");
           // Make sure existingQuiz has an id
           const quizId = typeof existingQuiz === 'object' && existingQuiz && 'id' in existingQuiz ? 
@@ -404,7 +444,7 @@ const Results = () => {
           
           if (quizId) {
             // Debugging to see what we're sending
-            console.log("Sending data to /api/report:", {
+            console.log("Creating report with data:", {
               quizId,
               compatibilityProfile: !!compatibilityProfile, // Just log if it exists to avoid console clutter
               isPaid: true 
@@ -425,7 +465,8 @@ const Results = () => {
           }
         } else {
           console.log("Skipping report creation because:", {
-            userExists: !!user,
+            userExists: !!supabaseUser,
+            dbUserExists: !!dbUser,
             reportExists: !!report,
             profileExists: !!compatibilityProfile,
             quizExists: !!existingQuiz
@@ -440,7 +481,7 @@ const Results = () => {
         });
       }
     }
-  }, [answers, toast, user, report, existingQuiz, createReportMutation]);
+  }, [answers, toast, supabaseUser, dbUser, report, existingQuiz, createReportMutation]);
   
   // All reports are now free, so we'll show the full report directly
   useEffect(() => {
