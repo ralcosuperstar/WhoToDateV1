@@ -478,13 +478,35 @@ export const quizService = {
           
           if (dbUser && dbUser.id) {
             console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-            dbUserId = dbUser.id;
+            // Make sure dbUserId is a number
+            if (typeof dbUser.id === 'string') {
+              try {
+                dbUserId = parseInt(dbUser.id, 10);
+                console.log('Converted string ID to number:', dbUserId);
+              } catch (e) {
+                console.error('Failed to parse user ID as integer:', dbUser.id);
+                return null;
+              }
+            } else {
+              dbUserId = dbUser.id;
+            }
           } else {
             console.error('Could not find database user for auth user');
             return null;
           }
         } else {
           console.error('Auth user not found or has no email');
+          return null;
+        }
+      }
+      
+      // Make absolutely sure dbUserId is a number not a string
+      if (typeof dbUserId === 'string') {
+        try {
+          dbUserId = parseInt(dbUserId, 10);
+          console.log('Converted string ID to number:', dbUserId);
+        } catch (e) {
+          console.error('Failed to parse user ID as integer:', dbUserId);
           return null;
         }
       }
@@ -590,8 +612,30 @@ export const reportService = {
           
           if (dbUser && dbUser.id) {
             console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-            dbUserId = dbUser.id;
+            // Make sure dbUserId is a number
+            if (typeof dbUser.id === 'string') {
+              try {
+                dbUserId = parseInt(dbUser.id, 10);
+                console.log('Converted string ID to number:', dbUserId);
+              } catch (e) {
+                console.error('Failed to parse user ID as integer:', dbUser.id);
+                return null;
+              }
+            } else {
+              dbUserId = dbUser.id;
+            }
           }
+        }
+      }
+      
+      // Make absolutely sure dbUserId is a number not a string
+      if (typeof dbUserId === 'string') {
+        try {
+          dbUserId = parseInt(dbUserId, 10);
+          console.log('Converted string ID to number:', dbUserId);
+        } catch (e) {
+          console.error('Failed to parse user ID as integer:', dbUserId);
+          return null;
         }
       }
       
@@ -896,11 +940,33 @@ export const paymentService = {
         
         if (dbUser && dbUser.id) {
           console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-          dbUserId = dbUser.id;
+          // Make sure dbUserId is a number
+          if (typeof dbUser.id === 'string') {
+            try {
+              dbUserId = parseInt(dbUser.id, 10);
+              console.log('Converted string ID to number:', dbUserId);
+            } catch (e) {
+              console.error('Failed to parse user ID as integer:', dbUser.id);
+              return { payment: null, error: new Error('Invalid user ID format') };
+            }
+          } else {
+            dbUserId = dbUser.id;
+          }
         } else {
           console.error('Could not find database user ID for payment');
           return { payment: null, error: new Error('User ID not found') };
         }
+      }
+    }
+    
+    // Make absolutely sure dbUserId is a number not a string
+    if (typeof dbUserId === 'string') {
+      try {
+        dbUserId = parseInt(dbUserId, 10);
+        console.log('Converted string ID to number:', dbUserId);
+      } catch (e) {
+        console.error('Failed to parse user ID as integer:', dbUserId);
+        return { payment: null, error: new Error('Invalid user ID format') };
       }
     }
     
