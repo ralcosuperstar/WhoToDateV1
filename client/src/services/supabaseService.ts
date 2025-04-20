@@ -147,20 +147,24 @@ export const userService = {
   /**
    * Get user by email address
    */
-  getUserByEmail: async (email: string) => {
-    const supabase = await authService.getClient();
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single();
+  getUserByEmail: async (supabase: any, email: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
 
-    if (error) {
-      console.error('Error getting user by email:', error);
-      return { user: null, error };
+      if (error) {
+        console.error('Error getting user by email:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error in getUserByEmail:', error);
+      return null;
     }
-
-    return { user: data, error: null };
   },
   
   /**
@@ -173,11 +177,13 @@ export const userService = {
     }
     
     try {
-      // Find user in database by email (which should be unique)
-      const { user, error } = await userService.getUserByEmail(authUser.email);
+      const supabase = await authService.getClient();
       
-      if (error || !user) {
-        console.error('Could not find database user ID for auth user:', error);
+      // Find user in database by email (which should be unique)
+      const user = await userService.getUserByEmail(supabase, authUser.email);
+      
+      if (!user) {
+        console.error('Could not find database user ID for auth user');
         return null;
       }
       
