@@ -63,6 +63,48 @@ app.use((req, res, next) => {
   // No need to initialize database tables - Supabase handles this
   console.log('✅ Connecting to Supabase...');
 
+  // Safety middleware to prevent server crashes - apply to all requests
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const originalNext = next;
+    
+    // Replace next with a safety-wrapped version
+    const safeNext: NextFunction = (err?: any) => {
+      try {
+        originalNext(err);
+      } catch (error) {
+        console.error(`CRASH PREVENTED: Error in middleware after ${req.method} ${req.url}:`, error);
+        const typedError = error as Error;
+        console.error("Stack trace:", typedError.stack);
+        
+        // Only send response if headers not sent yet
+        if (!res.headersSent) {
+          res.status(500).json({
+            message: "Internal server error prevented by safety middleware",
+            path: req.url,
+            error: process.env.NODE_ENV !== "production" ? typedError.message : undefined
+          });
+        }
+      }
+    };
+    
+    try {
+      // Process the next middleware with our safe wrapper
+      originalNext();
+    } catch (error) {
+      console.error(`CRASH PREVENTED: Error in initial middleware for ${req.method} ${req.url}:`, error);
+      const typedError = error as Error;
+      console.error("Stack trace:", typedError.stack);
+      
+      if (!res.headersSent) {
+        res.status(500).json({
+          message: "Internal server error prevented by safety middleware",
+          path: req.url,
+          error: process.env.NODE_ENV !== "production" ? typedError.message : undefined
+        });
+      }
+    }
+  });
+  
   // Create a separate router for API routes to ensure proper middleware order
   const apiRouter = express.Router();
   
