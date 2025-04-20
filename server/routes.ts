@@ -307,18 +307,26 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
 
   // Quiz API
   router.get("/quiz", isAuthenticated, async (req: Request, res: Response) => {
+    console.log("========== QUIZ ENDPOINT ACCESSED ==========");
+    console.log("Request user:", req.user);
+    
     try {
       const userId = req.user?.id;
+      console.log("User ID extracted:", userId, "with type:", typeof userId);
+      
       if (!userId) {
+        console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       console.log("Fetching quiz for user ID:", userId, "with type:", typeof userId);
+      console.log("Is development mode?", process.env.NODE_ENV !== 'production');
+      console.log("ALLOW_DEV_AUTH:", process.env.ALLOW_DEV_AUTH);
 
       // In development mode, we can return a mock quiz for easier testing
       if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
         console.log("⚠️ Using development quiz for testing");
-        return res.json({
+        const mockQuiz = {
           id: 1,
           userId: userId,
           answers: {
@@ -329,61 +337,118 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           completed: true,
           startedAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
           completedAt: new Date()
-        });
+        };
+        console.log("Returning mock quiz:", mockQuiz);
+        console.log("========== QUIZ ENDPOINT COMPLETED ==========");
+        return res.json(mockQuiz);
       }
 
       try {
-        const quizAnswers = await db.getQuizAnswers(userId);
+        console.log("Attempting to get quiz from database...");
+        console.log("Storage object type:", typeof db, "with getQuizAnswers:", typeof db.getQuizAnswers);
+        
+        // Convert userId to a number if it's a string but represents a number
+        // This handles both string and number userId formats, maintaining type compatibility
+        const userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
+          ? Number(userId) 
+          : userId;
+          
+        console.log("Using userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
+        const quizAnswers = await db.getQuizAnswers(userIdForQuery);
+        console.log("Got quiz result:", quizAnswers);
+        
         if (!quizAnswers) {
+          console.log("No quiz found, returning 404");
           return res.status(404).json({ message: "Quiz not found" });
         }
         
+        console.log("Quiz found, returning:", quizAnswers);
+        console.log("========== QUIZ ENDPOINT COMPLETED ==========");
         res.json(quizAnswers);
       } catch (dbError) {
         console.error("Database error when fetching quiz:", dbError);
+        const typedDbError = dbError as Error;
+        console.error("Error message:", typedDbError.message);
+        console.error("Error stack:", typedDbError.stack);
         res.status(500).json({ message: "Database error fetching quiz" });
       }
     } catch (error) {
       console.error("Error in quiz endpoint:", error);
+      const typedError = error as Error;
+      console.error("Error message:", typedError.message);
+      console.error("Error stack:", typedError.stack);
       res.status(500).json({ message: "Failed to fetch quiz" });
     }
   });
 
   router.post("/quiz", isAuthenticated, async (req: Request, res: Response) => {
+    console.log("========== POST QUIZ ENDPOINT ACCESSED ==========");
+    console.log("Request user:", req.user);
+    
     try {
       const userId = req.user?.id;
+      console.log("User ID extracted:", userId, "with type:", typeof userId);
+      
       if (!userId) {
+        console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       const { answers, completed } = req.body;
+      console.log("Received quiz data:", { answersReceived: !!answers, completed });
+      
       if (!answers) {
+        console.log("Missing quiz answers, returning 400");
         return res.status(400).json({ message: "Missing quiz answers" });
       }
 
-      // Check if user already has quiz answers
-      const existingAnswers = await db.getQuizAnswers(userId);
+      // Convert userId to a number if it's a string but represents a number
+      const userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
+        ? Number(userId) 
+        : userId;
+        
+      console.log("Using userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
       
-      let quizAnswers;
-      if (existingAnswers) {
-        // Update existing answers
-        quizAnswers = await db.updateQuizAnswers(
-          existingAnswers.id,
-          answers,
-          completed || false
-        );
-      } else {
-        // Create new answers
-        quizAnswers = await db.createQuizAnswers({
-          userId,
-          answers,
-          completed: completed || false
-        });
-      }
+      try {
+        // Check if user already has quiz answers
+        console.log("Checking for existing quiz answers...");
+        const existingAnswers = await db.getQuizAnswers(userIdForQuery);
+        console.log("Existing answers:", existingAnswers);
+        
+        let quizAnswers;
+        if (existingAnswers) {
+          console.log("Updating existing answers with ID:", existingAnswers.id);
+          // Update existing answers
+          quizAnswers = await db.updateQuizAnswers(
+            existingAnswers.id,
+            answers,
+            completed || false
+          );
+        } else {
+          console.log("Creating new quiz answers for user");
+          // Create new answers
+          quizAnswers = await db.createQuizAnswers({
+            userId: userIdForQuery,
+            answers,
+            completed: completed || false
+          });
+        }
 
-      res.json(quizAnswers);
+        console.log("Quiz saved successfully:", quizAnswers);
+        console.log("========== POST QUIZ ENDPOINT COMPLETED ==========");
+        res.json(quizAnswers);
+      } catch (dbError) {
+        console.error("Database error when saving quiz:", dbError);
+        const typedDbError = dbError as Error;
+        console.error("Error message:", typedDbError.message);
+        console.error("Error stack:", typedDbError.stack);
+        res.status(500).json({ message: "Database error saving quiz" });
+      }
     } catch (error) {
-      console.error("Error saving quiz:", error);
+      console.error("Error in quiz save endpoint:", error);
+      const typedError = error as Error;
+      console.error("Error message:", typedError.message);
+      console.error("Error stack:", typedError.stack);
       res.status(500).json({ message: "Failed to save quiz" });
     }
   });
