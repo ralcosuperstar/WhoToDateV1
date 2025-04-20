@@ -47,6 +47,15 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
     async function initialize() {
       setIsLoading(true);
       try {
+        console.log('Initializing Supabase context...');
+        
+        // Try to get the Supabase client first
+        const client = await authService.getClient();
+        
+        if (!client) {
+          throw new Error('Failed to initialize Supabase client');
+        }
+        
         // Get current session
         const sessionData = await authService.getSession();
         setSession(sessionData);
@@ -58,15 +67,18 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
           
           // Ensure user exists in database (or create if needed)
           if (userData) {
-            const { error } = await userService.ensureUserExists(userData);
-            if (error) {
-              console.error('Error ensuring user exists:', error);
+            try {
+              const { error } = await userService.ensureUserExists(userData);
+              if (error) {
+                console.error('Error ensuring user exists:', error);
+              }
+            } catch (userError) {
+              console.error('Exception ensuring user exists:', userError);
             }
           }
         }
         
         // Subscribe to auth changes
-        const client = await authService.getClient();
         const { data: authListener } = client.auth.onAuthStateChange(
           async (event, newSession) => {
             console.log("Auth state changed:", event);
@@ -80,7 +92,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
                 console.log('Ensuring user exists after auth change');
                 try {
                   await userService.ensureUserExists(newSession.user);
-                  // Direct Supabase approach - don't try to sync with Express server
+                  console.log('User sync completed successfully');
                 } catch (error) {
                   console.error('Error ensuring user exists after auth change:', error);
                 }

@@ -12,15 +12,34 @@ export const initSupabase = async () => {
     // If already initialized, return existing client
     if (supabaseClient) return supabaseClient;
 
-    // Use environment variables directly from Vite
-    // These are injected by the server at build time
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
-                       process.env.SUPABASE_URL || 
-                       "https://truulijpablpqxipindo.supabase.co";
-                       
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 
-                           process.env.SUPABASE_ANON_KEY || 
-                           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMyMDQwOTUsImV4cCI6MjAyODc4MDA5NX0.rWwxEbdjr6O0Xs6aBUQV5h3K0gWKZW1K1GPyv-UGxzs";
+    // First try to get config from server API
+    try {
+      const response = await fetch('/api/supabase-config');
+      if (response.ok) {
+        const config = await response.json();
+        if (config.initialized && config.url && config.anonKey) {
+          // Create Supabase client
+          supabaseClient = createClient(config.url, config.anonKey, {
+            auth: {
+              autoRefreshToken: true,
+              persistSession: true,
+            }
+          });
+          
+          console.log('Supabase service initialized successfully via API');
+          return supabaseClient;
+        }
+      }
+    } catch (apiError) {
+      console.warn('Could not fetch Supabase config from API, using hardcoded values');
+    }
+    
+    // Fallback to hardcoded values
+    console.log('Using hardcoded Supabase configuration');
+    
+    // Hardcoded values as fallback (these are public keys, safe to include)
+    const supabaseUrl = "https://truulijpablpqxipindo.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMyMDQwOTUsImV4cCI6MjAyODc4MDA5NX0.rWwxEbdjr6O0Xs6aBUQV5h3K0gWKZW1K1GPyv-UGxzs";
 
     // Create Supabase client
     supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
@@ -30,7 +49,7 @@ export const initSupabase = async () => {
       }
     });
 
-    console.log('Supabase service initialized successfully');
+    console.log('Supabase service initialized successfully with hardcoded values');
     return supabaseClient;
   } catch (error) {
     console.error('Error initializing Supabase service:', error);
