@@ -303,9 +303,7 @@ export const quizService = {
   /**
    * Get user's quiz answers
    */
-  getQuizAnswers: async (userId: string) => {
-    const supabase = await authService.getClient();
-    
+  getQuizAnswers: async (supabase: any, userId: string) => {
     const { data, error } = await supabase
       .from('quiz_answers')
       .select('*')
@@ -314,33 +312,39 @@ export const quizService = {
       
     if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
       console.error('Error fetching quiz answers:', error);
-      return { quizAnswers: null, error };
+      return null;
     }
     
-    return { quizAnswers: data as QuizAnswer, error: null };
+    return data as QuizAnswer;
+  },
+
+  /**
+   * Get quiz by user ID (alias for getQuizAnswers to match function name used in Results.tsx)
+   */
+  getQuizByUserId: async (supabase: any, userId: string) => {
+    return await quizService.getQuizAnswers(supabase, userId);
   },
 
   /**
    * Get current user's quiz answers
    */
   getCurrentUserQuizAnswers: async () => {
+    const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return { quizAnswers: null, error: new Error('No authenticated user') };
+    if (!user) return null;
     
-    return await quizService.getQuizAnswers(user.id);
+    return await quizService.getQuizAnswers(supabase, user.id);
   },
 
   /**
    * Save quiz answers
    */
-  saveQuizAnswers: async (userId: string, answers: any, completed: boolean = false) => {
+  saveQuizAnswers: async (supabase: any, userId: string, answers: any, completed: boolean = false) => {
     try {
-      const supabase = await authService.getClient();
-      
       // Check if user already has answers
-      const { quizAnswers } = await quizService.getQuizAnswers(userId);
+      const existingQuiz = await quizService.getQuizAnswers(supabase, userId);
       
-      if (quizAnswers) {
+      if (existingQuiz) {
         // Update existing answers
         const { data, error } = await supabase
           .from('quiz_answers')
@@ -349,16 +353,16 @@ export const quizService = {
             completed,
             completed_at: completed ? new Date().toISOString() : null
           })
-          .eq('id', quizAnswers.id)
+          .eq('id', existingQuiz.id)
           .select()
           .single();
           
         if (error) {
           console.error('Error updating quiz answers:', error);
-          return { quizAnswers: null, error };
+          return null;
         }
         
-        return { quizAnswers: data as QuizAnswer, error: null };
+        return data as QuizAnswer;
       } else {
         // Create new answers
         const { data, error } = await supabase
@@ -375,14 +379,14 @@ export const quizService = {
           
         if (error) {
           console.error('Error creating quiz answers:', error);
-          return { quizAnswers: null, error };
+          return null;
         }
         
-        return { quizAnswers: data as QuizAnswer, error: null };
+        return data as QuizAnswer;
       }
     } catch (error) {
       console.error('Error in saveQuizAnswers:', error);
-      return { quizAnswers: null, error };
+      return null;
     }
   },
 
@@ -390,10 +394,11 @@ export const quizService = {
    * Save current user's quiz answers
    */
   saveCurrentUserQuizAnswers: async (answers: any, completed: boolean = false) => {
+    const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return { quizAnswers: null, error: new Error('No authenticated user') };
+    if (!user) return null;
     
-    return await quizService.saveQuizAnswers(user.id, answers, completed);
+    return await quizService.saveQuizAnswers(supabase, user.id, answers, completed);
   }
 };
 
@@ -404,9 +409,7 @@ export const reportService = {
   /**
    * Get user's report
    */
-  getReport: async (userId: string) => {
-    const supabase = await authService.getClient();
-    
+  getReport: async (supabase: any, userId: string) => {
     const { data, error } = await supabase
       .from('reports')
       .select('*')
@@ -415,36 +418,49 @@ export const reportService = {
       
     if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
       console.error('Error fetching report:', error);
-      return { report: null, error };
+      return null;
     }
     
-    return { report: data as Report, error: null };
+    return data as Report;
+  },
+
+  /**
+   * Get report by user ID
+   */
+  getReportByUserId: async (supabase: any, userId: string) => {
+    return await reportService.getReport(supabase, userId);
   },
 
   /**
    * Get current user's report
    */
   getCurrentUserReport: async () => {
+    const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return { report: null, error: new Error('No authenticated user') };
+    if (!user) return null;
     
-    return await reportService.getReport(user.id);
+    return await reportService.getReport(supabase, user.id);
   },
 
   /**
    * Create a report
    */
-  createReport: async (userId: string, quizId: number, report: any, compatibilityColor: string) => {
-    const supabase = await authService.getClient();
-    
-    const { data, error } = await supabase
+  createReport: async (supabase: any, data: {
+    userId: string;
+    quizId: number;
+    report: any;
+    compatibilityColor: string;
+    isPaid: boolean;
+  }) => {
+    // Convert field names to snake_case for Supabase
+    const { data: createdReport, error } = await supabase
       .from('reports')
       .insert({
-        user_id: userId,
-        quiz_id: quizId,
-        report,
-        compatibility_color: compatibilityColor,
-        is_paid: false,
+        user_id: data.userId,
+        quiz_id: data.quizId,
+        report: data.report,
+        compatibility_color: data.compatibilityColor,
+        is_paid: data.isPaid,
         created_at: new Date().toISOString()
       })
       .select()
@@ -452,20 +468,27 @@ export const reportService = {
       
     if (error) {
       console.error('Error creating report:', error);
-      return { report: null, error };
+      return null;
     }
     
-    return { report: data as Report, error: null };
+    return createdReport as Report;
   },
 
   /**
    * Create a report for the current user
    */
   createCurrentUserReport: async (quizId: number, report: any, compatibilityColor: string) => {
+    const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return { report: null, error: new Error('No authenticated user') };
+    if (!user) return null;
     
-    return await reportService.createReport(user.id, quizId, report, compatibilityColor);
+    return await reportService.createReport(supabase, {
+      userId: user.id,
+      quizId,
+      report,
+      compatibilityColor,
+      isPaid: false
+    });
   },
 
   /**
