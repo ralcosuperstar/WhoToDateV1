@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { SupabaseProvider } from "@/contexts/NewSupabaseContext"; // Direct Supabase integration
+import { SupabaseAuthProvider } from "@/contexts/SupabaseAuthContext"; // Authentication context
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -20,6 +21,7 @@ import FixedQuiz from "@/pages/FixedQuiz"; // Fixed version of the quiz componen
 import Results from "@/pages/Results";
 import SimpleResults from "@/pages/SimpleResults";
 import LocalResults from "@/pages/LocalResults";
+import SavedResults from "@/pages/SavedResults"; // Supabase saved results component
 import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
@@ -102,6 +104,7 @@ function Router() {
       <ProtectedRoute path="/results" component={SimpleResults} allowGuests={true} />
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <Route path="/local-results" component={LocalResults} />
+      <Route path="/saved-results" component={SavedResults} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard-original" component={Dashboard} />
@@ -125,14 +128,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider> {/* New Supabase Context that uses our service directly */}
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1">
-            <Router />
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+        <SupabaseAuthProvider> {/* Authentication context for persistent user sessions */}
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">
+              <Router />
+            </main>
+            <Footer />
+            <Toaster />
+          </div>
+        </SupabaseAuthProvider>
       </SupabaseProvider>
     </QueryClientProvider>
   );

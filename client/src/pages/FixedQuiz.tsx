@@ -480,15 +480,14 @@ const FixedQuiz = () => {
             }
             
             // Create report in database - using snake_case for column names to match PostgreSQL conventions
-            // Remove the compatibility_color field since it doesn't exist in the schema
             const { error: reportError } = await supabase
               .from('reports')
               .insert({
                 user_id: user.id,
                 quiz_id: quizData.id,
                 report: profile,
-                is_paid: false
-                // Removed compatibility_color as it doesn't exist in the schema
+                is_paid: false,
+                compatibility_color: profile.overallColor // Include the compatibility_color field which does exist in the schema
               });
               
             if (reportError) throw reportError;
