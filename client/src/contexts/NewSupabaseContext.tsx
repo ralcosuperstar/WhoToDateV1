@@ -80,8 +80,9 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
                 console.log('Ensuring user exists after auth change');
                 try {
                   await userService.ensureUserExists(newSession.user);
+                  // Direct Supabase approach - don't try to sync with Express server
                 } catch (error) {
-                  console.error('Error syncing user after auth change:', error);
+                  console.error('Error ensuring user exists after auth change:', error);
                 }
               }
             } else {

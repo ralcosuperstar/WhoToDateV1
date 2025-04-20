@@ -5,10 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
-import { SupabaseProvider as OldSupabaseProvider } from "@/contexts/SupabaseContext";
-import { SupabaseProvider } from "@/contexts/NewSupabaseContext"; // New Supabase Context
-import { SupabaseDbProvider } from "@/contexts/SupabaseDbContext";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { SupabaseProvider } from "@/contexts/NewSupabaseContext"; // Direct Supabase integration
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -120,20 +117,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider> {/* New Supabase Context that uses our service directly */}
-        <OldSupabaseProvider>
-          <AuthProvider>
-            <SupabaseDbProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-1">
-                  <Router />
-                </main>
-                <Footer />
-                <Toaster />
-              </div>
-            </SupabaseDbProvider>
-          </AuthProvider>
-        </OldSupabaseProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-1">
+            <Router />
+          </main>
+          <Footer />
+          <Toaster />
+        </div>
       </SupabaseProvider>
     </QueryClientProvider>
   );

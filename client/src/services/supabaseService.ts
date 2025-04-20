@@ -12,19 +12,18 @@ export const initSupabase = async () => {
     // If already initialized, return existing client
     if (supabaseClient) return supabaseClient;
 
-    // Get Supabase config from server
-    const response = await fetch('/api/supabase-config');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch Supabase config: ${response.status} ${response.statusText}`);
-    }
-    
-    const config = await response.json();
-    if (!config.initialized || !config.url || !config.anonKey) {
-      throw new Error('Missing Supabase configuration');
-    }
+    // Use environment variables directly from Vite
+    // These are injected by the server at build time
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
+                       process.env.SUPABASE_URL || 
+                       "https://truulijpablpqxipindo.supabase.co";
+                       
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 
+                           process.env.SUPABASE_ANON_KEY || 
+                           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMyMDQwOTUsImV4cCI6MjAyODc4MDA5NX0.rWwxEbdjr6O0Xs6aBUQV5h3K0gWKZW1K1GPyv-UGxzs";
 
     // Create Supabase client
-    supabaseClient = createClient(config.url, config.anonKey, {
+    supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
