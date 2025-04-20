@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { getSupabaseClient } from "@/lib/supabase";
 import { ensureUserExists } from "@/lib/supabaseUtils";
 
@@ -320,7 +320,7 @@ const Quiz = () => {
       
       try {
         setIsQuizLoading(true);
-        const supabase = getSupabaseClient();
+        const supabase = await getSupabaseClient();
         
         // Get the user's quiz answers
         const { data: quizAnswers, error } = await supabase
@@ -331,8 +331,20 @@ const Quiz = () => {
         
         if (error) throw error;
         
+        console.log("Quiz answers loaded from Supabase:", quizAnswers);
+        
         if (quizAnswers) {
           setExistingQuiz(quizAnswers);
+          
+          // Set answers state if quiz was started previously
+          if (quizAnswers.answers && typeof quizAnswers.answers === 'object') {
+            setAnswers(quizAnswers.answers as Record<number, number>);
+          }
+          
+          // If quiz was completed, redirect to results
+          if (quizAnswers.completed) {
+            setQuizCompleted(true);
+          }
         }
       } catch (error) {
         console.error("Error loading quiz answers:", error);
@@ -352,7 +364,7 @@ const Quiz = () => {
   // Find current question
   const currentQuestion = quizQuestions.find(q => q.id === currentQuestionId);
   
-  // Save quiz answers mutation - simplified version that works offline first
+  // Save quiz answers mutation - updated to work correctly with Supabase
   const saveQuizMutation = useMutation({
     mutationFn: async (data: { answers: Record<number, number>, completed: boolean }) => {
       try {
@@ -360,12 +372,66 @@ const Quiz = () => {
         sessionStorage.setItem('quizAnswers', JSON.stringify(data.answers));
         console.log("Saved quiz answers locally");
         
-        // Return a mock result to keep the flow going
-        return { 
-          id: 0, 
+        // Try to save to Supabase if user is logged in
+        if (localUser) {
+          try {
+            const supabase = await getSupabaseClient();
+            
+            // Check if user already has quiz answers
+            const { data: existingAnswers, error: checkError } = await supabase
+              .from('quiz_answers')
+              .select('id')
+              .eq('user_id', localUser.id)
+              .maybeSingle();
+              
+            if (checkError) throw checkError;
+            
+            let result;
+            
+            if (existingAnswers) {
+              // Update existing quiz answers
+              const { data: updatedAnswers, error } = await supabase
+                .from('quiz_answers')
+                .update({
+                  answers: data.answers,
+                  completed: data.completed
+                })
+                .eq('id', existingAnswers.id)
+                .select()
+                .single();
+                
+              if (error) throw error;
+              result = updatedAnswers;
+            } else {
+              // Create new quiz answers
+              const { data: newAnswers, error } = await supabase
+                .from('quiz_answers')
+                .insert({
+                  user_id: localUser.id,
+                  answers: data.answers,
+                  completed: data.completed
+                })
+                .select()
+                .single();
+                
+              if (error) throw error;
+              result = newAnswers;
+            }
+            
+            console.log("Saved quiz answers to Supabase:", result);
+            return result;
+          } catch (err) {
+            console.error("Error saving to Supabase:", err);
+            // Don't throw - fall back to the local mock
+          }
+        }
+        
+        // Return a mock result if Supabase save failed or user is not logged in
+        return {
+          id: 0,
           user_id: localUser?.id || '0',
-          answers: data.answers, 
-          completed: data.completed 
+          answers: data.answers,
+          completed: data.completed
         };
       } catch (error) {
         console.error("Error saving quiz answers:", error);
@@ -423,7 +489,7 @@ const Quiz = () => {
         // Try to save to Supabase if user is logged in, but don't block on failure
         if (localUser) {
           try {
-            const supabase = getSupabaseClient();
+            const supabase = await getSupabaseClient();
             await ensureUserExists(localUser);
             
             // We'll attempt to save to Supabase, but won't wait for the result
@@ -433,10 +499,11 @@ const Quiz = () => {
               .upsert({
                 user_id: localUser.id,
                 quiz_id: data.quizId,
-                compatibility_profile: data.compatibilityProfile,
+                // Use the correct field name based on the database schema
+                report: data.compatibilityProfile,
                 is_paid: data.isPaid
               })
-              .then(result => {
+              .then((result: any) => {
                 if (result.error) {
                   console.warn("Background save to Supabase failed:", result.error);
                 } else {
