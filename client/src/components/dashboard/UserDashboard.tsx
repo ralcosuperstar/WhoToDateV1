@@ -41,19 +41,30 @@ const UserDashboard = () => {
       if (supabaseUser) {
         try {
           // First try to get user from the API
+          console.log('Fetching user data for:', supabaseUser.id);
           const response = await fetch('/api/user', {
             credentials: 'include'
           });
           
           if (response.ok) {
             const userData = await response.json();
+            console.log('Successfully loaded user data from API:', userData);
             setLocalUser(userData);
           } else {
+            console.log('API user endpoint returned status:', response.status);
+            // Check if we got a 404 (endpoint not found) error or another issue
+            try {
+              const error = await response.json();
+              console.log('API error response:', error);
+            } catch (e) {
+              console.log('Could not parse API error as JSON');
+            }
+            
             // If that fails, create a basic user object from Supabase data
             console.log('Creating basic user from Supabase data');
             // Create a minimal User object with required fields
             const basicUser: User = {
-              id: 0, // We don't know the ID yet
+              id: parseInt(supabaseUser.id) || 0, // Try to convert UUID to number if possible
               username: supabaseUser.email?.split('@')[0] || 'user',
               password: '', // Not used in frontend display
               email: supabaseUser.email || '',
@@ -73,15 +84,58 @@ const UserDashboard = () => {
               clerkId: supabaseUser.id,
               createdAt: new Date(),
             };
+            console.log('Created basic user profile:', basicUser);
             setLocalUser(basicUser);
+            
+            // Try to ensure user exists in backend if we're using a fallback
+            try {
+              console.log('Ensuring user exists in backend');
+              const ensureResponse = await fetch('/api/ensure-user', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                  id: supabaseUser.id,
+                  email: supabaseUser.email,
+                  username: supabaseUser.email?.split('@')[0],
+                  isVerified: true
+                })
+              });
+              
+              const ensureResult = await ensureResponse.json();
+              console.log('Ensure user result:', ensureResult);
+            } catch (ensureError) {
+              console.error('Failed to ensure user exists in backend:', ensureError);
+            }
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
-          toast({
-            title: 'Error',
-            description: 'Failed to load user data',
-            variant: 'destructive'
-          });
+          // Create fallback user without showing error toast
+          const fallbackUser: User = {
+            id: parseInt(supabaseUser.id) || 0,
+            username: supabaseUser.email?.split('@')[0] || 'user',
+            password: '',
+            email: supabaseUser.email || '',
+            phoneNumber: supabaseUser.phone || null,
+            firstName: null,
+            lastName: null,
+            fullName: supabaseUser.user_metadata?.full_name || '',
+            dateOfBirth: null,
+            gender: null,
+            imageUrl: null,
+            isVerified: true,
+            verificationMethod: null,
+            verificationToken: null,
+            verificationTokenExpiry: null,
+            otpCode: null,
+            otpExpiry: null,
+            clerkId: supabaseUser.id,
+            createdAt: new Date(),
+          };
+          console.log('Created fallback user after error:', fallbackUser);
+          setLocalUser(fallbackUser);
         } finally {
           setIsUserLoading(false);
         }
@@ -102,9 +156,12 @@ const UserDashboard = () => {
   } = useQuery<Report>({ 
     queryKey: ['/api/report'],
     enabled: !!localUser,
-    retry: false,
-    // If the query fails, we'll handle it gracefully
-    onError: (error) => {
+    retry: 1,
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      console.log('Successfully loaded report data:', data);
+    },
+    onError: (error: any) => {
       console.error('Error fetching report:', error);
       // We're handling errors in the UI, so no need to show toast
     }
