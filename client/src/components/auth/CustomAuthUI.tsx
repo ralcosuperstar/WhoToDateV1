@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useSupabase } from '@/contexts/SupabaseContext';
-import { getSupabaseClient } from '@/lib/supabase';
+import { signInWithPassword, signUpWithPassword, verifyOtp, syncUserWithServer } from '@/lib/authUtils';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,18 +34,6 @@ const otpSchema = z.object({
 });
 
 export function CustomAuthUI() {
-  const { supabase } = useSupabase();
-  const [supabaseClient, setSupabaseClient] = useState<any>(null);
-  
-  // Get the Supabase client
-  useEffect(() => {
-    async function initClient() {
-      const client = await getSupabaseClient();
-      setSupabaseClient(client);
-    }
-    
-    initClient();
-  }, []);
   const [activeTab, setActiveTab] = useState<string>('sign-in');
   const [isLoading, setIsLoading] = useState(false);
   const [verificationView, setVerificationView] = useState(false);
@@ -100,57 +87,28 @@ export function CustomAuthUI() {
   
   // Handle sign up submission
   const onSignUpSubmit = async (formData: z.infer<typeof signUpSchema>) => {
-    if (!supabase) {
-      toast({
-        title: 'Authentication error',
-        description: 'Authentication system is not initialized. Please try again later.',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
       // Extract the data for signup
       const { first_name, last_name, email, password, phone } = formData;
 
-      // Sign up with Supabase
-      const { data: signupData, error: signupError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            first_name,
-            last_name,
-            phone
-          }
-        }
+      // Sign up with our utility function
+      const { user, error } = await signUpWithPassword(email, password, {
+        first_name,
+        last_name,
+        phone
       });
 
-      console.log("Sign up response:", { data: signupData, error: signupError });
-      
-      // Check for explicit error about user already existing
-      if (signupError) {
-        if (signupError.message && (
-          signupError.message.includes('User already registered') || 
-          signupError.message.includes('already been registered')
-        )) {
+      // Check for error indicating existing user
+      if (error) {
+        if (error.existingUser || (error.message && (
+          error.message.includes('User already registered') || 
+          error.message.includes('already been registered')
+        ))) {
           handleExistingUser(email);
           return;
         }
-        throw signupError;
-      }
-      
-      // Supabase has a special case - when an existing user signs up,
-      // it may not return an error but instead return data with a null user
-      // or a data.user object with identities array of length 0
-      if (!signupData.user || 
-          (signupData.user.identities && signupData.user.identities.length === 0) ||
-          signupData.user?.email_confirmed_at) {
-          
-        console.log("Detected existing user from response data");
-        handleExistingUser(email);
-        return;
+        throw error;
       }
 
       // Show success message and prepare for OTP verification
@@ -176,55 +134,30 @@ export function CustomAuthUI() {
 
   // Handle sign in submission
   const onSignInSubmit = async (formData: z.infer<typeof signInSchema>) => {
-    if (!supabase) {
-      toast({
-        title: 'Authentication error',
-        description: 'Authentication system is not initialized. Please try again later.',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
-      // Sign in with Supabase
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password
-      });
+      // Sign in with our utility function
+      const { user, error } = await signInWithPassword(formData.email, formData.password);
 
-      if (signInError) {
-        throw signInError;
+      if (error) {
+        throw error;
       }
 
       // Sync the Supabase authentication with our server
-      try {
-        // Get the current user after sign in
-        const { data: userData } = await supabase.auth.getUser();
-        
-        if (userData?.user) {
-          console.log("Syncing Supabase user with server:", userData.user.email);
+      if (user) {
+        try {
+          console.log("Syncing user with server after sign in:", user.email);
+          const syncResult = await syncUserWithServer(user);
           
-          // Call our sync endpoint
-          const response = await fetch('/api/supabase-sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: userData.user.email,
-              user_id: userData.user.id
-            }),
-            credentials: 'include' // Important for cookies
-          });
-          
-          if (!response.ok) {
-            console.error("Failed to sync with server:", await response.text());
+          if (!syncResult.success) {
+            console.error("Failed to sync with server:", syncResult.error);
           } else {
-            console.log("Successfully synced Supabase user with server");
+            console.log("Successfully synced user with server");
           }
+        } catch (syncError) {
+          console.error("Error syncing user with server:", syncError);
+          // Continue even if sync fails - we want the user to be able to use the app
         }
-      } catch (syncError) {
-        console.error("Error syncing Supabase user with server:", syncError);
-        // Continue even if sync fails - we want the user to be able to use the app
       }
 
       toast({
@@ -245,26 +178,13 @@ export function CustomAuthUI() {
 
   // Handle OTP verification
   const onOTPSubmit = async (formData: z.infer<typeof otpSchema>) => {
-    if (!supabase) {
-      toast({
-        title: 'Authentication error',
-        description: 'Authentication system is not initialized. Please try again later.',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
-      // Verify OTP
-      const { error: otpError } = await supabase.auth.verifyOtp({
-        email: verificationEmail,
-        token: formData.otp,
-        type: 'signup'
-      });
+      // Verify OTP using our utility function
+      const { user, error } = await verifyOtp(verificationEmail, formData.otp);
 
-      if (otpError) {
-        throw otpError;
+      if (error) {
+        throw error;
       }
 
       toast({
@@ -273,33 +193,20 @@ export function CustomAuthUI() {
       });
 
       // Sync the Supabase authentication with our server
-      try {
-        // Get the current user after sign in
-        const { data: userData } = await supabase.auth.getUser();
-        
-        if (userData?.user) {
-          console.log("Syncing Supabase user with server after verification:", userData.user.email);
+      if (user) {
+        try {
+          console.log("Syncing user with server after verification:", user.email);
+          const syncResult = await syncUserWithServer(user);
           
-          // Call our sync endpoint
-          const response = await fetch('/api/supabase-sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: userData.user.email,
-              user_id: userData.user.id
-            }),
-            credentials: 'include' // Important for cookies
-          });
-          
-          if (!response.ok) {
-            console.error("Failed to sync with server after verification:", await response.text());
+          if (!syncResult.success) {
+            console.error("Failed to sync with server after verification:", syncResult.error);
           } else {
-            console.log("Successfully synced Supabase user with server after verification");
+            console.log("Successfully synced user with server after verification");
           }
+        } catch (syncError) {
+          console.error("Error syncing user with server after verification:", syncError);
+          // Continue even if sync fails - we want the user to be able to use the app
         }
-      } catch (syncError) {
-        console.error("Error syncing Supabase user with server after verification:", syncError);
-        // Continue even if sync fails - we want the user to be able to use the app
       }
 
       // Reset verification view
