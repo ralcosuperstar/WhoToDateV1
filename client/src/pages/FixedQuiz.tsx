@@ -499,8 +499,8 @@ const FixedQuiz = () => {
         }
       }
       
-      // Navigate to the results page
-      navigate('/results');
+      // Navigate to the local results page that doesn't depend on DB data
+      navigate('/local-results');
     } catch (err) {
       console.error("Error completing quiz:", err);
       toast({
@@ -509,8 +509,8 @@ const FixedQuiz = () => {
         variant: "destructive",
       });
       
-      // Navigate to results anyway - we have the profile in session storage
-      navigate('/results');
+      // Navigate to local results page even on error - we have the profile in session storage
+      navigate('/local-results');
     } finally {
       setSubmitting(false);
     }

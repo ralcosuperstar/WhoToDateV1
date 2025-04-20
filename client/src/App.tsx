@@ -19,6 +19,7 @@ import BasicQuiz from "@/pages/BasicQuiz"; // Ultra-simple quiz component
 import FixedQuiz from "@/pages/FixedQuiz"; // Fixed version of the quiz component
 import Results from "@/pages/Results";
 import SimpleResults from "@/pages/SimpleResults";
+import LocalResults from "@/pages/LocalResults";
 import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
@@ -100,6 +101,7 @@ function Router() {
       <Route path="/quiz" component={FixedQuiz} />
       <ProtectedRoute path="/results" component={SimpleResults} allowGuests={true} />
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
+      <Route path="/local-results" component={LocalResults} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard-original" component={Dashboard} />
