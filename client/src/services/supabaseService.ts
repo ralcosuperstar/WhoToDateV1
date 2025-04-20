@@ -189,11 +189,18 @@ export const userService = {
         return null;
       }
       
+      console.log('Using database user ID:', user.id, 'for auth user:', authUser.email);
+      
       // Return the database ID as an integer
       if (typeof user.id === 'number') {
         return user.id;
       } else if (typeof user.id === 'string') {
-        return parseInt(user.id, 10);
+        try {
+          return parseInt(user.id, 10);
+        } catch (e) {
+          console.error('Failed to parse user ID as integer:', user.id);
+          return null;
+        }
       } else {
         console.error('User ID is not a number or string:', user.id);
         return null;
