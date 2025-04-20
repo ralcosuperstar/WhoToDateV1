@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
 import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { getSupabaseClient } from "@/lib/supabase";
+import { userService } from "@/services/supabaseService";
 
 // Progress bar component
 const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: number; totalQuestions: number }) => {
@@ -376,19 +377,26 @@ const FixedQuiz = () => {
         setSaving(true);
         
         try {
-          // Since quizService doesn't exist, use direct Supabase queries
+          // First, get the database integer user ID
+          const dbUserId = await userService.getDatabaseUserId(user);
+          
+          if (!dbUserId) {
+            console.error("Could not get database user ID for email:", user.email);
+            // Continue with local storage only
+            return;
+          }
+          
+          // Use direct Supabase queries
           const supabase = await getSupabaseClient();
           
-          // Check if user already has quiz answers
+          // Check if user already has quiz answers using the database ID
           const { data: existingAnswers, error: checkError } = await supabase
             .from('quiz_answers')
             .select('id')
-            .eq('user_id', user.id)
+            .eq('user_id', dbUserId)
             .maybeSingle();
             
           if (checkError) throw checkError;
-          
-          let result;
           
           if (existingAnswers) {
             // Update existing quiz answers
@@ -396,7 +404,8 @@ const FixedQuiz = () => {
               .from('quiz_answers')
               .update({
                 answers: newAnswers,
-                completed
+                completed,
+                completed_at: completed ? new Date().toISOString() : null
               })
               .eq('id', existingAnswers.id);
               
@@ -406,9 +415,11 @@ const FixedQuiz = () => {
             const { error } = await supabase
               .from('quiz_answers')
               .insert({
-                user_id: user.id,
+                user_id: dbUserId, // Use the integer database ID
                 answers: newAnswers,
-                completed
+                completed,
+                started_at: new Date().toISOString(),
+                completed_at: completed ? new Date().toISOString() : null
               });
               
             if (error) throw error;
@@ -443,14 +454,30 @@ const FixedQuiz = () => {
       // If user is logged in, save report to database
       if (user) {
         try {
-          // Since quizService doesn't exist, use direct Supabase queries
+          // First, get the database integer user ID
+          const dbUserId = await userService.getDatabaseUserId(user);
+          
+          if (!dbUserId) {
+            console.error("Could not get database user ID for email:", user.email);
+            toast({
+              title: "Database Error",
+              description: "Could not find your user account in the database. Your results are saved locally only.",
+              variant: "destructive"
+            });
+            navigate('/local-results');
+            return;
+          }
+          
+          console.log("Using database user ID:", dbUserId, "for auth user:", user.email);
+          
+          // Use direct Supabase queries
           const supabase = await getSupabaseClient();
           
-          // Get the quiz ID directly from quiz_answers table
+          // Get the quiz ID directly from quiz_answers table using the database user ID
           const { data: quizData, error: quizError } = await supabase
             .from('quiz_answers')
             .select('id')
-            .eq('user_id', user.id)
+            .eq('user_id', dbUserId)
             .maybeSingle();
           
           if (quizError) throw quizError;
@@ -467,33 +494,34 @@ const FixedQuiz = () => {
             };
             const compatibilityColor = colorMap[compatibilityType] || colorMap.balanced;
             
-            // Get database schema to see actual column names
-            const { data: columns, error: schemaError } = await supabase
-              .from('reports')
-              .select()
-              .limit(1);
-              
-            if (schemaError) {
-              console.log("Error getting reports schema:", schemaError);
-            } else {
-              console.log("Reports table schema:", columns);
-            }
-            
             // Create report in database - using snake_case for column names to match PostgreSQL conventions
             const { error: reportError } = await supabase
               .from('reports')
               .insert({
-                user_id: user.id,
+                user_id: dbUserId, // Use the integer database ID here
                 quiz_id: quizData.id,
                 report: profile,
                 is_paid: false,
                 compatibility_color: compatibilityColor // Use the HEX color code for better visualization
               });
               
-            if (reportError) throw reportError;
+            if (reportError) {
+              console.error("Error creating report:", reportError);
+              throw reportError;
+            } else {
+              console.log("Successfully saved report to database for user ID:", dbUserId);
+            }
+          } else {
+            console.error("No quiz answers found for user ID:", dbUserId);
+            throw new Error("No quiz answers found");
           }
         } catch (dbErr) {
           console.error("Error saving report to database:", dbErr);
+          toast({
+            title: "Database Error",
+            description: "There was an error saving your report. Your results are saved locally only.",
+            variant: "destructive"
+          });
           // Continue with results page anyway since we have data in session storage
         }
       }

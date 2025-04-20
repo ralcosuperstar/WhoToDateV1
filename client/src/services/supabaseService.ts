@@ -143,6 +143,58 @@ export const userService = {
 
     return { user: data, error: null };
   },
+  
+  /**
+   * Get user by email address
+   */
+  getUserByEmail: async (email: string) => {
+    const supabase = await authService.getClient();
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (error) {
+      console.error('Error getting user by email:', error);
+      return { user: null, error };
+    }
+
+    return { user: data, error: null };
+  },
+  
+  /**
+   * Get database integer ID from auth user (useful for solving ID format inconsistencies)
+   */
+  getDatabaseUserId: async (authUser: User): Promise<number | null> => {
+    if (!authUser.email) {
+      console.error('User has no email when getting database ID');
+      return null;
+    }
+    
+    try {
+      // Find user in database by email (which should be unique)
+      const { user, error } = await userService.getUserByEmail(authUser.email);
+      
+      if (error || !user) {
+        console.error('Could not find database user ID for auth user:', error);
+        return null;
+      }
+      
+      // Return the database ID as an integer
+      if (typeof user.id === 'number') {
+        return user.id;
+      } else if (typeof user.id === 'string') {
+        return parseInt(user.id, 10);
+      } else {
+        console.error('User ID is not a number or string:', user.id);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting database user ID:', error);
+      return null;
+    }
+  },
 
   /**
    * Ensure a user exists in the users table
