@@ -613,6 +613,18 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   });
 
   // API routes for blog posts
+  router.get("/blog", async (req: Request, res: Response) => {
+    try {
+      console.log("Blog API endpoint accessed");
+      const blogPosts = await db.getAllBlogPosts();
+      res.json(blogPosts);
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+      res.status(500).json({ message: "Failed to fetch blog posts" });
+    }
+  });
+  
+  // Legacy blog-posts endpoint (keeping for backward compatibility)
   router.get("/blog-posts", async (req: Request, res: Response) => {
     try {
       const blogPosts = await db.getAllBlogPosts();

@@ -34,12 +34,10 @@ export async function getSupabaseConfig() {
   }
 }
 
-// Initialize and get the Supabase client (singleton pattern)
-export async function getSupabaseClient() {
-  if (supabaseClient) {
-    return supabaseClient;
-  }
-  
+// Initialize the Supabase client (singleton pattern initialization)
+let initializationPromise: Promise<ReturnType<typeof createClient>> | null = null;
+
+async function initializeSupabaseClient() {
   try {
     const { url, anonKey } = await getSupabaseConfig();
     
@@ -57,6 +55,29 @@ export async function getSupabaseClient() {
     console.error('Error initializing Supabase client:', error);
     throw error;
   }
+}
+
+// Get the Supabase client - now returns a regular non-promise when already initialized
+export function getSupabaseClient() {
+  // If already initialized, return the client immediately (no promise)
+  if (supabaseClient) {
+    return supabaseClient;
+  }
+  
+  // If initialization is in progress, return the existing promise
+  if (initializationPromise) {
+    return initializationPromise;
+  }
+  
+  // Start initialization
+  initializationPromise = initializeSupabaseClient();
+  
+  // Once initialization completes (success or failure), clear the promise
+  initializationPromise.finally(() => {
+    initializationPromise = null;
+  });
+  
+  return initializationPromise;
 }
 
 // Check if Supabase is initialized

@@ -1,14 +1,13 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
-import { useSupabase } from './SupabaseContext';
+import { useSupabase } from './NewSupabaseContext';
 import { getSupabaseClient } from '@/lib/supabase';
 import type { User, QuizAnswer, Report, Payment, BlogPost } from '@shared/schema';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 
-// Helper function to ensure we always use the singleton client
-async function getSafeSupabaseClient() {
-  return await getSupabaseClient();
-}
+// Modified helper to work with the updated singleton pattern
+// We now need to handle both synchronous and asynchronous return types
+import { SupabaseClient } from '@supabase/supabase-js';
 
 interface SupabaseDbContextType {
   // User profile operations
