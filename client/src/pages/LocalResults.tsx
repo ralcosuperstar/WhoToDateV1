@@ -335,13 +335,24 @@ const LocalResults = () => {
             <div className="mt-8 space-y-4">
               {/* Download PDF Button */}
               <div className="flex justify-center">
-                <button
-                  onClick={() => downloadPDFReport(profile)}
-                  className="py-3 px-6 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  Download PDF Report
-                </button>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => downloadPDFReport(profile)}
+                    className="py-3 px-5 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+                  >
+                    <Download className="h-5 w-5 mr-2" />
+                    Download PDF Report
+                  </button>
+                  
+                  <Link href="/quiz">
+                    <button
+                      className="py-3 px-5 border border-primary text-primary bg-white font-medium rounded-lg flex items-center justify-center hover:bg-primary/5"
+                    >
+                      <ArrowRight className="h-5 w-5 mr-2" />
+                      Retake Quiz
+                    </button>
+                  </Link>
+                </div>
               </div>
               
               {/* Share and Refer Buttons */}
