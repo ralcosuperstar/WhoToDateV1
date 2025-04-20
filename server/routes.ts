@@ -216,19 +216,28 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   });
 
   router.get("/report", isAuthenticated, async (req: Request, res: Response) => {
+    console.log("========== REPORT ENDPOINT ACCESSED ==========");
+    console.log("Request user:", req.user);
+    
     try {
       const userId = req.user?.id;
+      console.log("User ID extracted:", userId, "with type:", typeof userId);
+      
       if (!userId) {
+        console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       console.log("Fetching report for user ID:", userId, "with type:", typeof userId);
+      console.log("Is development mode?", process.env.NODE_ENV !== 'production');
+      console.log("ALLOW_DEV_AUTH:", process.env.ALLOW_DEV_AUTH);
 
       try {
         // In development mode, we can return a mock report for easier testing
         if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
           console.log("⚠️ Using development report for testing");
-          return res.json({
+          
+          const mockReport = {
             id: 1,
             createdAt: new Date(),
             userId: userId,
@@ -241,22 +250,57 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
             },
             isPaid: true,
             compatibilityColor: "green"
-          });
+          };
+          
+          console.log("Returning mock report:", mockReport);
+          console.log("========== REPORT ENDPOINT COMPLETED ==========");
+          return res.json(mockReport);
         }
         
         // For normal operation
-        const report = await db.getReportByUserId(userId);
-        if (!report) {
-          return res.status(404).json({ message: "Report not found" });
-        }
+        console.log("Attempting to get report from database...");
+        console.log("Storage object type:", typeof db, "with getReportByUserId:", typeof db.getReportByUserId);
         
-        res.json(report);
+        // Let's safely try to call getReportByUserId
+        try {
+          console.log("About to call db.getReportByUserId with userId:", userId);
+          // Convert userId to a number if it's a string but represents a number
+          // This handles both string and number userId formats, maintaining type compatibility
+          const userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
+            ? Number(userId) 
+            : userId;
+            
+          console.log("Using userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
+          const report = await db.getReportByUserId(userIdForQuery);
+          console.log("Got report result:", report);
+          
+          if (!report) {
+            console.log("No report found, returning 404");
+            return res.status(404).json({ message: "Report not found" });
+          }
+          
+          console.log("Report found, returning:", report);
+          console.log("========== REPORT ENDPOINT COMPLETED ==========");
+          res.json(report);
+        } catch (callError) {
+          console.error("Error calling getReportByUserId:", callError);
+          const typedError = callError as Error;
+          console.error("Error message:", typedError.message);
+          console.error("Error stack:", typedError.stack);
+          throw callError; // Re-throw to be caught by the outer catch
+        }
       } catch (dbError) {
         console.error("Database error when fetching report:", dbError);
+        const typedDbError = dbError as Error;
+        console.error("Error message:", typedDbError.message);
+        console.error("Error stack:", typedDbError.stack);
         res.status(500).json({ message: "Database error fetching report" });
       }
     } catch (error) {
       console.error("Error in report endpoint:", error);
+      const typedError = error as Error;
+      console.error("Error message:", typedError.message);
+      console.error("Error stack:", typedError.stack);
       res.status(500).json({ message: "Failed to fetch report" });
     }
   });

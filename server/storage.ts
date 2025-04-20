@@ -16,29 +16,30 @@ export interface IStorage {
   // Session store for authentication
   sessionStore: session.Store;
   
-  // User operations - now uses number IDs for integer primary keys
-  getUser(id: number): Promise<User | undefined>;
+  // User operations - now uses number IDs for integer primary keys in production,
+  // but supports string IDs for development mode
+  getUser(id: number | string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPhoneNumber(phoneNumber: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(user: Partial<InsertUser>): Promise<User>;
-  updateUser(id: number, userData: Partial<InsertUser>): Promise<User>;
-  setVerificationToken(userId: number, token: string, expiry: Date): Promise<User>;
-  verifyUser(userId: number): Promise<User>;
+  updateUser(id: number | string, userData: Partial<InsertUser>): Promise<User>;
+  setVerificationToken(userId: number | string, token: string, expiry: Date): Promise<User>;
+  verifyUser(userId: number | string): Promise<User>;
   
   // OTP operations
-  setOTP(userId: number, otp: string, expiry: Date): Promise<User>;
+  setOTP(userId: number | string, otp: string, expiry: Date): Promise<User>;
   
   // Quiz operations
-  getQuizAnswers(userId: number): Promise<QuizAnswer | undefined>;
+  getQuizAnswers(userId: number | string): Promise<QuizAnswer | undefined>;
   createQuizAnswers(quizAnswer: InsertQuizAnswer): Promise<QuizAnswer>;
   updateQuizAnswers(id: number, answers: any, completed: boolean): Promise<QuizAnswer>;
   
   // Report operations
   getReport(id: number): Promise<Report | undefined>;
-  getReportByUserId(userId: number): Promise<Report | undefined>;
+  getReportByUserId(userId: number | string): Promise<Report | undefined>;
   createReport(report: InsertReport): Promise<Report>;
   updateReportPaymentStatus(id: number, isPaid: boolean): Promise<Report>;
   
