@@ -236,6 +236,9 @@ export const calculateCompatibilityProfile = (answers: Record<number, number>): 
     emotionalIntelligence
   );
   
+  // Add primaryType property for color mapping in FixedQuiz component
+  const primaryType = getPrimaryType(answers);
+  
   // Create the basic profile
   const profile: CompatibilityProfile = {
     overallColor,
@@ -250,7 +253,8 @@ export const calculateCompatibilityProfile = (answers: Record<number, number>): 
     strengthsWeaknesses,
     compatibleTypes,
     compatibilityInsights,
-    relationshipTips
+    relationshipTips,
+    primaryType // Add the new property
   };
   
   // Add the new personalized recommendations

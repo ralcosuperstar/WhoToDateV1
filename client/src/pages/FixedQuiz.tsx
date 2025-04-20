@@ -518,9 +518,18 @@ const FixedQuiz = () => {
   const handleAnswerSelected = (answerIndex: number) => {
     if (!currentQuestion) return;
     
+    console.log("Selected answer:", answerIndex, "for question:", currentQuestion.id);
+    
     // Update local state
     const newAnswers = { ...answers, [currentQuestion.id]: answerIndex };
     setAnswers(newAnswers);
+    
+    // Auto-progress to next question after a short delay when an answer is selected
+    setTimeout(() => {
+      if (currentQuestion.id < quizQuestions.length) {
+        handleNextQuestion();
+      }
+    }, 700);
     
     // Save answers in the background (don't wait for it to complete)
     saveAnswers(newAnswers, false).catch(err => {
@@ -530,17 +539,28 @@ const FixedQuiz = () => {
   
   // Go to next question
   const handleNextQuestion = async () => {
-    if (!currentQuestion) return;
+    if (!currentQuestion) {
+      console.error("Next button clicked but currentQuestion is null");
+      return;
+    }
+    
+    // Log state for debugging
+    console.log("Current question:", currentQuestion.id);
+    console.log("Quiz length:", quizQuestions.length);
+    console.log("Current answers:", answers);
     
     // Check if this is the last question
     const isLast = currentQuestion.id === quizQuestions.length;
+    console.log("Is last question:", isLast);
     
     if (isLast) {
       // We're at the last question, complete the quiz
       if (user) {
+        console.log("Completing quiz for logged in user:", user.id);
         // User is logged in, complete the quiz properly
         await completeQuiz();
       } else {
+        console.log("User not logged in, redirecting to auth");
         // Not logged in, save to session storage and redirect to auth
         sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
         toast({
@@ -551,7 +571,9 @@ const FixedQuiz = () => {
       }
     } else {
       // Not the last question, just go to the next one
-      setCurrentQuestionId(currentQuestion.id + 1);
+      const nextQuestionId = currentQuestion.id + 1;
+      console.log("Moving to next question:", nextQuestionId);
+      setCurrentQuestionId(nextQuestionId);
       
       // Show a reminder occasionally (20% chance if more than 5 questions since last reminder)
       if (Math.random() < 0.2 && currentQuestion.id % 5 === 0) {
