@@ -1,7 +1,21 @@
 import { Router, Request, Response } from 'express';
-import { db } from '../db';
-import type { IStorage } from '../storage';
+import { IStorage } from '../storage';
+import { Session } from 'express-session';
+import { User } from '@shared/schema';
 
+// Extend the express-session Session interface
+declare module 'express-session' {
+  interface Session {
+    userId?: string;
+    email?: string;
+    supabaseToken?: string;
+    supabaseAuthenticated?: boolean;
+  }
+}
+
+/**
+ * Register routes for syncing Supabase authentication with our server session
+ */
 export function registerSupabaseSyncRoutes(router: Router, db: IStorage) {
   /**
    * API endpoint to sync Supabase authentication with our server session
@@ -12,26 +26,50 @@ export function registerSupabaseSyncRoutes(router: Router, db: IStorage) {
       const { email, user_id } = req.body;
       
       if (!email || !user_id) {
-        return res.status(400).json({ error: 'Email and user_id are required' });
+        return res.status(400).json({ success: false, message: 'Missing email or user_id' });
       }
       
-      // Set authenticated user in session
-      if (req.session) {
-        req.session.userId = user_id;
-        req.session.email = email;
-        req.session.supabaseAuthenticated = true;
-      }
+      console.log(`Syncing session for Supabase user: ${email} (${user_id})`);
       
-      // Success response
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Session synchronized with Supabase Auth'
+      // Store authentication info in the session
+      // @ts-ignore - Session may not have these properties, but we're adding them
+      req.session.userId = user_id;
+      // @ts-ignore
+      req.session.email = email;
+      // @ts-ignore
+      req.session.supabaseAuthenticated = true;
+      
+      // Save the session
+      req.session.save(async (err) => {
+        if (err) {
+          console.error('Error saving session:', err);
+          return res.status(500).json({ success: false, message: 'Failed to save session' });
+        }
+        
+        try {
+          // Check if the user exists in our database
+          let user;
+          try {
+            user = await db.getUserByEmail(email);
+          } catch (e) {
+            console.log('Error fetching user, might be type mismatch or user not found:', e);
+            // Continue without user data 
+          }
+          
+          // Return success
+          res.json({ 
+            success: true, 
+            message: 'Session synced successfully', 
+            userExists: !!user 
+          });
+        } catch (dbError) {
+          console.error('Database error during sync:', dbError);
+          res.status(500).json({ success: false, message: 'Database error during sync' });
+        }
       });
     } catch (error) {
-      console.error('Error in supabase-sync endpoint:', error);
-      return res.status(500).json({ 
-        error: 'Failed to sync session with Supabase Auth'
-      });
+      console.error('Error syncing session:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
 
@@ -39,17 +77,15 @@ export function registerSupabaseSyncRoutes(router: Router, db: IStorage) {
    * Check if session is authenticated with Supabase
    */
   router.get('/auth-status', (req: Request, res: Response) => {
-    try {
-      const isAuthenticated = !!(req.session && req.session.supabaseAuthenticated);
-      
-      return res.status(200).json({
-        authenticated: isAuthenticated,
-        userId: req.session?.userId || null,
-        email: req.session?.email || null
-      });
-    } catch (error) {
-      console.error('Error in auth-status endpoint:', error);
-      return res.status(500).json({ error: 'Failed to check authentication status' });
-    }
+    // @ts-ignore - We added these properties to the session
+    const isAuthenticated = req.session.supabaseAuthenticated === true;
+    
+    res.json({
+      authenticated: isAuthenticated,
+      // @ts-ignore
+      userId: isAuthenticated ? req.session.userId : null,
+      // @ts-ignore
+      email: isAuthenticated ? req.session.email : null
+    });
   });
 }

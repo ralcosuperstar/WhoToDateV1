@@ -53,18 +53,21 @@ export const apiRequest = async (
     options.body = JSON.stringify(body);
   }
 
+  // Remove /api prefix if it exists, since the apiClient already adds it
+  const cleanEndpoint = endpoint.startsWith('/api/') ? endpoint.substring(4) : endpoint;
+
   // Use our apiClient instead of raw fetch
   switch (method.toUpperCase()) {
     case 'GET':
-      return await apiClient.get(endpoint, options);
+      return await apiClient.get(cleanEndpoint, options);
     case 'POST':
-      return await apiClient.post(endpoint, body, options);
+      return await apiClient.post(cleanEndpoint, body, options);
     case 'PUT':
-      return await apiClient.put(endpoint, body, options);
+      return await apiClient.put(cleanEndpoint, body, options);
     case 'PATCH':
-      return await apiClient.patch(endpoint, body, options);
+      return await apiClient.patch(cleanEndpoint, body, options);
     case 'DELETE':
-      return await apiClient.delete(endpoint, options);
+      return await apiClient.delete(cleanEndpoint, options);
     default:
       throw new Error(`Unsupported method: ${method}`);
   }
@@ -75,11 +78,13 @@ export const getQueryFn = (opts: RequestOptions = {}) => {
     try {
       // Assume the first element in the queryKey is the endpoint
       const endpoint = context.queryKey[0] as string;
+      // Remove /api prefix if it exists, since the apiClient already adds it
+      const cleanEndpoint = endpoint.startsWith('/api/') ? endpoint.substring(4) : endpoint;
       const method = opts.method || 'GET';
       
       // For GET requests, we don't provide a body
       if (method === 'GET') {
-        return await apiClient.get(endpoint);
+        return await apiClient.get(cleanEndpoint);
       } else {
         throw new Error(`Unsupported method in getQueryFn: ${method}`);
       }
