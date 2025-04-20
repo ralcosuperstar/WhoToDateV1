@@ -161,8 +161,28 @@ export const userService = {
         return null;
       }
 
-      console.log('Found user by email:', data);
-      return data;
+      // We found the user, but we need to ensure we're returning the database
+      // integer ID and not using a string that might be parsed incorrectly
+      if (data) {
+        // Make sure the returned ID is a numeric database ID
+        const numericId = typeof data.id === 'number' ? 
+          data.id : 
+          (typeof data.id === 'string' ? parseInt(data.id, 10) : null);
+          
+        console.log('Found user by email with database ID:', numericId);
+        
+        if (numericId === null || isNaN(numericId)) {
+          console.error('Invalid user ID format from database:', data.id);
+          return null;
+        }
+        
+        return {
+          ...data,
+          id: numericId
+        };
+      }
+      
+      return null;
     } catch (error) {
       console.error('Error in getUserByEmail:', error);
       return null;
@@ -173,12 +193,13 @@ export const userService = {
    * Get database integer ID from auth user (useful for solving ID format inconsistencies)
    */
   getDatabaseUserId: async (authUser: User): Promise<number | null> => {
-    if (!authUser.email) {
+    if (!authUser || !authUser.email) {
       console.error('User has no email when getting database ID');
       return null;
     }
     
     try {
+      console.log('Getting database ID for auth user:', authUser.email);
       const supabase = await authService.getClient();
       
       // Find user in database by email (which should be unique)
@@ -189,20 +210,14 @@ export const userService = {
         return null;
       }
       
-      console.log('Using database user ID:', user.id, 'for auth user:', authUser.email);
+      // At this point user.id should already be a number due to the fix in getUserByEmail
+      console.log('Found database user ID:', user.id, 'for auth user:', authUser.email);
       
-      // Return the database ID as an integer
+      // Ensure the ID is a number and return it
       if (typeof user.id === 'number') {
         return user.id;
-      } else if (typeof user.id === 'string') {
-        try {
-          return parseInt(user.id, 10);
-        } catch (e) {
-          console.error('Failed to parse user ID as integer:', user.id);
-          return null;
-        }
       } else {
-        console.error('User ID is not a number or string:', user.id);
+        console.error('User ID is not a number after conversion:', user.id);
         return null;
       }
     } catch (error) {
@@ -223,51 +238,70 @@ export const userService = {
     try {
       const supabase = await authService.getClient();
       
-      // Check if user already exists
-      const { data: existingUser, error: checkError } = await supabase
+      // Step 1: First check if user exists based on email (most reliable way)
+      console.log('Checking if user exists by email:', authUser.email);
+      const { data: existingUserByEmail, error: emailCheckError } = await supabase
         .from('users')
-        .select('id, email')
-        .eq('id', authUser.id)
+        .select('id, email, clerk_id')
+        .eq('email', authUser.email)
         .single();
         
-      if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-        console.error('Error checking if user exists:', checkError);
-        return { error: checkError };
-      }
-      
-      // If user doesn't exist, create them
-      if (!existingUser) {
-        console.log('User not found in database, creating:', authUser.email);
+      if (emailCheckError && emailCheckError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+        console.error('Error checking if user exists by email:', emailCheckError);
+        // Continue to try other methods
+      } else if (existingUserByEmail) {
+        console.log('User already exists in database by email:', existingUserByEmail.email);
         
-        // Extract user metadata (if any)
-        const metadata = authUser.user_metadata || {};
-        
-        // Create a new user record
-        const { data, error: insertError } = await supabase
-          .from('users')
-          .insert({
-            id: authUser.id,
-            email: authUser.email,
-            username: metadata.username || authUser.email.split('@')[0],
-            full_name: metadata.full_name || '',
-            phone_number: metadata.phone || '',
-            is_verified: authUser.email_confirmed_at ? true : false,
-            created_at: new Date().toISOString()
-          })
-          .select()
-          .single();
-          
-        if (insertError) {
-          console.error('Error creating user:', insertError);
-          return { user: null, error: insertError };
+        // Update clerk_id if it's not set but we have an auth user id
+        if (!existingUserByEmail.clerk_id && authUser.id) {
+          console.log('Updating clerk_id for existing user:', existingUserByEmail.id);
+          const { data: updatedUser, error: updateError } = await supabase
+            .from('users')
+            .update({ clerk_id: authUser.id })
+            .eq('id', existingUserByEmail.id)
+            .select()
+            .single();
+            
+          if (updateError) {
+            console.error('Error updating clerk_id:', updateError);
+            // Continue with existing user anyway
+          } else {
+            console.log('Successfully updated clerk_id');
+            return { user: updatedUser, error: null };
+          }
         }
         
-        console.log('Successfully created user in database');
-        return { user: data, error: null };
-      } else {
-        console.log('User already exists in database:', existingUser.email);
-        return { user: existingUser, error: null };
+        return { user: existingUserByEmail, error: null };
       }
+      
+      // If we get here, user doesn't exist by email, create them
+      console.log('User not found in database, creating:', authUser.email);
+      
+      // Extract user metadata (if any)
+      const metadata = authUser.user_metadata || {};
+      
+      // Create a new user record - Don't specify ID to let the database generate one
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert({
+          email: authUser.email,
+          clerk_id: authUser.id, // Store the auth ID in clerk_id field for reference
+          username: metadata.username || authUser.email.split('@')[0],
+          full_name: metadata.full_name || '',
+          phone_number: metadata.phone || '',
+          is_verified: authUser.email_confirmed_at ? true : false,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+        
+      if (insertError) {
+        console.error('Error creating user:', insertError);
+        return { user: null, error: insertError };
+      }
+      
+      console.log('Successfully created user in database with ID:', newUser.id);
+      return { user: newUser, error: null };
     } catch (error) {
       console.error('Error in ensureUserExists:', error);
       return { user: null, error };
