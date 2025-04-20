@@ -32,8 +32,8 @@ export const quizAnswers = pgTable("quiz_answers", {
   userId: integer("user_id").notNull(), // References users.id (integer)
   answers: jsonb("answers").notNull().default('{}'), // JSON object of user answers
   completed: boolean("completed").default(false),
-  startedAt: timestamp("started_at", { withTimezone: true }), // When the quiz was started
-  completedAt: timestamp("completed_at", { withTimezone: true }), // When the quiz was completed
+  startedAt: timestamp("started_at", { withTimezone: false }), // When the quiz was started
+  completedAt: timestamp("completed_at", { withTimezone: false }), // When the quiz was completed
 });
 
 // Compatibility reports table
@@ -44,7 +44,7 @@ export const reports = pgTable("reports", {
   report: jsonb("report").notNull().default('{}'), // Full report data as JSON
   isPaid: boolean("is_paid").default(false),
   compatibilityColor: text("compatibility_color"), // Color code for compatibility level
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
 });
 
 // Payments tracking
