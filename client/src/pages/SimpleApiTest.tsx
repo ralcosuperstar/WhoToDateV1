@@ -9,10 +9,11 @@ export default function SimpleApiTest() {
   // Simple test endpoints that should work without auth
   const endpoints = [
     { name: 'Main API Health', url: '/api/health' },
+    { name: 'Supabase Config', url: '/api/supabase-config' },
+    { name: 'Database Health', url: '/api/db-health' },
+    { name: 'Test Blog Posts', url: '/api/test-blog-posts' },
+    { name: 'Test Users Count', url: '/api/test-users-count' },
     { name: 'Blog Posts', url: '/api/blog-posts' },
-    { name: 'Direct Fetch 5000', url: 'http://localhost:5000/api/health' },
-    { name: 'Test Server Health', url: 'http://localhost:4400/api/health' },
-    { name: 'Test Server Config', url: 'http://localhost:4400/api/config' },
   ];
 
   const testEndpoint = async (endpoint: { name: string; url: string }) => {
