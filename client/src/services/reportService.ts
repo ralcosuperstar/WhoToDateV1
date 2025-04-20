@@ -10,7 +10,7 @@ export const reportService = {
    */
   getReport: async (userId: string) => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       console.log('Fetching report for user:', userId);
       
       const { data, error } = await supabase
@@ -40,7 +40,7 @@ export const reportService = {
    */
   getReportById: async (reportId: number) => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { data, error } = await supabase
         .from('reports')
@@ -68,7 +68,7 @@ export const reportService = {
    */
   updateReportPaymentStatus: async (reportId: number, isPaid: boolean) => {
     try {
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { data, error } = await supabase
         .from('reports')
