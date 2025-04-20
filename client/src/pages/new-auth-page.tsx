@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useSupabase } from '@/contexts/SupabaseContext';
+import { useSupabase } from '@/contexts/NewSupabaseContext';
 import { CustomAuthUI } from '@/components/auth/CustomAuthUI';
 import { Loader2 } from "lucide-react";
 
