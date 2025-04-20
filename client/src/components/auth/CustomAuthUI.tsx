@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSupabase } from '@/contexts/SupabaseContext';
+import { getSupabaseClient } from '@/lib/supabase';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,6 +36,17 @@ const otpSchema = z.object({
 
 export function CustomAuthUI() {
   const { supabase } = useSupabase();
+  const [supabaseClient, setSupabaseClient] = useState<any>(null);
+  
+  // Get the Supabase client
+  useEffect(() => {
+    async function initClient() {
+      const client = await getSupabaseClient();
+      setSupabaseClient(client);
+    }
+    
+    initClient();
+  }, []);
   const [activeTab, setActiveTab] = useState<string>('sign-in');
   const [isLoading, setIsLoading] = useState(false);
   const [verificationView, setVerificationView] = useState(false);
