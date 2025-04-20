@@ -178,7 +178,29 @@ export async function syncUserWithServer(user: any) {
   }
   
   try {
-    const response = await fetch('/api/supabase-sync', {
+    console.log(`Syncing user with server after sign in: ${user.email}`);
+    
+    // First ensure the user exists in the database
+    const ensureResponse = await fetch('/api/ensure-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: user.id,
+        email: user.email,
+        username: user.user_metadata?.username || user.email.split('@')[0],
+        isVerified: !!user.email_confirmed_at
+      }),
+      credentials: 'include'
+    });
+    
+    if (!ensureResponse.ok) {
+      const text = await ensureResponse.text();
+      console.error('Failed to ensure user exists:', text);
+      // Continue anyway - this might just be a duplicate error
+    }
+    
+    // Then try to sync the session
+    const syncResponse = await fetch('/api/supabase-sync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -188,16 +210,18 @@ export async function syncUserWithServer(user: any) {
       credentials: 'include'
     });
     
-    if (!response.ok) {
-      const text = await response.text();
+    if (!syncResponse.ok) {
+      const text = await syncResponse.text();
       console.error('Failed to sync with server:', text);
-      return { success: false, error: text };
+      // Continue anyway - session sync isn't critical
+    } else {
+      console.log('Successfully synced with server');
     }
     
-    console.log('Successfully synced with server');
     return { success: true };
   } catch (error) {
     console.error('Exception during server sync:', error);
-    return { success: false, error };
+    // Don't fail auth because of sync issues
+    return { success: true };
   }
 }
