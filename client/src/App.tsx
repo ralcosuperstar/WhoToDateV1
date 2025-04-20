@@ -21,6 +21,7 @@ import SimpleResults from "@/pages/SimpleResults";
 import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
+import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
@@ -96,7 +97,8 @@ function Router() {
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
-      <ProtectedRoute path="/dashboard" component={Dashboard} />
+      <ProtectedRoute path="/dashboard-original" component={Dashboard} />
+      <ProtectedRoute path="/dashboard" component={DevDashboardPage} />
       
       {/* Catch-all route */}
       <Route component={NotFound} />
