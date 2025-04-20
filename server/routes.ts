@@ -82,16 +82,32 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
       }
     }
     
-    // Check for session-based auth (fallback)
-    if (req.session.userId) {
+    // Check for Supabase session-based auth
+    if (req.session.supabaseAuthenticated && req.session.userId) {
       try {
-        const user = await db.getUser(req.session.userId);
-        if (user) {
-          req.user = user;
-          return next();
+        console.log(`Authenticated via Supabase session for user ID: ${req.session.userId}`);
+        
+        // Try to get user by email first (more reliable with Supabase)
+        if (req.session.email) {
+          const user = await db.getUserByEmail(req.session.email);
+          if (user) {
+            req.user = user;
+            return next();
+          }
+        }
+        
+        // Fall back to userId if email lookup fails
+        try {
+          const user = await db.getUser(req.session.userId);
+          if (user) {
+            req.user = user;
+            return next();
+          }
+        } catch (idError) {
+          console.error("Error fetching user by ID from session:", idError);
         }
       } catch (error) {
-        console.error("Error fetching user from session:", error);
+        console.error("Error in Supabase session authentication:", error);
       }
     }
     
@@ -99,9 +115,10 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
       console.warn("⚠️ Using development authentication bypass");
       req.user = {
-        id: 'dev-user-id-1',
+        id: 1, // Use numeric ID to match schema
         email: 'dev@example.com',
         username: 'devuser',
+        password: 'hashed-password',
         phoneNumber: null,
         firstName: 'Dev',
         lastName: 'User',
