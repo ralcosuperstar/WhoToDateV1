@@ -255,19 +255,27 @@ export const userService = {
         // Update clerk_id if it's not set but we have an auth user id
         if (!existingUserByEmail.clerk_id && authUser.id) {
           console.log('Updating clerk_id for existing user:', existingUserByEmail.id);
-          const { data: updatedUser, error: updateError } = await supabase
-            .from('users')
-            .update({ clerk_id: authUser.id })
-            .eq('id', existingUserByEmail.id)
-            .select()
-            .single();
-            
-          if (updateError) {
-            console.error('Error updating clerk_id:', updateError);
-            // Continue with existing user anyway
-          } else {
-            console.log('Successfully updated clerk_id');
-            return { user: updatedUser, error: null };
+          try {
+            // Only update the clerk_id field to avoid updated_at issues
+            const { data: updatedUser, error: updateError } = await supabase
+              .from('users')
+              .update({ 
+                clerk_id: authUser.id
+              })
+              .eq('id', existingUserByEmail.id)
+              .select('*')
+              .single();
+              
+            if (updateError) {
+              console.error('Error updating clerk_id:', updateError);
+              // Continue with existing user anyway
+            } else {
+              console.log('Successfully updated clerk_id');
+              return { user: updatedUser, error: null };
+            }
+          } catch (err) {
+            console.error('Exception updating clerk_id:', err);
+            // Continue with existing user
           }
         }
         
@@ -437,7 +445,20 @@ export const quizService = {
     const user = await authService.getCurrentUser();
     if (!user) return null;
     
-    return await quizService.getQuizAnswers(supabase, user.id);
+    console.log('Getting current user quiz answers for auth user:', user.email);
+    
+    // We need to convert the auth UUID to a database ID
+    if (user && user.email) {
+      const dbUser = await userService.getUserByEmail(supabase, user.email);
+      if (dbUser && dbUser.id) {
+        // Use the numeric database ID instead of the auth UUID
+        console.log('Using database ID for quiz lookup:', dbUser.id);
+        return await quizService.getQuizAnswers(supabase, dbUser.id);
+      }
+    }
+    
+    console.error('Could not find database user ID for auth user');
+    return null;
   },
 
   /**
@@ -527,9 +548,24 @@ export const quizService = {
   saveCurrentUserQuizAnswers: async (answers: any, completed: boolean = false) => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return null;
+    if (!user || !user.email) {
+      console.error("No authenticated user or user has no email");
+      return null;
+    }
     
-    return await quizService.saveQuizAnswers(supabase, user.id, answers, completed);
+    console.log('Saving quiz answers for current user:', user.email);
+    
+    // First get the database user ID by email
+    const dbUser = await userService.getUserByEmail(supabase, user.email);
+    if (!dbUser || !dbUser.id) {
+      console.error('Could not find database user for current user');
+      return null;
+    }
+    
+    console.log('Found database user ID for quiz save:', dbUser.id);
+    
+    // Use the database user ID instead of the auth UUID
+    return await quizService.saveQuizAnswers(supabase, dbUser.id, answers, completed);
   }
 };
 
@@ -623,9 +659,22 @@ export const reportService = {
   getCurrentUserReport: async () => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return null;
+    if (!user || !user.email) {
+      console.error('No authenticated user or user has no email');
+      return null;
+    }
     
-    return await reportService.getReport(supabase, user.id);
+    console.log('Getting report for current user:', user.email);
+    
+    // Get database user ID first
+    const dbUser = await userService.getUserByEmail(supabase, user.email);
+    if (!dbUser || !dbUser.id) {
+      console.error('Could not find database user for current user');
+      return null;
+    }
+    
+    console.log('Found database user ID for report:', dbUser.id);
+    return await reportService.getReport(supabase, dbUser.id);
   },
 
   /**
@@ -714,10 +763,25 @@ export const reportService = {
   createCurrentUserReport: async (quizId: number, report: any, compatibilityColor: string) => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user) return null;
+    if (!user || !user.email) {
+      console.error('No authenticated user or user has no email');
+      return null;
+    }
     
+    console.log('Creating report for current user:', user.email);
+    
+    // Get database user ID first
+    const dbUser = await userService.getUserByEmail(supabase, user.email);
+    if (!dbUser || !dbUser.id) {
+      console.error('Could not find database user for current user');
+      return null;
+    }
+    
+    console.log('Found database user ID for report creation:', dbUser.id);
+    
+    // Use database user ID instead of auth UUID
     return await reportService.createReport(supabase, {
-      userId: user.id,
+      userId: dbUser.id,
       quizId,
       report,
       compatibilityColor,
