@@ -1,6 +1,19 @@
 import { QueryClient } from '@tanstack/react-query';
 import { apiClient } from './apiClient';
 
+// This will be used as the default query function
+const defaultQueryFn = async (context: any) => {
+  try {
+    const endpoint = context.queryKey[0] as string;
+    // Remove /api prefix if it exists, since the apiClient already adds it
+    const cleanEndpoint = endpoint.startsWith('/api/') ? endpoint.substring(4) : endpoint;
+    return await apiClient.get(cleanEndpoint);
+  } catch (error) {
+    console.error(`Error in default queryFn for ${context.queryKey[0]}:`, error);
+    throw error;
+  }
+};
+
 // Create a client
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -8,6 +21,7 @@ export const queryClient = new QueryClient({
       staleTime: 10 * 1000, // 10 seconds
       retry: 1,
       refetchOnWindowFocus: false, // Disable auto refetch on window focus
+      queryFn: defaultQueryFn, // Set the default query function
     },
   },
 });
@@ -57,10 +71,10 @@ export const apiRequest = async (
 };
 
 export const getQueryFn = (opts: RequestOptions = {}) => {
-  return async ({ queryKey }: { queryKey: (string | number)[] }) => {
+  return async (context: any) => {
     try {
       // Assume the first element in the queryKey is the endpoint
-      const endpoint = queryKey[0] as string;
+      const endpoint = context.queryKey[0] as string;
       const method = opts.method || 'GET';
       
       // For GET requests, we don't provide a body

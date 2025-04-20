@@ -70,20 +70,26 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
                 
                 // Then sync with our server
                 console.log("Syncing session with server after", event);
-                const response = await fetch('/api/supabase-sync', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    email: newSession.user.email,
-                    user_id: newSession.user.id
-                  }),
-                  credentials: 'include' // Important for cookies
-                });
-                
-                if (!response.ok) {
-                  console.error("Failed to sync with server from context:", await response.text());
-                } else {
-                  console.log("Successfully synced with server from context");
+                try {
+                  const response = await fetch('/api/supabase-sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      email: newSession.user.email,
+                      user_id: newSession.user.id
+                    }),
+                    credentials: 'include' // Important for cookies
+                  });
+                  
+                  if (!response.ok) {
+                    const text = await response.text();
+                    console.error("Failed to sync with server from context:", text);
+                  } else {
+                    console.log("Successfully synced with server from context");
+                  }
+                } catch (error) {
+                  console.error("Error during server sync:", error);
+                  // Continue authentication process even if server sync fails
                 }
               } catch (syncError) {
                 console.error("Error syncing with server from context:", syncError);
