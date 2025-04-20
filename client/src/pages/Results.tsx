@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { motion } from "framer-motion";
-import { reportService, quizService, userService } from "@/services/supabaseService";
+import { reportService, quizService, userService, authService } from "@/services/supabaseService";
 import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { 
   Download, 
@@ -344,7 +344,8 @@ const Results = () => {
         
         console.log("Creating report with Supabase");
         // Get database user ID from the email
-        const dbUser = await userService.getUserByEmail(supabase, supabaseUser.email || '');
+        const client = await authService.getClient();
+        const dbUser = await userService.getUserByEmail(client, supabaseUser.email || '');
         
         if (!dbUser || !dbUser.id) {
           throw new Error('Unable to find database user ID');
@@ -354,7 +355,7 @@ const Results = () => {
         console.log("Found database user ID:", userId);
         
         // Create report using reportService
-        const report = await reportService.createReport(supabase, {
+        const report = await reportService.createReport(client, {
           userId,
           quizId: data.quizId,
           report: data.report,
