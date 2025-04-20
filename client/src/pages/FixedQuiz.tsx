@@ -406,8 +406,7 @@ const FixedQuiz = () => {
               .from('quiz_answers')
               .update({
                 answers: newAnswers,
-                completed,
-                completed_at: completed ? new Date().toISOString() : null
+                completed
               })
               .eq('id', existingAnswers.id);
               
@@ -420,8 +419,7 @@ const FixedQuiz = () => {
                 user_id: authUserId, // Use the Auth UUID directly
                 answers: newAnswers,
                 completed,
-                started_at: new Date().toISOString(),
-                completed_at: completed ? new Date().toISOString() : null
+                started_at: new Date().toISOString()
               });
               
             if (error) throw error;
