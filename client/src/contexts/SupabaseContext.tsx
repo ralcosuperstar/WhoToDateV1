@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { initSupabase, signIn, signOut, signUp, getCurrentUser, getSession } from '@/lib/supabase';
+import { getSupabaseClient, signIn, signOut, signUp, getCurrentUser, getSession } from '@/lib/supabase';
 import { ensureUserExists } from '@/lib/supabaseUtils';
 
 // Define the context types
@@ -42,17 +42,17 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       try {
         // Initialize the supabase client
-        const client = await initSupabase();
+        const client = await getSupabaseClient();
         setSupabaseClient(client);
         
         // Get the current session
         const sessionData = await getSession();
-        setSession(sessionData.session);
+        setSession(sessionData);
         
         // Get the current user
-        if (sessionData.session) {
+        if (sessionData) {
           const userData = await getCurrentUser();
-          setUser(userData.user);
+          setUser(userData);
         }
         
         // Subscribe to auth changes
@@ -119,7 +119,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   // Function to refresh the user data
   const refreshUser = async () => {
     try {
-      const { user: currentUser } = await getCurrentUser();
+      const currentUser = await getCurrentUser();
       setUser(currentUser || null);
     } catch (error) {
       console.error('Error refreshing user:', error);

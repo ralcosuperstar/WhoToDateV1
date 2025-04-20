@@ -1,56 +1,13 @@
-import { createClient, User, Session, PostgrestError } from '@supabase/supabase-js';
+import { User, Session, PostgrestError } from '@supabase/supabase-js';
 import { Report, QuizAnswer, BlogPost } from '@shared/schema';
-
-// Singleton client instance
-let supabaseClient: ReturnType<typeof createClient> | null = null;
+import { getSupabaseClient } from '@/lib/supabase';
 
 /**
- * Initialize Supabase client
+ * Initialize Supabase client - uses singleton pattern from lib/supabase.ts
  */
 export const initSupabase = async () => {
   try {
-    // If already initialized, return existing client
-    if (supabaseClient) return supabaseClient;
-
-    // First try to get config from server API
-    try {
-      const response = await fetch('/api/supabase-config');
-      if (response.ok) {
-        const config = await response.json();
-        if (config.initialized && config.url && config.anonKey) {
-          // Create Supabase client
-          supabaseClient = createClient(config.url, config.anonKey, {
-            auth: {
-              autoRefreshToken: true,
-              persistSession: true,
-            }
-          });
-          
-          console.log('Supabase service initialized successfully via API');
-          return supabaseClient;
-        }
-      }
-    } catch (apiError) {
-      console.warn('Could not fetch Supabase config from API, using hardcoded values');
-    }
-    
-    // Fallback to hardcoded values
-    console.log('Using hardcoded Supabase configuration');
-    
-    // Hardcoded values as fallback (these are public keys, safe to include)
-    const supabaseUrl = "https://truulijpablpqxipindo.supabase.co";
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMyMDQwOTUsImV4cCI6MjAyODc4MDA5NX0.rWwxEbdjr6O0Xs6aBUQV5h3K0gWKZW1K1GPyv-UGxzs";
-
-    // Create Supabase client
-    supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-      }
-    });
-
-    console.log('Supabase service initialized successfully with hardcoded values');
-    return supabaseClient;
+    return await getSupabaseClient();
   } catch (error) {
     console.error('Error initializing Supabase service:', error);
     throw error;
@@ -65,10 +22,7 @@ export const authService = {
    * Get the current Supabase client
    */
   getClient: async () => {
-    if (!supabaseClient) {
-      return await initSupabase();
-    }
-    return supabaseClient;
+    return await getSupabaseClient();
   },
 
   /**

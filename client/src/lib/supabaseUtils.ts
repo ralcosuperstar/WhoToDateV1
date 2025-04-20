@@ -12,7 +12,7 @@ export async function ensureUserExists(authUser: User): Promise<void> {
   }
 
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     // Check if user already exists
     const { data: existingUser, error: checkError } = await supabase
@@ -66,7 +66,7 @@ export async function ensureUserExists(authUser: User): Promise<void> {
  */
 export async function getCurrentUserProfile() {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     // Get user ID from auth
     const { data: { user } } = await supabase.auth.getUser();
@@ -99,7 +99,7 @@ export async function getCurrentUserProfile() {
  */
 export async function updateUserProfile(userId: string, profileData: any) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     // Update the profile
     const { data, error } = await supabase
@@ -129,7 +129,7 @@ export async function updateUserProfile(userId: string, profileData: any) {
  */
 export async function getUserQuizAnswers(userId: string) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     const { data, error } = await supabase
       .from('quiz_answers')
@@ -154,7 +154,7 @@ export async function getUserQuizAnswers(userId: string) {
  */
 export async function saveQuizAnswers(userId: string, answers: any, completed: boolean = false) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     // Check if user already has answers
     const { quizAnswers } = await getUserQuizAnswers(userId);
@@ -210,7 +210,7 @@ export async function saveQuizAnswers(userId: string, answers: any, completed: b
  */
 export async function getUserReport(userId: string) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     const { data, error } = await supabase
       .from('reports')
@@ -235,7 +235,7 @@ export async function getUserReport(userId: string) {
  */
 export async function createUserReport(userId: string, quizId: number, compatibilityProfile: any) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     const { data, error } = await supabase
       .from('reports')
@@ -267,7 +267,7 @@ export async function createUserReport(userId: string, quizId: number, compatibi
  */
 export async function getBlogPosts() {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     const { data, error } = await supabase
       .from('blog_posts')
@@ -292,7 +292,7 @@ export async function getBlogPosts() {
  */
 export async function getBlogPostBySlug(slug: string) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     
     const { data, error } = await supabase
       .from('blog_posts')
