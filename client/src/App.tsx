@@ -5,7 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
-import { SupabaseProvider } from "@/contexts/SupabaseContext";
+import { SupabaseProvider as OldSupabaseProvider } from "@/contexts/SupabaseContext";
+import { SupabaseProvider } from "@/contexts/NewSupabaseContext"; // New Supabase Context
 import { SupabaseDbProvider } from "@/contexts/SupabaseDbContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -22,6 +23,7 @@ import Report from "@/pages/Report";
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
 import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
+import SupabaseDashboardPage from "@/pages/SupabaseDashboardPage"; // New Supabase Dashboard
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
@@ -98,7 +100,10 @@ function Router() {
       <ProtectedRoute path="/report" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard-original" component={Dashboard} />
-      <ProtectedRoute path="/dashboard" component={DevDashboardPage} />
+      <ProtectedRoute path="/dashboard-dev" component={DevDashboardPage} />
+      
+      {/* New Supabase Dashboard (direct integration) */}
+      <Route path="/dashboard" component={SupabaseDashboardPage} />
       
       {/* Catch-all route */}
       <Route component={NotFound} />
@@ -114,19 +119,21 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <SupabaseProvider>
-        <AuthProvider>
-          <SupabaseDbProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-1">
-                <Router />
-              </main>
-              <Footer />
-              <Toaster />
-            </div>
-          </SupabaseDbProvider>
-        </AuthProvider>
+      <SupabaseProvider> {/* New Supabase Context that uses our service directly */}
+        <OldSupabaseProvider>
+          <AuthProvider>
+            <SupabaseDbProvider>
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1">
+                  <Router />
+                </main>
+                <Footer />
+                <Toaster />
+              </div>
+            </SupabaseDbProvider>
+          </AuthProvider>
+        </OldSupabaseProvider>
       </SupabaseProvider>
     </QueryClientProvider>
   );

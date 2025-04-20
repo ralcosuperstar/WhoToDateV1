@@ -1,98 +1,76 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
-type CompatibilityColor = 'green' | 'yellow' | 'red';
+interface Trait {
+  name: string;
+  value: number;
+}
 
 interface CompatibilityCardProps {
-  color: CompatibilityColor;
+  color: 'green' | 'yellow' | 'red';
   title: string;
   description: string;
-  traits?: { name: string; value: number }[];
+  traits: Trait[];
 }
 
 const CompatibilityCard = ({ color, title, description, traits }: CompatibilityCardProps) => {
   const colorClasses = {
     green: {
-      bg: 'bg-emerald-500/10',
-      text: 'text-emerald-500',
-      dot: 'bg-emerald-500',
-      border: 'border-emerald-500',
-      progress: 'bg-emerald-500'
+      bgLight: 'bg-emerald-50',
+      bgDark: 'bg-emerald-500',
+      text: 'text-emerald-600',
+      border: 'border-emerald-200',
+      progress: 'bg-emerald-500',
     },
     yellow: {
-      bg: 'bg-amber-500/10',
-      text: 'text-amber-500',
-      dot: 'bg-amber-500',
-      border: 'border-amber-500',
-      progress: 'bg-amber-500'
+      bgLight: 'bg-amber-50',
+      bgDark: 'bg-amber-500',
+      text: 'text-amber-600',
+      border: 'border-amber-200',
+      progress: 'bg-amber-500',
     },
     red: {
-      bg: 'bg-red-500/10',
-      text: 'text-red-500',
-      dot: 'bg-red-500',
-      border: 'border-red-500',
-      progress: 'bg-red-500'
-    }
+      bgLight: 'bg-rose-50',
+      bgDark: 'bg-rose-500',
+      text: 'text-rose-600',
+      border: 'border-rose-200',
+      progress: 'bg-rose-500',
+    },
   };
   
-  const selectedColor = colorClasses[color];
+  const classes = colorClasses[color];
   
   return (
-    <Card className="hover:shadow-md transition-shadow overflow-hidden">
-      <CardHeader className={`${selectedColor.bg}`}>
-        <div className="flex items-center space-x-3">
-          <div className={`h-10 w-10 rounded-full ${selectedColor.bg} border ${selectedColor.border} flex items-center justify-center`}>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              strokeWidth={1.5} 
-              stroke="currentColor" 
-              className={`w-5 h-5 ${selectedColor.text}`}
-            >
-              {color === 'green' && (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              )}
-              {color === 'yellow' && (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-              )}
-              {color === 'red' && (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-              )}
-            </svg>
-          </div>
-          <div>
-            <CardTitle className="font-heading">
-              <span className={selectedColor.text}>{color.charAt(0).toUpperCase() + color.slice(1)}</span> Compatibility
-            </CardTitle>
-            <p className="text-sm">{title}</p>
-          </div>
+    <Card className={`${classes.bgLight} ${classes.border} border shadow-sm`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-center gap-2 mb-2">
+          <div className={`h-3 w-3 rounded-full ${classes.bgDark}`} />
+          <span className={`font-semibold ${classes.text}`}>
+            {color.charAt(0).toUpperCase() + color.slice(1)} Profile
+          </span>
         </div>
+        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
-      
-      <CardContent className="pt-6">
-        <p className="mb-6 text-neutral-dark/80">
-          {description}
-        </p>
-        
-        {traits && traits.length > 0 && (
-          <div className="space-y-4">
-            {traits.map((trait, index) => (
-              <div key={index}>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">{trait.name}</span>
-                  <span>{trait.value}%</span>
-                </div>
-                <div className="h-2 w-full bg-neutral-dark/10 rounded-full">
-                  <div 
-                    className={`h-full ${selectedColor.progress} rounded-full`} 
-                    style={{ width: `${trait.value}%` }}
-                  ></div>
-                </div>
+      <CardContent>
+        <div className="space-y-4">
+          {traits.map((trait, index) => (
+            <div key={index} className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="font-medium">{trait.name}</span>
+                <span className="text-neutral-dark/70">{trait.value}%</span>
               </div>
-            ))}
-          </div>
-        )}
+              <Progress value={trait.value} className={classes.progress} />
+            </div>
+          ))}
+        </div>
       </CardContent>
+      <CardFooter className="px-6 py-4 bg-white/50 text-sm text-neutral-dark/80">
+        <p>
+          This profile indicates your natural relationship style based on your responses
+          to our compatibility assessment.
+        </p>
+      </CardFooter>
     </Card>
   );
 };
