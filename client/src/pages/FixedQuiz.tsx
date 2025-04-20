@@ -418,8 +418,7 @@ const FixedQuiz = () => {
               .insert({
                 user_id: authUserId, // Use the Auth UUID directly
                 answers: newAnswers,
-                completed,
-                started_at: new Date().toISOString()
+                completed
               });
               
             if (error) throw error;
@@ -483,17 +482,6 @@ const FixedQuiz = () => {
           if (quizError) throw quizError;
           
           if (quizData) {
-            // Generate compatibility color
-            const compatibilityType = profile.primaryType || 'balanced';
-            const colorMap: Record<string, string> = {
-              passionate: '#e83a8e', // pink
-              secure: '#4ade80',     // green
-              anxious: '#f97316',    // orange
-              avoidant: '#3b82f6',   // blue
-              balanced: '#8b5cf6',   // purple
-            };
-            const compatibilityColor = colorMap[compatibilityType] || colorMap.balanced;
-            
             // Create report in database - using snake_case for column names to match PostgreSQL conventions
             const { error: reportError } = await supabase
               .from('reports')
@@ -501,8 +489,7 @@ const FixedQuiz = () => {
                 user_id: authUserId, // Use the Auth UUID directly
                 quiz_id: quizData.id,
                 report: profile,
-                is_paid: false,
-                compatibility_color: compatibilityColor // Use the HEX color code for better visualization
+                is_paid: false
               });
               
             if (reportError) {
