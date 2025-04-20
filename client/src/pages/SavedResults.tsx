@@ -49,14 +49,12 @@ const SavedResults = () => {
           console.log('No saved report found for user');
           toast({
             title: 'No Report Found',
-            description: 'We couldn\'t find a saved report for your account. Would you like to take the quiz?',
-            action: (
-              <Button variant="outline" size="sm" onClick={() => navigate('/quiz')}>
-                Take Quiz
-              </Button>
-            ),
+            description: 'We couldn\'t find a saved report for your account. You need to take the quiz first.',
+            variant: 'destructive'
           });
-          navigate('/quiz');
+          // Instead of automatically redirecting, show a message with a button to take the quiz
+          setLoading(false);
+          setError(new Error('No report found'));
           return;
         }
         
