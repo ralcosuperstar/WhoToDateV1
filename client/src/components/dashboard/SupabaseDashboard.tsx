@@ -129,7 +129,11 @@ const SupabaseDashboard = () => {
       try {
         setIsQuizLoading(true);
         console.log('Fetching quiz answers for:', user.id);
-        const { quizAnswers: answers, error } = await quizService.getQuizAnswers(user.id);
+        // Get Supabase client first
+        const supabase = await supabaseService.auth.getClient();
+        // Call the method correctly with supabase client and user ID
+        const answers = await supabaseService.quiz.getQuizAnswers(supabase, user.id);
+        const error = null;
         
         if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
           console.error('Error fetching quiz answers:', error);
