@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import MobileMenu from "./MobileMenu";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { Heart } from "lucide-react";
 
 const Header = () => {

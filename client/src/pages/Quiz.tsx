@@ -299,12 +299,20 @@ const Quiz = () => {
   
   // Effect to sync Supabase auth state with local user state
   useEffect(() => {
+    console.log("Auth state changed in Quiz component:", { 
+      supabaseUser, 
+      isSupabaseLoading,
+      state: supabaseUser ? 'logged-in' : (isSupabaseLoading ? 'loading' : 'logged-out')
+    });
+    
     if (supabaseUser) {
       setLocalUser(supabaseUser);
       setIsUserError(false);
+      console.log("User set in Quiz component:", supabaseUser);
     } else if (!isSupabaseLoading) {
       setLocalUser(null);
       setIsUserError(!supabaseUser);
+      console.log("No user found in Quiz component, continuing as guest");
     }
     setIsUserLoading(isSupabaseLoading);
   }, [supabaseUser, isSupabaseLoading]);
@@ -674,14 +682,30 @@ const Quiz = () => {
   const canGoNext = currentQuestion ? answers[currentQuestion.id] !== undefined : false;
   const isLastQuestion = currentQuestion ? currentQuestion.id === quizQuestions.length : false;
   
+  // Add a timeout for loading state to prevent infinite loading
+  const [isLoadingTimedOut, setIsLoadingTimedOut] = useState(false);
+  
+  // Set a timeout to show intro screen after 3 seconds even if loading isn't complete
+  useEffect(() => {
+    if (isUserLoading) {
+      const timeout = setTimeout(() => {
+        console.log("Authentication loading timed out after 3 seconds, continuing as guest");
+        setIsLoadingTimedOut(true);
+      }, 3000);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [isUserLoading]);
+  
   // Handle authentication and loading states
-  if (isUserLoading) {
+  if (isUserLoading && !isLoadingTimedOut) {
     // Initial loading
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
-          <div className="flex justify-center py-12">
-            <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          <div className="flex flex-col items-center py-12">
+            <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4"></div>
+            <p className="text-sm text-neutral-500">Loading your profile information...</p>
           </div>
         </div>
       </div>
@@ -689,9 +713,9 @@ const Quiz = () => {
   }
   
   // Check for authentication error but allow guest users to proceed
-  if (isUserError) {
+  if (isUserError || isLoadingTimedOut) {
     // Continue as a guest user
-    console.log("User is not authenticated, continuing as guest");
+    console.log("User is not authenticated or loading timed out, continuing as guest");
     // We'll just show the quiz normally and store answers in sessionStorage
   }
   
