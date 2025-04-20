@@ -7,6 +7,7 @@ import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { SupabaseProvider } from "@/contexts/SupabaseContext";
 import { SupabaseDbProvider } from "@/contexts/SupabaseDbContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -33,6 +34,7 @@ import SupabaseDbTest from "@/pages/SupabaseDbTest";
 import SimpleAuthTest from "@/pages/SimpleAuthTest";
 import CustomAuthTest from "@/pages/CustomAuthTest";
 import AuthTest from "@/pages/auth-test";
+import NewAuthTest from "@/pages/new-auth-test";
 import TestApiPage from "@/pages/test-api-page";
 import SimpleApiTest from "@/pages/SimpleApiTest";
 
@@ -63,6 +65,7 @@ function Router() {
       <Route path="/simple-auth-test" component={SimpleAuthTest} />
       <Route path="/custom-auth-test" component={CustomAuthTest} />
       <Route path="/auth-test" component={AuthTest} />
+      <Route path="/new-auth-test" component={NewAuthTest} />
       <Route path="/test-api" component={TestApiPage} />
       <Route path="/simple-api-test" component={SimpleApiTest} />
       
@@ -110,16 +113,18 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
-        <SupabaseDbProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">
-              <Router />
-            </main>
-            <Footer />
-            <Toaster />
-          </div>
-        </SupabaseDbProvider>
+        <AuthProvider>
+          <SupabaseDbProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">
+                <Router />
+              </main>
+              <Footer />
+              <Toaster />
+            </div>
+          </SupabaseDbProvider>
+        </AuthProvider>
       </SupabaseProvider>
     </QueryClientProvider>
   );

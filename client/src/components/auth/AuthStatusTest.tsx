@@ -1,151 +1,95 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { getSupabaseClient } from '@/lib/supabase';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2, AlertCircle } from 'lucide-react';
 
-export function AuthStatusTest() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [supabaseUser, setSupabaseUser] = useState<any>(null);
-  const [serverUser, setServerUser] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+function AuthStatusTest() {
+  const { user, session, isLoading, isInitialized, error, signOut } = useAuth();
 
-  useEffect(() => {
-    async function checkAuth() {
-      setIsLoading(true);
-      setError(null);
-      
-      try {
-        // Check Supabase auth status
-        const supabase = getSupabaseClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        setSupabaseUser(user);
-        
-        // Check server session status
-        const response = await fetch('/api/user', {
-          credentials: 'include' // Important for cookies
-        });
-        
-        if (response.ok) {
-          const userData = await response.json();
-          setServerUser(userData);
-        } else if (response.status !== 401) {
-          // Only treat as error if it's not a 401 (which is expected if not logged in)
-          const errorText = await response.text();
-          setError(`Server error: ${response.status} - ${errorText}`);
-        }
-      } catch (e) {
-        setError(`Error checking auth: ${e instanceof Error ? e.message : String(e)}`);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    
-    checkAuth();
-  }, []);
-  
-  const handleSync = async () => {
-    if (!supabaseUser) {
-      setError('No Supabase user logged in to sync');
-      return;
-    }
-    
-    setIsLoading(true);
-    try {
-      // Call our sync endpoint
-      const response = await fetch('/api/supabase-sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: supabaseUser.email,
-          user_id: supabaseUser.id
-        }),
-        credentials: 'include' // Important for cookies
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${response.status} - ${errorText}`);
-      }
-      
-      const syncedUser = await response.json();
-      setServerUser(syncedUser);
-      
-      // Refresh server status
-      const userResponse = await fetch('/api/user', {
-        credentials: 'include'
-      });
-      
-      if (userResponse.ok) {
-        const userData = await userResponse.json();
-        setServerUser(userData);
-      }
-    } catch (e) {
-      setError(`Error syncing: ${e instanceof Error ? e.message : String(e)}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
+  const formattedUser = user ? {
+    id: user.id,
+    email: user.email,
+    isEmailVerified: user.email_confirmed_at !== null,
+    lastSignIn: user.last_sign_in_at,
+    createdAt: user.created_at,
+  } : null;
+
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle>Authentication Status</CardTitle>
-        <CardDescription>Check if you're authenticated with both Supabase and the server</CardDescription>
+        <CardDescription>
+          Details about the current authentication state
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <div className="flex justify-center my-4">
-            <Loader2 className="animate-spin h-6 w-6" />
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-medium">Supabase Auth:</h3>
-              <div className="bg-slate-100 p-3 rounded-md mt-2">
-                {supabaseUser ? (
-                  <pre className="text-xs overflow-auto">{JSON.stringify(supabaseUser, null, 2)}</pre>
-                ) : (
-                  <p className="text-sm text-muted-foreground">Not logged in with Supabase</p>
-                )}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-medium">Server Session:</h3>
-              <div className="bg-slate-100 p-3 rounded-md mt-2">
-                {serverUser ? (
-                  <pre className="text-xs overflow-auto">{JSON.stringify(serverUser, null, 2)}</pre>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No active server session</p>
-                )}
-              </div>
-            </div>
-            
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-800 p-3 rounded-md">
-                <p className="text-sm">{error}</p>
-              </div>
-            )}
-            
-            <div className="flex justify-between mt-4">
-              <Button 
-                onClick={() => window.location.reload()} 
-                variant="outline"
-              >
-                Refresh
-              </Button>
-              
-              <Button
-                onClick={handleSync}
-                disabled={!supabaseUser || isLoading}
-              >
-                Sync with Server
-              </Button>
-            </div>
-          </div>
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              {error.message}
+            </AlertDescription>
+          </Alert>
         )}
+
+        <div className="grid grid-cols-1 gap-4">
+          <div className="p-4 border rounded-md">
+            <h3 className="text-sm font-medium mb-1">Initialization Status</h3>
+            <div className="flex items-center text-sm">
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <span className={`h-3 w-3 rounded-full mr-2 ${isInitialized ? 'bg-green-500' : 'bg-red-500'}`} />
+              )}
+              {isLoading ? 'Loading...' : (isInitialized ? 'Initialized' : 'Not Initialized')}
+            </div>
+          </div>
+
+          <div className="p-4 border rounded-md">
+            <h3 className="text-sm font-medium mb-1">Authentication Status</h3>
+            <div className="flex items-center text-sm">
+              <span className={`h-3 w-3 rounded-full mr-2 ${user ? 'bg-green-500' : 'bg-red-500'}`} />
+              {user ? 'Authenticated' : 'Not Authenticated'}
+            </div>
+          </div>
+
+          {user && (
+            <div className="p-4 border rounded-md">
+              <h3 className="text-sm font-medium mb-2">User Information</h3>
+              <pre className="text-xs bg-muted p-2 rounded overflow-auto">
+                {JSON.stringify(formattedUser, null, 2)}
+              </pre>
+            </div>
+          )}
+
+          {session && (
+            <div className="p-4 border rounded-md">
+              <h3 className="text-sm font-medium mb-2">Session Information</h3>
+              <div className="text-xs">
+                <p>Session Expires: {new Date(session.expires_at! * 1000).toLocaleString()}</p>
+                <p>Access Token: {session.access_token.substring(0, 10)}...</p>
+              </div>
+            </div>
+          )}
+        </div>
       </CardContent>
+      <CardFooter className="flex justify-between">
+        {user ? (
+          <Button onClick={() => signOut()} variant="outline">
+            Sign Out
+          </Button>
+        ) : (
+          <Button onClick={() => window.location.href = '/auth'} variant="default">
+            Sign In
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   );
 }
+
+export { AuthStatusTest };
+export default AuthStatusTest;

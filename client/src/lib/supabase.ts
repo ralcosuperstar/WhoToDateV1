@@ -1,138 +1,205 @@
-import { createClient } from '@supabase/supabase-js';
-import type { AuthError, Session, SupabaseClient, User } from '@supabase/supabase-js';
+import { createClient, type User, type Session } from '@supabase/supabase-js';
+import { apiRequest } from './queryClient';
 
-// Create a global instance for the Supabase client
-let supabaseInstance: SupabaseClient | null = null;
-
-// Function to get the Supabase configuration
-async function getSupabaseConfig() {
-  try {
-    // Fetch the Supabase configuration from our backend
-    const response = await fetch('/api/supabase-config');
-    if (!response.ok) {
-      throw new Error('Failed to fetch Supabase configuration');
-    }
-    const { supabaseUrl, supabaseAnonKey } = await response.json();
-    
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Missing Supabase configuration');
-    }
-    
-    return { supabaseUrl, supabaseAnonKey };
-  } catch (error) {
-    console.error('Error fetching Supabase configuration:', error);
-    throw error;
-  }
+// Types
+interface AuthResponse {
+  user: User | null;
+  session: Session | null;
+  error?: Error;
 }
 
-// Initialize the Supabase client
-export async function initSupabase() {
-  try {
-    // If the client is already initialized, return it
-    if (supabaseInstance) {
-      return supabaseInstance;
+// Dynamically fetch Supabase configuration from the server
+let supabaseClient: ReturnType<typeof createClient> | null = null;
+let initialized = false;
+let initializationError: Error | null = null;
+let initializationPromise: Promise<void> | null = null;
+
+// Initialize Supabase client with configuration from the server
+export const initializeSupabase = async (): Promise<void> => {
+  // If already initialized or initializing, don't try again
+  if (initialized || initializationPromise) {
+    return initializationPromise || Promise.resolve();
+  }
+  
+  // Set up initialization promise
+  initializationPromise = (async () => {
+    try {
+      // Direct fetch to avoid path prefix issues
+      const response = await fetch('/api/supabase-config');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch Supabase config: ${response.status} ${response.statusText}`);
+      }
+      const config = await response.json();
+      
+      if (!config.initialized || !config.url || !config.anonKey) {
+        throw new Error('Missing Supabase configuration');
+      }
+      
+      // Create the Supabase client
+      supabaseClient = createClient(config.url, config.anonKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+        }
+      });
+      
+      // Test the connection
+      const { data, error } = await supabaseClient.auth.getSession();
+      
+      if (error) {
+        console.warn('Supabase session not found:', error.message);
+        // This is not a critical error as the user might not be logged in
+      }
+      
+      console.log('Supabase client initialized successfully');
+      initialized = true;
+      initializationError = null;
+    } catch (error) {
+      console.error('Error initializing Supabase:', error);
+      initializationError = error instanceof Error ? error : new Error(String(error));
+      initialized = false;
+      throw error;
     }
+  })();
+  
+  return initializationPromise;
+};
+
+// Get the Supabase client (initializing if needed)
+export const getSupabaseClient = async () => {
+  if (!initialized && !initializationPromise) {
+    await initializeSupabase();
+  } else if (initializationPromise) {
+    await initializationPromise;
+  }
+  
+  if (!supabaseClient) {
+    throw new Error('Supabase client not initialized');
+  }
+  
+  return supabaseClient;
+};
+
+// Function to check if Supabase is initialized
+export const isSupabaseInitialized = () => {
+  return initialized;
+};
+
+// Function to get any initialization error
+export const getSupabaseError = () => {
+  return initializationError;
+};
+
+// Initialize Supabase on app load
+initializeSupabase().catch(err => {
+  console.error('Failed to initialize Supabase on app load:', err);
+});
+
+// Authentication functions
+export const signIn = async (email: string, password: string): Promise<AuthResponse> => {
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
     
-    // Get the configuration
-    const { supabaseUrl, supabaseAnonKey } = await getSupabaseConfig();
+    if (error) throw error;
     
-    console.log('Initializing Supabase with URL:', supabaseUrl);
-    
-    // Create a new Supabase client
-    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true
+    return {
+      user: data.user,
+      session: data.session
+    };
+  } catch (error) {
+    console.error('Error signing in:', error);
+    return {
+      user: null,
+      session: null,
+      error: error instanceof Error ? error : new Error(String(error))
+    };
+  }
+};
+
+export const signUp = async (
+  email: string, 
+  password: string,
+  userData?: Record<string, any>
+): Promise<AuthResponse> => {
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: userData,
+        emailRedirectTo: `${window.location.origin}/auth?verification=success`
       }
     });
     
-    console.log('Supabase client initialized successfully');
+    if (error) throw error;
     
-    return supabaseInstance;
-  } catch (error) {
-    console.error('Error initializing Supabase client:', error);
-    throw error;
-  }
-}
-
-// Get the Supabase client instance
-export function getSupabaseClient() {
-  if (!supabaseInstance) {
-    throw new Error('Supabase client not initialized. Call initSupabase() first.');
-  }
-  return supabaseInstance;
-}
-
-// Helper function to ensure client is initialized
-async function ensureClient() {
-  if (!supabaseInstance) {
-    return await initSupabase();
-  }
-  return supabaseInstance;
-}
-
-// Sign up with email and password
-export const signUp = async (email: string, password: string) => {
-  try {
-    const client = await ensureClient();
-    return await client.auth.signUp({
-      email,
-      password,
-    });
+    return {
+      user: data.user,
+      session: data.session
+    };
   } catch (error) {
     console.error('Error signing up:', error);
-    throw error;
+    return {
+      user: null,
+      session: null,
+      error: error instanceof Error ? error : new Error(String(error))
+    };
   }
 };
 
-// Sign in with email and password
-export const signIn = async (email: string, password: string) => {
+export const signOut = async (): Promise<{ error: Error | null }> => {
   try {
-    const client = await ensureClient();
-    return await client.auth.signInWithPassword({
-      email,
-      password,
-    });
-  } catch (error) {
-    console.error('Error signing in:', error);
-    throw error;
-  }
-};
-
-// Sign out
-export const signOut = async () => {
-  try {
-    const client = await ensureClient();
-    return await client.auth.signOut();
+    const supabase = await getSupabaseClient();
+    const { error } = await supabase.auth.signOut();
+    
+    if (error) throw error;
+    
+    return { error: null };
   } catch (error) {
     console.error('Error signing out:', error);
-    throw error;
+    return {
+      error: error instanceof Error ? error : new Error(String(error))
+    };
   }
 };
 
-// Get the current user
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<{ user: User | null }> => {
   try {
-    const client = await ensureClient();
-    const { data: { user } } = await client.auth.getUser();
-    return { user };
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.auth.getUser();
+    
+    if (error) throw error;
+    
+    return { user: data.user };
   } catch (error) {
     console.error('Error getting current user:', error);
-    throw error;
+    return { user: null };
   }
 };
 
-// Get the current session
-export const getSession = async () => {
+export const getSession = async (): Promise<{ session: Session | null }> => {
   try {
-    const client = await ensureClient();
-    const { data: { session } } = await client.auth.getSession();
-    return { session };
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.auth.getSession();
+    
+    if (error) throw error;
+    
+    return { session: data.session };
   } catch (error) {
     console.error('Error getting session:', error);
-    throw error;
+    return { session: null };
   }
 };
 
-// Export the current instance for direct access (but prefer using the async functions)
-export { supabaseInstance as supabase };
+// Custom utility for initializing Supabase
+export const initSupabase = async () => {
+  await initializeSupabase();
+  return await getSupabaseClient();
+};
+
+export default getSupabaseClient;
