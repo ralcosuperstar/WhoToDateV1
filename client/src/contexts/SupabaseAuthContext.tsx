@@ -26,7 +26,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     const checkSession = async () => {
       try {
         setIsLoading(true);
-        const supabase = getSupabaseClient();
+        const supabase = await getSupabaseClient();
         
         // Get current session
         const { data: { session } } = await supabase.auth.getSession();
@@ -37,7 +37,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
         }
         
         // Listen for auth state changes
-        const { data: { subscription } } = await supabase.auth.onAuthStateChange(
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
           (event, session) => {
             console.log('Auth state changed:', event);
             setUser(session?.user || null);
@@ -74,7 +74,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: Error }> => {
     try {
       setIsLoading(true);
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -99,7 +99,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const signup = async (email: string, password: string, metadata?: Record<string, any>): Promise<{ success: boolean; error?: Error }> => {
     try {
       setIsLoading(true);
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -136,7 +136,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const logout = async (): Promise<void> => {
     try {
       setIsLoading(true);
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
@@ -154,7 +154,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const resetPassword = async (email: string): Promise<{ success: boolean; error?: Error }> => {
     try {
       setIsLoading(true);
-      const supabase = getSupabaseClient();
+      const supabase = await getSupabaseClient();
       
       const { error } = await supabase.auth.resetPasswordForEmail(email);
       if (error) throw error;
