@@ -5,6 +5,11 @@ import type { User, QuizAnswer, Report, Payment, BlogPost } from '@shared/schema
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 
+// Helper function to ensure we always use the singleton client
+async function getSafeSupabaseClient() {
+  return await getSupabaseClient();
+}
+
 interface SupabaseDbContextType {
   // User profile operations
   profile: {

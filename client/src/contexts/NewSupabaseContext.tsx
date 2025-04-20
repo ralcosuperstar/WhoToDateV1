@@ -49,7 +49,8 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log('Initializing Supabase context...');
         
-        // Try to get the Supabase client first
+        // Use the existing client from the singleton pattern instead of getting a new one
+        // This prevents multiple GoTrueClient instances
         const client = await authService.getClient();
         
         if (!client) {
@@ -78,7 +79,7 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
           }
         }
         
-        // Subscribe to auth changes
+        // Subscribe to auth changes 
         const { data: authListener } = client.auth.onAuthStateChange(
           async (event, newSession) => {
             console.log("Auth state changed:", event);
