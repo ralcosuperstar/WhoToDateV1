@@ -74,6 +74,7 @@ export interface CompatibilityProfile {
   growthRecommendation?: string;
   idealPartnerSummary?: string;
   datingExperience?: string;
+  primaryType: string; // Added for color mapping in reports
 }
 
 // Growth recommendation for personal development
@@ -145,6 +146,27 @@ function getIdealPartnerSummary(profile: CompatibilityProfile): string {
   
   // Default recommendation
   return "Based on your profile, you'll likely connect best with someone who balances acceptance of who you are with encouragement to grow. Look for emotional intelligence, shared values, and complementary communication styles.";
+}
+
+// Function to generate a consistent, deterministic primary type based on answers
+function getPrimaryType(answers: Record<number, number>): string {
+  // Get a deterministic but semi-random number based on answers
+  // Count questions completed and use them to determine a consistent profile type
+  const answerCount = Object.keys(answers).length;
+  
+  // List of primary types (for color mapping and descriptions)
+  const primaryTypes = [
+    "passionate", // Red/pink - emotional, intense
+    "analytical", // Blue - logical, thoughtful
+    "balanced",   // Green - stable, grounded
+    "ambitious",  // Yellow - goal-oriented, driven
+    "nurturing"   // Purple - caring, supportive
+  ];
+  
+  // Use modulo to get a consistent but semi-random type
+  // This ensures the same user gets the same profile type
+  const typeIndex = Math.abs(answerCount) % primaryTypes.length;
+  return primaryTypes[typeIndex];
 }
 
 // Dating experiences to try based on profile
