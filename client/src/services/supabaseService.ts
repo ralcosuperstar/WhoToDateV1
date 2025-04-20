@@ -447,17 +447,13 @@ export const quizService = {
     
     console.log('Getting current user quiz answers for auth user:', user.email);
     
-    // We need to convert the auth UUID to a database ID
-    if (user && user.email) {
-      const dbUser = await userService.getUserByEmail(supabase, user.email);
-      if (dbUser && dbUser.id) {
-        // Use the numeric database ID instead of the auth UUID
-        console.log('Using database ID for quiz lookup:', dbUser.id);
-        return await quizService.getQuizAnswers(supabase, dbUser.id);
-      }
+    // With the updated schema, we can directly use the Auth UUID
+    if (user && user.id) {
+      console.log('Using auth UUID for quiz lookup:', user.id);
+      return await quizService.getQuizAnswers(supabase, user.id);
     }
     
-    console.error('Could not find database user ID for auth user');
+    console.error('Auth user has no ID');
     return null;
   },
 
@@ -468,48 +464,9 @@ export const quizService = {
     try {
       console.log('Saving quiz answers for user ID:', userId);
       
-      // If userId is a UUID (string with hyphens), we need to get the database integer ID
-      let dbUserId = userId;
-      if (typeof userId === 'string' && userId.includes('-')) {
-        // Get database user ID from email
-        const authUser = await authService.getCurrentUser();
-        if (authUser && authUser.email) {
-          const dbUser = await userService.getUserByEmail(supabase, authUser.email);
-          
-          if (dbUser && dbUser.id) {
-            console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-            // Make sure dbUserId is a number
-            if (typeof dbUser.id === 'string') {
-              try {
-                dbUserId = parseInt(dbUser.id, 10);
-                console.log('Converted string ID to number:', dbUserId);
-              } catch (e) {
-                console.error('Failed to parse user ID as integer:', dbUser.id);
-                return null;
-              }
-            } else {
-              dbUserId = dbUser.id;
-            }
-          } else {
-            console.error('Could not find database user for auth user');
-            return null;
-          }
-        } else {
-          console.error('Auth user not found or has no email');
-          return null;
-        }
-      }
-      
-      // Make absolutely sure dbUserId is a number not a string
-      if (typeof dbUserId === 'string') {
-        try {
-          dbUserId = parseInt(dbUserId, 10);
-          console.log('Converted string ID to number:', dbUserId);
-        } catch (e) {
-          console.error('Failed to parse user ID as integer:', dbUserId);
-          return null;
-        }
-      }
+      // We're now using Supabase Auth UUID directly, so we don't need to convert it
+      // Just ensure it's a string (newer schema uses text columns for user_id)
+      let dbUserId = String(userId);
       
       // Check if user already has answers
       const existingQuiz = await quizService.getQuizAnswers(supabase, dbUserId);
@@ -570,24 +527,15 @@ export const quizService = {
   saveCurrentUserQuizAnswers: async (answers: any, completed: boolean = false) => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user || !user.email) {
-      console.error("No authenticated user or user has no email");
+    if (!user || !user.id) {
+      console.error("No authenticated user or user has no ID");
       return null;
     }
     
-    console.log('Saving quiz answers for current user:', user.email);
+    console.log('Saving quiz answers for current user:', user.email, 'with ID:', user.id);
     
-    // First get the database user ID by email
-    const dbUser = await userService.getUserByEmail(supabase, user.email);
-    if (!dbUser || !dbUser.id) {
-      console.error('Could not find database user for current user');
-      return null;
-    }
-    
-    console.log('Found database user ID for quiz save:', dbUser.id);
-    
-    // Use the database user ID instead of the auth UUID
-    return await quizService.saveQuizAnswers(supabase, dbUser.id, answers, completed);
+    // With the updated schema, we can directly use the Auth UUID
+    return await quizService.saveQuizAnswers(supabase, user.id, answers, completed);
   }
 };
 
@@ -602,42 +550,9 @@ export const reportService = {
     console.log('Fetching report for user ID:', userId);
     
     try {
-      // If userId is a UUID (string with hyphens), we need to get the database integer ID
-      let dbUserId = userId;
-      if (typeof userId === 'string' && userId.includes('-')) {
-        // Get database user ID from email
-        const authUser = await authService.getCurrentUser();
-        if (authUser && authUser.email) {
-          const dbUser = await userService.getUserByEmail(supabase, authUser.email);
-          
-          if (dbUser && dbUser.id) {
-            console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-            // Make sure dbUserId is a number
-            if (typeof dbUser.id === 'string') {
-              try {
-                dbUserId = parseInt(dbUser.id, 10);
-                console.log('Converted string ID to number:', dbUserId);
-              } catch (e) {
-                console.error('Failed to parse user ID as integer:', dbUser.id);
-                return null;
-              }
-            } else {
-              dbUserId = dbUser.id;
-            }
-          }
-        }
-      }
-      
-      // Make absolutely sure dbUserId is a number not a string
-      if (typeof dbUserId === 'string') {
-        try {
-          dbUserId = parseInt(dbUserId, 10);
-          console.log('Converted string ID to number:', dbUserId);
-        } catch (e) {
-          console.error('Failed to parse user ID as integer:', dbUserId);
-          return null;
-        }
-      }
+      // We're now using Supabase Auth UUID directly, so we don't need to convert it
+      // Just ensure it's a string (newer schema uses text columns for user_id)
+      let dbUserId = String(userId);
       
       // Try to fetch with the determined user ID
       console.log('Fetching report with ID:', dbUserId);
@@ -703,22 +618,15 @@ export const reportService = {
   getCurrentUserReport: async () => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user || !user.email) {
-      console.error('No authenticated user or user has no email');
+    if (!user || !user.id) {
+      console.error('No authenticated user or user has no ID');
       return null;
     }
     
-    console.log('Getting report for current user:', user.email);
+    console.log('Getting report for current user:', user.email, 'with ID:', user.id);
     
-    // Get database user ID first
-    const dbUser = await userService.getUserByEmail(supabase, user.email);
-    if (!dbUser || !dbUser.id) {
-      console.error('Could not find database user for current user');
-      return null;
-    }
-    
-    console.log('Found database user ID for report:', dbUser.id);
-    return await reportService.getReport(supabase, dbUser.id);
+    // With the updated schema, we can directly use the Auth UUID
+    return await reportService.getReport(supabase, user.id);
   },
 
   /**
@@ -733,44 +641,9 @@ export const reportService = {
   }) => {
     console.log('Creating report with data:', data);
     try {
-      // Make sure we have a valid user ID
-      let dbUserId = data.userId;
-      
-      // If the userId is a UUID string (from auth), get the database user ID by email
-      if (typeof dbUserId === 'string' && dbUserId.includes('-')) {
-        console.log('Detected UUID user ID, fetching database user instead');
-        
-        // Get the auth user
-        const authUser = await authService.getCurrentUser();
-        if (authUser && authUser.email) {
-          const dbUser = await userService.getUserByEmail(supabase, authUser.email);
-          
-          if (dbUser && dbUser.id) {
-            console.log('Found database user ID:', dbUser.id, 'for auth user:', authUser.email);
-            
-            if (typeof dbUser.id === 'number') {
-              dbUserId = dbUser.id;
-            } else if (typeof dbUser.id === 'string') {
-              try {
-                dbUserId = parseInt(dbUser.id, 10);
-                console.log('Converted string ID to number:', dbUserId);
-              } catch (e) {
-                console.error('Failed to parse user ID as integer:', dbUser.id);
-                return null;
-              }
-            } else {
-              console.error('User ID is not a number or string:', dbUser.id);
-              return null;
-            }
-          } else {
-            console.error('Could not find database user for auth user');
-            return null;
-          }
-        } else {
-          console.error('Auth user not found or has no email');
-          return null;
-        }
-      }
+      // We're now using Supabase Auth UUID directly, so we don't need to convert it
+      // Just ensure it's a string (newer schema uses text columns for user_id)
+      let dbUserId = String(data.userId);
       
       console.log('Using database user ID for report:', dbUserId);
       
@@ -807,25 +680,16 @@ export const reportService = {
   createCurrentUserReport: async (quizId: number, report: any, compatibilityColor: string) => {
     const supabase = await authService.getClient();
     const user = await authService.getCurrentUser();
-    if (!user || !user.email) {
-      console.error('No authenticated user or user has no email');
+    if (!user || !user.id) {
+      console.error('No authenticated user or user has no ID');
       return null;
     }
     
-    console.log('Creating report for current user:', user.email);
+    console.log('Creating report for current user:', user.email, 'with ID:', user.id);
     
-    // Get database user ID first
-    const dbUser = await userService.getUserByEmail(supabase, user.email);
-    if (!dbUser || !dbUser.id) {
-      console.error('Could not find database user for current user');
-      return null;
-    }
-    
-    console.log('Found database user ID for report creation:', dbUser.id);
-    
-    // Use database user ID instead of auth UUID
+    // With the updated schema, we can directly use the Auth UUID
     return await reportService.createReport(supabase, {
-      userId: dbUser.id,
+      userId: user.id,
       quizId,
       report,
       compatibilityColor,
@@ -930,45 +794,9 @@ export const paymentService = {
   createPayment: async (userId: string | number, reportId: number, amount: number) => {
     const supabase = await authService.getClient();
     
-    // If userId is a UUID (string with hyphens), we need to get the database integer ID
-    let dbUserId = userId;
-    if (typeof userId === 'string' && userId.includes('-')) {
-      // Get database user ID from email
-      const authUser = await authService.getCurrentUser();
-      if (authUser && authUser.email) {
-        const dbUser = await userService.getUserByEmail(supabase, authUser.email);
-        
-        if (dbUser && dbUser.id) {
-          console.log('Using database user ID:', dbUser.id, 'for auth user:', authUser.email);
-          // Make sure dbUserId is a number
-          if (typeof dbUser.id === 'string') {
-            try {
-              dbUserId = parseInt(dbUser.id, 10);
-              console.log('Converted string ID to number:', dbUserId);
-            } catch (e) {
-              console.error('Failed to parse user ID as integer:', dbUser.id);
-              return { payment: null, error: new Error('Invalid user ID format') };
-            }
-          } else {
-            dbUserId = dbUser.id;
-          }
-        } else {
-          console.error('Could not find database user ID for payment');
-          return { payment: null, error: new Error('User ID not found') };
-        }
-      }
-    }
-    
-    // Make absolutely sure dbUserId is a number not a string
-    if (typeof dbUserId === 'string') {
-      try {
-        dbUserId = parseInt(dbUserId, 10);
-        console.log('Converted string ID to number:', dbUserId);
-      } catch (e) {
-        console.error('Failed to parse user ID as integer:', dbUserId);
-        return { payment: null, error: new Error('Invalid user ID format') };
-      }
-    }
+    // We're now using Supabase Auth UUID directly, so we don't need to convert it
+    // Just ensure it's a string (newer schema uses text columns for user_id)
+    let dbUserId = String(userId);
     
     console.log('Creating payment with user ID:', dbUserId);
     const { data, error } = await supabase
