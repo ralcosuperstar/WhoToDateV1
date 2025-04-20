@@ -14,6 +14,7 @@ import Footer from "@/components/layout/Footer";
 // Pages
 import Home from "@/pages/Home";
 import Quiz from "@/pages/Quiz";
+import SimpleQuiz from "@/pages/SimpleQuiz"; // New simplified quiz component
 import Results from "@/pages/Results";
 import SimpleResults from "@/pages/SimpleResults";
 import Report from "@/pages/Report";
@@ -91,7 +92,8 @@ function Router() {
       </Route>
       
       {/* Protected Routes */}
-      <ProtectedRoute path="/quiz" component={Quiz} allowGuests={true} />
+      <ProtectedRoute path="/quiz-original" component={Quiz} allowGuests={true} />
+      <ProtectedRoute path="/quiz" component={SimpleQuiz} allowGuests={true} />
       <ProtectedRoute path="/results" component={SimpleResults} allowGuests={true} />
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <ProtectedRoute path="/report" component={Report} />
