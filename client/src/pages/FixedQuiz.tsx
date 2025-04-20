@@ -467,15 +467,28 @@ const FixedQuiz = () => {
             };
             const compatibilityColor = colorMap[compatibilityType] || colorMap.balanced;
             
-            // Create report in database
+            // Get database schema to see actual column names
+            const { data: columns, error: schemaError } = await supabase
+              .from('reports')
+              .select()
+              .limit(1);
+              
+            if (schemaError) {
+              console.log("Error getting reports schema:", schemaError);
+            } else {
+              console.log("Reports table schema:", columns);
+            }
+            
+            // Create report in database - using snake_case for column names to match PostgreSQL conventions
+            // Remove the compatibility_color field since it doesn't exist in the schema
             const { error: reportError } = await supabase
               .from('reports')
               .insert({
                 user_id: user.id,
                 quiz_id: quizData.id,
                 report: profile,
-                is_paid: false,
-                compatibility_color: compatibilityColor
+                is_paid: false
+                // Removed compatibility_color as it doesn't exist in the schema
               });
               
             if (reportError) throw reportError;
