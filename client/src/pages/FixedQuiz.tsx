@@ -487,7 +487,7 @@ const FixedQuiz = () => {
                 quiz_id: quizData.id,
                 report: profile,
                 is_paid: false,
-                compatibility_color: profile.overallColor // Include the compatibility_color field which does exist in the schema
+                compatibility_color: compatibilityColor // Use the HEX color code for better visualization
               });
               
             if (reportError) throw reportError;
