@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/contexts/NewSupabaseContext";
-import supabaseService, { quizService, reportService } from "@/services/supabaseService";
+import supabaseService from "@/services/supabaseService";
 
 // Define types for clarity
 interface UserProfile {
@@ -133,13 +133,9 @@ const SupabaseDashboard = () => {
         const supabase = await supabaseService.auth.getClient();
         // Call the method correctly with supabase client and user ID
         const answers = await supabaseService.quiz.getQuizAnswers(supabase, user.id);
-        const error = null;
         
-        if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-          console.error('Error fetching quiz answers:', error);
-          setQuizError(error instanceof Error ? error : new Error(String(error)));
-        } else {
-          console.log('Quiz answers loaded:', answers);
+        console.log('Quiz answers loaded:', answers);
+        if (answers) {
           setQuizAnswers(answers as QuizData);
         }
       } catch (error) {
@@ -164,13 +160,13 @@ const SupabaseDashboard = () => {
       try {
         setIsReportLoading(true);
         console.log('Fetching report for:', user.id);
-        const { report: reportData, error } = await reportService.getReport(user.id);
+        // Get Supabase client first
+        const supabase = await supabaseService.auth.getClient();
+        // Call the method correctly with supabase client and user ID
+        const reportData = await supabaseService.report.getReport(supabase, user.id);
         
-        if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
-          console.error('Error fetching report:', error);
-          setReportError(error instanceof Error ? error : new Error(String(error)));
-        } else {
-          console.log('Report loaded:', reportData);
+        console.log('Report loaded:', reportData);
+        if (reportData) {
           setReport(reportData as ReportData);
         }
       } catch (error) {
