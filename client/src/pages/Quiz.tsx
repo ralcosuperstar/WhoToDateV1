@@ -682,41 +682,46 @@ const Quiz = () => {
   const canGoNext = currentQuestion ? answers[currentQuestion.id] !== undefined : false;
   const isLastQuestion = currentQuestion ? currentQuestion.id === quizQuestions.length : false;
   
-  // Add a timeout for loading state to prevent infinite loading
-  const [isLoadingTimedOut, setIsLoadingTimedOut] = useState(false);
-  
-  // Set a timeout to show intro screen after 3 seconds even if loading isn't complete
+  // Force the Quiz to render after 2 seconds regardless of auth state
   useEffect(() => {
-    if (isUserLoading) {
-      const timeout = setTimeout(() => {
-        console.log("Authentication loading timed out after 3 seconds, continuing as guest");
-        setIsLoadingTimedOut(true);
-      }, 3000);
-      
-      return () => clearTimeout(timeout);
-    }
-  }, [isUserLoading]);
-  
-  // Handle authentication and loading states
-  if (isUserLoading && !isLoadingTimedOut) {
-    // Initial loading
+    let mounted = true;
+    
+    // Start a timer when component mounts
+    const timer = setTimeout(() => {
+      if (mounted && isUserLoading) {
+        console.log("FORCE RENDERING QUIZ: Auth is taking too long, rendering quiz anyway");
+        // Force update loading state to stop the loading spinner
+        setIsUserLoading(false);
+      }
+    }, 2000);
+    
+    // Cleanup function
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // Quick debug for auth state
+  console.log("Quiz render state:", { 
+    isUserLoading, 
+    isUserError, 
+    hasUser: !!localUser,
+    showIntro
+  });
+
+  // This simplified loading state shows for max 2 seconds
+  if (isUserLoading) {
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
           <div className="flex flex-col items-center py-12">
             <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4"></div>
-            <p className="text-sm text-neutral-500">Loading your profile information...</p>
+            <p className="text-sm text-neutral-500">Loading your profile...</p>
           </div>
         </div>
       </div>
     );
-  }
-  
-  // Check for authentication error but allow guest users to proceed
-  if (isUserError || isLoadingTimedOut) {
-    // Continue as a guest user
-    console.log("User is not authenticated or loading timed out, continuing as guest");
-    // We'll just show the quiz normally and store answers in sessionStorage
   }
   
   return (

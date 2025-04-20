@@ -2,16 +2,17 @@ import { Link } from "wouter";
 import * as React from "react";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useSupabase } from "@/contexts/NewSupabaseContext";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  user: any;
   onLogout?: () => void;
 }
 
-const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose, onLogout }: MobileMenuProps) => {
   const { toast } = useToast();
+  const { user, signOut, isLoading } = useSupabase();
   
   // Close menu when clicking a link
   const handleLinkClick = () => {
@@ -32,33 +33,35 @@ const MobileMenu = ({ isOpen, onClose, user, onLogout }: MobileMenuProps) => {
   };
   
   // Handle logout
-  const handleLogout = () => {
+  const handleLogout = async () => {
     onClose();
-    if (onLogout) {
-      onLogout();
-    } else {
-      // Fallback if no onLogout is provided
-      fetch('/api/logout', {
-        method: 'POST',
-        credentials: 'include'
-      })
-      .then(response => {
-        if (response.ok) {
-          toast({
-            title: "Logged out successfully",
-            description: "You have been logged out of your account",
-          });
-          window.location.href = "/";
-        } else {
-          throw new Error('Logout failed');
+    
+    try {
+      if (onLogout) {
+        // Use the provided logout handler if available
+        onLogout();
+      } else {
+        // Otherwise use Supabase's signOut method directly
+        const { error } = await signOut();
+        
+        if (error) {
+          throw error;
         }
-      })
-      .catch(error => {
+        
         toast({
-          title: "Error logging out",
-          description: "There was a problem logging out. Please try again.",
-          variant: "destructive",
+          title: "Logged out successfully",
+          description: "You have been logged out of your account",
         });
+        
+        // Navigate to home page
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Error logging out",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
       });
     }
   };

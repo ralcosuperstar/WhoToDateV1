@@ -114,7 +114,6 @@ const Header = () => {
       <MobileMenu 
         isOpen={isMenuOpen} 
         onClose={() => setIsMenuOpen(false)} 
-        user={user} 
         onLogout={handleLogout}
       />
     </header>
