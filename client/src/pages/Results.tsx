@@ -362,6 +362,22 @@ const Results = () => {
     }
   }, [navigate, user]);
   
+  // Also try loading compatibility profile from session storage
+  useEffect(() => {
+    // Check if we have a saved compatibility profile in session storage
+    // This is useful when DB reports fail but we still have client-side data
+    const savedProfile = sessionStorage.getItem('compatibilityProfile');
+    if (savedProfile && !profile) {
+      try {
+        const parsedProfile = JSON.parse(savedProfile);
+        console.log("Loaded saved profile from session storage");
+        setProfile(parsedProfile);
+      } catch (e) {
+        console.error('Failed to parse saved profile from session storage', e);
+      }
+    }
+  }, []); // Run only once on initial load
+
   // Generate profile when answers are available
   useEffect(() => {
     console.log("useEffect for profile generation triggered");
@@ -481,8 +497,8 @@ const Results = () => {
     return null;
   }
   
-  // Show loading while fetching report or generating profile
-  if (isReportLoading || !profile) {
+  // Show loading while fetching report or generating profile - but only if we don't have a profile yet
+  if (!profile) {
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
