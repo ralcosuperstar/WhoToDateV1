@@ -82,6 +82,28 @@ async function apiFetch<T>(
     return data as T;
   } catch (error) {
     console.error('API Request failed:', error);
+    
+    // For development mode only, provide fallback data for certain critical endpoints
+    if (process.env.NODE_ENV !== 'production') {
+      if (endpoint === '/report') {
+        console.warn('⚠️ Development mode: Returning mock report data for testing');
+        return {
+          id: 1,
+          createdAt: new Date(),
+          userId: 1,
+          quizId: 1,
+          report: {
+            summary: "This is a development mode report for testing purposes.",
+            strengths: ["Communication", "Empathy", "Patience"],
+            challenges: ["Adaptability", "Conflict Resolution"],
+            recommendations: ["Practice active listening", "Learn to manage expectations"]
+          },
+          isPaid: true,
+          compatibilityColor: "green"
+        } as T;
+      }
+    }
+    
     throw error;
   }
 }
