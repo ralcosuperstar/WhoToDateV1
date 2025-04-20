@@ -31,12 +31,19 @@ export function registerSupabaseSyncRoutes(router: Router, db: IStorage) {
       
       console.log(`Syncing session for Supabase user: ${email} (${user_id})`);
       
+      // Check if session exists
+      if (!req.session) {
+        console.error('Session object is undefined - possible session middleware configuration issue');
+        return res.status(500).json({ 
+          success: false, 
+          message: 'Session not available',
+          error: 'session_undefined'
+        });
+      }
+      
       // Store authentication info in the session
-      // @ts-ignore - Session may not have these properties, but we're adding them
       req.session.userId = user_id;
-      // @ts-ignore
       req.session.email = email;
-      // @ts-ignore
       req.session.supabaseAuthenticated = true;
       
       // Save the session
@@ -77,14 +84,21 @@ export function registerSupabaseSyncRoutes(router: Router, db: IStorage) {
    * Check if session is authenticated with Supabase
    */
   router.get('/auth-status', (req: Request, res: Response) => {
-    // @ts-ignore - We added these properties to the session
+    // Check if session exists
+    if (!req.session) {
+      return res.json({
+        authenticated: false,
+        userId: null,
+        email: null,
+        error: 'session_undefined'
+      });
+    }
+    
     const isAuthenticated = req.session.supabaseAuthenticated === true;
     
     res.json({
       authenticated: isAuthenticated,
-      // @ts-ignore
       userId: isAuthenticated ? req.session.userId : null,
-      // @ts-ignore
       email: isAuthenticated ? req.session.email : null
     });
   });

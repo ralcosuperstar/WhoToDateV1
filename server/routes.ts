@@ -222,14 +222,41 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const report = await db.getReportByUserId(userId);
-      if (!report) {
-        return res.status(404).json({ message: "Report not found" });
-      }
+      console.log("Fetching report for user ID:", userId, "with type:", typeof userId);
 
-      res.json(report);
+      try {
+        // In development mode, we can return a mock report for easier testing
+        if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
+          console.log("⚠️ Using development report for testing");
+          return res.json({
+            id: 1,
+            createdAt: new Date(),
+            userId: userId,
+            quizId: 1,
+            report: {
+              summary: "This is a development mode report for testing purposes.",
+              strengths: ["Communication", "Empathy", "Patience"],
+              challenges: ["Adaptability", "Conflict Resolution"],
+              recommendations: ["Practice active listening", "Learn to manage expectations"]
+            },
+            isPaid: true,
+            compatibilityColor: "green"
+          });
+        }
+        
+        // For normal operation
+        const report = await db.getReportByUserId(userId);
+        if (!report) {
+          return res.status(404).json({ message: "Report not found" });
+        }
+        
+        res.json(report);
+      } catch (dbError) {
+        console.error("Database error when fetching report:", dbError);
+        res.status(500).json({ message: "Database error fetching report" });
+      }
     } catch (error) {
-      console.error("Error fetching report:", error);
+      console.error("Error in report endpoint:", error);
       res.status(500).json({ message: "Failed to fetch report" });
     }
   });
@@ -242,14 +269,38 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const quizAnswers = await db.getQuizAnswers(userId);
-      if (!quizAnswers) {
-        return res.status(404).json({ message: "Quiz not found" });
+      console.log("Fetching quiz for user ID:", userId, "with type:", typeof userId);
+
+      // In development mode, we can return a mock quiz for easier testing
+      if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
+        console.log("⚠️ Using development quiz for testing");
+        return res.json({
+          id: 1,
+          userId: userId,
+          answers: {
+            personality: ["extroverted", "intuitive", "thinking", "judging"],
+            values: ["honesty", "loyalty", "respect"],
+            communication: ["direct", "thoughtful"]
+          },
+          completed: true,
+          startedAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+          completedAt: new Date()
+        });
       }
 
-      res.json(quizAnswers);
+      try {
+        const quizAnswers = await db.getQuizAnswers(userId);
+        if (!quizAnswers) {
+          return res.status(404).json({ message: "Quiz not found" });
+        }
+        
+        res.json(quizAnswers);
+      } catch (dbError) {
+        console.error("Database error when fetching quiz:", dbError);
+        res.status(500).json({ message: "Database error fetching quiz" });
+      }
     } catch (error) {
-      console.error("Error fetching quiz:", error);
+      console.error("Error in quiz endpoint:", error);
       res.status(500).json({ message: "Failed to fetch quiz" });
     }
   });
