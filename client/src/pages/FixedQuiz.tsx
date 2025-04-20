@@ -417,7 +417,7 @@ const FixedQuiz = () => {
             const { error } = await supabase
               .from('quiz_answers')
               .insert({
-                user_id: dbUserId, // Use the integer database ID
+                user_id: authUserId, // Use the Auth UUID directly
                 answers: newAnswers,
                 completed,
                 started_at: new Date().toISOString(),
@@ -456,30 +456,30 @@ const FixedQuiz = () => {
       // If user is logged in, save report to database
       if (user) {
         try {
-          // First, get the database integer user ID
-          const dbUserId = await userService.getDatabaseUserId(user);
+          // Use the Auth UUID directly - this is what the database now expects
+          const authUserId = user.id;
           
-          if (!dbUserId) {
-            console.error("Could not get database user ID for email:", user.email);
+          if (!authUserId) {
+            console.error("No auth user ID available");
             toast({
               title: "Database Error",
-              description: "Could not find your user account in the database. Your results are saved locally only.",
+              description: "Could not find your user account. Your results are saved locally only.",
               variant: "destructive"
             });
             navigate('/local-results');
             return;
           }
           
-          console.log("Using database user ID:", dbUserId, "for auth user:", user.email);
+          console.log("Using Auth UUID for database operations:", authUserId);
           
           // Use direct Supabase queries
           const supabase = await getSupabaseClient();
           
-          // Get the quiz ID directly from quiz_answers table using the database user ID
+          // Get the quiz ID directly from quiz_answers table using the Auth UUID
           const { data: quizData, error: quizError } = await supabase
             .from('quiz_answers')
             .select('id')
-            .eq('user_id', dbUserId)
+            .eq('user_id', authUserId)
             .maybeSingle();
           
           if (quizError) throw quizError;
@@ -500,7 +500,7 @@ const FixedQuiz = () => {
             const { error: reportError } = await supabase
               .from('reports')
               .insert({
-                user_id: dbUserId, // Use the integer database ID here
+                user_id: authUserId, // Use the Auth UUID directly
                 quiz_id: quizData.id,
                 report: profile,
                 is_paid: false,
@@ -511,10 +511,10 @@ const FixedQuiz = () => {
               console.error("Error creating report:", reportError);
               throw reportError;
             } else {
-              console.log("Successfully saved report to database for user ID:", dbUserId);
+              console.log("Successfully saved report to database for user ID:", authUserId);
             }
           } else {
-            console.error("No quiz answers found for user ID:", dbUserId);
+            console.error("No quiz answers found for user ID:", authUserId);
             throw new Error("No quiz answers found");
           }
         } catch (dbErr) {
