@@ -94,10 +94,20 @@ const UserDashboard = () => {
     fetchUserData();
   }, [supabaseUser, isSupabaseLoading, toast]);
   
-  // Keep using the existing report query
-  const { data: report, isLoading: isReportLoading } = useQuery<Report>({ 
+  // Modified report query with error handling
+  const { 
+    data: report, 
+    isLoading: isReportLoading,
+    isError: isReportError
+  } = useQuery<Report>({ 
     queryKey: ['/api/report'],
-    enabled: !!localUser
+    enabled: !!localUser,
+    retry: false,
+    // If the query fails, we'll handle it gracefully
+    onError: (error) => {
+      console.error('Error fetching report:', error);
+      // We're handling errors in the UI, so no need to show toast
+    }
   });
   
   // Handle opening the edit profile dialog
@@ -256,6 +266,21 @@ const UserDashboard = () => {
                 <div className="flex items-center justify-center h-20">
                   <div className="w-6 h-6 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
                 </div>
+              ) : isReportError ? (
+                <div className="space-y-4">
+                  <p className="text-neutral-dark/80">
+                    There was an error loading your assessment. This might be because:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>You haven't completed the assessment yet</li>
+                    <li>Your session needs to be refreshed</li>
+                  </ul>
+                  <div className="flex space-x-3 mt-4">
+                    <Button asChild>
+                      <Link href="/quiz">Take Assessment</Link>
+                    </Button>
+                  </div>
+                </div>
               ) : report ? (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
@@ -301,6 +326,26 @@ const UserDashboard = () => {
             <div className="flex items-center justify-center min-h-[400px]">
               <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
             </div>
+          ) : isReportError ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Error Loading Report</CardTitle>
+                <CardDescription>
+                  We couldn't load your compatibility report.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">This could be because:</p>
+                <ul className="list-disc pl-5 mb-6 space-y-1">
+                  <li>You haven't completed the assessment</li>
+                  <li>There was a temporary server issue</li>
+                  <li>Your session needs to be refreshed</li>
+                </ul>
+                <Button asChild>
+                  <Link href="/quiz">Take Assessment</Link>
+                </Button>
+              </CardContent>
+            </Card>
           ) : report ? (
             report.isPaid ? (
               <div className="space-y-6">
