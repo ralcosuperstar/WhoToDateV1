@@ -328,7 +328,7 @@ const SupabaseDashboard = () => {
                 </div>
                 
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={handleEditProfileOpen}>Edit Profile</Button>
+                  {/* Edit Profile functionality disabled due to Supabase trigger issues */}
                   <Button 
                     variant="outline" 
                     className="text-red-500 hover:text-red-600"
@@ -482,49 +482,7 @@ const SupabaseDashboard = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Edit Profile Dialog */}
-      <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-white border-[#e83a8e]/20 shadow-lg">
-          <DialogHeader className="border-b border-[#e83a8e]/10 pb-4">
-            <DialogTitle className="text-[#e83a8e] font-bold">Edit Profile</DialogTitle>
-            <DialogDescription>
-              Update your profile information below.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-6">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="text-right font-medium text-gray-700">
-                Full Name
-              </Label>
-              <Input
-                id="fullName"
-                value={editFullName}
-                onChange={(e) => setEditFullName(e.target.value)}
-                className="col-span-3 border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
-                placeholder="Enter your full name"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right font-medium text-gray-700">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={editEmail}
-                onChange={(e) => setEditEmail(e.target.value)}
-                className="col-span-3 border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
-                placeholder="Enter your email address"
-              />
-            </div>
-          </div>
-          <DialogFooter className="border-t border-[#e83a8e]/10 pt-4">
-            <DialogClose asChild>
-              <Button variant="outline" className="border-[#e83a8e]/30 text-[#e83a8e] hover:bg-[#e83a8e]/5 hover:text-[#e83a8e]">Cancel</Button>
-            </DialogClose>
-            <Button onClick={handleUpdateProfile} className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Edit Profile Dialog removed due to Supabase trigger issue */}
 
     </div>
   );
