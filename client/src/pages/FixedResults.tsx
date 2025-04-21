@@ -272,10 +272,13 @@ const FixedResults = () => {
     }
   }, [navigate, supabaseUser]);
   
-  // Try loading compatibility profile from session storage
+  // Try loading compatibility profile from session storage - this runs once
   useEffect(() => {
+    // Skip if we already have a profile, or if we don't have any answers
+    if (profile || Object.keys(answers).length === 0) return;
+    
     const savedProfile = sessionStorage.getItem('compatibilityProfile');
-    if (savedProfile && !profile) {
+    if (savedProfile) {
       try {
         const parsedProfile = JSON.parse(savedProfile);
         setProfile(parsedProfile);
@@ -283,10 +286,13 @@ const FixedResults = () => {
         console.error('Failed to parse saved profile from session storage', e);
       }
     }
-  }, [profile]); 
+  }, []); // Empty dependency array to run only once on mount 
   
   // Generate profile from report or answers
   useEffect(() => {
+    // Skip if we already have a profile
+    if (profile) return;
+    
     const isDev = process.env.NODE_ENV === 'development';
     
     if (isDev) {
@@ -353,14 +359,14 @@ const FixedResults = () => {
     }
     
     // If we have answers in state, generate a profile
-    if (Object.keys(answers).length > 0) {
+    if (Object.keys(answers).length > 0 && !profile) {
       if (isDev) console.debug("Generating profile from answers in state");
       try {
         const compatibilityProfile = calculateCompatibilityProfile(answers);
-        setProfile(compatibilityProfile);
         
         // Save to session storage as backup
         sessionStorage.setItem('compatibilityProfile', JSON.stringify(compatibilityProfile));
+        setProfile(compatibilityProfile);
         
         // Create a report if we have quiz data
         if (existingQuiz && dbUser && supabaseUser) {
@@ -384,7 +390,7 @@ const FixedResults = () => {
         });
       }
     }
-  }, [report, existingQuiz, answers, dbUser, supabaseUser, createReportMutation, toast]);
+  }, [report, existingQuiz, answers, dbUser, supabaseUser, createReportMutation, toast, profile]);
   
   // Show full report when profile is available
   useEffect(() => {
