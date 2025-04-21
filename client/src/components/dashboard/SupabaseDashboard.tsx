@@ -315,8 +315,8 @@ const SupabaseDashboard = () => {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium">Username</label>
-                  <p className="rounded-lg border border-neutral-dark/10 p-2">{userProfile.username}</p>
+                  <label className="text-sm font-medium">Phone Number</label>
+                  <p className="rounded-lg border border-neutral-dark/10 p-2">{userProfile.phone_number || 'Not provided'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Email</label>

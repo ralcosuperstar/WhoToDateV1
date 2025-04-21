@@ -43,6 +43,7 @@ export async function ensureUserExists(authUser: User): Promise<void> {
           first_name: metadata.first_name || '',
           last_name: metadata.last_name || '',
           phone_number: metadata.phone || '',
+          full_name: metadata.first_name && metadata.last_name ? `${metadata.first_name} ${metadata.last_name}` : '',
           is_verified: authUser.email_confirmed_at ? true : false,
           created_at: new Date().toISOString(),
           // Note: updated_at column doesn't exist in the database schema
