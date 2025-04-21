@@ -127,13 +127,15 @@ const FixedResults = () => {
   const { user: supabaseUser, isLoading: isUserLoading } = useFixedSupabase();
   const isUserError = !supabaseUser && !isUserLoading;
   
-  // Debug authentication
+  // Debug authentication - only in development mode
   useEffect(() => {
-    console.log("Auth state in FixedResults:", { 
-      supabaseUser: !!supabaseUser, 
-      id: supabaseUser?.id,
-      isUserLoading 
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.debug("Auth state in FixedResults:", { 
+        supabaseUser: !!supabaseUser, 
+        id: supabaseUser?.id,
+        isUserLoading 
+      });
+    }
   }, [supabaseUser, isUserLoading]);
   
   // Get database user
@@ -145,7 +147,6 @@ const FixedResults = () => {
     queryKey: ['dbUser', supabaseUser?.id],
     queryFn: async () => {
       if (!supabaseUser?.email) throw new Error('User email not available');
-      console.log("Loading database user for email:", supabaseUser.email);
       const client = await authService.getClient();
       return userService.getUserByEmail(client, supabaseUser.email);
     },
@@ -164,7 +165,6 @@ const FixedResults = () => {
     queryKey: ['quiz', dbUser?.id],
     queryFn: async () => {
       if (!dbUser?.id) throw new Error('Database user ID not available');
-      console.log("Loading quiz for user ID:", dbUser.id);
       const client = await authService.getClient();
       return quizService.getQuizByUserId(client, dbUser.id);
     },
@@ -183,7 +183,6 @@ const FixedResults = () => {
     queryKey: ['report', dbUser?.id],
     queryFn: async () => {
       if (!dbUser?.id) throw new Error('Database user ID not available');
-      console.log("Loading report for user ID:", dbUser.id);
       const client = await authService.getClient();
       return reportService.getReportByUserId(client, dbUser.id);
     },
@@ -201,11 +200,7 @@ const FixedResults = () => {
       isPaid: boolean;
     }) => {
       setIsGeneratingReport(true);
-      console.log("Creating report with data:", {
-        quizId: data.quizId,
-        compatibilityColor: data.compatibilityColor,
-        isPaid: data.isPaid
-      });
+      const isDev = process.env.NODE_ENV === 'development';
       
       try {
         if (!supabaseUser) {
@@ -220,7 +215,6 @@ const FixedResults = () => {
         }
         
         const userId = dbUser.id;
-        console.log("Found database user ID:", userId);
         
         const report = await reportService.createReport(client, {
           userId,
@@ -230,7 +224,6 @@ const FixedResults = () => {
           isPaid: data.isPaid
         });
         
-        console.log("Report created successfully");
         return report;
       } catch (error) {
         console.error("Report creation failed:", error);
@@ -240,7 +233,6 @@ const FixedResults = () => {
       }
     },
     onSuccess: () => {
-      console.log("Report creation success");
       // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ['report'] });
       toast({
@@ -286,7 +278,6 @@ const FixedResults = () => {
     if (savedProfile && !profile) {
       try {
         const parsedProfile = JSON.parse(savedProfile);
-        console.log("Loaded saved profile from session storage");
         setProfile(parsedProfile);
       } catch (e) {
         console.error('Failed to parse saved profile from session storage', e);
@@ -296,14 +287,20 @@ const FixedResults = () => {
   
   // Generate profile from report or answers
   useEffect(() => {
-    console.log("Processing report/quiz data for profile generation");
-    console.log("Report available:", !!report);
-    console.log("Quiz available:", !!existingQuiz);
-    console.log("Answers available:", Object.keys(answers).length > 0);
+    const isDev = process.env.NODE_ENV === 'development';
+    
+    if (isDev) {
+      console.debug("Processing report/quiz data for profile generation");
+      console.debug("Data available:", { 
+        report: !!report, 
+        quiz: !!existingQuiz,
+        answers: Object.keys(answers).length > 0
+      });
+    }
     
     // If we have a report, use it
     if (report && report.report) {
-      console.log("Using existing report for profile");
+      if (isDev) console.debug("Using existing report for profile");
       // Type assertion to ensure TypeScript knows this is a CompatibilityProfile
       setProfile(report.report as CompatibilityProfile);
       return;
@@ -311,7 +308,7 @@ const FixedResults = () => {
     
     // If we have quiz answers from database but no answers in state, use them
     if (existingQuiz && !report) {
-      console.log("Using quiz answers from database");
+      if (isDev) console.debug("Using quiz answers from database");
       try {
         // Cast to any to access its properties
         const quizData = existingQuiz as any;
@@ -331,14 +328,14 @@ const FixedResults = () => {
           
           // If we have valid quiz answers, generate a profile
           if (Object.keys(quizAnswers).length > 0) {
-            console.log("Generating profile from quiz answers");
+            if (isDev) console.debug("Generating profile from quiz answers");
             setAnswers(quizAnswers);
             const compatibilityProfile = calculateCompatibilityProfile(quizAnswers);
             setProfile(compatibilityProfile);
             
             // Create a report using these answers
             if (supabaseUser && dbUser && quizData.id) {
-              console.log("Creating report from quiz answers");
+              if (isDev) console.debug("Creating report from quiz answers");
               createReportMutation.mutate({
                 quizId: quizData.id,
                 report: compatibilityProfile,
@@ -357,7 +354,7 @@ const FixedResults = () => {
     
     // If we have answers in state, generate a profile
     if (Object.keys(answers).length > 0) {
-      console.log("Generating profile from answers in state");
+      if (isDev) console.debug("Generating profile from answers in state");
       try {
         const compatibilityProfile = calculateCompatibilityProfile(answers);
         setProfile(compatibilityProfile);
@@ -369,7 +366,7 @@ const FixedResults = () => {
         if (existingQuiz && dbUser && supabaseUser) {
           const quizData = existingQuiz as any;
           if (quizData.id) {
-            console.log("Creating report from session answers");
+            if (isDev) console.debug("Creating report from session answers");
             createReportMutation.mutate({
               quizId: quizData.id,
               report: compatibilityProfile,
@@ -443,7 +440,9 @@ const FixedResults = () => {
   // Only show authentication loading if it's still loading
   // This change allows the component to proceed to the next step if auth is available
   if (isUserLoading && !supabaseUser) {
-    console.log("Waiting for authentication to complete...");
+    if (process.env.NODE_ENV === 'development') {
+      console.debug("Waiting for authentication to complete...");
+    }
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
