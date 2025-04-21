@@ -108,17 +108,15 @@ const SectionOverview = ({
       console.log(`Section ${sectionId}: ${completedCount}/${sectionQuestionCounts[sectionId].total} completed`);
     });
     
-    // Fix for section progression based on question numbers rather than completion count
-    // Get the highest question number answered
-    const highestAnsweredId = Object.keys(answers).length > 0 ? 
-      Math.max(...Object.keys(answers).map(Number)) : 0;
-      
-    // Determine completed sections based on question progression rather than counts
-    // This matches the section changes in the quiz_questions.json file
+    // Change sections strictly after every 10 questions
+    // This ignores the actual section data in questions and enforces a clean 10/10/10/10 split
+    const answeredCount = Object.keys(answers).length;
     const completedSections = [];
-    if (highestAnsweredId >= 21) completedSections.push('personality');
-    if (highestAnsweredId >= 31) completedSections.push('emotional');
-    if (highestAnsweredId >= 36) completedSections.push('values');
+    
+    // Mark sections as complete based on number of answered questions
+    if (answeredCount >= 10) completedSections.push('personality');
+    if (answeredCount >= 20) completedSections.push('emotional');
+    if (answeredCount >= 30) completedSections.push('values');
       
     console.log("Completed sections:", completedSections);
       
@@ -812,12 +810,12 @@ const FixedQuiz = () => {
                 
                 {/* New section overview component */}
                 {console.log("Current answers state:", answers, "Length:", Object.keys(answers).length)}
-                {/* Determine the current section based on question ID rather than the section property */}
+                {/* Strictly change sections every 10 questions regardless of the question content */}
                 <SectionOverview 
                   currentSection={
-                    currentQuestion.id <= 20 ? 'personality' :
-                    currentQuestion.id <= 30 ? 'emotional' :
-                    currentQuestion.id <= 35 ? 'values' : 'physical'
+                    currentQuestion.id <= 10 ? 'personality' :
+                    currentQuestion.id <= 20 ? 'emotional' :
+                    currentQuestion.id <= 30 ? 'values' : 'physical'
                   }
                   completedQuestions={Object.keys(answers).length}
                   answers={answers}
