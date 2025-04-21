@@ -317,27 +317,27 @@ export function CustomAuthUI() {
                         <InputOTPGroup>
                           <InputOTPSlot 
                             index={0} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                           <InputOTPSlot 
                             index={1} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                           <InputOTPSlot 
                             index={2} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                           <InputOTPSlot 
                             index={3} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                           <InputOTPSlot 
                             index={4} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                           <InputOTPSlot 
                             index={5} 
-                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
+                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
                           />
                         </InputOTPGroup>
                       </InputOTP>
