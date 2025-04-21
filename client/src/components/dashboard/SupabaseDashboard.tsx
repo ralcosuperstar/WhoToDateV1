@@ -105,7 +105,14 @@ const SupabaseDashboard = () => {
           });
         } else if (profile) {
           console.log('User profile loaded:', profile);
-          setUserProfile(profile as UserProfile);
+          // Safely convert the profile data to UserProfile type
+          setUserProfile({
+            id: profile.id || '',
+            username: profile.username || profile.email?.split('@')[0] || 'user',
+            email: profile.email || '',
+            full_name: profile.full_name || null,
+            phone_number: profile.phone_number || null
+          });
         }
       } catch (error) {
         console.error('Error in fetchUserProfile:', error);
@@ -136,7 +143,15 @@ const SupabaseDashboard = () => {
         
         console.log('Quiz answers loaded:', answers);
         if (answers) {
-          setQuizAnswers(answers as QuizData);
+          // Convert the quiz answers to the expected format
+          setQuizAnswers({
+            id: answers.id || 0,
+            user_id: answers.userId || user.id,
+            answers: answers.answers || {},
+            completed: answers.completed || false,
+            started_at: answers.startedAt ? answers.startedAt.toString() : null,
+            completed_at: answers.completedAt ? answers.completedAt.toString() : null
+          });
         }
       } catch (error) {
         console.error('Error in fetchQuizAnswers:', error);
