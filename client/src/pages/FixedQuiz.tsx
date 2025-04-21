@@ -123,7 +123,7 @@ const SectionOverview = ({
           ></div>
         </div>
         <div className="ml-2 text-xs font-medium text-[#e83a8e] whitespace-nowrap">
-          {completedQuestions}/40
+          {completedQuestions} of 40 completed
         </div>
       </div>
       
@@ -762,7 +762,7 @@ const FixedQuiz = () => {
                 {/* New section overview component */}
                 <SectionOverview 
                   currentSection={currentQuestion.section}
-                  completedQuestions={Object.keys(answers).length}
+                  completedQuestions={currentQuestion.id - 1}
                 />
                 
                 <SectionInfo
