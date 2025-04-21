@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { signInWithPassword, signUpWithPassword, verifyOtp, syncUserWithServer } from '@/lib/authUtils';
+import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Add fixed Supabase context
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -216,7 +217,7 @@ export function CustomAuthUI() {
           const syncResult = await syncUserWithServer(user);
           
           if (!syncResult.success) {
-            console.error("Failed to sync with server:", syncResult.error);
+            console.error("Failed to sync with server");
           } else {
             console.log("Successfully synced user with server");
           }
@@ -265,7 +266,7 @@ export function CustomAuthUI() {
           const syncResult = await syncUserWithServer(user);
           
           if (!syncResult.success) {
-            console.error("Failed to sync with server after verification:", syncResult.error);
+            console.error("Failed to sync with server after verification");
           } else {
             console.log("Successfully synced user with server after verification");
           }
