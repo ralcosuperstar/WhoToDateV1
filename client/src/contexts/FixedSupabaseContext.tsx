@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import directSupabaseService from '@/services/directSupabaseService';
 import { useToast } from '@/hooks/use-toast';
 
@@ -35,18 +35,39 @@ export const FixedSupabaseContext = createContext<SupabaseContextType>({
   updateUserProfile: () => Promise.resolve({}),
 });
 
-// Get the supabase client directly
-const supabase = directSupabaseService.auth.getClient();
-
 // Create the provider component
 export function FixedSupabaseProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [supabase, setSupabase] = useState<any>(null);
   const { toast } = useToast();
-
-  // Initial auth check
+  
+  // Initialize the Supabase client when the component mounts
   useEffect(() => {
+    const initSupabase = async () => {
+      try {
+        // Get the client when it's ready
+        const client = await directSupabaseService.auth.getClient();
+        setSupabase(client);
+      } catch (error) {
+        console.error('Error initializing Supabase client in FixedSupabaseContext:', error);
+        toast({
+          title: 'Authentication Error',
+          description: 'Failed to initialize authentication. Please try refreshing the page.',
+          variant: 'destructive',
+        });
+      }
+    };
+    
+    initSupabase();
+  }, []);
+
+  // Initial auth check - only run when supabase client is available
+  useEffect(() => {
+    // Skip if no supabase client is available yet
+    if (!supabase) return;
+    
     let mounted = true;
     
     const checkAuthStatus = async () => {
@@ -76,21 +97,29 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
     };
     
     // Set up auth state change listener
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, newSession) => {
-      console.log('Fixed Context: Auth state changed:', event);
-      
-      if (mounted) {
-        if (newSession) {
-          setSession(newSession);
-          setUser(newSession.user);
-          console.log('Fixed Context: User updated:', newSession.user.id);
-        } else {
-          setSession(null);
-          setUser(null);
-          console.log('Fixed Context: User cleared');
+    let authListener: { subscription: { unsubscribe: () => void } } | null = null;
+    
+    try {
+      const listener = supabase.auth.onAuthStateChange((event: AuthChangeEvent, newSession: Session | null) => {
+        console.log('Fixed Context: Auth state changed:', event);
+        
+        if (mounted) {
+          if (newSession) {
+            setSession(newSession);
+            setUser(newSession.user);
+            console.log('Fixed Context: User updated:', newSession.user.id);
+          } else {
+            setSession(null);
+            setUser(null);
+            console.log('Fixed Context: User cleared');
+          }
         }
-      }
-    });
+      });
+      
+      authListener = listener;
+    } catch (error) {
+      console.error('Failed to set up auth listener:', error);
+    }
     
     // Run the initial auth check
     checkAuthStatus();
@@ -107,12 +136,20 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
     return () => {
       mounted = false;
       clearTimeout(timeout);
-      authListener.subscription.unsubscribe();
+      if (authListener && authListener.subscription && typeof authListener.subscription.unsubscribe === 'function') {
+        try {
+          authListener.subscription.unsubscribe();
+        } catch (e) {
+          console.error('Error unsubscribing from auth listener:', e);
+        }
+      }
     };
-  }, []);
+  }, [supabase]); // Re-run when supabase client changes
 
   // Function to refresh the user data
   const refreshUser = async () => {
+    if (!supabase) return;
+    
     try {
       const { data } = await supabase.auth.getUser();
       if (data?.user) {
@@ -149,23 +186,29 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
 
   // Simplified sign out function
   const handleSignOut = async () => {
-    try {
-      // Clear local state immediately
-      setUser(null);
-      setSession(null);
+    // Clear local state immediately - this happens whether Supabase is ready or not
+    setUser(null);
+    setSession(null);
+    
+    // Clear browser storage and cookies
+    localStorage.removeItem("supabase.auth.token");
+    localStorage.removeItem("supabase.auth.expires_at");
+    document.cookie = "sb-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       
-      // Then actually sign out from Supabase
-      localStorage.removeItem("supabase.auth.token");
-      localStorage.removeItem("supabase.auth.expires_at");
-      document.cookie = "sb-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut();
-      return { error };
-    } catch (error) {
-      console.error('Error signing out:', error);
-      return { error };
+    // Only attempt Supabase signOut if the client is available
+    if (supabase) {
+      try {
+        // Sign out from Supabase
+        const { error } = await supabase.auth.signOut();
+        return { error };
+      } catch (error) {
+        console.error('Error signing out from Supabase:', error);
+        return { error };
+      }
+    } else {
+      console.log('No Supabase client available for signOut, but local state cleared');
+      return { error: null };
     }
   };
 

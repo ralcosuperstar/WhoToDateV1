@@ -1,12 +1,20 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase';
 
-// Use hardcoded values for development - in client code we use these directly
-// since the application is already configured with these values
-const supabaseUrl = 'https://truulijpablpqxipindo.supabase.co'; 
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDE2NTEsImV4cCI6MjA1ODk3NzY1MX0.8A2H_2V_3Y3DfkN_M-SkClQgRQYh1TkMK5tG9fH_-3w';
+// We'll use the supabase client from lib/supabase.ts to avoid creating multiple instances
+let supabase: SupabaseClient;
 
-// Create a single instance of the Supabase client to use throughout the app
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize the client when imported
+(async () => {
+  try {
+    // Get the client from the shared implementation
+    supabase = await getSupabaseClient();
+    console.log('directSupabaseService: Using shared Supabase client');
+  } catch (error) {
+    console.error('directSupabaseService: Failed to initialize Supabase client', error);
+    throw error;
+  }
+})();
 
 // Authentication service
 export const auth = {
