@@ -181,7 +181,7 @@ const DirectReport = () => {
           <FullReportView profile={profile} />
           <div className="mt-8 space-y-4">
             {/* Download PDF Button */}
-            <div className="flex justify-center space-x-3">
+            <div className="flex justify-center space-x-3 mx-auto max-w-fit">
               <button
                 onClick={() => downloadPDFReport(profile)}
                 className="py-3 px-5 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
@@ -201,7 +201,7 @@ const DirectReport = () => {
             </div>
             
             {/* Share and Refer Buttons */}
-            <div className="flex flex-col md:flex-row gap-3 justify-center">
+            <div className="flex flex-col md:flex-row gap-3 justify-center mx-auto max-w-fit">
               <button
                 onClick={() => {
                   // Create a personalized share message based on the profile
