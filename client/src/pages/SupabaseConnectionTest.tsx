@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, AlertCircle, CheckCircle, KeyRound } from 'lucide-react';
-
-// Create a direct, standalone Supabase client for testing
-const supabaseUrl = 'https://truulijpablpqxipindo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDE2NTEsImV4cCI6MjA1ODk3NzY1MX0.8A2H_2V_3Y3DfkN_M-SkClQgRQYh1TkMK5tG9fH_-3w';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 
 export default function SupabaseConnectionTest() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,12 +12,20 @@ export default function SupabaseConnectionTest() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [authStatus, setAuthStatus] = useState<'signed-out' | 'signed-in'>('signed-out');
   const [user, setUser] = useState<any>(null);
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+  const [email, setEmail] = useState('test@example.com');
+  const [password, setPassword] = useState('password123');
 
-  // Check initial auth state
+  // Initialize Supabase client
   useEffect(() => {
-    const checkAuth = async () => {
+    async function initSupabase() {
       try {
-        const { data } = await supabase.auth.getSession();
+        setIsLoading(true);
+        const client = await getSupabaseClient();
+        setSupabase(client);
+        
+        // Check initial auth state
+        const { data } = await client.auth.getSession();
         if (data.session) {
           setAuthStatus('signed-in');
           setUser(data.session.user);
@@ -29,31 +33,40 @@ export default function SupabaseConnectionTest() {
           setAuthStatus('signed-out');
           setUser(null);
         }
+        
+        // Set up auth listener
+        const { data: authListener } = client.auth.onAuthStateChange((event, session) => {
+          console.log('Auth state changed:', event);
+          if (session) {
+            setAuthStatus('signed-in');
+            setUser(session.user);
+          } else {
+            setAuthStatus('signed-out');
+            setUser(null);
+          }
+        });
+        
+        return () => {
+          authListener.subscription.unsubscribe();
+        };
       } catch (error) {
-        console.error('Error checking auth status:', error);
+        console.error('Error initializing Supabase:', error);
+        setErrorMessage('Failed to initialize Supabase client. Check console for details.');
+        setConnectionStatus('error');
+      } finally {
+        setIsLoading(false);
       }
-    };
-
-    checkAuth();
-
-    // Set up auth listener
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event);
-      if (session) {
-        setAuthStatus('signed-in');
-        setUser(session.user);
-      } else {
-        setAuthStatus('signed-out');
-        setUser(null);
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    }
+    
+    initSupabase();
   }, []);
 
   const testConnection = async () => {
+    if (!supabase) {
+      setErrorMessage('Supabase client not initialized');
+      return;
+    }
+    
     setIsLoading(true);
     setConnectionStatus('idle');
     setErrorMessage(null);
@@ -79,39 +92,81 @@ export default function SupabaseConnectionTest() {
   };
 
   const signIn = async () => {
+    if (!supabase) {
+      setErrorMessage('Supabase client not initialized');
+      return;
+    }
+    
     setIsLoading(true);
     try {
-      // Sign in with test credentials (these will be provided by user)
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: 'test@example.com', // Ask user to provide test credentials
-        password: 'password123'     // Ask user to provide test credentials
+        email,
+        password
       });
 
       if (error) throw error;
       
       console.log('Sign in successful:', data);
+      setConnectionStatus('success');
+      setErrorMessage(null);
     } catch (error: any) {
       console.error('Sign in failed:', error);
       setErrorMessage(error.message || 'Sign in failed');
+      setConnectionStatus('error');
     } finally {
       setIsLoading(false);
     }
   };
 
   const signOut = async () => {
+    if (!supabase) {
+      setErrorMessage('Supabase client not initialized');
+      return;
+    }
+    
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
       console.log('Sign out successful');
+      setConnectionStatus('idle');
+      setErrorMessage(null);
     } catch (error: any) {
       console.error('Sign out failed:', error);
       setErrorMessage(error.message || 'Sign out failed');
+      setConnectionStatus('error');
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (!supabase) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Initializing...</CardTitle>
+            <CardDescription>
+              Setting up Supabase connection
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            </div>
+            {errorMessage && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
@@ -119,7 +174,7 @@ export default function SupabaseConnectionTest() {
         <CardHeader>
           <CardTitle>Supabase Connection Test</CardTitle>
           <CardDescription>
-            Test direct connection to Supabase services
+            Test connection to Supabase services using server-provided API keys
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -156,10 +211,31 @@ export default function SupabaseConnectionTest() {
               </div>
             </div>
             
-            {user && (
+            {user ? (
               <div className="bg-white p-3 rounded text-sm">
                 <div className="font-medium">User ID: {user.id}</div>
                 <div>Email: {user.email}</div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="bg-white p-3 rounded text-sm">
+                  <label className="block text-sm font-medium text-gray-700">Test Email</label>
+                  <input 
+                    type="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                  />
+                </div>
+                <div className="bg-white p-3 rounded text-sm">
+                  <label className="block text-sm font-medium text-gray-700">Test Password</label>
+                  <input 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -215,7 +291,7 @@ export default function SupabaseConnectionTest() {
       </Card>
       
       <div className="mt-4 text-sm text-gray-500">
-        <p>Note: This test uses a direct Supabase client with no dependencies on any context providers.</p>
+        <p>Note: This test uses a Supabase client with API keys from the server environment.</p>
       </div>
     </div>
   );
