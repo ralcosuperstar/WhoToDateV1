@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useSupabase } from '@/contexts/NewSupabaseContext';
+import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Use fixed context
 import { CustomAuthUI } from '@/components/auth/CustomAuthUI';
 import { Loader2 } from "lucide-react";
 
@@ -8,8 +8,8 @@ export default function NewAuthPage() {
   // Router
   const [, navigate] = useLocation();
   
-  // Auth states
-  const { user, isLoading } = useSupabase();
+  // Auth states - use fixed context
+  const { user, isLoading } = useFixedSupabase();
   
   // If already logged in, redirect to dashboard
   useEffect(() => {
