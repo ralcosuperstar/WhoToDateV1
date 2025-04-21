@@ -4,9 +4,9 @@ import { z } from "zod";
 
 // Users table - matches actual database structure
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(), // Integer primary key with auto-increment
-  username: text("username").notNull(),
-  password: text("password").notNull(), // Required password field
+  id: text("id").primaryKey(), // UUID from Supabase Auth as primary key
+  username: text("username"), // Username can be null initially
+  password: text("password"), // Password may be null for social auth
   email: text("email").notNull().unique(),
   phoneNumber: text("phone_number").unique(), // Phone number for SMS verification
   firstName: text("first_name"),
@@ -21,7 +21,7 @@ export const users = pgTable("users", {
   verificationTokenExpiry: timestamp("verification_token_expiry", { withTimezone: false }), // Expiry for verification token
   otpCode: text("otp_code"), // OTP code for SMS verification
   otpExpiry: timestamp("otp_expiry", { withTimezone: false }), // Expiry time for OTP code
-  clerkId: text("clerk_id").unique(), // Legacy field for Clerk integration
+  supabaseUuid: text("supabase_uuid").unique(), // Supabase Auth UUID
   createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
   // removed updatedAt as it doesn't exist in the database
 });
@@ -72,9 +72,9 @@ export const blogPosts = pgTable("blog_posts", {
 
 // Schemas for inserts
 export const insertUserSchema = createInsertSchema(users).pick({
-  // Note: id is auto-generated, so we omit it from required fields
+  id: true, // UUID from Supabase Auth
   username: true,
-  password: true, // Required password field
+  password: true,
   email: true,
   phoneNumber: true,
   firstName: true,
@@ -85,7 +85,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   imageUrl: true,
   isVerified: true,
   verificationMethod: true,
-  clerkId: true,
+  supabaseUuid: true,
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({
