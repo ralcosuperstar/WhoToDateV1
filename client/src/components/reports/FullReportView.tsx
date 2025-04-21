@@ -17,7 +17,7 @@ import {
   Scale,
   Sparkles
 } from "lucide-react";
-import { CompatibilityProfile } from "@/lib/compatibilityAnalysis";
+import { CompatibilityProfile } from "@/utils/calculateCompatibilityProfile";
 import { motion } from "framer-motion";
 
 // This component displays the full report in a single-page visual format
@@ -68,7 +68,7 @@ const FullReportView = ({
             </h2>
           </div>
           <p className="text-sm leading-relaxed">
-            {profile.description}
+            {profile.overallSummary}
           </p>
         </div>
 
@@ -88,55 +88,9 @@ const FullReportView = ({
                   <p className="text-sm font-medium capitalize text-blue-800">{profile.attachmentStyle}</p>
                 </div>
                 <div className="bg-white p-3 rounded-md shadow-sm">
-                  <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Personality Type</p>
-                  <p className="text-sm font-medium text-blue-800">{profile.mbtiStyle}</p>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Personality Archetype</p>
+                  <p className="text-sm font-medium text-blue-800">{profile.personalityArchetype}</p>
                 </div>
-              </div>
-            </div>
-
-            {/* Dimension Scores with visual representation */}
-            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-              <h3 className="text-md font-bold mb-3 flex items-center">
-                <PieChart className="h-4 w-4 mr-2 text-primary" />
-                Compatibility Dimensions
-              </h3>
-              <div className="space-y-3">
-                {Object.entries(profile.sectionScores).map(([section, scoreValue]) => {
-                  const score = scoreValue as number;
-                  const roundedScore = Math.round(score);
-                  
-                  return (
-                    <div key={section} className="relative">
-                      <div className="flex justify-between mb-1">
-                        <div className="flex items-center">
-                          {section === 'personality' && <Brain className="h-3 w-3 mr-1 text-primary" />}
-                          {section === 'emotional' && <Heart className="h-3 w-3 mr-1 text-primary" />}
-                          {section === 'values' && <Scale className="h-3 w-3 mr-1 text-primary" />}
-                          {section === 'physical' && <Sparkles className="h-3 w-3 mr-1 text-primary" />}
-                          <p className="text-xs font-medium uppercase">{section}</p>
-                        </div>
-                        <span className="text-xs font-bold">{roundedScore}%</span>
-                      </div>
-                      <div className="relative">
-                        <div className="h-2.5 w-full bg-neutral-200 rounded-full overflow-hidden">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${score}%` }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className={`h-full ${scoreBarColor(score)} rounded-full`}
-                          ></motion.div>
-                        </div>
-                        {/* Weight indicator */}
-                        <div className="absolute right-0 -bottom-4 text-[10px] text-neutral-500">
-                          {section === 'personality' && '35% weight'}
-                          {section === 'emotional' && '25% weight'}
-                          {section === 'values' && '25% weight'}
-                          {section === 'physical' && '15% weight'}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
               </div>
             </div>
 
@@ -170,54 +124,121 @@ const FullReportView = ({
 
           {/* Right Column */}
           <div className="space-y-5">
-            {/* Personality Traits with radial visualization */}
+            {/* Personality Traits visualization */}
             <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
               <h3 className="text-md font-bold mb-3 flex items-center text-purple-800">
                 <Brain className="h-4 w-4 mr-2" />
                 Your Personality Traits
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.personalityTraits).map(([trait, score]) => (
-                  <div key={trait} className="relative">
-                    <div className="flex justify-between mb-1">
-                      <p className="text-xs font-medium uppercase text-purple-800">{trait}</p>
-                      <span className="text-xs font-bold text-purple-800">{score}%</span>
+                {Object.entries(profile.personalityTraits).map(([trait, scoreVal]) => {
+                  // Convert 0-5 scale to percentage for display
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  
+                  return (
+                    <div key={trait} className="relative">
+                      <div className="flex justify-between mb-1">
+                        <p className="text-xs font-medium uppercase text-purple-800">{trait}</p>
+                        <span className="text-xs font-bold text-purple-800">{Math.round(score)}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-purple-200 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${score}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-purple-500 rounded-full"
+                        ></motion.div>
+                      </div>
+                      <p className="text-[10px] text-purple-700/80 mt-1">
+                        {trait === 'openness' && 'Receptiveness to new ideas & experiences'}
+                        {trait === 'conscientiousness' && 'Organization, reliability & responsibility'}
+                        {trait === 'extraversion' && 'Energy from social interaction'}
+                        {trait === 'agreeableness' && 'Concern for social harmony & cooperation'}
+                        {trait === 'neuroticism' && 'Emotional stability & stress resilience'}
+                      </p>
                     </div>
-                    <div className="h-2 w-full bg-purple-200 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${score}%` }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                        className="h-full bg-purple-500 rounded-full"
-                      ></motion.div>
-                    </div>
-                    <p className="text-[10px] text-purple-700/80 mt-1">
-                      {trait === 'openness' && 'Receptiveness to new ideas & experiences'}
-                      {trait === 'conscientiousness' && 'Organization, reliability & responsibility'}
-                      {trait === 'extraversion' && 'Energy from social interaction'}
-                      {trait === 'agreeableness' && 'Concern for social harmony & cooperation'}
-                      {trait === 'neuroticism' && 'Emotional stability & stress resilience'}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             
-            {/* Compatibility Matches */}
+            {/* Emotional Intelligence visualization */}
+            <div className="bg-pink-50 rounded-lg p-4 border border-pink-100">
+              <h3 className="text-md font-bold mb-3 flex items-center text-pink-800">
+                <Heart className="h-4 w-4 mr-2" />
+                Your Emotional Intelligence
+              </h3>
+              <div className="space-y-2.5">
+                {Object.entries(profile.emotionalIntelligence).map(([trait, scoreVal]) => {
+                  // Convert 0-5 scale to percentage for display
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  
+                  return (
+                    <div key={trait} className="relative">
+                      <div className="flex justify-between mb-1">
+                        <p className="text-xs font-medium uppercase text-pink-800">{trait}</p>
+                        <span className="text-xs font-bold text-pink-800">{Math.round(score)}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-pink-200 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${score}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-pink-500 rounded-full"
+                        ></motion.div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Core Values Visualization */}
+            <div className="bg-amber-50 rounded-lg p-4 border border-amber-100">
+              <h3 className="text-md font-bold mb-3 flex items-center text-amber-800">
+                <Scale className="h-4 w-4 mr-2" />
+                Your Core Values
+              </h3>
+              <div className="space-y-2.5">
+                {Object.entries(profile.coreValues).map(([trait, scoreVal]) => {
+                  // Convert 0-5 scale to percentage for display
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  
+                  return (
+                    <div key={trait} className="relative">
+                      <div className="flex justify-between mb-1">
+                        <p className="text-xs font-medium uppercase text-amber-800">{trait}</p>
+                        <span className="text-xs font-bold text-amber-800">{Math.round(score)}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-amber-200 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${score}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-amber-500 rounded-full"
+                        ></motion.div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Ideal Partner Insights */}
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
               <h3 className="text-md font-bold mb-3 flex items-center text-blue-800">
                 <Heart className="h-4 w-4 mr-2" />
-                Compatibility Insights
+                Ideal Partner Insights
               </h3>
               <div className="space-y-3">
                 <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-xs font-medium uppercase mb-1 text-green-700 flex items-center">
                     <CheckCircle2 className="h-3 w-3 mr-1" />
-                    Most Compatible With
+                    Compatible Traits
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.compatibleTypes.mostCompatible.map((type, idx) => (
-                      <li key={idx}>{type}</li>
+                    {profile.idealPartner.traits.map((trait, idx) => (
+                      <li key={idx}>{trait}</li>
                     ))}
                   </ul>
                 </div>
@@ -225,35 +246,25 @@ const FullReportView = ({
                 <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-xs font-medium uppercase mb-1 text-yellow-700 flex items-center">
                     <AlertTriangle className="h-3 w-3 mr-1" />
-                    Challenging Matches
+                    Warning Signs
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.compatibleTypes.challengingMatches.map((type, idx) => (
-                      <li key={idx}>{type}</li>
+                    {profile.idealPartner.warningFlags.map((flag, idx) => (
+                      <li key={idx}>{flag}</li>
                     ))}
                   </ul>
                 </div>
-                
-                <p className="text-xs text-blue-800 italic">
-                  {profile.compatibleTypes.compatibilityRationale}
-                </p>
               </div>
             </div>
             
-            {/* Personal Growth & Tips */}
+            {/* Communication Tips */}
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <h3 className="text-md font-bold mb-3 flex items-center text-green-800">
                 <Lightbulb className="h-4 w-4 mr-2" />
-                Growth & Relationship Tips
+                Communication Tips
               </h3>
-              <div className="mb-3 p-3 bg-white rounded-md shadow-sm">
-                <p className="text-xs font-medium uppercase mb-1 text-primary">Focus Area</p>
-                <p className="text-sm">
-                  {profile.growthRecommendation || "Work on developing deeper self-awareness in relationships."}
-                </p>
-              </div>
               <div className="space-y-2">
-                {profile.relationshipTips.slice(0, 3).map((tip, idx) => (
+                {profile.relationshipInsights.communicationTips.map((tip, idx) => (
                   <div key={idx} className="flex items-start">
                     <span className="bg-green-200 text-green-800 font-medium rounded-full w-5 h-5 flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
                       <ArrowRight className="h-3 w-3" />
@@ -266,26 +277,30 @@ const FullReportView = ({
           </div>
         </div>
         
-        {/* Bottom Section - Your Ideal Match */}
+        {/* Bottom Section - Growth Areas */}
         <div className="mt-5 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg">
           <h3 className="text-md font-bold mb-2 flex items-center text-primary">
             <User className="h-4 w-4 mr-2" />
-            Your Ideal Partner
+            Growth Areas
           </h3>
-          <p className="text-sm">
-            {profile.idealPartnerSummary || "You'll connect best with someone who appreciates depth over superficial qualities."}
-          </p>
+          <ul className="ml-5 text-sm list-disc space-y-1.5">
+            {profile.relationshipInsights.growthAreas.map((area, idx) => (
+              <li key={idx}>{area}</li>
+            ))}
+          </ul>
         </div>
         
-        {/* Dating Advice */}
+        {/* Pattern Insights */}
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
           <h3 className="text-md font-bold mb-2 flex items-center text-blue-800">
             <Rocket className="h-4 w-4 mr-2" />
-            Try This Dating Approach
+            Relationship Patterns
           </h3>
-          <p className="text-sm">
-            {profile.datingExperience || "Practice active listening on your next date - put away distractions and truly focus on the other person."}
-          </p>
+          <ul className="ml-5 text-sm list-disc space-y-1.5">
+            {profile.relationshipInsights.compatibilityPatterns.map((pattern, idx) => (
+              <li key={idx}>{pattern}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
