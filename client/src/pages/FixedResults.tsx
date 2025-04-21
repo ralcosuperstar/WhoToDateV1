@@ -25,8 +25,6 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
   profile: CompatibilityProfile; 
   onGetFullReport: () => void;
 }) => {
-  // Generate preview data from full profile
-  const previewData = generateProfilePreview(profile);
   const colorClass = profile.overallColor === 'green' 
     ? 'bg-green-50 text-green-800 border-green-200' 
     : profile.overallColor === 'yellow' 
@@ -68,16 +66,16 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
               Attachment Style
             </h3>
             <p className="text-neutral-dark/70">
-              {profile.attachmentStyle}
+              {profile.attachmentStyle.charAt(0).toUpperCase() + profile.attachmentStyle.slice(1)}
             </p>
           </div>
           
           <div>
             <h3 className="text-lg font-medium text-neutral-dark mb-2">
-              Personality Style
+              Personality Archetype
             </h3>
             <p className="text-neutral-dark/70">
-              {profile.mbtiStyle}
+              {profile.personalityArchetype}
             </p>
           </div>
           
