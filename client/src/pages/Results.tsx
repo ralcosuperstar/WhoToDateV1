@@ -272,6 +272,7 @@ const Results = () => {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
+  const [loadingTime, setLoadingTime] = useState(0);
   
   // Use Supabase for authentication
   const { user: supabaseUser, isLoading: isUserLoading } = useSupabase();
@@ -443,9 +444,62 @@ const Results = () => {
       }
     }
     
+    // Special case: If we have a quiz but no answers in state, use the quiz answers
+    if (existingQuiz && 'answers' in existingQuiz && Object.keys(answers).length === 0) {
+      console.log("Using existing quiz answers from database");
+      try {
+        // Cast to any since we're not sure of the exact structure from the database
+        const quizDataAny = existingQuiz as any;
+        if (quizDataAny.answers && typeof quizDataAny.answers === 'object') {
+          // Validate that it's actually a Record<number, number>
+          const quizAnswers: Record<number, number> = {};
+          
+          // Convert the answers to the right format, ensuring they're numbers
+          Object.entries(quizDataAny.answers).forEach(([key, value]) => {
+            const questionNumber = parseInt(key, 10);
+            const answerNumber = typeof value === 'number' ? value : 0;
+            if (!isNaN(questionNumber)) {
+              quizAnswers[questionNumber] = answerNumber;
+            }
+          });
+          
+          if (Object.keys(quizAnswers).length > 0) {
+            console.log("Parsed quiz answers:", quizAnswers);
+            setAnswers(quizAnswers);
+            
+            // Calculate and set profile
+            const compatibilityProfile = calculateCompatibilityProfile(quizAnswers);
+            console.log("Profile calculated from existing quiz:", !!compatibilityProfile);
+            setProfile(compatibilityProfile);
+            
+            // Create report for this existing quiz
+            if (supabaseUser && dbUser && !report && compatibilityProfile) {
+              console.log("Creating report from existing quiz answers");
+              const quizId = quizDataAny.id || null;
+              
+              if (quizId) {
+                createReportMutation.mutate({
+                  quizId,
+                  report: compatibilityProfile,
+                  compatibilityColor: compatibilityProfile.overallColor, 
+                  isPaid: true // All reports are free
+                });
+              }
+            }
+            
+            return; // Exit early since we've set the profile
+          }
+        }
+      } catch (error) {
+        console.error("Error using quiz answers from database:", error);
+        // Continue to normal flow
+      }
+    }
+    
+    // Generate profile from answers in state
     if (Object.keys(answers).length > 0) {
       try {
-        console.log("Calculating compatibility profile...");
+        console.log("Calculating compatibility profile from state answers...");
         const compatibilityProfile = calculateCompatibilityProfile(answers);
         console.log("Profile calculated successfully:", !!compatibilityProfile);
         setProfile(compatibilityProfile);
@@ -563,6 +617,16 @@ const Results = () => {
     return null;
   }
   
+  // Incrementally increase loading time counter
+  useEffect(() => {
+    if (!profile) {
+      const timer = setTimeout(() => {
+        setLoadingTime(prev => prev + 1);
+      }, 3000); // Check every 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [profile, loadingTime]);
+  
   // Show loading while fetching report or generating profile - but only if we don't have a profile yet
   if (!profile) {
     return (
@@ -571,6 +635,32 @@ const Results = () => {
           <div className="flex flex-col items-center justify-center py-12">
             <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4"></div>
             <p className="text-neutral-dark/70">Analyzing your responses...</p>
+            
+            {/* Show help options if loading takes too long */}
+            {loadingTime > 1 && (
+              <div className="mt-8 p-5 border border-neutral-200 rounded-lg bg-white">
+                <h3 className="text-lg font-medium text-neutral-dark mb-2">Taking longer than expected?</h3>
+                <p className="text-neutral-dark/70 mb-4">Your report might need to be generated for the first time. Here are some options:</p>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => {
+                      // Refresh the current page to retry
+                      window.location.reload();
+                    }}
+                    className="py-2 px-4 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2" />
+                    Refresh and Retry
+                  </button>
+                  
+                  <Link href="/quiz">
+                    <button className="py-2 px-4 border border-primary text-primary bg-white font-medium rounded-lg flex items-center justify-center w-full">
+                      Retake the Quiz
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
