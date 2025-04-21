@@ -106,13 +106,19 @@ const SupabaseDashboard = () => {
         } else if (profile) {
           console.log('User profile loaded:', profile);
           // Safely convert the profile data to UserProfile type
-          setUserProfile({
-            id: profile.id || '',
-            username: profile.username || profile.email?.split('@')[0] || 'user',
-            email: profile.email || '',
-            full_name: profile.full_name || null,
-            phone_number: profile.phone_number || null
-          });
+          const safeProfile = {
+            id: typeof profile.id === 'string' ? profile.id : user.id || '',
+            username: typeof profile.username === 'string' ? profile.username : 
+                      (typeof profile.email === 'string' ? profile.email.split('@')[0] : 
+                      (typeof user.email === 'string' ? user.email.split('@')[0] : 'user')),
+            email: typeof profile.email === 'string' ? profile.email : user.email || '',
+            full_name: typeof profile.full_name === 'string' ? profile.full_name : 
+                      (user.user_metadata && typeof user.user_metadata.full_name === 'string' ? 
+                      user.user_metadata.full_name : null),
+            phone_number: typeof profile.phone_number === 'string' ? profile.phone_number : 
+                         (typeof user.phone === 'string' ? user.phone : null)
+          };
+          setUserProfile(safeProfile);
         }
       } catch (error) {
         console.error('Error in fetchUserProfile:', error);
@@ -182,7 +188,15 @@ const SupabaseDashboard = () => {
         
         console.log('Report loaded:', reportData);
         if (reportData) {
-          setReport(reportData as ReportData);
+          // Safely convert report data to expected format
+          setReport({
+            id: reportData.id || 0,
+            user_id: reportData.userId || user.id,
+            quiz_id: reportData.quizId || 0,
+            report: reportData.report || {},
+            compatibility_color: reportData.compatibilityColor || 'yellow',
+            is_paid: reportData.isPaid || true // Reports are now free
+          });
         }
       } catch (error) {
         console.error('Error in fetchReport:', error);
@@ -227,7 +241,16 @@ const SupabaseDashboard = () => {
         });
       } else {
         console.log('Profile updated:', updatedProfile);
-        setUserProfile(updatedProfile as UserProfile);
+        // Safely handle the updated profile
+        if (updatedProfile && typeof updatedProfile === 'object') {
+          setUserProfile({
+            id: updatedProfile.id?.toString() || user.id || '',
+            username: updatedProfile.username?.toString() || (updatedProfile.email && typeof updatedProfile.email === 'string' ? updatedProfile.email.split('@')[0] : user.email?.split('@')[0]) || 'user',
+            email: updatedProfile.email?.toString() || user.email || '',
+            full_name: updatedProfile.full_name?.toString() || null,
+            phone_number: updatedProfile.phone_number?.toString() || null
+          });
+        }
         setIsEditProfileOpen(false);
         toast({
           title: "Profile updated",
