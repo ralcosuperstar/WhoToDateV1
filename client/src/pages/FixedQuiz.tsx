@@ -145,28 +145,7 @@ const SectionOverview = ({
   );
 };
 
-// Section info component
-const SectionInfo = ({ section, questionNumber }: { section: string; questionNumber: number }) => {
-  // Find the current section from our sections array
-  const sectionData = quizSections.find(s => s.id === section) || {
-    id: '',
-    title: 'Compatibility Assessment',
-    description: 'Answer honestly for the most accurate results.',
-    icon: '🧪',
-    number: 0
-  };
-  
-  return (
-    <div className="mb-6 text-center">
-      <div className="inline-block text-3xl mb-2 rounded-full bg-[#e83a8e]/10 w-16 h-16 flex items-center justify-center">
-        <span>{sectionData.icon}</span>
-      </div>
-      <h2 className="text-xl font-heading font-bold mb-1">{sectionData.title}</h2>
-      <p className="text-neutral-dark/70 text-sm">{sectionData.description}</p>
 
-    </div>
-  );
-};
 
 // Question card component with improved styling
 const QuizQuestion = ({ 
@@ -761,11 +740,6 @@ const FixedQuiz = () => {
                 <SectionOverview 
                   currentSection={currentQuestion.section}
                   completedQuestions={currentQuestion.id - 1}
-                />
-                
-                <SectionInfo
-                  section={currentQuestion.section}
-                  questionNumber={currentQuestion.id}
                 />
                 
                 <QuizQuestion
