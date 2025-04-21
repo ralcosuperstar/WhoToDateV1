@@ -108,9 +108,9 @@ const SectionOverview = ({
       console.log(`Section ${sectionId}: ${completedCount}/${sectionQuestionCounts[sectionId].total} completed`);
     });
     
-    // A section is complete if all its questions are complete
+    // A section is complete if all its questions are complete AND it has at least one question
     const completedSections = Object.entries(sectionQuestionCounts)
-      .filter(([_, counts]) => counts.completed === counts.total)
+      .filter(([_, counts]) => counts.total > 0 && counts.completed === counts.total)
       .map(([section, _]) => section);
       
     console.log("Completed sections:", completedSections);
