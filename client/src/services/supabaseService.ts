@@ -252,15 +252,17 @@ export const userService = {
       } else if (existingUserByEmail) {
         console.log('User already exists in database by email:', existingUserByEmail.email);
         
-        // Update clerk_id if it's not set but we have an auth user id
-        if (!existingUserByEmail.clerk_id && authUser.id) {
-          console.log('Updating clerk_id for existing user:', existingUserByEmail.id);
+        // Update both clerk_id and supabase_uuid to maintain compatibility during migration
+        if ((!existingUserByEmail.clerk_id || !existingUserByEmail.supabase_uuid) && authUser.id) {
+          console.log('Updating auth IDs for existing user:', existingUserByEmail.id);
           try {
-            // Only update the clerk_id field
+            // Manually include updated_at to avoid trigger issues
             const { data: updatedUser, error: updateError } = await supabase
               .from('users')
               .update({ 
-                clerk_id: authUser.id
+                clerk_id: authUser.id,
+                supabase_uuid: authUser.id,
+                updated_at: new Date().toISOString()
               })
               .eq('id', existingUserByEmail.id)
               .select('*')
