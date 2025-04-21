@@ -65,12 +65,66 @@ const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: num
 // Section overview component to show progress across all sections
 const SectionOverview = ({ 
   currentSection, 
-  completedQuestions 
+  completedQuestions,
+  answers
 }: { 
   currentSection: string; 
-  completedQuestions: number 
+  completedQuestions: number;
+  answers: Record<number, number>;
 }) => {
-  // Calculate which sections are complete, current, or upcoming
+  // Calculate sections completion based on questions completed in each section
+  const getSectionCompletionStatus = () => {
+    // Map to track questions completed per section
+    const sectionQuestionCounts: Record<string, { total: number, completed: number }> = {
+      personality: { total: 0, completed: 0 },
+      emotional: { total: 0, completed: 0 },
+      values: { total: 0, completed: 0 },
+      physical: { total: 0, completed: 0 }
+    };
+    
+    // Count total questions per section
+    quizQuestions.forEach(q => {
+      if (sectionQuestionCounts[q.section]) {
+        sectionQuestionCounts[q.section].total++;
+      }
+    });
+    
+    // Count completed questions per section
+    Object.keys(sectionQuestionCounts).forEach(sectionId => {
+      // Get all questions in this section
+      const sectionQuestions = quizQuestions.filter(q => q.section === sectionId);
+      
+      // Count how many have been answered (are in the answers object)
+      let completedCount = 0;
+      sectionQuestions.forEach(q => {
+        if (answers && answers[q.id] !== undefined) {
+          completedCount++;
+        }
+      });
+      
+      sectionQuestionCounts[sectionId].completed = completedCount;
+      
+      // Debug
+      console.log(`Section ${sectionId}: ${completedCount}/${sectionQuestionCounts[sectionId].total} completed`);
+    });
+    
+    // A section is complete if all its questions are complete
+    const completedSections = Object.entries(sectionQuestionCounts)
+      .filter(([_, counts]) => counts.completed === counts.total)
+      .map(([section, _]) => section);
+      
+    console.log("Completed sections:", completedSections);
+      
+    return {
+      completedSections,
+      currentSection,
+      sectionQuestionCounts
+    };
+  };
+  
+  const sectionStatus = getSectionCompletionStatus();
+  
+  // Get current section index
   const getCurrentSectionIndex = () => {
     return quizSections.findIndex(section => section.id === currentSection);
   };
@@ -82,9 +136,9 @@ const SectionOverview = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {quizSections.map((section, index) => {
           const currentSectionIndex = getCurrentSectionIndex();
-          const isComplete = index < currentSectionIndex;
-          const isCurrent = index === currentSectionIndex;
-          const isUpcoming = index > currentSectionIndex;
+          const isComplete = sectionStatus.completedSections.includes(section.id);
+          const isCurrent = section.id === currentSection;
+          const isUpcoming = !isComplete && !isCurrent;
           
           return (
             <div 
@@ -741,7 +795,8 @@ const FixedQuiz = () => {
                 {/* New section overview component */}
                 <SectionOverview 
                   currentSection={currentQuestion.section}
-                  completedQuestions={currentQuestion.id - 1}
+                  completedQuestions={Object.keys(answers).length}
+                  answers={answers}
                 />
                 
                 <QuizQuestion
