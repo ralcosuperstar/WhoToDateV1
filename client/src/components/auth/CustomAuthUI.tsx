@@ -407,16 +407,16 @@ export function CustomAuthUI() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 border-[#e83a8e]/20">
+          <TabsList className="grid w-full grid-cols-2 border border-[#e83a8e]/20 rounded-lg p-1">
             <TabsTrigger 
               value="sign-in" 
-              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#e83a8e] rounded-none"
+              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none rounded-md"
             >
               Sign In
             </TabsTrigger>
             <TabsTrigger 
               value="sign-up" 
-              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#e83a8e] rounded-none"
+              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none rounded-md"
             >
               Sign Up
             </TabsTrigger>
