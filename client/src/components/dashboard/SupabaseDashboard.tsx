@@ -525,67 +525,7 @@ const SupabaseDashboard = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
-      {/* Toast Test Area */}
-      <Card className="mt-8 border-[#e83a8e]/20">
-        <CardHeader>
-          <CardTitle className="text-[#e83a8e]">Notification Settings</CardTitle>
-          <CardDescription>Test and customize your notification preferences</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
-          <Button 
-            onClick={() => toast({
-              title: "Profile Updated",
-              description: "Your profile information has been saved successfully.",
-              variant: "pink"
-            })}
-            className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors"
-          >
-            Test Success Toast
-          </Button>
-          <Button 
-            onClick={() => toast({
-              title: "Action Required",
-              description: "Please complete your profile to access all features.",
-              variant: "default"
-            })}
-            variant="outline"
-            className="border-[#e83a8e]/30 text-[#e83a8e] hover:bg-[#e83a8e]/5"
-          >
-            Test Info Toast
-          </Button>
-          <Button 
-            onClick={() => toast({
-              title: "Error Occurred",
-              description: "Unable to save changes. Please try again later.",
-              variant: "destructive"
-            })}
-            variant="outline"
-            className="border-red-300 text-red-500 hover:bg-red-50"
-          >
-            Test Error Toast
-          </Button>
-          <Button 
-            onClick={() => toast({
-              title: "Take the Quiz",
-              description: "Complete your compatibility quiz to see your matches.",
-              variant: "pink",
-              action: (
-                <Button
-                  onClick={() => window.location.href = '/quiz'}
-                  className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
-                  size="sm"
-                >
-                  Start Quiz
-                </Button>
-              )
-            })}
-            className="bg-gradient-to-r from-[#e83a8e] to-[#d02e7d] text-white hover:opacity-90 transition-opacity"
-          >
-            Test Action Toast
-          </Button>
-        </CardContent>
-      </Card>
+
     </div>
   );
 };
