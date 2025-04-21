@@ -187,34 +187,34 @@ const QuizNavigation = ({
 // Introduction screen
 const QuizIntro = ({ onStart }: { onStart: () => void }) => {
   return (
-    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md border border-neutral-100 text-center">
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md border border-[#e83a8e]/20 text-center">
       <span className="text-4xl mb-4 inline-block">🧪</span>
       <h2 className="text-2xl font-heading font-bold mb-3">Scientific Compatibility Assessment</h2>
       <p className="text-neutral-dark/80 mb-6 max-w-lg mx-auto">
         Discover your unique relationship patterns and compatibility profile through this scientifically-designed 40-question assessment.
       </p>
       
-      <div className="bg-blue-50 rounded-lg p-4 mb-6 text-left">
-        <h3 className="font-medium mb-2 flex items-center text-blue-700">
+      <div className="bg-[#e83a8e]/10 rounded-lg p-4 mb-6 text-left">
+        <h3 className="font-medium mb-2 flex items-center text-[#e83a8e]">
           <Info className="h-5 w-5 mr-2" />
           Here's what to expect:
         </h3>
         
-        <ul className="space-y-2 text-sm text-blue-800/80">
+        <ul className="space-y-2 text-sm text-neutral-dark/90">
           <li className="flex items-start">
-            <span className="h-5 w-5 text-blue-500 mr-2">•</span>
+            <span className="h-5 w-5 text-[#e83a8e] mr-2">•</span>
             <span><strong>40 questions</strong> divided into 4 sections (about 8-10 minutes to complete)</span>
           </li>
           <li className="flex items-start">
-            <span className="h-5 w-5 text-blue-500 mr-2">•</span>
+            <span className="h-5 w-5 text-[#e83a8e] mr-2">•</span>
             <span>Questions about personality, emotional patterns, values, and relationship preferences</span>
           </li>
           <li className="flex items-start">
-            <span className="h-5 w-5 text-blue-500 mr-2">•</span>
+            <span className="h-5 w-5 text-[#e83a8e] mr-2">•</span>
             <span>A comprehensive compatibility profile with personalized insights and recommendations</span>
           </li>
           <li className="flex items-start">
-            <span className="h-5 w-5 text-blue-500 mr-2">•</span>
+            <span className="h-5 w-5 text-[#e83a8e] mr-2">•</span>
             <span>Scientifically validated insights based on relationship psychology research</span>
           </li>
         </ul>
@@ -234,7 +234,7 @@ const QuizIntro = ({ onStart }: { onStart: () => void }) => {
       </div>
       
       <motion.button
-        className="px-8 py-4 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary/90 transition flex items-center justify-center mx-auto"
+        className="px-8 py-4 bg-[#e83a8e] text-white font-medium rounded-xl shadow-md hover:bg-[#d02e7d] transition flex items-center justify-center mx-auto"
         onClick={onStart}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.98 }}
