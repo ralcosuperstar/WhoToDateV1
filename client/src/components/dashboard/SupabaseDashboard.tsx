@@ -521,7 +521,7 @@ const SupabaseDashboard = () => {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button onClick={handleUpdateProfile}>Save Changes</Button>
+            <Button onClick={handleUpdateProfile} className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
