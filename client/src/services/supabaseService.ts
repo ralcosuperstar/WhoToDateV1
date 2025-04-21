@@ -242,7 +242,7 @@ export const userService = {
       console.log('Checking if user exists by email:', authUser.email);
       const { data: existingUserByEmail, error: emailCheckError } = await supabase
         .from('users')
-        .select('id, email, clerk_id')
+        .select('id, email, supabase_uuid')
         .eq('email', authUser.email)
         .single();
         
@@ -252,29 +252,29 @@ export const userService = {
       } else if (existingUserByEmail) {
         console.log('User already exists in database by email:', existingUserByEmail.email);
         
-        // Update clerk_id if it's not set but we have an auth user id
-        if (!existingUserByEmail.clerk_id && authUser.id) {
-          console.log('Updating clerk_id for existing user:', existingUserByEmail.id);
+        // Update supabase_uuid if it's not set but we have an auth user id
+        if (!existingUserByEmail.supabase_uuid && authUser.id) {
+          console.log('Updating supabase_uuid for existing user:', existingUserByEmail.id);
           try {
-            // Only update the clerk_id field to avoid updated_at issues
+            // Only update the supabase_uuid field
             const { data: updatedUser, error: updateError } = await supabase
               .from('users')
               .update({ 
-                clerk_id: authUser.id
+                supabase_uuid: authUser.id
               })
               .eq('id', existingUserByEmail.id)
               .select('*')
               .single();
               
             if (updateError) {
-              console.error('Error updating clerk_id:', updateError);
+              console.error('Error updating supabase_uuid:', updateError);
               // Continue with existing user anyway
             } else {
-              console.log('Successfully updated clerk_id');
+              console.log('Successfully updated supabase_uuid');
               return { user: updatedUser, error: null };
             }
           } catch (err) {
-            console.error('Exception updating clerk_id:', err);
+            console.error('Exception updating supabase_uuid:', err);
             // Continue with existing user
           }
         }
@@ -288,12 +288,13 @@ export const userService = {
       // Extract user metadata (if any)
       const metadata = authUser.user_metadata || {};
       
-      // Create a new user record - Don't specify ID to let the database generate one
+      // Create a new user record
       const { data: newUser, error: insertError } = await supabase
         .from('users')
         .insert({
+          id: authUser.id, // Use Supabase Auth UUID as primary key
           email: authUser.email,
-          clerk_id: authUser.id, // Store the auth ID in clerk_id field for reference
+          supabase_uuid: authUser.id, // Store the Supabase Auth UUID in the dedicated field
           username: metadata.username || authUser.email.split('@')[0],
           full_name: metadata.full_name || '',
           phone_number: metadata.phone || '',
