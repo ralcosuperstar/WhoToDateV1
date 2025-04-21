@@ -421,7 +421,7 @@ const Results = () => {
     }
   }, []); // Run only once on initial load
 
-  // Generate profile when answers are available
+  // Generate profile when answers are available or load from existing report
   useEffect(() => {
     console.log("useEffect for profile generation triggered");
     console.log("Answers available:", Object.keys(answers).length > 0);
@@ -429,6 +429,19 @@ const Results = () => {
     console.log("Database user available:", !!dbUser);
     console.log("Report available:", !!report);
     console.log("Quiz available:", !!existingQuiz);
+    
+    // If we have a report, use its data for the profile
+    if (report && report.report) {
+      console.log("Using existing report for profile data");
+      try {
+        const reportData = report.report;
+        setProfile(reportData);
+        return; // Exit early since we already have a profile
+      } catch (error) {
+        console.error("Error setting profile from report:", error);
+        // Continue to answers-based generation as fallback
+      }
+    }
     
     if (Object.keys(answers).length > 0) {
       try {
@@ -492,9 +505,17 @@ const Results = () => {
     // If we have a profile, show the full report immediately
     if (profile) {
       // Skip all modals and show the premium report directly
+      console.log("Setting premium report visible to true");
       setIsPremiumReportVisible(true);
     }
   }, [profile]);
+  
+  // Force premium report visibility to be true on initial load
+  useEffect(() => {
+    // This will ensure the report is always visible regardless of other conditions
+    console.log("Forcing premium report visibility on initial load");
+    setIsPremiumReportVisible(true);
+  }, []);
   
   // This is kept for backward compatibility but not used in the main flow anymore
   const handleGetFullReport = () => {
