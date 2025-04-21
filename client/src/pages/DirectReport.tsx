@@ -184,7 +184,7 @@ const DirectReport = () => {
             <div className="flex justify-center space-x-3 mx-auto max-w-fit">
               <button
                 onClick={() => downloadPDFReport(profile)}
-                className="py-3 px-5 bg-primary text-white font-medium rounded-lg flex items-center justify-center"
+                className="py-3 px-5 bg-[#e83a8e] text-white font-medium rounded-lg flex items-center justify-center hover:bg-[#d02e7d] transition-colors"
               >
                 <Download className="h-5 w-5 mr-2" />
                 Download PDF Report
@@ -192,7 +192,7 @@ const DirectReport = () => {
               
               <Link href="/quiz">
                 <button
-                  className="py-3 px-5 border border-primary text-primary bg-white font-medium rounded-lg flex items-center justify-center hover:bg-primary/5"
+                  className="py-3 px-5 border border-[#e83a8e] text-[#e83a8e] bg-white font-medium rounded-lg flex items-center justify-center hover:bg-[#e83a8e]/5 transition-colors"
                 >
                   <ArrowRight className="h-5 w-5 mr-2" />
                   Retake Quiz
@@ -224,7 +224,7 @@ const DirectReport = () => {
                     });
                   }
                 }}
-                className="py-2 px-4 bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center"
+                className="py-2 px-4 bg-[#e83a8e] text-white font-medium rounded-lg flex items-center justify-center hover:bg-[#d02e7d] transition-colors"
               >
                 <Share2 className="h-4 w-4 mr-2" />
                 Share Results
@@ -248,7 +248,7 @@ Try it yourself at: ${window.location.origin}`;
                   
                   window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 }}
-                className="py-2 px-4 bg-green-600 text-white font-medium rounded-lg flex items-center justify-center"
+                className="py-2 px-4 bg-[#e83a8e] text-white font-medium rounded-lg flex items-center justify-center hover:bg-[#d02e7d] transition-colors"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Email to a Friend
