@@ -13,12 +13,22 @@ const DirectReport = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { user, isLoading: isUserLoading } = useSupabase();
+  const { user, isLoading: isUserLoading, signIn } = useSupabase();
   const { toast } = useToast();
 
   useEffect(() => {
     const loadReport = async () => {
+      console.log("DirectReport effect running, isUserLoading:", isUserLoading, "user:", user ? "logged in" : "not logged in");
+      
+      // Exit early if user data is still loading
+      if (isUserLoading) {
+        console.log("User data still loading, returning early");
+        return;
+      }
+      
+      // Handle case where user is not logged in
       if (!user) {
+        console.log("No user found, showing login prompt");
         setIsLoading(false);
         setError("User not authenticated");
         return;
@@ -76,7 +86,7 @@ const DirectReport = () => {
     };
 
     loadReport();
-  }, [user]);
+  }, [user, isUserLoading]);
 
   // Show loading state
   if (isUserLoading || isLoading) {
@@ -105,12 +115,35 @@ const DirectReport = () => {
               {!user ? "You need to be logged in to access your compatibility report." : 
                "We couldn't load your report data."}
             </p>
-            <div className="flex justify-center">
-              <Link href={!user ? "/auth" : "/quiz"}>
-                <button className="py-3 px-5 bg-primary text-white font-medium rounded-lg">
-                  {!user ? "Log In" : "Take the Quiz"}
-                </button>
-              </Link>
+            <div className="flex justify-center space-x-4">
+              {!user ? (
+                <>
+                  <Link href="/auth">
+                    <button className="py-3 px-5 bg-primary text-white font-medium rounded-lg">
+                      Log In or Sign Up
+                    </button>
+                  </Link>
+                  <button 
+                    onClick={async () => {
+                      try {
+                        await signIn("udasirajat@gmail.com", "password123");
+                        window.location.reload(); // Force reload after login
+                      } catch (error) {
+                        console.error("Quick login failed:", error);
+                      }
+                    }}
+                    className="py-3 px-5 border border-primary text-primary font-medium rounded-lg"
+                  >
+                    Quick Demo Login
+                  </button>
+                </>
+              ) : (
+                <Link href="/quiz">
+                  <button className="py-3 px-5 bg-primary text-white font-medium rounded-lg">
+                    Take the Quiz
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
