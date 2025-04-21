@@ -365,20 +365,10 @@ const SupabaseDashboard = () => {
                     You have completed the compatibility assessment.
                   </p>
                   
-                  {report.is_paid === true ? (
-                    <Button asChild>
-                      <Link href="/report">View Full Report</Link>
-                    </Button>
-                  ) : (
-                    <div className="space-y-3">
-                      <p className="text-amber-500">
-                        Your report is ready, but it hasn't been unlocked yet.
-                      </p>
-                      <Button asChild>
-                        <Link href="/payment">Unlock Full Report</Link>
-                      </Button>
-                    </div>
-                  )}
+                  {/* All reports are now free, so we always show the button to view the report */}
+                  <Button asChild>
+                    <Link href="/report">View Full Report</Link>
+                  </Button>
                 </div>
               ) : quizAnswers?.completed ? (
                 <div className="space-y-4">
@@ -438,60 +428,28 @@ const SupabaseDashboard = () => {
               </CardContent>
             </Card>
           ) : report ? (
-            report.is_paid === true ? (
-              <div className="space-y-6">
-                <CompatibilityCard 
-                  color={(report.compatibility_color || 'yellow') as 'green' | 'yellow' | 'red'}
-                  title={
-                    !report.compatibility_color ? 'Your Compatibility Profile' :
-                    report.compatibility_color === 'green' ? 'Adaptable & Balanced' : 
-                    report.compatibility_color === 'yellow' ? 'Selective & Specific' : 
-                    'Particular & Defined'
-                  }
-                  description="This is a summary of your compatibility profile based on the assessment you completed."
-                  traits={[
-                    { name: "Openness", value: 75 },
-                    { name: "Emotional Stability", value: 68 },
-                    { name: "Communication", value: 82 }
-                  ]}
-                />
-                
-                <Button asChild>
-                  <Link href="/report">View Full Report</Link>
-                </Button>
-              </div>
-            ) : (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Unlock Your Full Report</CardTitle>
-                  <CardDescription>
-                    Your report is ready, but it needs to be unlocked.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="p-4 bg-primary/5 rounded-lg">
-                    <p className="mb-4">
-                      Based on your assessment, you have a 
-                      <span className="font-medium"> {report.compatibility_color ? 
-                        `${report.compatibility_color.charAt(0).toUpperCase()}${report.compatibility_color.slice(1)} Compatibility Profile` : 
-                        'Compatibility Profile'}
-                      </span>.
-                    </p>
-                    <p>Unlock your full report to discover:</p>
-                    <ul className="ml-6 mt-2 list-disc space-y-1">
-                      <li>Detailed personality insights</li>
-                      <li>Relationship strengths and challenges</li>
-                      <li>Compatibility with different personality types</li>
-                      <li>Personalized recommendations</li>
-                    </ul>
-                  </div>
-                  
-                  <Button asChild>
-                    <Link href="/payment">Unlock Full Report for ₹999</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            )
+            <div className="space-y-6">
+              {/* All reports are now free, so we always show the compatibility card and report button */}
+              <CompatibilityCard 
+                color={(report.compatibility_color || 'yellow') as 'green' | 'yellow' | 'red'}
+                title={
+                  !report.compatibility_color ? 'Your Compatibility Profile' :
+                  report.compatibility_color === 'green' ? 'Adaptable & Balanced' : 
+                  report.compatibility_color === 'yellow' ? 'Selective & Specific' : 
+                  'Particular & Defined'
+                }
+                description="This is a summary of your compatibility profile based on the assessment you completed."
+                traits={[
+                  { name: "Openness", value: 75 },
+                  { name: "Emotional Stability", value: 68 },
+                  { name: "Communication", value: 82 }
+                ]}
+              />
+              
+              <Button asChild>
+                <Link href="/report">View Full Report</Link>
+              </Button>
+            </div>
           ) : (
             <Card>
               <CardHeader>
