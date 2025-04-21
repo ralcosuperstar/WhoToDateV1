@@ -474,14 +474,24 @@ const FixedQuiz = () => {
               
               // If database has answers, use those (overriding local storage)
               if (data.answers && typeof data.answers === 'object') {
-                setAnswers(data.answers as Record<number, number>);
-                
-                // Find the next unanswered question
-                const answeredIds = Object.keys(data.answers as Record<number, number>).map(Number);
-                if (answeredIds.length > 0) {
-                  const maxAnswered = Math.max(...answeredIds);
-                  if (maxAnswered < quizQuestions.length) {
-                    setCurrentQuestionId(maxAnswered + 1);
+                // Check if this is a reset quiz with the special marker
+                if ('_reset' in data.answers && Object.keys(data.answers).length === 1) {
+                  console.log("Found reset quiz marker, starting fresh");
+                  setAnswers({});
+                  setCurrentQuestionId(1);
+                } else {
+                  setAnswers(data.answers as Record<number, number>);
+                  
+                  // Find the next unanswered question
+                  const answeredIds = Object.keys(data.answers as Record<number, number>)
+                    .filter(key => key !== '_reset')
+                    .map(Number);
+                    
+                  if (answeredIds.length > 0) {
+                    const maxAnswered = Math.max(...answeredIds);
+                    if (maxAnswered < quizQuestions.length) {
+                      setCurrentQuestionId(maxAnswered + 1);
+                    }
                   }
                 }
               }

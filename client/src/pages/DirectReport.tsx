@@ -199,14 +199,52 @@ const DirectReport = () => {
                 Download PDF Report
               </button>
               
-              <Link href="/quiz">
-                <button
-                  className="py-3 px-5 border border-[#e83a8e] text-[#e83a8e] bg-white font-medium rounded-lg flex items-center justify-center hover:bg-[#e83a8e]/5 transition-colors"
-                >
-                  <ArrowRight className="h-5 w-5 mr-2" />
-                  Retake Quiz
-                </button>
-              </Link>
+              <button
+                onClick={() => {
+                  // Clear session storage to reset quiz state
+                  sessionStorage.removeItem('quizAnswers');
+                  sessionStorage.removeItem('compatibilityProfile');
+                  
+                  // Clear database quiz data
+                  const resetQuizData = async () => {
+                    try {
+                      const supabase = await supabaseService.auth.getClient();
+                      if (user) {
+                        // Set completed to false for the user's quiz answers
+                        const { error } = await supabase
+                          .from('quiz_answers')
+                          .update({ 
+                            // Start with a blank object, but don't break empty array checks
+                            answers: { _reset: true }, 
+                            completed: false,
+                            updated_at: new Date().toISOString()
+                          })
+                          .eq('user_id', user.id);
+                        
+                        if (error) {
+                          console.error("Error resetting quiz data:", error);
+                        }
+                      }
+                    } catch (err) {
+                      console.error("Failed to reset quiz data:", err);
+                    }
+                    
+                    // Navigate to quiz page
+                    window.location.href = '/quiz';
+                  };
+                  
+                  resetQuizData();
+                  
+                  toast({
+                    title: "Quiz Reset",
+                    description: "Your quiz data has been reset. You can now take the quiz again.",
+                  });
+                }}
+                className="py-3 px-5 border border-[#e83a8e] text-[#e83a8e] bg-white font-medium rounded-lg flex items-center justify-center hover:bg-[#e83a8e]/5 transition-colors"
+              >
+                <ArrowRight className="h-5 w-5 mr-2" />
+                Retake Quiz
+              </button>
             </div>
             
             {/* Share and Refer Buttons */}
