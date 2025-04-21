@@ -79,7 +79,7 @@ const SectionOverview = ({
     <div className="mb-8 bg-white rounded-xl p-4 shadow-md border border-[#e83a8e]/20">
       <h3 className="text-center font-medium mb-5 text-[#e83a8e]">Your Assessment Journey</h3>
       
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {quizSections.map((section, index) => {
           const currentSectionIndex = getCurrentSectionIndex();
           const isComplete = index < currentSectionIndex;
@@ -97,17 +97,19 @@ const SectionOverview = ({
                     : 'bg-gray-50 text-gray-400'
               }`}
             >
-              <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center mb-1 ${
+              <div className={`mx-auto w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-1 ${
                 isComplete 
                   ? 'bg-[#e83a8e] text-white' 
                   : isCurrent 
                     ? 'bg-white border-2 border-[#e83a8e]' 
                     : 'bg-gray-100 text-gray-400'
               }`}>
-                <span className="text-lg">{isComplete ? '✓' : section.icon}</span>
+                <span className="text-base sm:text-lg">{isComplete ? '✓' : section.icon}</span>
               </div>
-              <div className="text-xs font-medium truncate">{section.title.split('&')[0]}</div>
-              <div className="text-[10px] mt-1">
+              <div className="text-xs font-medium leading-tight">
+                {section.title.split('&')[0].split(' ').slice(0, 2).join(' ')}
+              </div>
+              <div className="text-[9px] sm:text-[10px] mt-1 opacity-80">
                 {isComplete ? 'Complete' : isCurrent ? 'In Progress' : 'Coming Up'}
               </div>
             </div>
@@ -115,14 +117,14 @@ const SectionOverview = ({
         })}
       </div>
       
-      <div className="mt-4 flex items-center">
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center">
         <div className="h-2 w-full bg-[#e83a8e]/10 rounded-full overflow-hidden">
           <div 
             className="h-full bg-[#e83a8e] rounded-full transition-all duration-300" 
             style={{ width: `${(completedQuestions / 40) * 100}%` }}
           ></div>
         </div>
-        <div className="ml-2 text-xs font-medium text-[#e83a8e] whitespace-nowrap">
+        <div className="mt-1 sm:mt-0 sm:ml-2 text-xs font-medium text-[#e83a8e] text-center sm:text-left">
           {completedQuestions} of 40 completed
         </div>
       </div>
