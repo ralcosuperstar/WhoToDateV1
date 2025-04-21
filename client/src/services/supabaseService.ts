@@ -324,19 +324,40 @@ export const userService = {
   updateUserProfile: async (userId: string, profileData: any) => {
     const supabase = await authService.getClient();
     
-    const { data, error } = await supabase
-      .from('users')
-      .update(profileData)
-      .eq('id', userId)
-      .select()
-      .single();
+    try {
+      // First, get the current user data
+      const { data: currentUser, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+        
+      if (fetchError) {
+        console.error('Error fetching user profile:', fetchError);
+        return { user: null, error: fetchError };
+      }
       
-    if (error) {
-      console.error('Error updating user profile:', error);
-      return { user: null, error };
+      // Update the user with the new data
+      const { data, error } = await supabase
+        .from('users')
+        .update({
+          ...profileData
+          // No need to include updated_at as it doesn't exist in the schema
+        })
+        .eq('id', userId)
+        .select()
+        .single();
+        
+      if (error) {
+        console.error('Error updating user profile:', error);
+        return { user: null, error };
+      }
+      
+      return { user: data, error: null };
+    } catch (e) {
+      console.error('Unexpected error in updateUserProfile:', e);
+      return { user: null, error: e as Error };
     }
-    
-    return { user: data, error: null };
   }
 };
 
