@@ -317,33 +317,33 @@ export function CustomAuthUI() {
                         <InputOTPGroup>
                           <InputOTPSlot 
                             index={0} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                           <InputOTPSlot 
                             index={1} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                           <InputOTPSlot 
                             index={2} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                           <InputOTPSlot 
                             index={3} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                           <InputOTPSlot 
                             index={4} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                           <InputOTPSlot 
                             index={5} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
+                            className="border-[#e83a8e]/30 focus-within:border-[#e83a8e] focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e] [&_input]:caret-w-1"
                           />
                         </InputOTPGroup>
                       </InputOTP>
                     </FormControl>
-                    <FormDescription className="text-[#e83a8e]/70 mt-2">
-                      This code expires in 60 minutes
+                    <FormDescription className="text-gray-500 mt-2">
+                      Enter the verification code sent to your email
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -368,17 +368,17 @@ export function CustomAuthUI() {
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-center gap-3">
           {!showResendButton ? (
-            <div className="text-sm text-gray-500">
-              Resend code in <span className="text-[#e83a8e] font-medium">{resendTimer}s</span>
+            <div className="text-base text-gray-600">
+              Request new code in <span className="text-[#e83a8e] font-semibold">{resendTimer}</span> seconds
             </div>
           ) : (
             <Button 
               variant="outline" 
               onClick={handleResendOTP}
               disabled={isLoading}
-              className="border-[#e83a8e]/30 hover:bg-[#e83a8e]/10 text-[#e83a8e] hover:text-[#d02e7d]"
+              className="border-[#e83a8e]/60 hover:bg-[#e83a8e]/10 text-[#e83a8e] hover:text-[#d02e7d] font-medium px-6 py-2"
             >
-              Resend Code
+              Resend Verification Code
             </Button>
           )}
           
