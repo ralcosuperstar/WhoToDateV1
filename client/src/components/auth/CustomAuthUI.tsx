@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-// No need to import auth utils as we're using the context
+// We're using the context directly
 import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Add fixed Supabase context
 
 import { Button } from '@/components/ui/button';
