@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { reportService, quizService, userService, authService } from "@/services/supabaseService";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import { 
   Download, 
   CheckCircle2, 
@@ -124,8 +124,17 @@ const FixedResults = () => {
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   
   // Authentication
-  const { user: supabaseUser, isLoading: isUserLoading } = useSupabase();
+  const { user: supabaseUser, isLoading: isUserLoading } = useFixedSupabase();
   const isUserError = !supabaseUser && !isUserLoading;
+  
+  // Debug authentication
+  useEffect(() => {
+    console.log("Auth state in FixedResults:", { 
+      supabaseUser: !!supabaseUser, 
+      id: supabaseUser?.id,
+      isUserLoading 
+    });
+  }, [supabaseUser, isUserLoading]);
   
   // Get database user
   const { 
@@ -431,8 +440,10 @@ const FixedResults = () => {
     }
   }, [isUserError, toast, navigate]);
   
-  // If authentication is loading, show loading
-  if (isUserLoading) {
+  // Only show authentication loading if it's still loading
+  // This change allows the component to proceed to the next step if auth is available
+  if (isUserLoading && !supabaseUser) {
+    console.log("Waiting for authentication to complete...");
     return (
       <div className="pt-20 px-4 pb-12">
         <div className="container mx-auto max-w-3xl">
