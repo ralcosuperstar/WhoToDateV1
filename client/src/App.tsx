@@ -24,6 +24,7 @@ import LocalResults from "@/pages/LocalResults";
 import SavedResults from "@/pages/SavedResults"; // Supabase saved results component
 import Report from "@/pages/Report";
 import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
+import FixedResults from "@/pages/FixedResults"; // Fixed results page with improved error handling
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
 import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
@@ -104,7 +105,7 @@ function Router() {
       <ProtectedRoute path="/quiz-simple" component={SimpleQuiz} allowGuests={true} />
       <Route path="/quiz-basic" component={BasicQuiz} />
       <Route path="/quiz" component={FixedQuiz} />
-      <Route path="/results" component={DirectReport} />
+      <Route path="/results" component={FixedResults} />
       <ProtectedRoute path="/results-simple" component={SimpleResults} allowGuests={true} />
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <Route path="/local-results" component={LocalResults} />
