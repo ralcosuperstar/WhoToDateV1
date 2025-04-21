@@ -43,68 +43,95 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   // Initialize and fetch the current user/session
   useEffect(() => {
     let unsubscribe: any = null;
+    let initialized = false;
     
     async function initialize() {
+      // Only allow initialization once
+      if (initialized) return;
+      initialized = true;
+      
       setIsLoading(true);
       try {
         console.log('Initializing Supabase context...');
         
-        // Use the existing client from the singleton pattern instead of getting a new one
-        // This prevents multiple GoTrueClient instances
+        // Use the existing client from the singleton pattern
         const client = await authService.getClient();
         
         if (!client) {
           throw new Error('Failed to initialize Supabase client');
         }
         
-        // Get current session
-        const sessionData = await authService.getSession();
-        setSession(sessionData);
+        console.log('Supabase client initialized successfully');
         
-        // Get current user if session exists
-        if (sessionData) {
-          const userData = await authService.getCurrentUser();
-          setUser(userData);
-          
-          // Ensure user exists in database (or create if needed)
-          if (userData) {
-            try {
-              const { error } = await userService.ensureUserExists(userData);
-              if (error) {
-                console.error('Error ensuring user exists:', error);
-              }
-            } catch (userError) {
-              console.error('Exception ensuring user exists:', userError);
-            }
-          }
-        }
-        
-        // Subscribe to auth changes 
+        // Set up the auth state change listener first before checking the current session
+        // This ensures we don't miss any auth state changes that happen during initialization
         const { data: authListener } = client.auth.onAuthStateChange(
           async (event, newSession) => {
             console.log("Auth state changed:", event);
-            setSession(newSession);
             
-            if (newSession?.user) {
-              setUser(newSession.user);
-              
-              // Ensure user exists in database when they sign in
-              if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                console.log('Ensuring user exists after auth change');
+            // Important: Don't set loading to false yet, wait until we process the event
+            
+            // INITIAL_SESSION event is triggered when the page loads
+            if (event === 'INITIAL_SESSION') {
+              if (newSession?.user) {
+                console.log('User authenticated:', newSession.user.id);
+                setSession(newSession);
+                setUser(newSession.user);
+                
+                // Ensure user exists in database
+                try {
+                  const { error } = await userService.ensureUserExists(newSession.user);
+                  if (error) {
+                    console.error('Error ensuring user exists:', error);
+                  }
+                } catch (userError) {
+                  console.error('Exception ensuring user exists:', userError);
+                }
+              } else {
+                console.log('No authenticated user in INITIAL_SESSION');
+                setUser(null);
+                setSession(null);
+              }
+            } 
+            // User just signed in
+            else if (event === 'SIGNED_IN') {
+              if (newSession?.user) {
+                console.log('User signed in:', newSession.user.id);
+                setSession(newSession);
+                setUser(newSession.user);
+                
+                // Ensure user exists in database
                 try {
                   await userService.ensureUserExists(newSession.user);
-                  console.log('User sync completed successfully');
                 } catch (error) {
-                  console.error('Error ensuring user exists after auth change:', error);
+                  console.error('Error ensuring user exists after sign in:', error);
                 }
               }
-            } else {
+            } 
+            // User signed out
+            else if (event === 'SIGNED_OUT') {
+              console.log('User signed out');
               setUser(null);
+              setSession(null);
             }
+            
+            // Finally, always set loading to false after processing the event
+            setIsLoading(false);
           }
         );
         
         unsubscribe = authListener.subscription;
+        
+        // Get current session - this will trigger the INITIAL_SESSION event
+        // through the listener we just set up
+        const { data } = await client.auth.getSession();
+        
+        // If the auth listener doesn't fire for some reason, ensure we're not stuck in loading state
+        // by setting a timeout
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 3000);
+        
       } catch (error) {
         console.error('Error initializing Supabase context:', error);
         toast({
@@ -112,7 +139,6 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
           description: 'There was a problem connecting to the authentication service.',
           variant: 'destructive',
         });
-      } finally {
         setIsLoading(false);
       }
     }

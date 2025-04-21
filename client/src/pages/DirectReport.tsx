@@ -17,6 +17,24 @@ const DirectReport = () => {
   const { user, isLoading: isUserLoading, signIn } = useSupabase();
   const { toast } = useToast();
 
+  // Add a timeout to prevent infinite loading states
+  useEffect(() => {
+    // Force timeouts to prevent infinite loading
+    const loadingTimeout = setTimeout(() => {
+      if (isLoading) {
+        console.log("Loading timeout reached, forcing loading to complete");
+        setIsLoading(false);
+        
+        // If we still don't have user data, show an error
+        if (!user && !error) {
+          setError("Loading timed out. Please try refreshing the page.");
+        }
+      }
+    }, 5000); // 5 second timeout
+    
+    return () => clearTimeout(loadingTimeout);
+  }, [isLoading, user, error]);
+
   useEffect(() => {
     const loadReport = async () => {
       console.log("DirectReport effect running, isUserLoading:", isUserLoading, "user:", user ? "logged in" : "not logged in");
