@@ -647,8 +647,9 @@ const FixedQuiz = () => {
         }
       }
       
-      // Navigate to the local results page that doesn't depend on DB data
-      navigate('/local-results');
+      // Navigate to the results page, preferring the main results page for logged-in users
+      // with fallback to local-results for non-logged-in users
+      navigate(user ? '/results' : '/local-results');
     } catch (err) {
       console.error("Error completing quiz:", err);
       toast({
@@ -657,8 +658,8 @@ const FixedQuiz = () => {
         variant: "destructive",
       });
       
-      // Navigate to local results page even on error - we have the profile in session storage
-      navigate('/local-results');
+      // Navigate to results page even on error - we have the profile in session storage
+      navigate(user ? '/results' : '/local-results');
     } finally {
       setSubmitting(false);
     }

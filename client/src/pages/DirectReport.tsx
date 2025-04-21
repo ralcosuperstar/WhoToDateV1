@@ -13,12 +13,19 @@ const DirectReport = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reportLoaded, setReportLoaded] = useState(false);
   const { user, isLoading: isUserLoading, signIn } = useSupabase();
   const { toast } = useToast();
 
   useEffect(() => {
     const loadReport = async () => {
       console.log("DirectReport effect running, isUserLoading:", isUserLoading, "user:", user ? "logged in" : "not logged in");
+      
+      // Skip if report is already loaded
+      if (reportLoaded && profile) {
+        console.log("Report already loaded, skipping fetch");
+        return;
+      }
       
       // Exit early if user data is still loading
       if (isUserLoading) {
@@ -48,6 +55,7 @@ const DirectReport = () => {
           console.log("Found existing report, loading it");
           setProfile(report.report as CompatibilityProfile);
           setIsLoading(false);
+          setReportLoaded(true);
           return;
         }
         
@@ -78,6 +86,7 @@ const DirectReport = () => {
         });
         
         setIsLoading(false);
+        setReportLoaded(true);
       } catch (error) {
         console.error("Error loading report:", error);
         setError("Failed to load your report data. Please try again.");
@@ -86,7 +95,7 @@ const DirectReport = () => {
     };
 
     loadReport();
-  }, [user, isUserLoading]);
+  }, [user, isUserLoading, reportLoaded, profile]);
 
   // Show loading state
   if (isUserLoading || isLoading) {
