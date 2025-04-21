@@ -404,18 +404,14 @@ export const quizService = {
   },
 
   /**
-   * Save quiz answers
+   * Save quiz answers - simplified for Supabase-only operation
    */
-  saveQuizAnswers: async (supabase: any, userId: string | number, answers: any, completed: boolean = false) => {
+  saveQuizAnswers: async (supabase: any, userId: string, answers: any, completed: boolean = false) => {
     try {
       console.log('Saving quiz answers for user ID:', userId);
       
-      // We're now using Supabase Auth UUID directly, so we don't need to convert it
-      // Just ensure it's a string (newer schema uses text columns for user_id)
-      let dbUserId = String(userId);
-      
       // Check if user already has answers
-      const existingQuiz = await quizService.getQuizAnswers(supabase, dbUserId);
+      const existingQuiz = await quizService.getQuizAnswers(supabase, userId);
       
       if (existingQuiz) {
         console.log('Updating existing quiz answers for ID:', existingQuiz.id);
@@ -439,12 +435,12 @@ export const quizService = {
         console.log('Successfully updated quiz answers');
         return data as QuizAnswer;
       } else {
-        console.log('Creating new quiz answers for user ID:', dbUserId);
+        console.log('Creating new quiz answers for user ID:', userId);
         // Create new answers
         const { data, error } = await supabase
           .from('quiz_answers')
           .insert({
-            user_id: dbUserId,
+            user_id: userId,
             answers,
             completed,
             started_at: new Date().toISOString(),
@@ -546,10 +542,10 @@ export const reportService = {
   },
 
   /**
-   * Create a report
+   * Create a report - simplified for Supabase-only operation
    */
   createReport: async (supabase: any, data: {
-    userId: string | number;
+    userId: string;
     quizId: number;
     report: any;
     compatibilityColor: string;
@@ -557,17 +553,13 @@ export const reportService = {
   }) => {
     console.log('Creating report with data:', data);
     try {
-      // We're now using Supabase Auth UUID directly, so we don't need to convert it
-      // Just ensure it's a string (newer schema uses text columns for user_id)
-      let dbUserId = String(data.userId);
-      
-      console.log('Using database user ID for report:', dbUserId);
+      console.log('Creating report with user ID:', data.userId);
       
       // Convert field names to snake_case for Supabase
       const { data: createdReport, error } = await supabase
         .from('reports')
         .insert({
-          user_id: dbUserId,
+          user_id: data.userId,
           quiz_id: data.quizId,
           report: data.report,
           compatibility_color: data.compatibilityColor,
@@ -705,20 +697,16 @@ export const blogService = {
  */
 export const paymentService = {
   /**
-   * Create a payment
+   * Create a payment - simplified for Supabase-only operation
    */
-  createPayment: async (userId: string | number, reportId: number, amount: number) => {
+  createPayment: async (userId: string, reportId: number, amount: number) => {
     const supabase = await authService.getClient();
     
-    // We're now using Supabase Auth UUID directly, so we don't need to convert it
-    // Just ensure it's a string (newer schema uses text columns for user_id)
-    let dbUserId = String(userId);
-    
-    console.log('Creating payment with user ID:', dbUserId);
+    console.log('Creating payment with user ID:', userId);
     const { data, error } = await supabase
       .from('payments')
       .insert({
-        user_id: dbUserId,
+        user_id: userId,
         report_id: reportId,
         amount,
         status: 'pending',

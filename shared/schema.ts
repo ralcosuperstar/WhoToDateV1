@@ -21,7 +21,7 @@ export const users = pgTable("users", {
   verificationTokenExpiry: timestamp("verification_token_expiry", { withTimezone: false }), // Expiry for verification token
   otpCode: text("otp_code"), // OTP code for SMS verification
   otpExpiry: timestamp("otp_expiry", { withTimezone: false }), // Expiry time for OTP code
-  supabaseUuid: text("supabase_uuid").unique(), // Supabase Auth UUID
+  clerkId: text("clerk_id"), // Legacy field - kept for backward compatibility
   createdAt: timestamp("created_at", { withTimezone: false }).defaultNow(),
   // removed updatedAt as it doesn't exist in the database
 });
@@ -85,7 +85,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   imageUrl: true,
   isVerified: true,
   verificationMethod: true,
-  supabaseUuid: true,
+  clerkId: true,
 });
 
 export const insertQuizAnswerSchema = createInsertSchema(quizAnswers).pick({
