@@ -257,6 +257,37 @@ const FullReportView = ({
               </div>
             </div>
             
+            {/* Intimacy Profile */}
+            <div className="bg-red-50 rounded-lg p-4 border border-red-100">
+              <h3 className="text-md font-bold mb-3 flex items-center text-red-800">
+                <Heart className="h-4 w-4 mr-2" />
+                Your Intimacy Style: {profile.intimacyStyle}
+              </h3>
+              <div className="space-y-2.5">
+                {Object.entries(profile.intimacyProfile).map(([trait, scoreVal]) => {
+                  // Convert 0-5 scale to percentage for display
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  
+                  return (
+                    <div key={trait} className="relative">
+                      <div className="flex justify-between mb-1">
+                        <p className="text-xs font-medium uppercase text-red-800">{trait}</p>
+                        <span className="text-xs font-bold text-red-800">{Math.round(score)}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-red-200 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${score}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-red-500 rounded-full"
+                        ></motion.div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
             {/* Communication Tips */}
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <h3 className="text-md font-bold mb-3 flex items-center text-green-800">

@@ -117,7 +117,7 @@ const FixedResults = () => {
   // State hooks
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
-  const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(false);
+  const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(true); // Now true by default since reports are free
   const [loadingTime, setLoadingTime] = useState(0);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   
@@ -590,12 +590,15 @@ const FixedResults = () => {
                     // Create a personalized message based on profile
                     const subject = `My ${profile.overallColor} compatibility profile from WhoToDate!`;
                     
-                    // Get a tip to share
-                    const randomTip = profile.relationshipTips[Math.floor(Math.random() * profile.relationshipTips.length)] || "Understanding your relationship style helps find better matches";
+                    // Get a tip to share from communication tips
+                    const communicationTips = profile.relationshipInsights?.communicationTips || [];
+                    const randomTip = communicationTips.length > 0 
+                      ? communicationTips[Math.floor(Math.random() * communicationTips.length)] 
+                      : "Understanding your relationship style helps find better matches";
                     
                     const body = `Hey! I just discovered my relationship compatibility type on WhoToDate. 
                     
-My profile says I'm a ${profile.attachmentStyle} attachment style with ${profile.mbtiStyle} personality type. One relationship tip I got was: "${randomTip}"
+My profile says I'm a ${profile.attachmentStyle} attachment style with ${profile.personalityArchetype} personality. One relationship tip I got was: "${randomTip}"
 
 This free tool gives you insights into your relationship patterns and helps you understand what kind of relationships will suit you best. It takes about 5 minutes to complete.
 
