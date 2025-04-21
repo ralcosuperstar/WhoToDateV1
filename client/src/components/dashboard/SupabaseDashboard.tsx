@@ -22,7 +22,7 @@ import {
 import { Label } from "@/components/ui/label";
 import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext"; // Use the fixed Supabase context
 import supabaseService from "@/services/supabaseService";
 
 // Define types for clarity
@@ -60,8 +60,8 @@ const SupabaseDashboard = () => {
   const [editEmail, setEditEmail] = useState("");
   const { toast } = useToast();
   
-  // Auth context
-  const { user, signOut } = useSupabase();
+  // Auth context - use fixed Supabase context
+  const { user, signOut } = useFixedSupabase();
   
   // Local state for data
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);

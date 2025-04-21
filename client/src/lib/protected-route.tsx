@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { Route } from "wouter";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext"; // Use the fixed Supabase context
 
 export function ProtectedRoute({
   path,
@@ -11,8 +11,8 @@ export function ProtectedRoute({
   component: React.ComponentType;
   allowGuests?: boolean;
 }) {
-  // Use Supabase hook instead of direct context access
-  const { user, isLoading } = useSupabase();
+  // Use the fixed Supabase hook
+  const { user, isLoading } = useFixedSupabase();
 
   // Special handling for the quiz route - allow access without login
   const isQuizRoute = path === "/quiz";

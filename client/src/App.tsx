@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
-import { SupabaseProvider } from "@/contexts/NewSupabaseContext"; // Direct Supabase integration
+import { FixedSupabaseProvider } from "@/contexts/FixedSupabaseContext"; // Simplified direct Supabase integration 
 import { SupabaseAuthProvider } from "@/contexts/SupabaseAuthContext"; // Authentication context
 
 // Layout components
@@ -130,7 +130,7 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <SupabaseProvider> {/* New Supabase Context that uses our service directly */}
+      <FixedSupabaseProvider> {/* Simplified Supabase Context that directly integrates with Supabase */}
         <SupabaseAuthProvider> {/* Authentication context for persistent user sessions */}
           <div className="flex flex-col min-h-screen">
             <Header />
@@ -141,7 +141,7 @@ function App() {
             <Toaster />
           </div>
         </SupabaseAuthProvider>
-      </SupabaseProvider>
+      </FixedSupabaseProvider>
     </QueryClientProvider>
   );
 }

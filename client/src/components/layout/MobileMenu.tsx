@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import * as React from "react";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext"; // Import the fixed context
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isOpen, onClose, onLogout }: MobileMenuProps) => {
   const { toast } = useToast();
-  const { user, signOut, isLoading } = useSupabase();
+  const { user, signOut, isLoading } = useFixedSupabase();
   
   // Close menu when clicking a link
   const handleLinkClick = () => {

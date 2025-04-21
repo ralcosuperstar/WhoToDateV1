@@ -2,14 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import MobileMenu from "./MobileMenu";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext"; // Use the fixed Supabase context
 import { Heart } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { toast } = useToast();
-  const { user, isLoading, signOut } = useSupabase();
+  const { user, isLoading, signOut } = useFixedSupabase();
 
   const handleLogout = async () => {
     try {
