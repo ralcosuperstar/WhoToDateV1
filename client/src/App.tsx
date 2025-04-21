@@ -23,6 +23,7 @@ import SimpleResults from "@/pages/SimpleResults";
 import LocalResults from "@/pages/LocalResults";
 import SavedResults from "@/pages/SavedResults"; // Supabase saved results component
 import Report from "@/pages/Report";
+import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
 import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
@@ -101,11 +102,13 @@ function Router() {
       <ProtectedRoute path="/quiz-simple" component={SimpleQuiz} allowGuests={true} />
       <Route path="/quiz-basic" component={BasicQuiz} />
       <Route path="/quiz" component={FixedQuiz} />
-      <ProtectedRoute path="/results" component={SimpleResults} allowGuests={true} />
+      <Route path="/results" component={DirectReport} />
+      <ProtectedRoute path="/results-simple" component={SimpleResults} allowGuests={true} />
       <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
       <Route path="/local-results" component={LocalResults} />
       <Route path="/saved-results" component={SavedResults} />
-      <ProtectedRoute path="/report" component={Report} />
+      <Route path="/report" component={DirectReport} />
+      <ProtectedRoute path="/report-legacy" component={Report} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard-original" component={Dashboard} />
       <ProtectedRoute path="/dashboard-dev" component={DevDashboardPage} />
