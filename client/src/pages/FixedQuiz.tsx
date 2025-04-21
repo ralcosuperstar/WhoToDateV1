@@ -163,9 +163,7 @@ const SectionInfo = ({ section, questionNumber }: { section: string; questionNum
       </div>
       <h2 className="text-xl font-heading font-bold mb-1">{sectionData.title}</h2>
       <p className="text-neutral-dark/70 text-sm">{sectionData.description}</p>
-      <div className="mt-3 text-xs text-[#e83a8e] font-medium">
-        Section {sectionData.number} of 4 • Question {questionNumber} of 40
-      </div>
+
     </div>
   );
 };
