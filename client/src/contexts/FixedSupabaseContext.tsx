@@ -11,6 +11,7 @@ interface SupabaseContextType {
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string, userData?: any) => Promise<any>;
   signOut: () => Promise<any>;
+  verifyOtp: (email: string, token: string) => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
   updatePassword: (password: string) => Promise<any>;
   refreshUser: () => Promise<void>;
@@ -26,6 +27,7 @@ export const FixedSupabaseContext = createContext<SupabaseContextType>({
   signIn: () => Promise.resolve({}),
   signUp: () => Promise.resolve({}),
   signOut: () => Promise.resolve({}),
+  verifyOtp: () => Promise.resolve({}),
   resetPassword: () => Promise.resolve({}),
   updatePassword: () => Promise.resolve({}),
   refreshUser: () => Promise.resolve(),
@@ -175,6 +177,7 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
     signIn: directSupabaseService.auth.signIn,
     signUp: directSupabaseService.auth.signUp,
     signOut: handleSignOut,
+    verifyOtp: directSupabaseService.auth.verifyOtp,
     resetPassword: directSupabaseService.auth.resetPassword,
     updatePassword: directSupabaseService.auth.updatePassword,
     refreshUser,

@@ -42,7 +42,7 @@ export function CustomAuthUI() {
   const [resendTimer, setResendTimer] = useState(60);
   const [showResendButton, setShowResendButton] = useState(false);
   const { toast } = useToast();
-  const { user, isLoading: authLoading, signIn, signUp } = useFixedSupabase();
+  const { user, isLoading: authLoading, signIn, signUp, verifyOtp } = useFixedSupabase();
 
   // Redirect if user is already logged in
   useEffect(() => {
@@ -238,34 +238,17 @@ export function CustomAuthUI() {
   const onOTPSubmit = async (formData: z.infer<typeof otpSchema>) => {
     setIsLoading(true);
     try {
-      // Verify OTP using our utility function
-      const { user, error } = await verifyOtp(verificationEmail, formData.otp);
-
-      if (error) {
-        throw error;
+      // Verify OTP using the context function
+      const result = await verifyOtp(verificationEmail, formData.otp);
+      
+      if (result.error) {
+        throw result.error;
       }
 
       toast({
         title: 'Email verified',
         description: 'Your email has been verified. You are now signed in.',
       });
-
-      // Sync the Supabase authentication with our server
-      if (user) {
-        try {
-          console.log("Syncing user with server after verification:", user.email);
-          const syncResult = await syncUserWithServer(user);
-          
-          if (!syncResult.success) {
-            console.error("Failed to sync with server after verification");
-          } else {
-            console.log("Successfully synced user with server after verification");
-          }
-        } catch (syncError) {
-          console.error("Error syncing user with server after verification:", syncError);
-          // Continue even if sync fails - we want the user to be able to use the app
-        }
-      }
 
       // Reset verification view
       setVerificationView(false);

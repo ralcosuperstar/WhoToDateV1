@@ -31,6 +31,15 @@ export const auth = {
       options: { data: userData }
     });
   },
+  
+  // Verify OTP code
+  verifyOtp: async (email: string, token: string) => {
+    return await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'signup'
+    });
+  },
 
   // Sign out
   signOut: async () => {
