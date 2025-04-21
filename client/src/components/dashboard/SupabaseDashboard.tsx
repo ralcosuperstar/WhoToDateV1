@@ -347,13 +347,17 @@ const SupabaseDashboard = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <div className={`h-3 w-3 rounded-full ${
-                      report.compatibility_color === 'green' ? 'bg-emerald-500' : 
-                      report.compatibility_color === 'yellow' ? 'bg-amber-500' : 
-                      'bg-red-500'
+                      report.compatibility_color ? (
+                        report.compatibility_color === 'green' ? 'bg-emerald-500' : 
+                        report.compatibility_color === 'yellow' ? 'bg-amber-500' : 
+                        'bg-red-500'
+                      ) : 'bg-gray-500'
                     }`}></div>
                     <span className="font-medium">
-                      {report.compatibility_color.charAt(0).toUpperCase() + 
-                       report.compatibility_color.slice(1)} Compatibility Profile
+                      {report.compatibility_color ? 
+                        `${report.compatibility_color.charAt(0).toUpperCase()}${report.compatibility_color.slice(1)} Compatibility Profile` : 
+                        'Compatibility Profile'
+                      }
                     </span>
                   </div>
                   
@@ -361,7 +365,7 @@ const SupabaseDashboard = () => {
                     You have completed the compatibility assessment.
                   </p>
                   
-                  {report.is_paid ? (
+                  {report.is_paid === true ? (
                     <Button asChild>
                       <Link href="/report">View Full Report</Link>
                     </Button>
@@ -434,11 +438,12 @@ const SupabaseDashboard = () => {
               </CardContent>
             </Card>
           ) : report ? (
-            report.is_paid ? (
+            report.is_paid === true ? (
               <div className="space-y-6">
                 <CompatibilityCard 
-                  color={report.compatibility_color as 'green' | 'yellow' | 'red'}
+                  color={(report.compatibility_color || 'yellow') as 'green' | 'yellow' | 'red'}
                   title={
+                    !report.compatibility_color ? 'Your Compatibility Profile' :
                     report.compatibility_color === 'green' ? 'Adaptable & Balanced' : 
                     report.compatibility_color === 'yellow' ? 'Selective & Specific' : 
                     'Particular & Defined'
@@ -467,8 +472,10 @@ const SupabaseDashboard = () => {
                   <div className="p-4 bg-primary/5 rounded-lg">
                     <p className="mb-4">
                       Based on your assessment, you have a 
-                      <span className="font-medium"> {report.compatibility_color.charAt(0).toUpperCase() + 
-                      report.compatibility_color.slice(1)} Compatibility Profile</span>.
+                      <span className="font-medium"> {report.compatibility_color ? 
+                        `${report.compatibility_color.charAt(0).toUpperCase()}${report.compatibility_color.slice(1)} Compatibility Profile` : 
+                        'Compatibility Profile'}
+                      </span>.
                     </p>
                     <p>Unlock your full report to discover:</p>
                     <ul className="ml-6 mt-2 list-disc space-y-1">
