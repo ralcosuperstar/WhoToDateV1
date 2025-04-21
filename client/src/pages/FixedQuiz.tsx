@@ -175,11 +175,11 @@ const SectionOverview = ({
         <div className="h-2 w-full bg-[#e83a8e]/10 rounded-full overflow-hidden">
           <div 
             className="h-full bg-[#e83a8e] rounded-full transition-all duration-300" 
-            style={{ width: `${(completedQuestions / 40) * 100}%` }}
+            style={{ width: `${Math.max(0, (completedQuestions / 40) * 100)}%` }}
           ></div>
         </div>
         <div className="mt-1 sm:mt-0 sm:ml-2 text-xs font-medium text-[#e83a8e] text-center sm:text-left">
-          {completedQuestions} of 40 completed
+          {completedQuestions || 0} of 40 completed
         </div>
       </div>
       
@@ -793,6 +793,7 @@ const FixedQuiz = () => {
                 />
                 
                 {/* New section overview component */}
+                {console.log("Current answers state:", answers, "Length:", Object.keys(answers).length)}
                 <SectionOverview 
                   currentSection={currentQuestion.section}
                   completedQuestions={Object.keys(answers).length}
