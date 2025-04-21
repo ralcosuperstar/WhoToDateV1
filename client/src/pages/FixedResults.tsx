@@ -162,13 +162,14 @@ const FixedResults = () => {
     error: quizError,
     refetch: refetchQuiz
   } = useQuery({
-    queryKey: ['quiz', dbUser?.id],
+    queryKey: ['quiz', supabaseUser?.id],
     queryFn: async () => {
-      if (!dbUser?.id) throw new Error('Database user ID not available');
+      if (!supabaseUser?.id) throw new Error('Auth user ID not available');
       const client = await authService.getClient();
-      return quizService.getQuizByUserId(client, dbUser.id);
+      // Use the supabaseUser.id (UUID) directly instead of the database numeric ID
+      return quizService.getQuizByUserId(client, supabaseUser.id);
     },
-    enabled: !!dbUser?.id,
+    enabled: !!supabaseUser?.id,
     retry: 2,
     refetchOnWindowFocus: false
   });
@@ -180,13 +181,14 @@ const FixedResults = () => {
     isError: isReportError,
     refetch: refetchReport
   } = useQuery({
-    queryKey: ['report', dbUser?.id],
+    queryKey: ['report', supabaseUser?.id],
     queryFn: async () => {
-      if (!dbUser?.id) throw new Error('Database user ID not available');
+      if (!supabaseUser?.id) throw new Error('Auth user ID not available');
       const client = await authService.getClient();
-      return reportService.getReportByUserId(client, dbUser.id);
+      // Use the supabaseUser.id (UUID) directly instead of the database numeric ID
+      return reportService.getReportByUserId(client, supabaseUser.id);
     },
-    enabled: !!dbUser?.id,
+    enabled: !!supabaseUser?.id,
     refetchOnWindowFocus: false,
     retry: 2
   });
@@ -207,15 +209,14 @@ const FixedResults = () => {
           throw new Error('User not authenticated');
         }
         
-        const client = await authService.getClient();
-        const dbUser = await userService.getUserByEmail(client, supabaseUser.email || '');
+        // Use the Supabase Auth UUID directly
+        const userId = supabaseUser.id;
         
-        if (!dbUser || !dbUser.id) {
-          throw new Error('Unable to find database user ID');
+        if (!userId) {
+          throw new Error('User ID not available');
         }
         
-        const userId = dbUser.id;
-        
+        const client = await authService.getClient();
         const report = await reportService.createReport(client, {
           userId,
           quizId: data.quizId,
