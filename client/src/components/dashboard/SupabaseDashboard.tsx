@@ -289,9 +289,19 @@ const SupabaseDashboard = () => {
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <TabsList className="grid w-full max-w-md grid-cols-2">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="report">Compatibility Report</TabsTrigger>
+        <TabsList className="grid w-full max-w-md grid-cols-2 bg-[#e83a8e]/10">
+          <TabsTrigger 
+            value="profile" 
+            className="data-[state=active]:bg-[#e83a8e] data-[state=active]:text-white data-[state=active]:shadow-none"
+          >
+            Profile
+          </TabsTrigger>
+          <TabsTrigger 
+            value="report" 
+            className="data-[state=active]:bg-[#e83a8e] data-[state=active]:text-white data-[state=active]:shadow-none"
+          >
+            Compatibility Report
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile" className="space-y-6">
@@ -366,7 +376,7 @@ const SupabaseDashboard = () => {
                   </p>
                   
                   {/* All reports are now free, so we always show the button to view the report */}
-                  <Button asChild>
+                  <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">
                     <Link href="/report">View Full Report</Link>
                   </Button>
                 </div>
@@ -375,7 +385,7 @@ const SupabaseDashboard = () => {
                   <p className="text-neutral-dark/80">
                     You have completed the assessment, but your report is still being generated.
                   </p>
-                  <Button asChild>
+                  <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">
                     <Link href="/results">View Results</Link>
                   </Button>
                 </div>
@@ -384,7 +394,7 @@ const SupabaseDashboard = () => {
                   <p className="text-neutral-dark/80">
                     You have started the assessment but haven't completed it yet.
                   </p>
-                  <Button asChild>
+                  <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">
                     <Link href="/quiz">Continue Assessment</Link>
                   </Button>
                 </div>
@@ -393,7 +403,7 @@ const SupabaseDashboard = () => {
                   <p className="text-neutral-dark/80">
                     You haven't taken the compatibility assessment yet.
                   </p>
-                  <Button asChild>
+                  <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">
                     <Link href="/quiz">Take Assessment</Link>
                   </Button>
                 </div>
@@ -446,7 +456,7 @@ const SupabaseDashboard = () => {
                 ]}
               />
               
-              <Button asChild>
+              <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors">
                 <Link href="/report">View Full Report</Link>
               </Button>
             </div>
