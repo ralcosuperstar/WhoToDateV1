@@ -13,19 +13,35 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
+      // Set loading state immediately to prevent multiple clicks
+      // But don't disable button as it causes the "logging out" text to get stuck
+      
+      console.log("Starting logout process");
+      
       // Use Supabase signOut method
       const { error } = await signOut();
       
       if (error) {
+        console.error("Logout error from Supabase:", error);
         throw error;
       }
+      
+      console.log("Logout successful, showing toast");
       
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
       });
-      // Navigate to home page
-      window.location.href = "/";
+      
+      // Clear any cached user data in localStorage
+      localStorage.removeItem("supabase.auth.token");
+      
+      // Small delay to allow the auth state to update before redirecting
+      setTimeout(() => {
+        // Use window.location.replace instead of href to prevent caching issues
+        window.location.replace("/");
+      }, 300);
+      
     } catch (error) {
       console.error("Logout error:", error);
       toast({

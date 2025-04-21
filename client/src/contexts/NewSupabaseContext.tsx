@@ -183,12 +183,33 @@ export function SupabaseProvider({ children }: { children: React.ReactNode }) {
     signIn: authService.signIn,
     signUp: authService.signUp,
     signOut: async () => {
-      const result = await authService.signOut();
-      if (!result.error) {
+      try {
+        console.log("Context: Attempting to sign out");
+        // First clear local state immediately to give immediate feedback
         setUser(null);
         setSession(null);
+        
+        // Then actually sign out from Supabase
+        const result = await authService.signOut();
+        
+        console.log("Context: Sign out complete, result:", result);
+        
+        // Force a browser refresh of auth state by clearing any tokens/cache
+        localStorage.removeItem("supabase.auth.token");
+        localStorage.removeItem("supabase.auth.expires_at");
+        
+        // Clear any session cookies by setting to expired
+        document.cookie = "sb-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        
+        return result;
+      } catch (error) {
+        console.error("Context: Error during sign out:", error);
+        // Still reset the local state even if there was an API error
+        setUser(null);
+        setSession(null);
+        return { error };
       }
-      return result;
     },
     resetPassword: authService.resetPassword,
     updatePassword: authService.updatePassword,

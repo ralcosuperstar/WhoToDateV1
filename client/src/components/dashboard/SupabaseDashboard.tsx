@@ -78,9 +78,34 @@ const SupabaseDashboard = () => {
   const [quizError, setQuizError] = useState<Error | null>(null);
   const [reportError, setReportError] = useState<Error | null>(null);
   
+  // Add a timeout to prevent infinite loading
+  useEffect(() => {
+    // Check if we're still loading after 5 seconds
+    const timeout = setTimeout(() => {
+      if (isProfileLoading) {
+        console.log('Dashboard: Profile loading timeout reached');
+        setIsProfileLoading(false);
+        
+        // Set fallback data from auth user if available
+        if (user) {
+          setUserProfile({
+            id: user.id,
+            username: user.email?.split('@')[0] || 'user',
+            email: user.email || '',
+            full_name: user.user_metadata?.full_name || null,
+            phone_number: user.phone || null
+          });
+        }
+      }
+    }, 5000);
+    
+    return () => clearTimeout(timeout);
+  }, [isProfileLoading, user]);
+
   // Fetch user profile from database
   useEffect(() => {
     const fetchUserProfile = async () => {
+      // If no user, or if profile is already loaded, exit early
       if (!user) {
         setIsProfileLoading(false);
         return;
@@ -123,6 +148,17 @@ const SupabaseDashboard = () => {
       } catch (error) {
         console.error('Error in fetchUserProfile:', error);
         setProfileError(error instanceof Error ? error : new Error(String(error)));
+        
+        // Still set a fallback profile on error
+        if (user) {
+          setUserProfile({
+            id: user.id,
+            username: user.email?.split('@')[0] || 'user',
+            email: user.email || '',
+            full_name: user.user_metadata?.full_name || null,
+            phone_number: user.phone || null
+          });
+        }
       } finally {
         setIsProfileLoading(false);
       }
@@ -270,14 +306,36 @@ const SupabaseDashboard = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
+      console.log("Dashboard: Starting logout process");
+      
+      // Show toast first for immediate feedback
+      toast({
+        title: "Logging out...",
+        description: "Please wait while we log you out",
+      });
+      
+      // Clear any local storage/cookies
+      localStorage.removeItem("supabase.auth.token");
+      localStorage.removeItem("supabase.auth.expires_at");
+      
+      // Clear any session cookies
+      document.cookie = "sb-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      // Call the signOut method
       await signOut();
+      
+      console.log("Dashboard: Logout completed successfully");
+      
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
       });
       
-      // Navigate to home page
-      window.location.href = "/";
+      // Use replace to force a clean page load without keeping history
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 300);
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
@@ -285,6 +343,11 @@ const SupabaseDashboard = () => {
         description: "There was a problem logging out. Please try again.",
         variant: "destructive",
       });
+      
+      // Even if there's an error, try to navigate home
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 1000);
     }
   };
   
