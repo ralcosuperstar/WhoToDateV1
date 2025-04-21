@@ -308,39 +308,34 @@ export function CustomAuthUI() {
                   <FormItem className="mx-auto flex flex-col items-center">
                     <FormLabel className="text-gray-700">Verification Code</FormLabel>
                     <FormControl>
-                      <InputOTP 
-                        maxLength={6} 
-                        {...field} 
-                        className="gap-2"
-                        containerClassName="group"
-                      >
-                        <InputOTPGroup>
-                          <InputOTPSlot 
-                            index={0} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                          <InputOTPSlot 
-                            index={1} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                          <InputOTPSlot 
-                            index={2} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                          <InputOTPSlot 
-                            index={3} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                          <InputOTPSlot 
-                            index={4} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                          <InputOTPSlot 
-                            index={5} 
-                            className="border-[#e83a8e]/40 focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e]/40 [&_input]:caret-[#e83a8e] [&_input]:caret-w-2"
-                          />
-                        </InputOTPGroup>
-                      </InputOTP>
+                      <div className="space-y-6">
+                        <InputOTP 
+                          maxLength={6} 
+                          {...field} 
+                          className="gap-3"
+                          containerClassName="group"
+                        >
+                          <InputOTPGroup>
+                            {[0, 1, 2, 3, 4, 5].map((i) => (
+                              <div key={i} className="relative">
+                                <InputOTPSlot 
+                                  index={i} 
+                                  className="border-[#e83a8e]/40 w-12 h-12 text-lg focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e] focus-within:ring-2 [&_input]:caret-transparent"
+                                />
+                                <div 
+                                  className="absolute inset-0 pointer-events-none flex items-center justify-center"
+                                  style={{ 
+                                    opacity: field.value?.length === i ? 1 : 0 
+                                  }}
+                                >
+                                  <div className="w-px h-6 bg-[#e83a8e] animate-pulse" />
+                                </div>
+                              </div>
+                            ))}
+                          </InputOTPGroup>
+                        </InputOTP>
+                        <p className="text-xs text-center text-gray-500">The blinking vertical line shows where the next digit will be entered</p>
+                      </div>
                     </FormControl>
                     <FormDescription className="text-gray-500 mt-2">
                       Enter the verification code sent to your email
