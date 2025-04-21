@@ -308,33 +308,32 @@ export function CustomAuthUI() {
                   <FormItem className="mx-auto flex flex-col items-center">
                     <FormLabel className="text-gray-700">Verification Code</FormLabel>
                     <FormControl>
-                      <div className="space-y-6">
+                      <div className="w-full space-y-4">
                         <InputOTP 
                           maxLength={6} 
                           {...field} 
-                          className="gap-3"
-                          containerClassName="group"
+                          className="flex justify-center mx-auto"
                         >
-                          <InputOTPGroup>
+                          <InputOTPGroup className="gap-2 md:gap-3">
                             {[0, 1, 2, 3, 4, 5].map((i) => (
-                              <div key={i} className="relative">
+                              <div key={i} className="relative flex justify-center">
                                 <InputOTPSlot 
-                                  index={i} 
-                                  className="border-[#e83a8e]/40 w-12 h-12 text-lg focus-within:border-[#e83a8e] focus-within:bg-[#e83a8e]/5 focus-within:ring-[#e83a8e] focus-within:ring-2 [&_input]:caret-transparent"
+                                  index={i}
+                                  className="w-10 h-10 md:w-12 md:h-12 text-lg rounded-md
+                                    border-[#e83a8e]/30 
+                                    focus-within:border-[#e83a8e] 
+                                    focus-within:bg-[#e83a8e]/5 
+                                    focus-within:ring-[#e83a8e]/50 
+                                    focus-within:ring-1"
                                 />
-                                <div 
-                                  className="absolute inset-0 pointer-events-none flex items-center justify-center"
-                                  style={{ 
-                                    opacity: field.value?.length === i ? 1 : 0 
-                                  }}
-                                >
-                                  <div className="w-px h-6 bg-[#e83a8e] animate-pulse" />
-                                </div>
+                                {field.value?.length === i && (
+                                  <div className="absolute h-5 w-0.5 bg-[#e83a8e] animate-pulse inset-0 m-auto" />
+                                )}
                               </div>
                             ))}
                           </InputOTPGroup>
                         </InputOTP>
-                        <p className="text-xs text-center text-gray-500">The blinking vertical line shows where the next digit will be entered</p>
+                        <p className="text-xs text-center text-gray-500">Look for the blinking pink line showing the active input position</p>
                       </div>
                     </FormControl>
                     <FormDescription className="text-gray-500 mt-2">
