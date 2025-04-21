@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -38,6 +38,8 @@ export function CustomAuthUI() {
   const [isLoading, setIsLoading] = useState(false);
   const [verificationView, setVerificationView] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
+  const [resendTimer, setResendTimer] = useState(60);
+  const [showResendButton, setShowResendButton] = useState(false);
   const { toast } = useToast();
 
   // Sign up form
@@ -86,6 +88,68 @@ export function CustomAuthUI() {
   }
   
   // Handle sign up submission
+  // Add a timer for the resend OTP button
+  useEffect(() => {
+    let interval: number | undefined;
+    
+    if (verificationView && resendTimer > 0) {
+      interval = window.setInterval(() => {
+        setResendTimer((timer) => timer - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      setShowResendButton(true);
+    }
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [verificationView, resendTimer]);
+  
+  // Reset timer when entering verification view
+  useEffect(() => {
+    if (verificationView) {
+      setResendTimer(60);
+      setShowResendButton(false);
+    }
+  }, [verificationView]);
+
+  // Handle resend OTP
+  const handleResendOTP = async () => {
+    if (!verificationEmail) return;
+    
+    setIsLoading(true);
+    try {
+      // Resend verification email by triggering the signup process again
+      // but with a special flag to only send the verification email
+      const { user, error } = await signUpWithPassword(verificationEmail, '', {
+        resendVerification: true
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Reset timer
+      setResendTimer(60);
+      setShowResendButton(false);
+      
+      toast({
+        title: 'Verification email resent',
+        description: 'Please check your email for a new verification code.',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Failed to resend code',
+        description: error.message || 'An unexpected error occurred.',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const onSignUpSubmit = async (formData: z.infer<typeof signUpSchema>) => {
     setIsLoading(true);
     try {
@@ -120,6 +184,8 @@ export function CustomAuthUI() {
       // Switch to verification view
       setVerificationEmail(email);
       setVerificationView(true);
+      setResendTimer(60);
+      setShowResendButton(false);
 
     } catch (error: any) {
       toast({
@@ -246,31 +312,32 @@ export function CustomAuthUI() {
                         maxLength={6} 
                         {...field} 
                         className="gap-2"
+                        containerClassName="group"
                       >
                         <InputOTPGroup>
                           <InputOTPSlot 
                             index={0} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                           <InputOTPSlot 
                             index={1} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                           <InputOTPSlot 
                             index={2} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                           <InputOTPSlot 
                             index={3} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                           <InputOTPSlot 
                             index={4} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                           <InputOTPSlot 
                             index={5} 
-                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30 [&_input]:caret-[#e83a8e]"
                           />
                         </InputOTPGroup>
                       </InputOTP>
@@ -299,7 +366,22 @@ export function CustomAuthUI() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex flex-col items-center justify-center gap-3">
+          {!showResendButton ? (
+            <div className="text-sm text-gray-500">
+              Resend code in <span className="text-[#e83a8e] font-medium">{resendTimer}s</span>
+            </div>
+          ) : (
+            <Button 
+              variant="outline" 
+              onClick={handleResendOTP}
+              disabled={isLoading}
+              className="border-[#e83a8e]/30 hover:bg-[#e83a8e]/10 text-[#e83a8e] hover:text-[#d02e7d]"
+            >
+              Resend Code
+            </Button>
+          )}
+          
           <Button 
             variant="link" 
             onClick={() => setVerificationView(false)}
