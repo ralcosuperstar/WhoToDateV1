@@ -10,19 +10,51 @@ import { useSupabase } from "@/contexts/NewSupabaseContext";
 import { getSupabaseClient } from "@/lib/supabase";
 import { userService } from "@/services/supabaseService";
 
+// Quiz sections data
+const quizSections = [
+  {
+    id: 'personality',
+    title: 'Personality Traits',
+    description: 'These questions help us understand your natural tendencies and how you interact with the world.',
+    icon: '👤',
+    number: 1
+  },
+  {
+    id: 'emotional',
+    title: 'Emotional Intelligence & Attachment',
+    description: 'These questions explore how you connect emotionally and handle relationships.',
+    icon: '❤️',
+    number: 2
+  },
+  {
+    id: 'values',
+    title: 'Values & Beliefs',
+    description: 'These questions help us understand what matters most to you in life and relationships.',
+    icon: '⚖️',
+    number: 3
+  },
+  {
+    id: 'physical',
+    title: 'Intimacy & Boundaries',
+    description: 'These questions explore your attitudes toward physical and emotional intimacy.',
+    icon: '🔐',
+    number: 4
+  }
+];
+
 // Progress bar component
 const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: number; totalQuestions: number }) => {
   const progress = Math.round((currentQuestion / totalQuestions) * 100);
   
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-6">
       <div className="flex justify-between text-xs text-neutral-dark/70 mb-1">
         <span>Question {currentQuestion} of {totalQuestions}</span>
         <span>{progress}% Complete</span>
       </div>
-      <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
+      <div className="h-3 w-full bg-[#e83a8e]/10 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-primary rounded-full transition-all duration-300" 
+          className="h-full bg-[#e83a8e] rounded-full transition-all duration-300" 
           style={{ width: `${progress}%` }}
         ></div>
       </div>
@@ -30,59 +62,115 @@ const ProgressBar = ({ currentQuestion, totalQuestions }: { currentQuestion: num
   );
 };
 
-// Section info component
-const SectionInfo = ({ section, questionNumber }: { section: string; questionNumber: number }) => {
-  let title = '';
-  let description = '';
-  let icon = '';
-  let sectionNumber = 0;
-  
-  // Determine which section we're in based on the section name
-  switch(section) {
-    case 'personality':
-      title = 'Personality Traits';
-      description = 'These questions help us understand your natural tendencies and how you interact with the world.';
-      icon = '👤';
-      sectionNumber = 1;
-      break;
-    case 'emotional':
-      title = 'Emotional Intelligence & Attachment';
-      description = 'These questions explore how you connect emotionally and handle relationships.';
-      icon = '❤️';
-      sectionNumber = 2;
-      break;
-    case 'values':
-      title = 'Values & Beliefs';
-      description = 'These questions help us understand what matters most to you in life and relationships.';
-      icon = '⚖️';
-      sectionNumber = 3;
-      break;
-    case 'physical':
-      title = 'Intimacy & Boundaries';
-      description = 'These questions explore your attitudes toward physical and emotional intimacy.';
-      icon = '🔐';
-      sectionNumber = 4;
-      break;
-    default:
-      title = 'Compatibility Assessment';
-      description = 'Answer honestly for the most accurate results.';
-      icon = '🧪';
-      sectionNumber = 0;
-  }
+// Section overview component to show progress across all sections
+const SectionOverview = ({ 
+  currentSection, 
+  completedQuestions 
+}: { 
+  currentSection: string; 
+  completedQuestions: number 
+}) => {
+  // Calculate which sections are complete, current, or upcoming
+  const getCurrentSectionIndex = () => {
+    return quizSections.findIndex(section => section.id === currentSection);
+  };
   
   return (
-    <div className="mb-6 text-center">
-      <span className="inline-block text-3xl mb-2">{icon}</span>
-      <h2 className="text-xl font-heading font-bold mb-1">{title}</h2>
-      <p className="text-neutral-dark/70 text-sm">{description}</p>
-      <div className="mt-3 text-xs text-primary font-medium">
-        Section {sectionNumber} of 4 • Question {questionNumber} of 40
+    <div className="mb-8 bg-white rounded-xl p-4 shadow-md border border-[#e83a8e]/20">
+      <h3 className="text-center font-medium mb-5 text-[#e83a8e]">Your Assessment Journey</h3>
+      
+      <div className="grid grid-cols-4 gap-2">
+        {quizSections.map((section, index) => {
+          const currentSectionIndex = getCurrentSectionIndex();
+          const isComplete = index < currentSectionIndex;
+          const isCurrent = index === currentSectionIndex;
+          const isUpcoming = index > currentSectionIndex;
+          
+          return (
+            <div 
+              key={section.id}
+              className={`text-center p-2 rounded-lg transition-all ${
+                isComplete 
+                  ? 'bg-[#e83a8e]/10 text-[#e83a8e]' 
+                  : isCurrent 
+                    ? 'bg-[#e83a8e]/5 border border-[#e83a8e]/30' 
+                    : 'bg-gray-50 text-gray-400'
+              }`}
+            >
+              <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center mb-1 ${
+                isComplete 
+                  ? 'bg-[#e83a8e] text-white' 
+                  : isCurrent 
+                    ? 'bg-white border-2 border-[#e83a8e]' 
+                    : 'bg-gray-100 text-gray-400'
+              }`}>
+                <span className="text-lg">{isComplete ? '✓' : section.icon}</span>
+              </div>
+              <div className="text-xs font-medium truncate">{section.title.split('&')[0]}</div>
+              <div className="text-[10px] mt-1">
+                {isComplete ? 'Complete' : isCurrent ? 'In Progress' : 'Coming Up'}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
+      <div className="mt-4 flex items-center">
+        <div className="h-2 w-full bg-[#e83a8e]/10 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-[#e83a8e] rounded-full transition-all duration-300" 
+            style={{ width: `${(completedQuestions / 40) * 100}%` }}
+          ></div>
+        </div>
+        <div className="ml-2 text-xs font-medium text-[#e83a8e] whitespace-nowrap">
+          {completedQuestions}/40
+        </div>
+      </div>
+      
+      <div className="mt-3 text-center">
+        <div className="text-xs text-neutral-dark/60">
+          Complete the assessment to unlock your personalized report
+        </div>
+        <div className="mt-2 flex justify-center space-x-1">
+          <span className="text-sm">🧪</span>
+          <span className="text-sm">➡️</span>
+          <span className="text-sm">📊</span>
+          <span className="text-sm">➡️</span>
+          <span className="text-sm">🔍</span>
+          <span className="text-sm">➡️</span>
+          <span className="text-sm">💖</span>
+        </div>
       </div>
     </div>
   );
 };
 
-// Question card component
+// Section info component
+const SectionInfo = ({ section, questionNumber }: { section: string; questionNumber: number }) => {
+  // Find the current section from our sections array
+  const sectionData = quizSections.find(s => s.id === section) || {
+    id: '',
+    title: 'Compatibility Assessment',
+    description: 'Answer honestly for the most accurate results.',
+    icon: '🧪',
+    number: 0
+  };
+  
+  return (
+    <div className="mb-6 text-center">
+      <div className="inline-block text-3xl mb-2 rounded-full bg-[#e83a8e]/10 w-16 h-16 flex items-center justify-center">
+        <span>{sectionData.icon}</span>
+      </div>
+      <h2 className="text-xl font-heading font-bold mb-1">{sectionData.title}</h2>
+      <p className="text-neutral-dark/70 text-sm">{sectionData.description}</p>
+      <div className="mt-3 text-xs text-[#e83a8e] font-medium">
+        Section {sectionData.number} of 4 • Question {questionNumber} of 40
+      </div>
+    </div>
+  );
+};
+
+// Question card component with improved styling
 const QuizQuestion = ({ 
   question, 
   selectedAnswer, 
@@ -93,8 +181,8 @@ const QuizQuestion = ({
   onAnswerSelected: (answerIndex: number) => void;
 }) => {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-md border border-neutral-100">
-      <h3 className="text-lg font-medium mb-4">{question.text}</h3>
+    <div className="bg-white rounded-xl p-6 shadow-md border border-[#e83a8e]/20">
+      <h3 className="text-lg font-medium mb-6 text-center">{question.text}</h3>
       
       <div className="space-y-3">
         {question.options.map((option: string, index: number) => (
@@ -102,15 +190,15 @@ const QuizQuestion = ({
             key={index}
             className={`w-full text-left p-4 rounded-lg border transition-all ${
               selectedAnswer === index 
-                ? 'bg-primary/10 border-primary' 
-                : 'border-neutral-200 hover:border-primary/50'
+                ? 'bg-[#e83a8e]/10 border-[#e83a8e] shadow-sm' 
+                : 'border-neutral-200 hover:border-[#e83a8e]/50 hover:bg-[#e83a8e]/5'
             }`}
             onClick={() => onAnswerSelected(index)}
           >
             <div className="flex items-center">
-              <div className={`h-5 w-5 rounded-full border mr-3 flex-shrink-0 ${
+              <div className={`h-5 w-5 rounded-full border transition-colors mr-3 flex-shrink-0 ${
                 selectedAnswer === index
-                  ? 'bg-primary border-primary'
+                  ? 'bg-[#e83a8e] border-[#e83a8e]'
                   : 'border-neutral-400'
               }`}>
                 {selectedAnswer === index && (
@@ -123,6 +211,10 @@ const QuizQuestion = ({
             </div>
           </button>
         ))}
+      </div>
+      
+      <div className="mt-6 text-center text-xs text-neutral-dark/60 italic">
+        Select the answer that best describes you, not what you think is "right"
       </div>
     </div>
   );
@@ -148,7 +240,7 @@ const QuizNavigation = ({
     <div className="flex justify-between mt-6">
       {showPrevious ? (
         <button
-          className="px-4 py-2 border border-neutral-200 rounded-lg flex items-center text-neutral-dark hover:bg-neutral-50 transition"
+          className="px-4 py-2 border border-[#e83a8e]/20 rounded-lg flex items-center text-neutral-dark hover:bg-[#e83a8e]/5 transition"
           onClick={onPrevious}
           disabled={isPending}
         >
@@ -162,7 +254,7 @@ const QuizNavigation = ({
       <button
         className={`px-6 py-3 rounded-lg flex items-center font-medium ${
           canGoNext && !isPending
-            ? 'bg-primary text-white hover:bg-primary/90'
+            ? 'bg-[#e83a8e] text-white hover:bg-[#d02e7d]'
             : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
         }`}
         onClick={onNext}
@@ -175,8 +267,17 @@ const QuizNavigation = ({
           </>
         ) : (
           <>
-            {isLastQuestion ? 'See Results' : 'Next'}
-            <ArrowRight className="h-4 w-4 ml-2" />
+            {isLastQuestion ? (
+              <>
+                <span className="mr-2">See Results</span>
+                <span>📊</span>
+              </>
+            ) : (
+              <>
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </>
+            )}
           </>
         )}
       </button>
@@ -658,6 +759,12 @@ const FixedQuiz = () => {
                   totalQuestions={quizQuestions.length}
                 />
                 
+                {/* New section overview component */}
+                <SectionOverview 
+                  currentSection={currentQuestion.section}
+                  completedQuestions={Object.keys(answers).length}
+                />
+                
                 <SectionInfo
                   section={currentQuestion.section}
                   questionNumber={currentQuestion.id}
@@ -677,6 +784,23 @@ const FixedQuiz = () => {
                   showPrevious={currentQuestion.id > 1}
                   isPending={saving || submitting}
                 />
+                
+                {/* Final result teaser */}
+                {currentQuestion.id > 30 && (
+                  <div className="mt-8 bg-[#e83a8e]/5 border border-[#e83a8e]/20 rounded-lg p-4 text-center">
+                    <div className="text-sm font-medium text-[#e83a8e] mb-1">
+                      Almost there! 
+                    </div>
+                    <div className="text-xs text-neutral-dark/70">
+                      Complete all questions to unlock your personalized compatibility profile and relationship insights.
+                    </div>
+                    <div className="mt-2 flex justify-center">
+                      <span className="text-lg">📊</span>
+                      <span className="mx-1">➡️</span>
+                      <span className="text-lg">💖</span>
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </>
@@ -684,10 +808,10 @@ const FixedQuiz = () => {
         
         {/* Mobile sticky progress indicator */}
         {!showIntro && currentQuestion && (
-          <div className="fixed bottom-0 left-0 w-full bg-white border-t border-neutral-200 p-2 md:hidden">
-            <div className="h-1 w-full bg-neutral-100 rounded-full overflow-hidden">
+          <div className="fixed bottom-0 left-0 w-full bg-white border-t border-[#e83a8e]/20 p-2 md:hidden">
+            <div className="h-1 w-full bg-[#e83a8e]/10 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-primary rounded-full transition-all duration-300" 
+                className="h-full bg-[#e83a8e] rounded-full transition-all duration-300" 
                 style={{ width: `${Math.round((currentQuestion.id / quizQuestions.length) * 100)}%` }}
               ></div>
             </div>
