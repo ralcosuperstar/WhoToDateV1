@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { signInWithPassword, signUpWithPassword, verifyOtp, syncUserWithServer } from '@/lib/authUtils';
+// No need to import auth utils as we're using the context
 import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Add fixed Supabase context
 
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,14 @@ export function CustomAuthUI() {
   const [resendTimer, setResendTimer] = useState(60);
   const [showResendButton, setShowResendButton] = useState(false);
   const { toast } = useToast();
+  const { user, isLoading: authLoading, signIn, signUp } = useFixedSupabase();
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      window.location.href = '/';
+    }
+  }, [user]);
 
   // Sign up form
   const signUpForm = useForm<z.infer<typeof signUpSchema>>({
@@ -124,12 +132,12 @@ export function CustomAuthUI() {
     try {
       // Resend verification email by triggering the signup process again
       // but with a special flag to only send the verification email
-      const { user, error } = await signUpWithPassword(verificationEmail, '', {
+      const result = await signUp(verificationEmail, '', {
         resendVerification: true
       });
       
-      if (error) {
-        throw error;
+      if (result.error) {
+        throw result.error;
       }
       
       // Reset timer
@@ -157,23 +165,23 @@ export function CustomAuthUI() {
       // Extract the data for signup
       const { first_name, last_name, email, password, phone } = formData;
 
-      // Sign up with our utility function
-      const { user, error } = await signUpWithPassword(email, password, {
+      // Sign up with the context function
+      const result = await signUp(email, password, {
         first_name,
         last_name,
         phone
       });
 
       // Check for error indicating existing user
-      if (error) {
-        if (error.existingUser || (error.message && (
-          error.message.includes('User already registered') || 
-          error.message.includes('already been registered')
-        ))) {
+      if (result.error) {
+        if (result.error.message && (
+          result.error.message.includes('User already registered') || 
+          result.error.message.includes('already been registered')
+        )) {
           handleExistingUser(email);
           return;
         }
-        throw error;
+        throw result.error;
       }
 
       // Show success message and prepare for OTP verification
@@ -203,28 +211,11 @@ export function CustomAuthUI() {
   const onSignInSubmit = async (formData: z.infer<typeof signInSchema>) => {
     setIsLoading(true);
     try {
-      // Sign in with our utility function
-      const { user, error } = await signInWithPassword(formData.email, formData.password);
-
-      if (error) {
-        throw error;
-      }
-
-      // Sync the Supabase authentication with our server
-      if (user) {
-        try {
-          console.log("Syncing user with server after sign in:", user.email);
-          const syncResult = await syncUserWithServer(user);
-          
-          if (!syncResult.success) {
-            console.error("Failed to sync with server");
-          } else {
-            console.log("Successfully synced user with server");
-          }
-        } catch (syncError) {
-          console.error("Error syncing user with server:", syncError);
-          // Continue even if sync fails - we want the user to be able to use the app
-        }
+      // Sign in with the context function
+      const result = await signIn(formData.email, formData.password);
+      
+      if (result.error) {
+        throw result.error;
       }
 
       toast({
