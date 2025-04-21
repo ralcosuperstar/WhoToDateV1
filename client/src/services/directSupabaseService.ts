@@ -1,15 +1,17 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { getSupabaseClient } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 
-// We'll use the supabase client from lib/supabase.ts to avoid creating multiple instances
+// We'll use the supabase client from our new supabaseConfig helper
 let supabase: SupabaseClient;
+let clientPromise: Promise<SupabaseClient>;
 
 // Initialize the client when imported
-(async () => {
+clientPromise = (async () => {
   try {
-    // Get the client from the shared implementation
+    // Get the client from the shared implementation that uses server-provided credentials
     supabase = await getSupabaseClient();
-    console.log('directSupabaseService: Using shared Supabase client');
+    console.log('directSupabaseService: Using server-configured Supabase client');
+    return supabase;
   } catch (error) {
     console.error('directSupabaseService: Failed to initialize Supabase client', error);
     throw error;

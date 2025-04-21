@@ -9,10 +9,6 @@ export async function initSupabase() {
   return await getSupabaseClient();
 }
 
-// Hardcoded fallback values (these are public keys, safe to include)
-const FALLBACK_SUPABASE_URL = "https://truulijpablpqxipindo.supabase.co";
-const FALLBACK_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRydXVsaWpwYWJscHF4aXBpbmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMyMDQwOTUsImV4cCI6MjAyODc4MDA5NX0.rWwxEbdjr6O0Xs6aBUQV5h3K0gWKZW1K1GPyv-UGxzs";
-
 // This function fetches the config from the server
 export async function getSupabaseConfig() {
   try {
@@ -29,8 +25,8 @@ export async function getSupabaseConfig() {
       throw new Error('Supabase config not initialized');
     }
   } catch (error) {
-    console.warn('Failed to get Supabase config from API, using fallback values');
-    return { url: FALLBACK_SUPABASE_URL, anonKey: FALLBACK_SUPABASE_ANON_KEY };
+    console.error('Failed to get Supabase config from API', error);
+    throw new Error('Failed to fetch Supabase configuration. Please check your network connection and try again.');
   }
 }
 
