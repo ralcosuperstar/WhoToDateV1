@@ -240,27 +240,53 @@ export function CustomAuthUI() {
                 name="otp"
                 render={({ field }) => (
                   <FormItem className="mx-auto flex flex-col items-center">
-                    <FormLabel>Verification Code</FormLabel>
+                    <FormLabel className="text-gray-700">Verification Code</FormLabel>
                     <FormControl>
-                      <InputOTP maxLength={6} {...field}>
+                      <InputOTP 
+                        maxLength={6} 
+                        {...field} 
+                        className="gap-2"
+                      >
                         <InputOTPGroup>
-                          <InputOTPSlot index={0} />
-                          <InputOTPSlot index={1} />
-                          <InputOTPSlot index={2} />
-                          <InputOTPSlot index={3} />
-                          <InputOTPSlot index={4} />
-                          <InputOTPSlot index={5} />
+                          <InputOTPSlot 
+                            index={0} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
+                          <InputOTPSlot 
+                            index={1} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
+                          <InputOTPSlot 
+                            index={2} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
+                          <InputOTPSlot 
+                            index={3} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
+                          <InputOTPSlot 
+                            index={4} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
+                          <InputOTPSlot 
+                            index={5} 
+                            className="border-[#e83a8e]/20 focus-within:border-[#e83a8e]/40 focus-within:ring-[#e83a8e]/30"
+                          />
                         </InputOTPGroup>
                       </InputOTP>
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription className="text-[#e83a8e]/70 mt-2">
                       This code expires in 60 minutes
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors" 
+                disabled={isLoading}
+              >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -278,6 +304,7 @@ export function CustomAuthUI() {
             variant="link" 
             onClick={() => setVerificationView(false)}
             disabled={isLoading}
+            className="text-[#e83a8e] hover:text-[#d02e7d]"
           >
             Back to Login
           </Button>
@@ -298,9 +325,19 @@ export function CustomAuthUI() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="sign-in">Sign In</TabsTrigger>
-            <TabsTrigger value="sign-up">Sign Up</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 border-[#e83a8e]/20">
+            <TabsTrigger 
+              value="sign-in" 
+              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#e83a8e] rounded-none"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="sign-up" 
+              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#e83a8e] rounded-none"
+            >
+              Sign Up
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="sign-in">
@@ -311,9 +348,13 @@ export function CustomAuthUI() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="text-gray-700">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="youremail@example.com" {...field} />
+                        <Input 
+                          placeholder="youremail@example.com" 
+                          className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,15 +365,24 @@ export function CustomAuthUI() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel className="text-gray-700">Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••" 
+                          className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button 
+                  type="submit" 
+                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors" 
+                  disabled={isLoading}
+                >
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -355,9 +405,13 @@ export function CustomAuthUI() {
                     name="first_name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First Name</FormLabel>
+                        <FormLabel className="text-gray-700">First Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="First name" {...field} />
+                          <Input 
+                            placeholder="First name" 
+                            className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -368,9 +422,13 @@ export function CustomAuthUI() {
                     name="last_name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Last Name</FormLabel>
+                        <FormLabel className="text-gray-700">Last Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Last name" {...field} />
+                          <Input 
+                            placeholder="Last name" 
+                            className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -382,9 +440,13 @@ export function CustomAuthUI() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="text-gray-700">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="youremail@example.com" {...field} />
+                        <Input 
+                          placeholder="youremail@example.com" 
+                          className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -395,9 +457,13 @@ export function CustomAuthUI() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel className="text-gray-700">Phone Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="+91 9XXXXXXXX" {...field} />
+                        <Input 
+                          placeholder="+91 9XXXXXXXX" 
+                          className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -408,18 +474,27 @@ export function CustomAuthUI() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel className="text-gray-700">Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••" 
+                          className="border-[#e83a8e]/20 focus-visible:ring-[#e83a8e]/30 focus-visible:border-[#e83a8e]/40"
+                          {...field} 
+                        />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-[#e83a8e]/70">
                         At least 8 characters
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button 
+                  type="submit" 
+                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors" 
+                  disabled={isLoading}
+                >
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
