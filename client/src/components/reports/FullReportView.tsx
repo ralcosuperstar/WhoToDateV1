@@ -200,7 +200,7 @@ const FullReportView = ({
                 Your Core Values
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.values).map(([trait, scoreVal]) => {
+                {profile.values && Object.entries(profile.values).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -237,9 +237,9 @@ const FullReportView = ({
                     Compatible Traits
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.matches.good.map((trait, idx) => (
+                    {profile.matches?.good?.map((trait, idx) => (
                       <li key={idx}>{trait}</li>
-                    ))}
+                    )) || <li>No data available</li>}
                   </ul>
                 </div>
                 
@@ -249,9 +249,9 @@ const FullReportView = ({
                     Warning Signs
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.matches.bad.map((flag, idx) => (
+                    {profile.matches?.bad?.map((flag, idx) => (
                       <li key={idx}>{flag}</li>
-                    ))}
+                    )) || <li>No data available</li>}
                   </ul>
                 </div>
               </div>
@@ -264,7 +264,7 @@ const FullReportView = ({
                 Your Physical Connection Style
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.physical).map(([trait, scoreVal]) => {
+                {profile.physical && Object.entries(profile.physical).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -295,14 +295,21 @@ const FullReportView = ({
                 Communication Tips
               </h3>
               <div className="space-y-2">
-                {profile.tips.map((tip, idx) => (
+                {profile.tips?.map((tip, idx) => (
                   <div key={idx} className="flex items-start">
                     <span className="bg-green-200 text-green-800 font-medium rounded-full w-5 h-5 flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
                       <ArrowRight className="h-3 w-3" />
                     </span>
                     <p className="text-xs text-green-800">{tip}</p>
                   </div>
-                ))}
+                )) || (
+                  <div className="flex items-start">
+                    <span className="bg-green-200 text-green-800 font-medium rounded-full w-5 h-5 flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
+                    <p className="text-xs text-green-800">No communication tips available</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -315,9 +322,9 @@ const FullReportView = ({
             Advice For Growth
           </h3>
           <ul className="ml-5 text-sm list-disc space-y-1.5">
-            {profile.advice.map((area, idx) => (
+            {profile.advice?.map((area, idx) => (
               <li key={idx}>{area}</li>
-            ))}
+            )) || <li>No advice data available</li>}
           </ul>
         </div>
         
@@ -328,9 +335,9 @@ const FullReportView = ({
             Relationship Insights
           </h3>
           <ul className="ml-5 text-sm list-disc space-y-1.5">
-            {profile.insights.map((insight, idx) => (
+            {profile.insights?.map((insight, idx) => (
               <li key={idx}>{insight}</li>
-            ))}
+            )) || <li>No relationship insights available</li>}
           </ul>
         </div>
       </div>
