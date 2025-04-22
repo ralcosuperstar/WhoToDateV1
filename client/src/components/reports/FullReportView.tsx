@@ -19,6 +19,7 @@ import {
   Gift,
   Info,
   Puzzle,
+  ChevronDown
 } from "lucide-react";
 import { DetailedReport } from "../../logic/profile";
 import { motion } from "framer-motion";
@@ -30,6 +31,7 @@ const FullReportView = ({
   profile: DetailedReport;
 }) => {
   const [activeSection, setActiveSection] = useState<string>("overview");
+  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   
   // References to each section for scrolling
   const overviewRef = useRef<HTMLDivElement>(null);
@@ -185,8 +187,8 @@ const FullReportView = ({
       
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-4">
-        {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 sticky top-0 z-10 bg-white p-3 rounded-lg shadow-sm">
+        {/* Desktop Navigation Tabs */}
+        <div className="hidden md:flex flex-wrap gap-2 mb-8 bg-white p-3 rounded-lg shadow-sm">
           <button 
             onClick={() => setActiveSection("overview")}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
@@ -223,6 +225,85 @@ const FullReportView = ({
           >
             💡 Growth & Advice
           </button>
+        </div>
+        
+        {/* Mobile Navigation Dropdown */}
+        <div className="md:hidden mb-8">
+          <button 
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="w-full flex items-center justify-between bg-white p-3 rounded-lg shadow-sm"
+          >
+            <span className="font-semibold flex items-center gap-2">
+              {activeSection === "overview" && "🔍 Overview"}
+              {activeSection === "personality" && "🧩 Your Personality"}
+              {activeSection === "emotional" && "❤️ Emotional Intelligence"}
+              {activeSection === "values" && "⚖️ Core Values"}
+              {activeSection === "partner" && "💘 Ideal Partner"}
+              {activeSection === "advice" && "💡 Growth & Advice"}
+            </span>
+            <ChevronDown className={`h-5 w-5 transition-transform ${showMobileMenu ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showMobileMenu && (
+            <div className="absolute left-4 right-4 mt-1 bg-white rounded-lg shadow-lg overflow-hidden z-20">
+              <div className="p-2 space-y-1">
+                <button 
+                  onClick={() => {
+                    setActiveSection("overview");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  🔍 Overview
+                </button>
+                <button 
+                  onClick={() => {
+                    setActiveSection("personality");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "personality" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  🧩 Your Personality
+                </button>
+                <button 
+                  onClick={() => {
+                    setActiveSection("emotional");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "emotional" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  ❤️ Emotional Intelligence
+                </button>
+                <button 
+                  onClick={() => {
+                    setActiveSection("values");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "values" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  ⚖️ Core Values
+                </button>
+                <button 
+                  onClick={() => {
+                    setActiveSection("partner");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "partner" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  💘 Ideal Partner
+                </button>
+                <button 
+                  onClick={() => {
+                    setActiveSection("advice");
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "advice" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                >
+                  💡 Growth & Advice
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Overview Section */}
