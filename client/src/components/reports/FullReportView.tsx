@@ -191,7 +191,7 @@ const FullReportView = ({
         <div className="hidden md:flex flex-wrap gap-2 mb-8 bg-white p-3 rounded-lg shadow-sm">
           <button 
             onClick={() => setActiveSection("overview")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "overview" ? "bg-primary/90 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             🔍 Overview
           </button>
@@ -252,7 +252,7 @@ const FullReportView = ({
                     setActiveSection("overview");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary/90 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   🔍 Overview
                 </button>
