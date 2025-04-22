@@ -60,15 +60,15 @@ const FullReportView = ({
               {colorIcon}
             </div>
             <h2 className="text-xl font-bold">
-              {profile.overallColor === 'green' 
+              {profile.overall === 'green' 
                 ? 'High Compatibility Potential' 
-                : profile.overallColor === 'yellow' 
+                : profile.overall === 'yellow' 
                   ? 'Moderate Compatibility Potential' 
                   : 'Challenging Compatibility Profile'}
             </h2>
           </div>
           <p className="text-sm leading-relaxed">
-            {profile.overallSummary}
+            {profile.snapshot}
           </p>
         </div>
 
@@ -85,11 +85,11 @@ const FullReportView = ({
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Attachment Style</p>
-                  <p className="text-sm font-medium capitalize text-blue-800">{profile.attachmentStyle}</p>
+                  <p className="text-sm font-medium capitalize text-blue-800">{profile.attachment}</p>
                 </div>
                 <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Personality Archetype</p>
-                  <p className="text-sm font-medium text-blue-800">{profile.personalityArchetype}</p>
+                  <p className="text-sm font-medium text-blue-800">{profile.primaryArchetype}</p>
                 </div>
               </div>
             </div>
@@ -102,7 +102,7 @@ const FullReportView = ({
                   Your Relationship Strengths
                 </h3>
                 <ul className="ml-5 text-sm list-disc text-green-800 space-y-1.5">
-                  {profile.strengthsWeaknesses.strengths.map((strength, idx) => (
+                  {profile.flags.positives.map((strength, idx) => (
                     <li key={idx}>{strength}</li>
                   ))}
                 </ul>
@@ -114,7 +114,7 @@ const FullReportView = ({
                   Areas for Growth
                 </h3>
                 <ul className="ml-5 text-sm list-disc text-yellow-800 space-y-1.5">
-                  {profile.strengthsWeaknesses.challenges.map((challenge, idx) => (
+                  {profile.flags.cautions.map((challenge, idx) => (
                     <li key={idx}>{challenge}</li>
                   ))}
                 </ul>
@@ -131,7 +131,7 @@ const FullReportView = ({
                 Your Personality Traits
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.personalityTraits).map(([trait, scoreVal]) => {
+                {Object.entries(profile.bigFive).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -169,7 +169,7 @@ const FullReportView = ({
                 Your Emotional Intelligence
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.emotionalIntelligence).map(([trait, scoreVal]) => {
+                {Object.entries(profile.eq).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -200,7 +200,7 @@ const FullReportView = ({
                 Your Core Values
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.coreValues).map(([trait, scoreVal]) => {
+                {Object.entries(profile.values).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -237,7 +237,7 @@ const FullReportView = ({
                     Compatible Traits
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.idealPartner.traits.map((trait, idx) => (
+                    {profile.matches.good.map((trait, idx) => (
                       <li key={idx}>{trait}</li>
                     ))}
                   </ul>
@@ -249,7 +249,7 @@ const FullReportView = ({
                     Warning Signs
                   </p>
                   <ul className="ml-5 text-xs list-disc space-y-1">
-                    {profile.idealPartner.warningFlags.map((flag, idx) => (
+                    {profile.matches.bad.map((flag, idx) => (
                       <li key={idx}>{flag}</li>
                     ))}
                   </ul>
@@ -257,14 +257,14 @@ const FullReportView = ({
               </div>
             </div>
             
-            {/* Intimacy Profile */}
+            {/* Physical Profile */}
             <div className="bg-red-50 rounded-lg p-4 border border-red-100">
               <h3 className="text-md font-bold mb-3 flex items-center text-red-800">
                 <Heart className="h-4 w-4 mr-2" />
-                Your Intimacy Style: {profile.intimacyStyle}
+                Your Physical Connection Style
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.intimacyProfile).map(([trait, scoreVal]) => {
+                {Object.entries(profile.physical).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -295,7 +295,7 @@ const FullReportView = ({
                 Communication Tips
               </h3>
               <div className="space-y-2">
-                {profile.relationshipInsights.communicationTips.map((tip, idx) => (
+                {profile.tips.map((tip, idx) => (
                   <div key={idx} className="flex items-start">
                     <span className="bg-green-200 text-green-800 font-medium rounded-full w-5 h-5 flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
                       <ArrowRight className="h-3 w-3" />
@@ -312,24 +312,24 @@ const FullReportView = ({
         <div className="mt-5 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg">
           <h3 className="text-md font-bold mb-2 flex items-center text-primary">
             <User className="h-4 w-4 mr-2" />
-            Growth Areas
+            Advice For Growth
           </h3>
           <ul className="ml-5 text-sm list-disc space-y-1.5">
-            {profile.relationshipInsights.growthAreas.map((area, idx) => (
+            {profile.advice.map((area, idx) => (
               <li key={idx}>{area}</li>
             ))}
           </ul>
         </div>
         
-        {/* Pattern Insights */}
+        {/* Additional Insights */}
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
           <h3 className="text-md font-bold mb-2 flex items-center text-blue-800">
             <Rocket className="h-4 w-4 mr-2" />
-            Relationship Patterns
+            Relationship Insights
           </h3>
           <ul className="ml-5 text-sm list-disc space-y-1.5">
-            {profile.relationshipInsights.compatibilityPatterns.map((pattern, idx) => (
-              <li key={idx}>{pattern}</li>
+            {profile.insights.map((insight, idx) => (
+              <li key={idx}>{insight}</li>
             ))}
           </ul>
         </div>
