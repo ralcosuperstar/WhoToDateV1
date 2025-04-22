@@ -102,9 +102,9 @@ const FullReportView = ({
                   Your Relationship Strengths
                 </h3>
                 <ul className="ml-5 text-sm list-disc text-green-800 space-y-1.5">
-                  {profile.flags.positives.map((strength, idx) => (
+                  {profile.flags?.positives?.map((strength, idx) => (
                     <li key={idx}>{strength}</li>
-                  ))}
+                  )) || <li>No strengths data available</li>}
                 </ul>
               </div>
               
@@ -114,9 +114,9 @@ const FullReportView = ({
                   Areas for Growth
                 </h3>
                 <ul className="ml-5 text-sm list-disc text-yellow-800 space-y-1.5">
-                  {profile.flags.cautions.map((challenge, idx) => (
+                  {profile.flags?.cautions?.map((challenge, idx) => (
                     <li key={idx}>{challenge}</li>
-                  ))}
+                  )) || <li>No growth areas data available</li>}
                 </ul>
               </div>
             </div>
@@ -131,7 +131,7 @@ const FullReportView = ({
                 Your Personality Traits
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.bigFive).map(([trait, scoreVal]) => {
+                {profile.bigFive && Object.entries(profile.bigFive).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
@@ -169,7 +169,7 @@ const FullReportView = ({
                 Your Emotional Intelligence
               </h3>
               <div className="space-y-2.5">
-                {Object.entries(profile.eq).map(([trait, scoreVal]) => {
+                {profile.eq && Object.entries(profile.eq).map(([trait, scoreVal]) => {
                   // Values are already on a 0-100 scale, no conversion needed
                   const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
