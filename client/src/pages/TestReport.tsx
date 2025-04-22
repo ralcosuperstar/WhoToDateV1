@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { buildReport, DetailedReport } from '../logic/profile';
-import { adaptToLegacyProfile } from '../logic/profileAdapter';
-import { CompatibilityProfile } from '../utils/calculateCompatibilityProfile';
+// Using just DetailedReport from profile.ts
 import { Button } from "../components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
@@ -22,7 +21,8 @@ import FullReportView from '../components/reports/FullReportView';
 const TestReport: React.FC = () => {
   // Use state to store our report objects
   const [detailedReport, setDetailedReport] = useState<DetailedReport | null>(null);
-  const [legacyProfile, setLegacyProfile] = useState<CompatibilityProfile | null>(null);
+  // Just using DetailedReport now
+  const [legacyProfile, setLegacyProfile] = useState<DetailedReport | null>(null);
   
   // Build some sample answers (this would normally come from the quiz)
   const generateSampleAnswers = () => {
@@ -44,9 +44,8 @@ const TestReport: React.FC = () => {
     const newReport = buildReport(sampleAnswers);
     setDetailedReport(newReport);
     
-    // Convert to legacy format for comparison 
-    const adaptedProfile = adaptToLegacyProfile(newReport);
-    setLegacyProfile(adaptedProfile);
+    // Since we've removed the adapter, just use the same report
+    setLegacyProfile(newReport);
   };
   
   return (

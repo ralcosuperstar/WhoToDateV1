@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Helmet } from "react-helmet";
-import { type CompatibilityProfile } from "../utils/calculateCompatibilityProfile";
-import { calculateLegacyCompatibilityProfile } from "../logic/profileAdapter";
-import { buildReport } from "../logic/profile";
+import { type DetailedReport, buildReport } from "../logic/profile";
 import { useToast } from "../hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryClient } from "../lib/queryClient";
@@ -24,18 +22,18 @@ import FullReportView from "../components/reports/FullReportView";
 import { downloadPDFReport } from "../lib/pdfGenerator";
 
 const ResultsPreview = ({ profile, onGetFullReport }: { 
-  profile: CompatibilityProfile; 
+  profile: DetailedReport; 
   onGetFullReport: () => void;
 }) => {
-  const colorClass = profile.overallColor === 'green' 
+  const colorClass = profile.overall === 'green' 
     ? 'bg-green-50 text-green-800 border-green-200' 
-    : profile.overallColor === 'yellow' 
+    : profile.overall === 'yellow' 
       ? 'bg-yellow-50 text-yellow-800 border-yellow-200' 
       : 'bg-red-50 text-red-800 border-red-200';
 
-  const colorIcon = profile.overallColor === 'green' 
+  const colorIcon = profile.overall === 'green' 
     ? <CheckCircle2 className="h-5 w-5 text-green-500" /> 
-    : profile.overallColor === 'yellow' 
+    : profile.overall === 'yellow' 
       ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> 
       : <XCircle className="h-5 w-5 text-red-500" />;
 
@@ -54,9 +52,9 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
         <div className={`mb-6 p-4 rounded-md border ${colorClass} flex items-center`}>
           {colorIcon}
           <span className="ml-2 font-medium">
-            {profile.overallColor === 'green' 
+            {profile.overall === 'green' 
               ? 'High Compatibility' 
-              : profile.overallColor === 'yellow' 
+              : profile.overall === 'yellow' 
                 ? 'Medium Compatibility' 
                 : 'Challenging Compatibility'}
           </span>
@@ -68,7 +66,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
               Attachment Style
             </h3>
             <p className="text-neutral-dark/70">
-              {profile.attachmentStyle.charAt(0).toUpperCase() + profile.attachmentStyle.slice(1)}
+              {profile.attachment.charAt(0).toUpperCase() + profile.attachment.slice(1)}
             </p>
           </div>
           
@@ -77,7 +75,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
               Personality Archetype
             </h3>
             <p className="text-neutral-dark/70">
-              {profile.personalityArchetype}
+              {profile.primaryArchetype}
             </p>
           </div>
           
@@ -86,7 +84,7 @@ const ResultsPreview = ({ profile, onGetFullReport }: {
               Top Strengths
             </h3>
             <ul className="list-disc pl-5 text-neutral-dark/70 space-y-1">
-              {profile.strengthsWeaknesses.strengths.slice(0, 2).map((strength, i) => (
+              {profile.flags.positives.slice(0, 2).map((strength, i) => (
                 <li key={i}>{strength}</li>
               ))}
             </ul>
@@ -118,7 +116,7 @@ const FixedResults = () => {
   
   // State hooks
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
+  const [profile, setProfile] = useState<DetailedReport | null>(null);
   const [isPremiumReportVisible, setIsPremiumReportVisible] = useState(true); // Now true by default since reports are free
   const [loadingTime, setLoadingTime] = useState(0);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
@@ -197,7 +195,7 @@ const FixedResults = () => {
   const createReportMutation = useMutation({
     mutationFn: async (data: { 
       quizId: number;
-      report: CompatibilityProfile; 
+      report: DetailedReport; 
       compatibilityColor: string;
       isPaid: boolean;
     }) => {
@@ -337,16 +335,16 @@ const FixedResults = () => {
           if (Object.keys(quizAnswers).length > 0) {
             if (isDev) console.debug("Generating profile from quiz answers");
             setAnswers(quizAnswers);
-            const compatibilityProfile = calculateLegacyCompatibilityProfile(quizAnswers);
-            setProfile(compatibilityProfile);
+            const detailedReport = buildReport(quizAnswers);
+            setProfile(detailedReport);
             
             // Create a report using these answers
             if (supabaseUser && dbUser && quizData.id) {
               if (isDev) console.debug("Creating report from quiz answers");
               createReportMutation.mutate({
                 quizId: quizData.id,
-                report: compatibilityProfile,
-                compatibilityColor: compatibilityProfile.overallColor,
+                report: detailedReport,
+                compatibilityColor: detailedReport.overall,
                 isPaid: true
               });
             }
@@ -363,11 +361,11 @@ const FixedResults = () => {
     if (Object.keys(answers).length > 0 && !profile) {
       if (isDev) console.debug("Generating profile from answers in state");
       try {
-        const compatibilityProfile = calculateLegacyCompatibilityProfile(answers);
+        const detailedReport = buildReport(answers);
         
         // Save to session storage as backup
-        sessionStorage.setItem('compatibilityProfile', JSON.stringify(compatibilityProfile));
-        setProfile(compatibilityProfile);
+        sessionStorage.setItem('compatibilityProfile', JSON.stringify(detailedReport));
+        setProfile(detailedReport);
         
         // Create a report if we have quiz data
         if (existingQuiz && dbUser && supabaseUser) {
@@ -376,8 +374,8 @@ const FixedResults = () => {
             if (isDev) console.debug("Creating report from session answers");
             createReportMutation.mutate({
               quizId: quizData.id,
-              report: compatibilityProfile,
-              compatibilityColor: compatibilityProfile.overallColor,
+              report: detailedReport,
+              compatibilityColor: detailedReport.overall,
               isPaid: true
             });
           }
@@ -562,8 +560,8 @@ const FixedResults = () => {
                 <button
                   onClick={() => {
                     // Create a personalized share message based on the profile
-                    const strengthText = profile.strengthsWeaknesses.strengths[0] || "";
-                    const challengeText = profile.strengthsWeaknesses.challenges[0] || "";
+                    const strengthText = profile.flags.positives[0] || "";
+                    const challengeText = profile.flags.areas[0] || "";
                     
                     const shareText = `I just took the WhoToDate compatibility assessment! It says my relationship strength is "${strengthText}" and I should work on "${challengeText}". This free tool helps you understand what kind of relationships suit you best. Try it yourself at: ${window.location.origin}`;
                     
@@ -590,17 +588,17 @@ const FixedResults = () => {
                 <button
                   onClick={() => {
                     // Create a personalized message based on profile
-                    const subject = `My ${profile.overallColor} compatibility profile from WhoToDate!`;
+                    const subject = `My ${profile.overall} compatibility profile from WhoToDate!`;
                     
-                    // Get a tip to share from communication tips
-                    const communicationTips = profile.relationshipInsights?.communicationTips || [];
-                    const randomTip = communicationTips.length > 0 
-                      ? communicationTips[Math.floor(Math.random() * communicationTips.length)] 
+                    // Get a tip to share from tips
+                    const tips = profile.tips || [];
+                    const randomTip = tips.length > 0 
+                      ? tips[Math.floor(Math.random() * tips.length)] 
                       : "Understanding your relationship style helps find better matches";
                     
                     const body = `Hey! I just discovered my relationship compatibility type on WhoToDate. 
                     
-My profile says I'm a ${profile.attachmentStyle} attachment style with ${profile.personalityArchetype} personality. One relationship tip I got was: "${randomTip}"
+My profile says I'm a ${profile.attachment} attachment style with ${profile.primaryArchetype} personality. One relationship tip I got was: "${randomTip}"
 
 This free tool gives you insights into your relationship patterns and helps you understand what kind of relationships will suit you best. It takes about 5 minutes to complete.
 
