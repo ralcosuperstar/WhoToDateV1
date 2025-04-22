@@ -288,7 +288,7 @@ const FullReportView = ({
                     setActiveSection("partner");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "partner" ? "bg-emerald-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "partner" ? "bg-emerald-700 text-white shadow-md" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   💘 Ideal Partner
                 </button>
@@ -297,7 +297,7 @@ const FullReportView = ({
                     setActiveSection("advice");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "advice" ? "bg-blue-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "advice" ? "bg-blue-700 text-white shadow-md" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   💡 Growth & Advice
                 </button>
