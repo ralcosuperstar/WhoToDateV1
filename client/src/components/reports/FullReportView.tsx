@@ -252,7 +252,7 @@ const FullReportView = ({
                     setActiveSection("overview");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   🔍 Overview
                 </button>
@@ -261,7 +261,7 @@ const FullReportView = ({
                     setActiveSection("personality");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "personality" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "personality" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   🧩 Your Personality
                 </button>
@@ -270,7 +270,7 @@ const FullReportView = ({
                     setActiveSection("emotional");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "emotional" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "emotional" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   ❤️ Emotional Intelligence
                 </button>
@@ -279,7 +279,7 @@ const FullReportView = ({
                     setActiveSection("values");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "values" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "values" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   ⚖️ Core Values
                 </button>
@@ -288,7 +288,7 @@ const FullReportView = ({
                     setActiveSection("partner");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "partner" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "partner" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   💘 Ideal Partner
                 </button>
@@ -297,7 +297,7 @@ const FullReportView = ({
                     setActiveSection("advice");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "advice" ? "bg-primary text-white" : "hover:bg-neutral-100"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "advice" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   💡 Growth & Advice
                 </button>
