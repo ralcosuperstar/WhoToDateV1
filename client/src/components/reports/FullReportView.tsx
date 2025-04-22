@@ -26,6 +26,21 @@ const FullReportView = ({
 }: { 
   profile: DetailedReport;
 }) => {
+  // Safety check - if profile is undefined or incomplete, show loading state
+  if (!profile || 
+      !profile.bigFive || 
+      !profile.flags || 
+      !profile.overall || 
+      !profile.snapshot) {
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-lg font-semibold mb-4 text-center text-primary">Loading your profile...</h2>
+        <div className="flex justify-center my-6">
+          <div className="animate-spin h-8 w-8 border-4 border-primary rounded-full border-t-transparent"></div>
+        </div>
+      </div>
+    );
+  }
   const colorClass = profile.overall === 'green' 
     ? 'bg-green-50 text-green-800 border-green-200' 
     : profile.overall === 'yellow' 
