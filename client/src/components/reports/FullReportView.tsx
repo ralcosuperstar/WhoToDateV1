@@ -191,37 +191,37 @@ const FullReportView = ({
         <div className="hidden md:flex flex-wrap gap-2 mb-8 bg-white p-3 rounded-lg shadow-sm">
           <button 
             onClick={() => setActiveSection("overview")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "overview" ? "bg-primary/90 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             🔍 Overview
           </button>
           <button 
             onClick={() => setActiveSection("personality")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "personality" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "personality" ? "bg-purple-700 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             🧩 Your Personality
           </button>
           <button 
             onClick={() => setActiveSection("emotional")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "emotional" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "emotional" ? "bg-rose-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             ❤️ Emotional Intelligence
           </button>
           <button 
             onClick={() => setActiveSection("values")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "values" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "values" ? "bg-amber-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             ⚖️ Core Values
           </button>
           <button 
             onClick={() => setActiveSection("partner")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "partner" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "partner" ? "bg-emerald-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             💘 Ideal Partner
           </button>
           <button 
             onClick={() => setActiveSection("advice")}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "advice" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeSection === "advice" ? "bg-blue-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
           >
             💡 Growth & Advice
           </button>
@@ -252,7 +252,7 @@ const FullReportView = ({
                     setActiveSection("overview");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "overview" ? "bg-primary/90 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   🔍 Overview
                 </button>
@@ -261,7 +261,7 @@ const FullReportView = ({
                     setActiveSection("personality");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "personality" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "personality" ? "bg-purple-700 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   🧩 Your Personality
                 </button>
@@ -270,7 +270,7 @@ const FullReportView = ({
                     setActiveSection("emotional");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "emotional" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "emotional" ? "bg-rose-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   ❤️ Emotional Intelligence
                 </button>
@@ -279,7 +279,7 @@ const FullReportView = ({
                     setActiveSection("values");
                     setShowMobileMenu(false);
                   }}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "values" ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-semibold ${activeSection === "values" ? "bg-amber-600 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
                 >
                   ⚖️ Core Values
                 </button>
