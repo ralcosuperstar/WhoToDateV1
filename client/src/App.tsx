@@ -25,6 +25,7 @@ import SavedResults from "@/pages/SavedResults"; // Supabase saved results compo
 import Report from "@/pages/Report";
 import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
 import FixedResults from "@/pages/FixedResults"; // Fixed results page with improved error handling
+import TestReport from "@/pages/TestReport"; // New test report page for the new profile format
 import Analytics from "@/pages/Analytics";
 import Dashboard from "@/pages/Dashboard";
 import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
@@ -112,6 +113,7 @@ function Router() {
       <Route path="/saved-results" component={SavedResults} />
       <Route path="/report" component={DirectReport} />
       <ProtectedRoute path="/report-legacy" component={Report} />
+      <Route path="/test-report" component={TestReport} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       <ProtectedRoute path="/dashboard-original" component={Dashboard} />
       <ProtectedRoute path="/dashboard-dev" component={DevDashboardPage} />

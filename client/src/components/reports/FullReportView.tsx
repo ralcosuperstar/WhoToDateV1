@@ -17,7 +17,7 @@ import {
   Scale,
   Sparkles
 } from "lucide-react";
-import { CompatibilityProfile } from "@/utils/calculateCompatibilityProfile";
+import { CompatibilityProfile } from "../../utils/calculateCompatibilityProfile";
 import { motion } from "framer-motion";
 
 // This component displays the full report in a single-page visual format
@@ -132,8 +132,8 @@ const FullReportView = ({
               </h3>
               <div className="space-y-2.5">
                 {Object.entries(profile.personalityTraits).map(([trait, scoreVal]) => {
-                  // Convert 0-5 scale to percentage for display
-                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  // Values are already on a 0-100 scale, no conversion needed
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
                   return (
                     <div key={trait} className="relative">
@@ -170,8 +170,8 @@ const FullReportView = ({
               </h3>
               <div className="space-y-2.5">
                 {Object.entries(profile.emotionalIntelligence).map(([trait, scoreVal]) => {
-                  // Convert 0-5 scale to percentage for display
-                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  // Values are already on a 0-100 scale, no conversion needed
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
                   return (
                     <div key={trait} className="relative">
@@ -201,8 +201,8 @@ const FullReportView = ({
               </h3>
               <div className="space-y-2.5">
                 {Object.entries(profile.coreValues).map(([trait, scoreVal]) => {
-                  // Convert 0-5 scale to percentage for display
-                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  // Values are already on a 0-100 scale, no conversion needed
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
                   return (
                     <div key={trait} className="relative">
@@ -265,8 +265,8 @@ const FullReportView = ({
               </h3>
               <div className="space-y-2.5">
                 {Object.entries(profile.intimacyProfile).map(([trait, scoreVal]) => {
-                  // Convert 0-5 scale to percentage for display
-                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal * 20)) : 50;
+                  // Values are already on a 0-100 scale, no conversion needed
+                  const score = typeof scoreVal === 'number' ? Math.min(100, Math.max(0, scoreVal)) : 50;
                   
                   return (
                     <div key={trait} className="relative">

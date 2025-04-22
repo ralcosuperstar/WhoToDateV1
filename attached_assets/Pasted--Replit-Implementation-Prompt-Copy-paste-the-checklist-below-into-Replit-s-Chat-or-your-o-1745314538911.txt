@@ -1,0 +1,151 @@
+### 🔧 Replit Implementation Prompt  
+*Copy‑paste the checklist below into Replit’s Chat (or your own task tracker) and work through it in order.  
+Every step is concrete, file‑scoped, and avoids ambiguous names so the LLM can execute decisively.*
+
+---
+
+#### 1 · Add the new logic file  
+```
+CREATE   src/logic/profile.ts
+PASTE    the full “profile.ts  •  v2  •  22‑Apr‑2025” code the strategist supplied earlier
+```
+*It contains all scoring, archetype, radar‑series helpers, etc.*
+
+---
+
+#### 2 · Remove legacy calculators  
+```
+DELETE   src/utils/calculateCompatibilityProfile.ts
+DELETE   src/logic/profileAdapter.ts      // if still present
+```
+
+---
+
+#### 3 · Patch the results page  
+**File:** `src/pages/FixedResults.tsx`
+
+| Replace | With |
+|---------|------|
+| `import { type CompatibilityProfile } ...` | `import { type DetailedReport, buildReport } from "../logic/profile";` |
+| `calculateLegacyCompatibilityProfile(...)` | `buildReport(...)` |
+| State hook `useState<CompatibilityProfile>` | `useState<DetailedReport>` |
+| `overallColor` → `overall` | Everywhere in this file |
+| `attachmentStyle` → `attachment` | Everywhere |
+| `personalityArchetype` → `primaryArchetype` | Everywhere |
+| Strength path `profile.strengthsWeaknesses.strengths` | `profile.flags.positives` |
+| Challenges path `...challenges` | `profile.flags.cautions` |
+| Communication tips path | `profile.tips` |
+
+Also update the Supabase payload:
+
+```ts
+compatibilityColor: compatibilityProfile.overall,   // not overallColor
+```
+
+---
+
+#### 4 · Update `<FullReportView>` props  
+**File:** `src/components/reports/FullReportView.tsx`
+
+1. Change prop type to `report: DetailedReport`.
+2. Consume the new fields:  
+
+   * hero colour → `report.overall`  
+   * archetype → `report.primaryArchetype`  
+   * radar chart → `report.radarSeries`  
+   * section bars → `report.sectionBars`  
+   * strengths / cautions / growth → `report.flags`  
+   * wow copy bloc → `report.wowInsights`
+
+*(Use Recharts `RadarChart`, `PolarGrid`, `Radar` and `BarChart` for visuals; Tailwind colours already match the sample palette.)*
+
+---
+
+#### 5 · Radar & bar components  
+Create two tiny wrappers so the JSX stays clean.
+
+`src/components/Radar.tsx`
+```tsx
+import { RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip } from "recharts";
+export default function RadarGraph({ data }:{ data:{axis:string,value:number}[] }){
+  return (
+    <RadarChart width={300} height={250} data={data}>
+      <PolarGrid />
+      <PolarAngleAxis dataKey="axis" />
+      <Radar name="score" dataKey="value" fill="#a855f7" fillOpacity={0.4}/>
+      <Tooltip />
+    </RadarChart>
+  );
+}
+```
+
+`src/components/SectionBars.tsx`
+```tsx
+import { BarChart, XAxis, Tooltip, Bar } from "recharts";
+export default function SectionBars({ data }:{ data:{section:string;score:number}[] }){
+  return (
+    <BarChart width={320} height={180} data={data}>
+      <XAxis dataKey="section" />
+      <Tooltip />
+      <Bar dataKey="score" fill="#6366f1" radius={[4,4,0,0]} />
+    </BarChart>
+  );
+}
+```
+
+Import and drop them into `FullReportView`.
+
+---
+
+#### 6 · Hero section “wow” card  
+Inside `FullReportView` top:
+
+```tsx
+<div className={`rounded-xl p-6 text-center
+  ${report.overall === 'green' ? 'bg-green-50' :
+    report.overall === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'}`}>
+  <h2 className="text-xl font-bold mb-1">{report.primaryArchetype}</h2>
+  <p className="text-neutral-600">{report.snapshot}</p>
+</div>
+```
+
+---
+
+#### 7 · PDF generator  
+Change import paths to use `DetailedReport` and map radar + bars if you embed images. (No logic change, just TS types.)
+
+---
+
+#### 8 · Clean up stray references  
+Search workspace for:
+
+```
+overallColor
+attachmentStyle
+personalityArchetype
+strengthsWeaknesses.
+relationshipInsights.
+calculateLegacyCompatibilityProfile
+```
+
+…and fix each to new API.
+
+---
+
+#### 9 · Run & verify  
+1. `npm run dev`  
+2. Take quiz → Results.  
+3. Ensure radar, bars, archetype hero, green‑flag / caution boxes, wowInsights section render.  
+4. Download PDF still works.
+
+---
+
+#### 10 · Optional polish (after it compiles)  
+* center hero card on small screens  
+* animate bar fill with Framer Motion (`initial={{ width:0 }} animate={{ width:\`\${score}%\` }}`)  
+* add confetti on green reports (tiny canvas effect)
+
+---
+
+**That’s it!**  
+Following this ordered prompt Replit’s AI can patch the codebase in one go and your end‑users will see the rich, “wow‑factor” report instead of the bland version in the screenshot.

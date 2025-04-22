@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Helmet } from "react-helmet";
-import { calculateCompatibilityProfile, type CompatibilityProfile } from "@/utils/calculateCompatibilityProfile";
-import { useToast } from "@/hooks/use-toast";
+import { type CompatibilityProfile } from "../utils/calculateCompatibilityProfile";
+import { calculateLegacyCompatibilityProfile } from "../logic/profileAdapter";
+import { buildReport } from "../logic/profile";
+import { useToast } from "../hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
+import { queryClient } from "../lib/queryClient";
 import { motion } from "framer-motion";
-import { reportService, quizService, userService, authService } from "@/services/supabaseService";
-import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
+import { reportService, quizService, userService, authService } from "../services/supabaseService";
+import { useFixedSupabase } from "../contexts/FixedSupabaseContext";
 import { 
   Download, 
   CheckCircle2, 
@@ -18,8 +20,8 @@ import {
   ArrowRight,
   RefreshCw
 } from "lucide-react";
-import FullReportView from "@/components/reports/FullReportView";
-import { downloadPDFReport } from "@/lib/pdfGenerator";
+import FullReportView from "../components/reports/FullReportView";
+import { downloadPDFReport } from "../lib/pdfGenerator";
 
 const ResultsPreview = ({ profile, onGetFullReport }: { 
   profile: CompatibilityProfile; 
@@ -335,7 +337,7 @@ const FixedResults = () => {
           if (Object.keys(quizAnswers).length > 0) {
             if (isDev) console.debug("Generating profile from quiz answers");
             setAnswers(quizAnswers);
-            const compatibilityProfile = calculateCompatibilityProfile(quizAnswers);
+            const compatibilityProfile = calculateLegacyCompatibilityProfile(quizAnswers);
             setProfile(compatibilityProfile);
             
             // Create a report using these answers
@@ -361,7 +363,7 @@ const FixedResults = () => {
     if (Object.keys(answers).length > 0 && !profile) {
       if (isDev) console.debug("Generating profile from answers in state");
       try {
-        const compatibilityProfile = calculateCompatibilityProfile(answers);
+        const compatibilityProfile = calculateLegacyCompatibilityProfile(answers);
         
         // Save to session storage as backup
         sessionStorage.setItem('compatibilityProfile', JSON.stringify(compatibilityProfile));
