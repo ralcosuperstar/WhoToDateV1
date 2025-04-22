@@ -306,8 +306,8 @@ const FixedResults = () => {
     // If we have a report, use it
     if (report && report.report) {
       if (isDev) console.debug("Using existing report for profile");
-      // Type assertion to ensure TypeScript knows this is a CompatibilityProfile
-      setProfile(report.report as CompatibilityProfile);
+      // Type assertion to ensure TypeScript knows this is a DetailedReport
+      setProfile(report.report as DetailedReport);
       return;
     }
     
@@ -561,7 +561,7 @@ const FixedResults = () => {
                   onClick={() => {
                     // Create a personalized share message based on the profile
                     const strengthText = profile.flags.positives[0] || "";
-                    const challengeText = profile.flags.areas[0] || "";
+                    const challengeText = profile.flags.cautions[0] || "";
                     
                     const shareText = `I just took the WhoToDate compatibility assessment! It says my relationship strength is "${strengthText}" and I should work on "${challengeText}". This free tool helps you understand what kind of relationships suit you best. Try it yourself at: ${window.location.origin}`;
                     
