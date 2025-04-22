@@ -17,24 +17,24 @@ import {
   Scale,
   Sparkles
 } from "lucide-react";
-import { CompatibilityProfile } from "../../utils/calculateCompatibilityProfile";
+import { DetailedReport } from "../../logic/profile";
 import { motion } from "framer-motion";
 
 // This component displays the full report in a single-page visual format
 const FullReportView = ({ 
   profile
 }: { 
-  profile: CompatibilityProfile;
+  profile: DetailedReport;
 }) => {
-  const colorClass = profile.overallColor === 'green' 
+  const colorClass = profile.overall === 'green' 
     ? 'bg-green-50 text-green-800 border-green-200' 
-    : profile.overallColor === 'yellow' 
+    : profile.overall === 'yellow' 
       ? 'bg-yellow-50 text-yellow-800 border-yellow-200' 
       : 'bg-red-50 text-red-800 border-red-200';
 
-  const colorIcon = profile.overallColor === 'green' 
+  const colorIcon = profile.overall === 'green' 
     ? <CheckCircle2 className="h-5 w-5 text-green-500" /> 
-    : profile.overallColor === 'yellow' 
+    : profile.overall === 'yellow' 
       ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> 
       : <XCircle className="h-5 w-5 text-red-500" />;
   
@@ -44,9 +44,9 @@ const FullReportView = ({
     return "bg-red-500";
   };
 
-  const colorGradient = profile.overallColor === 'green' 
+  const colorGradient = profile.overall === 'green' 
     ? 'from-green-100 to-green-50' 
-    : profile.overallColor === 'yellow' 
+    : profile.overall === 'yellow' 
       ? 'from-yellow-100 to-yellow-50' 
       : 'from-red-100 to-red-50';
 
