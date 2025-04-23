@@ -14,39 +14,17 @@ import Footer from "@/components/layout/Footer";
 
 // Pages
 import Home from "@/pages/Home";
-import Quiz from "@/pages/Quiz";
-import SimpleQuiz from "@/pages/SimpleQuiz"; // New simplified quiz component
-import BasicQuiz from "@/pages/BasicQuiz"; // Ultra-simple quiz component
 import FixedQuiz from "@/pages/FixedQuiz"; // Fixed version of the quiz component
-import Results from "@/pages/Results";
-import SimpleResults from "@/pages/SimpleResults";
-import LocalResults from "@/pages/LocalResults";
-import SavedResults from "@/pages/SavedResults"; // Supabase saved results component
-import Report from "@/pages/Report";
 import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
 import FixedResults from "@/pages/FixedResults"; // Fixed results page with improved error handling
-import TestReport from "@/pages/TestReport"; // New test report page for the new profile format
 import Analytics from "@/pages/Analytics";
-import Dashboard from "@/pages/Dashboard";
-import DevDashboardPage from "@/pages/DevDashboard"; // Development crash-proof dashboard
 import SupabaseDashboardPage from "@/pages/SupabaseDashboardPage"; // New Supabase Dashboard
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
 import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
-import AuthPage from "@/pages/auth-page";
 import NewAuthPage from "@/pages/new-auth-page";
-import SupabaseTest from "@/pages/SupabaseTest";
-import SupabaseAuthTest from "@/pages/SupabaseAuthTest";
-import SupabaseDbTest from "@/pages/SupabaseDbTest";
-import SimpleAuthTest from "@/pages/SimpleAuthTest";
-import CustomAuthTest from "@/pages/CustomAuthTest";
-import AuthTest from "@/pages/auth-test";
-import NewAuthTest from "@/pages/new-auth-test";
-import TestApiPage from "@/pages/test-api-page";
-import SimpleApiTest from "@/pages/SimpleApiTest";
-import SupabaseConnectionTest from "@/pages/SupabaseConnectionTest";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -68,17 +46,6 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/auth" component={NewAuthPage} />
-      <Route path="/old-auth" component={AuthPage} />
-      <Route path="/supabase-test" component={SupabaseTest} />
-      <Route path="/supabase-auth-test" component={SupabaseAuthTest} />
-      <Route path="/supabase-db-test" component={SupabaseDbTest} />
-      <Route path="/simple-auth-test" component={SimpleAuthTest} />
-      <Route path="/custom-auth-test" component={CustomAuthTest} />
-      <Route path="/auth-test" component={AuthTest} />
-      <Route path="/new-auth-test" component={NewAuthTest} />
-      <Route path="/test-api" component={TestApiPage} />
-      <Route path="/simple-api-test" component={SimpleApiTest} />
-      <Route path="/supabase-connection-test" component={SupabaseConnectionTest} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />
@@ -101,24 +68,13 @@ function Router() {
         {() => window.location.href = "/auth?tab=register"}
       </Route>
       
-      {/* Quiz Routes (For Debugging) */}
-      <ProtectedRoute path="/quiz-original" component={Quiz} allowGuests={true} />
-      <ProtectedRoute path="/quiz-simple" component={SimpleQuiz} allowGuests={true} />
-      <Route path="/quiz-basic" component={BasicQuiz} />
+      {/* Core App Routes */}
       <Route path="/quiz" component={FixedQuiz} />
       <Route path="/results" component={FixedResults} />
-      <ProtectedRoute path="/results-simple" component={SimpleResults} allowGuests={true} />
-      <ProtectedRoute path="/results-legacy" component={Results} allowGuests={true} />
-      <Route path="/local-results" component={LocalResults} />
-      <Route path="/saved-results" component={SavedResults} />
       <Route path="/report" component={DirectReport} />
-      <ProtectedRoute path="/report-legacy" component={Report} />
-      <Route path="/test-report" component={TestReport} />
       <ProtectedRoute path="/analytics" component={Analytics} />
-      <ProtectedRoute path="/dashboard-original" component={Dashboard} />
-      <ProtectedRoute path="/dashboard-dev" component={DevDashboardPage} />
       
-      {/* New Supabase Dashboard (direct integration) */}
+      {/* Supabase Dashboard */}
       <Route path="/dashboard" component={SupabaseDashboardPage} />
       
       {/* Catch-all route */}
