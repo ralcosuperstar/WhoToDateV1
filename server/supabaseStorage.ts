@@ -48,24 +48,12 @@ export class SupabaseStorage implements IStorage {
         console.log('✅ Connecting to Supabase...'); 
         console.log('✅ Supabase client initialized successfully');
         
-        // Set up session store with PostgreSQL if possible, otherwise use memory store
-        if (process.env.DATABASE_URL) {
-          const PostgresSessionStore = connectPg(session);
-          
-          // Configure the session store with specific table name and no auto-creation
-          this.sessionStore = new PostgresSessionStore({
-            conString: process.env.DATABASE_URL,
-            createTableIfMissing: false, // Don't try to create the table
-            tableName: 'user_sessions', // Use the existing table name
-            schemaName: 'public',
-            disableTouch: true // Prevent updated_at attempts
-          });
-        } else {
-          console.warn('⚠️ No DATABASE_URL found. Using in-memory session store.');
-          this.sessionStore = new MemoryStore({
-            checkPeriod: 86400000 // Prune expired entries every 24h
-          });
-        }
+        // Set up in-memory session store for Supabase setup
+        // We're using Supabase for auth directly, so session store is less critical
+        console.log('Setting up in-memory session store for Express sessions');
+        this.sessionStore = new MemoryStore({
+          checkPeriod: 86400000 // Prune expired entries every 24h
+        });
       } catch (error) {
         console.error('❌ Failed to connect to Supabase:', error);
         console.warn('⚠️ Falling back to development mode');

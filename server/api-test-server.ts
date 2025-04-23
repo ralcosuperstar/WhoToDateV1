@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { Pool } from '@neondatabase/serverless';
+import { createClient } from '@supabase/supabase-js';
 
 // Create Express server
 const app = express();
@@ -20,26 +20,27 @@ let dbConnected = false;
 let dbError = null;
 
 try {
-  if (process.env.DATABASE_URL) {
-    const pool = new Pool({
-      connectionString: process.env.DATABASE_URL
-    });
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY
+    );
     
     // Test the connection
-    pool.query('SELECT NOW()').then(() => {
+    supabase.from('users').select('count').limit(1).then(() => {
       dbConnected = true;
-      console.log('✅ Database connection successful');
+      console.log('✅ Supabase database connection successful');
     }).catch(err => {
       dbError = err.message;
-      console.error('❌ Database connection error:', err);
+      console.error('❌ Supabase connection error:', err);
     });
   } else {
-    dbError = 'DATABASE_URL not set';
-    console.warn('⚠️ DATABASE_URL not set');
+    dbError = 'Supabase configuration not set';
+    console.warn('⚠️ SUPABASE_URL or SUPABASE_SERVICE_KEY not set');
   }
 } catch (error) {
   dbError = error.message;
-  console.error('❌ Error initializing database connection:', error);
+  console.error('❌ Error initializing Supabase connection:', error);
 }
 
 // Basic test routes
