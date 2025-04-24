@@ -9,7 +9,7 @@ import { createClient } from '@supabase/supabase-js';
 import { IStorage } from "./storage";
 import { User } from '@shared/schema';
 import { setupSupabaseRoutes } from "./routes/supabase";
-import { setupDatabaseTestRoutes } from "./routes/database-test";
+// Database test routes removed
 import { registerSupabaseSyncRoutes } from "./routes/supabase-sync";
 
 // Use Supabase storage
@@ -146,8 +146,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   // Set up dedicated Supabase routes
   setupSupabaseRoutes(app, router);
   
-  // Set up database test routes
-  setupDatabaseTestRoutes(app, router);
+  // Database test routes removed
   
   // Set up Supabase sync routes
   registerSupabaseSyncRoutes(router, db);

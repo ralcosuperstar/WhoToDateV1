@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 
 const DevDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -23,7 +23,7 @@ const DevDashboard = () => {
   const [editFullName, setEditFullName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const { toast } = useToast();
-  const { user: supabaseUser, isLoading: isSupabaseLoading, signOut } = useSupabase();
+  const { user: supabaseUser, isLoading: isSupabaseLoading, signOut } = useFixedSupabase();
   
   // Mock user data for development
   const mockUser = supabaseUser ? {

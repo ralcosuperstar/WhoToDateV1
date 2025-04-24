@@ -6,7 +6,7 @@ import { calculateCompatibilityProfile } from "@/lib/compatibilityAnalysis";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import { getSupabaseClient } from "@/lib/supabase";
 import { userService } from "@/services/supabaseService";
 
@@ -419,7 +419,7 @@ const FixedQuiz = () => {
   const currentQuestion = quizQuestions.find(q => q.id === currentQuestionId);
   
   // Get authentication state from context
-  const { user } = useSupabase();
+  const { user } = useFixedSupabase();
   
   // Force rendering after a short timeout
   useEffect(() => {

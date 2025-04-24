@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useSupabase } from "@/contexts/NewSupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import { Link } from "wouter";
 import { calculateCompatibilityProfile, type CompatibilityProfile } from "@/lib/compatibilityAnalysis";
 import FullReportView from "@/components/reports/FullReportView";
@@ -14,7 +14,7 @@ const DirectReport = () => {
   const [profile, setProfile] = useState<CompatibilityProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reportLoaded, setReportLoaded] = useState(false);
-  const { user, isLoading: isUserLoading, signIn } = useSupabase();
+  const { user, isLoading: isUserLoading, signIn } = useFixedSupabase();
   const { toast } = useToast();
 
   // Add a timeout to prevent infinite loading states

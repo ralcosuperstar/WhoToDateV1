@@ -19,7 +19,7 @@ import CompatibilityCard from "@/components/report/CompatibilityCard";
 import { User, Report } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient"; 
 import { useToast } from "@/hooks/use-toast";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -29,7 +29,7 @@ const UserDashboard = () => {
   const [_, navigate] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user: supabaseUser, isLoading: isSupabaseLoading, signOut } = useSupabase();
+  const { user: supabaseUser, isLoading: isSupabaseLoading, signOut } = useFixedSupabase();
   
   // Local state to store the user profile
   const [localUser, setLocalUser] = useState<User | null>(null);
@@ -81,7 +81,7 @@ const UserDashboard = () => {
               verificationTokenExpiry: null,
               otpCode: null,
               otpExpiry: null,
-              clerkId: supabaseUser.id,
+              // clerkId field removed as we've migrated to Supabase
               createdAt: new Date(),
             };
             console.log('Created basic user profile:', basicUser);
@@ -131,7 +131,7 @@ const UserDashboard = () => {
             verificationTokenExpiry: null,
             otpCode: null,
             otpExpiry: null,
-            clerkId: supabaseUser.id,
+            // clerkId field removed as we've migrated to Supabase
             createdAt: new Date(),
           };
           console.log('Created fallback user after error:', fallbackUser);
