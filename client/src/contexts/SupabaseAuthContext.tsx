@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { getSupabaseClient } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 import { User } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
 

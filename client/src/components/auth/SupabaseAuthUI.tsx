@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { initSupabase } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -25,7 +25,7 @@ export function SupabaseAuthUI({
     async function loadSupabase() {
       try {
         console.log('Initializing Supabase for Auth UI...');
-        const client = await initSupabase();
+        const client = await getSupabaseClient();
         setSupabaseClient(client);
       } catch (error) {
         console.error('Error initializing Supabase for Auth UI:', error);

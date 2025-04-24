@@ -1,5 +1,5 @@
 import { User } from '@supabase/supabase-js';
-import { getSupabaseClient } from './supabase';
+import { getSupabaseClient } from './supabaseConfig';
 
 /**
  * Ensures that a user exists in the public.users table after authentication
