@@ -1,15 +1,17 @@
 import directSupabaseService from '@/services/directSupabaseService';
 import { ensureUserExists } from './supabaseUtils';
+import { getSupabaseClient } from './supabaseConfig';
 
-// Get a direct reference to the Supabase client
-const supabase = directSupabaseService.auth.getClient();
+// Get the Supabase client on-demand to avoid duplicate client instances
+const getClient = async () => await getSupabaseClient();
 
 /**
  * Sign in with email and password
  */
 export async function signInWithPassword(email: string, password: string) {
   try {
-    // Use the direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -42,7 +44,8 @@ export async function signInWithPassword(email: string, password: string) {
  */
 export async function signUpWithPassword(email: string, password: string, userData?: any) {
   try {
-    // Use direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -82,7 +85,8 @@ export async function signUpWithPassword(email: string, password: string, userDa
  */
 export async function verifyOtp(email: string, token: string) {
   try {
-    // Use direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.verifyOtp({
       email,
       token,
@@ -116,7 +120,8 @@ export async function verifyOtp(email: string, token: string) {
  */
 export async function signOut() {
   try {
-    // Use direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { error } = await supabase.auth.signOut();
     
     if (error) {
@@ -136,7 +141,8 @@ export async function signOut() {
  */
 export async function getSession() {
   try {
-    // Use direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.getSession();
     
     if (error) {
@@ -156,7 +162,8 @@ export async function getSession() {
  */
 export async function getCurrentUser() {
   try {
-    // Use direct Supabase client
+    // Get a client instance when needed
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.getUser();
     
     if (error) {
