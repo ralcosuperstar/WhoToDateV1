@@ -85,6 +85,7 @@ export const auth = {
 
   // Update password
   updatePassword: async (password: string) => {
+    const supabase = await getClient();
     return await supabase.auth.updateUser({ password });
   },
 };
@@ -93,6 +94,7 @@ export const auth = {
 export const user = {
   // Get user by ID
   getUserById: async (userId: string) => {
+    const supabase = await getClient();
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -104,6 +106,7 @@ export const user = {
 
   // Get user by email
   getUserByEmail: async (email: string) => {
+    const supabase = await getClient();
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -115,6 +118,7 @@ export const user = {
 
   // Ensure user exists in the users table (create if not)
   ensureUserExists: async (authUser: any) => {
+    const supabase = await getClient();
     // First check if user exists
     const { data: existingUser, error: checkError } = await supabase
       .from('users')
@@ -133,6 +137,7 @@ export const user = {
     }
     
     // User doesn't exist, create it
+    // We already have the supabase client from above, no need to get it again
     const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert([{
@@ -152,6 +157,7 @@ export const user = {
 
   // Update user profile
   updateUserProfile: async (userId: string, userData: any) => {
+    const supabase = await getClient();
     const { data, error } = await supabase
       .from('users')
       .update({
