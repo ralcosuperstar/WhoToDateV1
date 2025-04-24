@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, ChevronRight, Info, Check } from "lucide-react";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
-import { getSupabaseClient } from "@/lib/supabase";
+import { getSupabaseClient } from "@/lib/supabaseConfig";
 import { userService } from "@/services/supabaseService";
 
 // Quiz sections data

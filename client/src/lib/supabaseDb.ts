@@ -1,4 +1,4 @@
-import { getSupabaseClient } from './supabase';
+import { getSupabaseClient } from './supabaseConfig';
 import type { User, QuizAnswer, Report, Payment, BlogPost } from '@shared/schema';
 
 // Type for responses

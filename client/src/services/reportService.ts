@@ -1,4 +1,4 @@
-import { getSupabaseClient } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 import type { Report } from '@shared/schema';
 
 /**

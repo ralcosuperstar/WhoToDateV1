@@ -1,6 +1,6 @@
 import { User, Session, PostgrestError } from '@supabase/supabase-js';
 import { Report, QuizAnswer, BlogPost } from '@shared/schema';
-import { getSupabaseClient } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 
 /**
  * Initialize Supabase client - uses singleton pattern from lib/supabase.ts
