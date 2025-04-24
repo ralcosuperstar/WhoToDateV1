@@ -1,32 +1,29 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getSupabaseClient } from '@/lib/supabaseConfig';
 
-// We'll use the supabase client from our new supabaseConfig helper
-let supabase: SupabaseClient;
-let clientPromise: Promise<SupabaseClient>;
+// IMPORTANT: Instead of initializing a new client here, we'll just get the client on demand
+// This prevents multiple Supabase client instances being created across the application
 
-// Initialize the client when imported
-clientPromise = (async () => {
+// Helper to get a Supabase client when needed - this makes sure we're always using the same instance
+const getClient = async (): Promise<SupabaseClient> => {
   try {
-    // Get the client from the shared implementation that uses server-provided credentials
-    supabase = await getSupabaseClient();
-    console.log('directSupabaseService: Using server-configured Supabase client');
-    return supabase;
+    return await getSupabaseClient();
   } catch (error) {
-    console.error('directSupabaseService: Failed to initialize Supabase client', error);
+    console.error('directSupabaseService: Failed to get Supabase client', error);
     throw error;
   }
-})();
+};
 
 // Authentication service
 export const auth = {
-  // Get the supabase client
-  getClient: (): SupabaseClient => {
-    return supabase;
+  // Get the supabase client - returns the same singleton instance every time
+  getClient: async (): Promise<SupabaseClient> => {
+    return await getClient();
   },
 
   // Sign in with email and password
   signIn: async (email: string, password: string) => {
+    const supabase = await getClient();
     return await supabase.auth.signInWithPassword({
       email,
       password
@@ -35,6 +32,7 @@ export const auth = {
 
   // Sign up with email and password
   signUp: async (email: string, password: string, userData?: any) => {
+    const supabase = await getClient();
     return await supabase.auth.signUp({
       email,
       password,
@@ -44,6 +42,7 @@ export const auth = {
   
   // Verify OTP code
   verifyOtp: async (email: string, token: string) => {
+    const supabase = await getClient();
     return await supabase.auth.verifyOtp({
       email,
       token,
@@ -60,23 +59,27 @@ export const auth = {
     document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     
     // Then sign out from Supabase
+    const supabase = await getClient();
     return await supabase.auth.signOut();
   },
 
   // Get current session
   getSession: async () => {
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.getSession();
     return data?.session || null;
   },
 
   // Get current user
   getCurrentUser: async () => {
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.getUser();
     return data?.user || null;
   },
 
   // Reset password
   resetPassword: async (email: string) => {
+    const supabase = await getClient();
     return await supabase.auth.resetPasswordForEmail(email);
   },
 
