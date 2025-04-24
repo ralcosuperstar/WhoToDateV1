@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import directSupabaseService from '@/services/directSupabaseService';
 import { useToast } from '@/hooks/use-toast';
+import { getSupabaseClient } from '@/lib/supabaseConfig';
 
 // Define the context types
 interface SupabaseContextType {
