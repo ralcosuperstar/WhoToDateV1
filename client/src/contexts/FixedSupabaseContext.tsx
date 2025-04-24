@@ -48,8 +48,7 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     const initSupabase = async () => {
       try {
-        // Use our supabaseConfig helper to get credentials from server
-        const { getSupabaseClient } = await import('@/lib/supabaseConfig');
+        // Use the imported getSupabaseClient function
         const client = await getSupabaseClient();
         setSupabase(client);
         console.log('Fixed Context: Supabase client initialized successfully from server config');

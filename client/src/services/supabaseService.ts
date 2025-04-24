@@ -3,7 +3,9 @@ import { Report, QuizAnswer, BlogPost } from '@shared/schema';
 import { getSupabaseClient } from '@/lib/supabaseConfig';
 
 /**
- * Initialize Supabase client - uses singleton pattern from lib/supabase.ts
+ * Get Supabase client using the standardized pattern from lib/supabaseConfig.ts
+ * This function exists for backwards compatibility and directly calls getSupabaseClient
+ * @deprecated Use getSupabaseClient from @/lib/supabaseConfig directly
  */
 export const initSupabase = async () => {
   try {
