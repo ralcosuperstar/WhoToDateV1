@@ -849,7 +849,7 @@ const EnhancedDashboard = () => {
                               description: "Please wait while we prepare your report"
                             });
                             setTimeout(() => {
-                              window.location.href = "/report";
+                              window.location.href = "/results";
                             }, 500);
                           }}
                         >
@@ -1047,7 +1047,7 @@ const EnhancedDashboard = () => {
                         </div>
                         
                         <Button asChild className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-                          <Link href="/report">
+                          <Link href="/results">
                             View Full Detailed Report <ArrowRight className="ml-2 w-4 h-4" />
                           </Link>
                         </Button>
@@ -1065,7 +1065,7 @@ const EnhancedDashboard = () => {
                           Your attachment style influences how you connect with partners.
                         </p>
                         <Button asChild variant="link" className="px-0 text-[#e83a8e]">
-                          <Link href="/report">Learn more</Link>
+                          <Link href="/results">Learn more</Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -1079,7 +1079,7 @@ const EnhancedDashboard = () => {
                           Your unique way of expressing needs and resolving conflicts.
                         </p>
                         <Button asChild variant="link" className="px-0 text-[#e83a8e]">
-                          <Link href="/report">Learn more</Link>
+                          <Link href="/results">Learn more</Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -1093,7 +1093,7 @@ const EnhancedDashboard = () => {
                           Opportunities to enhance your relationship satisfaction.
                         </p>
                         <Button asChild variant="link" className="px-0 text-[#e83a8e]">
-                          <Link href="/report">Learn more</Link>
+                          <Link href="/results">Learn more</Link>
                         </Button>
                       </CardContent>
                     </Card>
