@@ -206,7 +206,7 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
             </div>
             {quizCompleted && !reportGenerated && (
               <Button asChild size="sm" className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-                <Link href="/report">Generate</Link>
+                <Link href="/results">Generate</Link>
               </Button>
             )}
           </div>
@@ -408,7 +408,7 @@ const CompatibilitySummaryCard = ({ report }: { report: ReportData }) => {
           asChild 
           className="w-full mt-6 bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
         >
-          <Link href="/report">
+          <Link href="/results">
             View Full Report <ArrowRight className="ml-2 w-4 h-4" />
           </Link>
         </Button>
@@ -711,7 +711,7 @@ const EnhancedDashboard = () => {
                 <Link href="/profile">My Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/report">My Report</Link>
+                <Link href="/results">My Report</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
