@@ -10,32 +10,50 @@ declare global {
 
 // Cache for the Supabase configuration
 let supabaseConfig: { url: string; anonKey: string } | null = null;
+// Use a promise to avoid multiple concurrent fetch requests
+let configPromise: Promise<{ url: string; anonKey: string }> | null = null;
 
 /**
  * Fetches Supabase configuration from the server
+ * Uses a promise cache to prevent duplicate API calls during initialization
  */
 export async function fetchSupabaseConfig(): Promise<{ url: string; anonKey: string }> {
+  // If config is already loaded, return it immediately
   if (supabaseConfig) {
     return supabaseConfig;
   }
   
-  try {
-    const response = await fetch('/api/supabase-config');
-    if (!response.ok) {
-      throw new Error('Failed to fetch Supabase config');
-    }
-    
-    const data = await response.json();
-    supabaseConfig = {
-      url: data.url,
-      anonKey: data.anonKey
-    };
-    
-    return supabaseConfig;
-  } catch (error) {
-    console.error('Error fetching Supabase config:', error);
-    throw error;
+  // If there's already a request in progress, return its promise
+  if (configPromise) {
+    return configPromise;
   }
+  
+  // Start a new fetch request and store the promise
+  configPromise = (async () => {
+    try {
+      const response = await fetch('/api/supabase-config');
+      if (!response.ok) {
+        throw new Error('Failed to fetch Supabase config');
+      }
+      
+      const data = await response.json();
+      supabaseConfig = {
+        url: data.url,
+        anonKey: data.anonKey
+      };
+      
+      return supabaseConfig;
+    } catch (error) {
+      console.error('Error fetching Supabase config:', error);
+      throw error;
+    } finally {
+      // Reset the promise after completion (success or failure)
+      // This allows retry if the first attempt failed
+      configPromise = null;
+    }
+  })();
+  
+  return configPromise;
 }
 
 /**
