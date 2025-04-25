@@ -348,6 +348,12 @@ export const report = {
       
       let data, error;
       
+      // Make sure we have valid report data
+      if (!reportData.report) {
+        console.error('Invalid report data provided');
+        return { success: false, error: new Error('Invalid report data') };
+      }
+      
       // If report exists, update it instead of creating a new one
       if (existingReport) {
         console.log('Found existing report with ID:', existingReport.id, '. Updating instead of creating new.');
@@ -357,7 +363,7 @@ export const report = {
           .update({
             quiz_id: reportData.quizId,
             report: reportData.report,
-            compatibility_color: reportData.compatibilityColor,
+            compatibility_color: reportData.compatibilityColor || 'yellow',
             is_paid: reportData.isPaid || true, // Reports are now free
             updated_at: new Date().toISOString()
           })
@@ -367,6 +373,22 @@ export const report = {
           
         data = result.data;
         error = result.error;
+        
+        // Double check that we got data back
+        if (!data && !error) {
+          console.warn('No data returned after update, but no error reported');
+          // Try to fetch the report to see if update actually worked
+          const checkResult = await client
+            .from('reports')
+            .select('*')
+            .eq('id', existingReport.id)
+            .single();
+            
+          if (checkResult.data) {
+            console.log('Found report after update check:', checkResult.data);
+            data = checkResult.data;
+          }
+        }
       } else {
         // If no report exists, create a new one
         console.log('No existing report found. Creating new report for user:', reportData.userId);
@@ -377,7 +399,7 @@ export const report = {
             user_id: reportData.userId,
             quiz_id: reportData.quizId,
             report: reportData.report,
-            compatibility_color: reportData.compatibilityColor,
+            compatibility_color: reportData.compatibilityColor || 'yellow',
             is_paid: reportData.isPaid || true, // Reports are now free
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()

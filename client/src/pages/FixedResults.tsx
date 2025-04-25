@@ -233,8 +233,9 @@ const FixedResults = () => {
       }
     },
     onSuccess: () => {
-      // Invalidate queries to refresh data
-      queryClient.invalidateQueries({ queryKey: ['report'] });
+      // Invalidate queries to refresh data - include user ID to be more specific
+      queryClient.invalidateQueries({ queryKey: ['report', supabaseUser?.id] });
+      
       toast({
         title: "Success!",
         description: "Your compatibility report has been created."
@@ -242,6 +243,8 @@ const FixedResults = () => {
       
       // Refresh the report data
       refetchReport();
+      
+      console.log("Report created successfully, refetching report data");
     },
     onError: (error) => {
       console.error("Report creation error:", error);
