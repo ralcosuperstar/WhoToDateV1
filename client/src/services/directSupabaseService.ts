@@ -334,28 +334,67 @@ export const report = {
     }
   },
   
-  // Create a report
+  // Create or update a report
   createReport: async (reportData: any) => {
     const client = await getClient();
     try {
-      const { data, error } = await client
+      // First check if a report already exists for this user
+      const { data: existingReport } = await client
         .from('reports')
-        .insert([{
-          user_id: reportData.userId,
-          quiz_id: reportData.quizId,
-          report: reportData.report,
-          compatibility_color: reportData.compatibilityColor,
-          is_paid: reportData.isPaid || true, // Reports are now free
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }])
-        .select()
+        .select('id')
+        .eq('user_id', reportData.userId)
+        .limit(1)
         .single();
       
+      let data, error;
+      
+      // If report exists, update it instead of creating a new one
+      if (existingReport) {
+        console.log('Found existing report with ID:', existingReport.id, '. Updating instead of creating new.');
+        
+        const result = await client
+          .from('reports')
+          .update({
+            quiz_id: reportData.quizId,
+            report: reportData.report,
+            compatibility_color: reportData.compatibilityColor,
+            is_paid: reportData.isPaid || true, // Reports are now free
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingReport.id)
+          .select()
+          .single();
+          
+        data = result.data;
+        error = result.error;
+      } else {
+        // If no report exists, create a new one
+        console.log('No existing report found. Creating new report for user:', reportData.userId);
+        
+        const result = await client
+          .from('reports')
+          .insert([{
+            user_id: reportData.userId,
+            quiz_id: reportData.quizId,
+            report: reportData.report,
+            compatibility_color: reportData.compatibilityColor,
+            is_paid: reportData.isPaid || true, // Reports are now free
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+          
+        data = result.data;
+        error = result.error;
+      }
+      
       if (error) {
-        console.error('Error creating report:', error);
+        console.error('Error creating/updating report:', error);
         return { success: false, error };
       }
+      
+      console.log('Successfully created/updated report:', data);
       
       return { 
         success: true, 
