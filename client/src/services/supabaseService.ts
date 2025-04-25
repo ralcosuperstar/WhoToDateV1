@@ -853,10 +853,9 @@ export const storageService = {
   }
 };
 
-// Initialize Supabase on module import
-initSupabase().catch(err => {
-  console.error('Failed to initialize Supabase service:', err);
-});
+// No longer need to initialize Supabase on module import
+// The singleton pattern ensures we always use the same client instance
+// when getSupabaseClient() is called
 
 // Export a default object with all services
 export default {
