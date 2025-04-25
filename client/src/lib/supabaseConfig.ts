@@ -1,8 +1,15 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Cache for the Supabase configuration and client instance
+// GLOBAL SINGLETON: Define a truly global singleton for the Supabase client
+// This is required to prevent "Multiple GoTrueClient instances" warning
+declare global {
+  interface Window {
+    __SUPABASE_SINGLETON_CLIENT?: SupabaseClient;
+  }
+}
+
+// Cache for the Supabase configuration
 let supabaseConfig: { url: string; anonKey: string } | null = null;
-let supabaseInstance: SupabaseClient | null = null;
 
 /**
  * Fetches Supabase configuration from the server
@@ -33,19 +40,32 @@ export async function fetchSupabaseConfig(): Promise<{ url: string; anonKey: str
 
 /**
  * Gets a Supabase client instance using the configuration from the server
+ * This implementation ensures there is truly only ONE client instance 
+ * in the entire application by storing it in the global window object.
  */
 export async function getSupabaseClient(): Promise<SupabaseClient> {
-  if (supabaseInstance) {
-    return supabaseInstance;
+  // First check if we already have a client instance in the global scope
+  if (typeof window !== 'undefined' && window.__SUPABASE_SINGLETON_CLIENT) {
+    return window.__SUPABASE_SINGLETON_CLIENT;
   }
   
   try {
     const config = await fetchSupabaseConfig();
     
     console.log('Creating Supabase client with config from API');
-    supabaseInstance = createClient(config.url, config.anonKey);
+    const newClient = createClient(config.url, config.anonKey, {
+      auth: {
+        persistSession: true, // Enable session persistence
+        storageKey: 'supabase.auth.token' // Use consistent storage key
+      }
+    });
     
-    return supabaseInstance;
+    // Store the client in the global scope to ensure it's truly a singleton
+    if (typeof window !== 'undefined') {
+      window.__SUPABASE_SINGLETON_CLIENT = newClient;
+    }
+    
+    return newClient;
   } catch (error) {
     console.error('Error initializing Supabase client:', error);
     throw error;
@@ -53,14 +73,11 @@ export async function getSupabaseClient(): Promise<SupabaseClient> {
 }
 
 /**
- * Creates a new Supabase client instance (for cases where you need a fresh instance)
+ * This function is deprecated and only kept for backward compatibility.
+ * Always use getSupabaseClient() instead.
+ * @deprecated Use getSupabaseClient() instead
  */
 export async function createFreshSupabaseClient(): Promise<SupabaseClient> {
-  try {
-    const config = await fetchSupabaseConfig();
-    return createClient(config.url, config.anonKey);
-  } catch (error) {
-    console.error('Error creating fresh Supabase client:', error);
-    throw error;
-  }
+  // Always returns the singleton instance
+  return getSupabaseClient();
 }

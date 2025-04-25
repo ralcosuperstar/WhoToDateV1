@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
+import { User, Session, AuthChangeEvent, SupabaseClient } from '@supabase/supabase-js';
 import directSupabaseService from '@/services/directSupabaseService';
 import { useToast } from '@/hooks/use-toast';
 import { getSupabaseClient } from '@/lib/supabaseConfig';
@@ -21,7 +21,7 @@ interface SupabaseContextType {
 }
 
 // Create the context with default values
-export const FixedSupabaseContext = createContext<SupabaseContextType>({
+const contextDefaultValues: SupabaseContextType = {
   isLoading: true,
   user: null,
   session: null,
@@ -34,21 +34,26 @@ export const FixedSupabaseContext = createContext<SupabaseContextType>({
   refreshUser: () => Promise.resolve(),
   getUserProfile: () => Promise.resolve({}),
   updateUserProfile: () => Promise.resolve({}),
-});
+};
+
+export const FixedSupabaseContext = createContext<SupabaseContextType>(contextDefaultValues);
 
 // Create the provider component
 export function FixedSupabaseProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [supabase, setSupabase] = useState<any>(null);
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const { toast } = useToast();
   
   // Initialize the Supabase client when the component mounts
   useEffect(() => {
+    // Skip initialization if client is already set
+    if (supabase) return;
+    
     const initSupabase = async () => {
       try {
-        // Use the imported getSupabaseClient function
+        // Use the imported getSupabaseClient function which now uses window.__SUPABASE_SINGLETON_CLIENT
         const client = await getSupabaseClient();
         setSupabase(client);
         console.log('Fixed Context: Supabase client initialized successfully from server config');
@@ -63,7 +68,7 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
     };
     
     initSupabase();
-  }, []);
+  }, [supabase, toast]);
 
   // Initial auth check - only run when supabase client is available
   useEffect(() => {
@@ -99,10 +104,10 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
     };
     
     // Set up auth state change listener
-    let authListener: { subscription: { unsubscribe: () => void } } | null = null;
+    let authListener: any = null;
     
     try {
-      const listener = supabase.auth.onAuthStateChange((event: AuthChangeEvent, newSession: Session | null) => {
+      const { data } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, newSession: Session | null) => {
         console.log('Fixed Context: Auth state changed:', event);
         
         if (mounted) {
@@ -118,7 +123,7 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
         }
       });
       
-      authListener = listener;
+      authListener = data;
     } catch (error) {
       console.error('Failed to set up auth listener:', error);
     }
@@ -146,7 +151,7 @@ export function FixedSupabaseProvider({ children }: { children: React.ReactNode 
         }
       }
     };
-  }, [supabase]); // Re-run when supabase client changes
+  }, [supabase, isLoading]); // Re-run when supabase client changes
 
   // Function to refresh the user data
   const refreshUser = async () => {

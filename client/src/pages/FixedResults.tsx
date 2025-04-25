@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryClient } from "../lib/queryClient";
 import { motion } from "framer-motion";
 import { reportService, quizService, userService, authService } from "../services/supabaseService";
+import directSupabaseService from "../services/directSupabaseService";
 import { useFixedSupabase } from "../contexts/FixedSupabaseContext";
 import { 
   Download, 
@@ -145,8 +146,8 @@ const FixedResults = () => {
     queryKey: ['dbUser', supabaseUser?.id],
     queryFn: async () => {
       if (!supabaseUser?.email) throw new Error('User email not available');
-      const client = await authService.getClient();
-      return userService.getUserByEmail(client, supabaseUser.email);
+      // Use directSupabaseService to get a client using the global singleton
+      return directSupabaseService.user.getUserByEmail(supabaseUser.email);
     },
     enabled: !!supabaseUser?.email,
     refetchOnWindowFocus: false,
@@ -163,9 +164,8 @@ const FixedResults = () => {
     queryKey: ['quiz', supabaseUser?.id],
     queryFn: async () => {
       if (!supabaseUser?.id) throw new Error('Auth user ID not available');
-      const client = await authService.getClient();
-      // Use the supabaseUser.id (UUID) directly instead of the database numeric ID
-      return quizService.getQuizByUserId(client, supabaseUser.id);
+      // Use the directSupabaseService to access the singleton client
+      return directSupabaseService.quiz.getQuizAnswers(supabaseUser.id);
     },
     enabled: !!supabaseUser?.id,
     retry: 2,
@@ -182,9 +182,8 @@ const FixedResults = () => {
     queryKey: ['report', supabaseUser?.id],
     queryFn: async () => {
       if (!supabaseUser?.id) throw new Error('Auth user ID not available');
-      const client = await authService.getClient();
-      // Use the supabaseUser.id (UUID) directly instead of the database numeric ID
-      return reportService.getReportByUserId(client, supabaseUser.id);
+      // Use the directSupabaseService to access the singleton client
+      return directSupabaseService.report.getReport(supabaseUser.id);
     },
     enabled: !!supabaseUser?.id,
     refetchOnWindowFocus: false,
@@ -214,14 +213,16 @@ const FixedResults = () => {
           throw new Error('User ID not available');
         }
         
-        const client = await authService.getClient();
-        const report = await reportService.createReport(client, {
+        // Use directSupabaseService to leverage the global singleton client
+        const result = await directSupabaseService.report.createReport({
           userId,
           quizId: data.quizId,
           report: data.report,
           compatibilityColor: data.compatibilityColor,
           isPaid: data.isPaid
         });
+        
+        const report = result.success ? result.report : null;
         
         return report;
       } catch (error) {
@@ -339,7 +340,7 @@ const FixedResults = () => {
             setProfile(detailedReport);
             
             // Create a report using these answers
-            if (supabaseUser && dbUser && quizData.id) {
+            if (supabaseUser && supabaseUser.id && quizData.id) {
               if (isDev) console.debug("Creating report from quiz answers");
               createReportMutation.mutate({
                 quizId: quizData.id,
@@ -368,7 +369,7 @@ const FixedResults = () => {
         setProfile(detailedReport);
         
         // Create a report if we have quiz data
-        if (existingQuiz && dbUser && supabaseUser) {
+        if (existingQuiz && supabaseUser && supabaseUser.id) {
           const quizData = existingQuiz as any;
           if (quizData.id) {
             if (isDev) console.debug("Creating report from session answers");
@@ -416,7 +417,7 @@ const FixedResults = () => {
   // Handle retry loading
   const handleRetry = () => {
     // Refetch all data
-    if (dbUser?.id) {
+    if (supabaseUser?.id) {
       refetchQuiz();
       refetchReport();
     }

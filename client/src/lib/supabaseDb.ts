@@ -1,6 +1,9 @@
 import { getSupabaseClient } from './supabaseConfig';
 import type { User, QuizAnswer, Report, Payment, BlogPost } from '@shared/schema';
 
+// Get the Supabase client on-demand to avoid duplicate client instances
+const getClient = async () => await getSupabaseClient();
+
 // Type for responses
 interface SupabaseResponse<T> {
   data: T | null;
@@ -19,7 +22,7 @@ function handleSupabaseResponse<T>(result: { data: T | null, error: any }): Supa
 // User profile operations
 export async function getProfile(userId: string): Promise<SupabaseResponse<User>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const result = await supabase
       .from('users')
       .select('*')
@@ -35,7 +38,7 @@ export async function getProfile(userId: string): Promise<SupabaseResponse<User>
 
 export async function updateProfile(userId: string, userData: Partial<User>): Promise<SupabaseResponse<User>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const result = await supabase
       .from('users')
       .update(userData)
@@ -53,7 +56,7 @@ export async function updateProfile(userId: string, userData: Partial<User>): Pr
 // Quiz operations
 export async function getQuizAnswers(userId: string): Promise<SupabaseResponse<QuizAnswer>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const result = await supabase
       .from('quiz_answers')
       .select('*')
@@ -69,7 +72,7 @@ export async function getQuizAnswers(userId: string): Promise<SupabaseResponse<Q
 
 export async function saveQuizAnswers(quizData: Partial<QuizAnswer>): Promise<SupabaseResponse<QuizAnswer>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const { data: session } = await supabase.auth.getSession();
     
     if (!session.session) {
@@ -120,7 +123,7 @@ export async function saveQuizAnswers(quizData: Partial<QuizAnswer>): Promise<Su
 // Report operations
 export async function getReport(userId: string): Promise<SupabaseResponse<Report>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const result = await supabase
       .from('reports')
       .select('*')
@@ -136,7 +139,7 @@ export async function getReport(userId: string): Promise<SupabaseResponse<Report
 
 export async function createReport(reportData: Partial<Report>): Promise<SupabaseResponse<Report>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     const { data: session } = await supabase.auth.getSession();
     
     if (!session.session) {
@@ -165,7 +168,7 @@ export async function createReport(reportData: Partial<Report>): Promise<Supabas
 
 export async function updateReportPayment(reportId: number, isPaid: boolean): Promise<SupabaseResponse<Report>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('reports')
@@ -184,7 +187,7 @@ export async function updateReportPayment(reportId: number, isPaid: boolean): Pr
 // Payment operations
 export async function createPayment(paymentData: Partial<Payment>): Promise<SupabaseResponse<Payment>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('payments')
@@ -204,7 +207,7 @@ export async function createPayment(paymentData: Partial<Payment>): Promise<Supa
 
 export async function getPaymentByReportId(reportId: number): Promise<SupabaseResponse<Payment>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('payments')
@@ -221,7 +224,7 @@ export async function getPaymentByReportId(reportId: number): Promise<SupabaseRe
 
 export async function updatePaymentStatus(paymentId: number, status: string): Promise<SupabaseResponse<Payment>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('payments')
@@ -240,7 +243,7 @@ export async function updatePaymentStatus(paymentId: number, status: string): Pr
 // Blog operations
 export async function getAllBlogPosts(): Promise<SupabaseResponse<BlogPost[]>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('blog_posts')
@@ -256,7 +259,7 @@ export async function getAllBlogPosts(): Promise<SupabaseResponse<BlogPost[]>> {
 
 export async function getBlogPostById(id: number): Promise<SupabaseResponse<BlogPost>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('blog_posts')
@@ -273,7 +276,7 @@ export async function getBlogPostById(id: number): Promise<SupabaseResponse<Blog
 
 export async function getBlogPostBySlug(slug: string): Promise<SupabaseResponse<BlogPost>> {
   try {
-    const supabase = await getSupabaseClient();
+    const supabase = await getClient();
     
     const result = await supabase
       .from('blog_posts')

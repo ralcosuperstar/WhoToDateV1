@@ -90,7 +90,7 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <FixedSupabaseProvider> {/* Simplified Supabase Context that directly integrates with Supabase */}
+      <FixedSupabaseProvider> {/* Uses consistent Supabase client initialization */}
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-1">

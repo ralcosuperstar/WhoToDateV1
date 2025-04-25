@@ -175,7 +175,8 @@ export const user = {
 // Quiz service
 export const quiz = {
   // Get quiz answers for a user
-  getQuizAnswers: async (client: SupabaseClient, userId: string) => {
+  getQuizAnswers: async (userId: string) => {
+    const client = await getClient();
     console.log('Fetching quiz answers for user ID:', userId);
     console.log('Fetching quiz answers with ID:', userId);
     
@@ -213,7 +214,8 @@ export const quiz = {
   },
   
   // Create or update quiz answers
-  saveQuizAnswers: async (client: SupabaseClient, userId: string, answers: any, completed: boolean = false) => {
+  saveQuizAnswers: async (userId: string, answers: any, completed: boolean = false) => {
+    const client = await getClient();
     try {
       // First check if the user already has quiz answers
       const { data: existingAnswers } = await client
@@ -293,7 +295,8 @@ export const quiz = {
 // Report service
 export const report = {
   // Get report by ID
-  getReport: async (client: SupabaseClient, userId: string) => {
+  getReport: async (userId: string) => {
+    const client = await getClient();
     console.log('Fetching report for user ID:', userId);
     console.log('Fetching report with ID:', userId);
     
@@ -332,7 +335,8 @@ export const report = {
   },
   
   // Create a report
-  createReport: async (client: SupabaseClient, reportData: any) => {
+  createReport: async (reportData: any) => {
+    const client = await getClient();
     try {
       const { data, error } = await client
         .from('reports')
