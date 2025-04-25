@@ -17,7 +17,7 @@ import FixedQuiz from "@/pages/FixedQuiz"; // Fixed version of the quiz componen
 import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
 import FixedResults from "@/pages/FixedResults"; // Fixed results page with improved error handling
 import Analytics from "@/pages/Analytics";
-import SupabaseDashboardPage from "@/pages/SupabaseDashboardPage"; // New Supabase Dashboard
+import EnhancedDashboardPage from "@/pages/EnhancedDashboardPage"; // New Enhanced Dashboard with better UI/UX
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
@@ -73,8 +73,8 @@ function Router() {
       <Route path="/report" component={DirectReport} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       
-      {/* Supabase Dashboard */}
-      <Route path="/dashboard" component={SupabaseDashboardPage} />
+      {/* Enhanced Dashboard */}
+      <ProtectedRoute path="/dashboard" component={EnhancedDashboardPage} />
       
       {/* Catch-all route */}
       <Route component={NotFound} />
