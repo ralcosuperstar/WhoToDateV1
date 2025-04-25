@@ -105,10 +105,23 @@ const DirectReport = () => {
         
         setIsLoading(false);
         setReportLoaded(true);
+        
+        // Show a toast to confirm report creation
+        toast({
+          title: "Report created successfully!",
+          description: "Your compatibility profile is now ready to view",
+        });
       } catch (error) {
         console.error("Error loading report:", error);
         setError("Failed to load your report data. Please try again.");
         setIsLoading(false);
+        
+        // Show a toast with the error for debugging
+        toast({
+          title: "Error creating report",
+          description: error instanceof Error ? error.message : "An unknown error occurred",
+          variant: "destructive",
+        });
       }
     };
 

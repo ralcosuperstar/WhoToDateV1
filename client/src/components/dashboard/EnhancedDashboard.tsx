@@ -841,10 +841,19 @@ const EnhancedDashboard = () => {
                           </Link>
                         </Button>
                       ) : (
-                        <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white w-full">
-                          <Link href="/report">
-                            Generate Report <ArrowRight className="ml-2 w-4 h-4" />
-                          </Link>
+                        <Button 
+                          className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white w-full"
+                          onClick={() => {
+                            toast({
+                              title: "Generating report...",
+                              description: "Please wait while we prepare your report"
+                            });
+                            setTimeout(() => {
+                              window.location.href = "/report";
+                            }, 500);
+                          }}
+                        >
+                          Generate Report <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       )}
                     </CardContent>
