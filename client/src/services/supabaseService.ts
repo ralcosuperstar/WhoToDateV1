@@ -565,7 +565,7 @@ export const reportService = {
   },
 
   /**
-   * Create a report - simplified for Supabase-only operation
+   * Create or update a report - simplified for Supabase-only operation
    */
   createReport: async (supabase: any, data: {
     userId: string;
@@ -574,31 +574,68 @@ export const reportService = {
     compatibilityColor: string;
     isPaid: boolean;
   }) => {
-    console.log('Creating report with data:', data);
+    console.log('Creating/updating report with data for user:', data.userId);
     try {
-      console.log('Creating report with user ID:', data.userId);
-      
-      // Convert field names to snake_case for Supabase
-      const { data: createdReport, error } = await supabase
+      // First check if a report already exists for this user
+      const { data: existingReport } = await supabase
         .from('reports')
-        .insert({
-          user_id: data.userId,
-          quiz_id: data.quizId,
-          report: data.report,
-          compatibility_color: data.compatibilityColor,
-          is_paid: data.isPaid,
-          created_at: new Date().toISOString()
-        })
-        .select()
-        .single();
+        .select('id')
+        .eq('user_id', data.userId)
+        .maybeSingle();
+      
+      let result;
+      
+      if (existingReport) {
+        // Update existing report instead of creating a new one
+        console.log('Found existing report with ID:', existingReport.id, '. Updating instead of creating new.');
         
-      if (error) {
-        console.error('Error creating report:', error);
-        return null;
+        const { data: updatedReport, error } = await supabase
+          .from('reports')
+          .update({
+            quiz_id: data.quizId,
+            report: data.report,
+            compatibility_color: data.compatibilityColor,
+            is_paid: data.isPaid,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingReport.id)
+          .select()
+          .single();
+          
+        if (error) {
+          console.error('Error updating report:', error);
+          return null;
+        }
+        
+        console.log('Successfully updated report:', updatedReport);
+        result = updatedReport;
+      } else {
+        // Create new report if one doesn't exist
+        console.log('No existing report found. Creating new report for user:', data.userId);
+        
+        const { data: createdReport, error } = await supabase
+          .from('reports')
+          .insert({
+            user_id: data.userId,
+            quiz_id: data.quizId,
+            report: data.report,
+            compatibility_color: data.compatibilityColor,
+            is_paid: data.isPaid,
+            created_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+          
+        if (error) {
+          console.error('Error creating report:', error);
+          return null;
+        }
+        
+        console.log('Successfully created report:', createdReport);
+        result = createdReport;
       }
       
-      console.log('Successfully created report:', createdReport);
-      return createdReport as Report;
+      return result as Report;
     } catch (error) {
       console.error('Error in createReport:', error);
       return null;
