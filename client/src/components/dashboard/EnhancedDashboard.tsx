@@ -36,7 +36,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import supabaseService from "@/services/supabaseService";
+import directSupabaseService from "@/services/directSupabaseService";
 import aanchalImage from "@/assets/Aanchal.jpg";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 
 // Import icons
 import { 
@@ -954,34 +970,15 @@ const EnhancedDashboard = () => {
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center">
-                      <Settings className="w-5 h-5 mr-2 text-[#e83a8e]" />
-                      Account Settings
+                      <User className="w-5 h-5 mr-2 text-[#e83a8e]" />
+                      Personal Information
                     </CardTitle>
+                    <CardDescription>
+                      Update your personal information that appears on your profile
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between py-2 border-b">
-                      <div>
-                        <h4 className="font-medium">Email Notifications</h4>
-                        <p className="text-sm text-neutral-dark/70">Receive updates and tips</p>
-                      </div>
-                      <Button variant="outline" size="sm">Manage</Button>
-                    </div>
-                    
-                    <div className="flex items-center justify-between py-2 border-b">
-                      <div>
-                        <h4 className="font-medium">Password</h4>
-                        <p className="text-sm text-neutral-dark/70">Update your password</p>
-                      </div>
-                      <Button variant="outline" size="sm">Change</Button>
-                    </div>
-                    
-                    <div className="flex items-center justify-between py-2">
-                      <div>
-                        <h4 className="font-medium">Delete Account</h4>
-                        <p className="text-sm text-neutral-dark/70">Remove all your data</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-red-500">Delete</Button>
-                    </div>
+                  <CardContent>
+                    <ProfileEditForm profile={userProfile} />
                   </CardContent>
                 </Card>
               </div>
