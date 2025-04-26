@@ -9,7 +9,7 @@ export const fixUpdatedAtColumn = async (userId: string): Promise<boolean> => {
     console.log('Attempting to fix updated_at column for user:', userId);
     
     // Call our fix-updated-at endpoint
-    const response = await apiRequest('POST', '/api/fix-updated-at', { userId });
+    const response = await apiRequest('POST', '/api/fix-updated-at', { userId }) as Response;
     const result = await response.json();
     
     if (result.success) {
@@ -33,7 +33,7 @@ export const getTableStructure = async (): Promise<any> => {
   try {
     console.log('Fetching database table structure information...');
     
-    const response = await apiRequest('GET', '/api/db-table-info');
+    const response = await apiRequest('GET', '/api/db-table-info') as Response;
     const result = await response.json();
     
     if (result.success) {

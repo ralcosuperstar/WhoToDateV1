@@ -37,6 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import supabaseService from "@/services/supabaseService";
 import directSupabaseService from "@/services/directSupabaseService";
+import { fixUpdatedAtColumn } from "@/lib/databaseFix";
 import aanchalImage from "@/assets/Aanchal.jpg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -596,6 +597,15 @@ const ProfileEditForm = ({ profile }: { profile: UserProfile }) => {
         full_name: `${values.firstName} ${values.lastName}`.trim()
       };
       
+      // First try to fix the database schema if needed (add updated_at column)
+      console.log("Attempting to fix database schema before updating profile...");
+      try {
+        await fixUpdatedAtColumn(user.id);
+      } catch (fixError) {
+        console.error("Failed to fix database schema, but continuing with update:", fixError);
+      }
+      
+      // Proceed with the profile update
       const result = await directSupabaseService.user.updateUserProfile(user.id, userData);
       if (result.error) throw new Error(result.error.message);
       return result.user;
