@@ -552,6 +552,142 @@ const CompatibilitySummaryCard = ({ report }: { report: ReportData }) => {
 };
 
 // Enhanced Dashboard component
+// Profile Edit Form
+const formSchema = z.object({
+  firstName: z.string().min(1, "First name is required").max(50),
+  lastName: z.string().min(1, "Last name is required").max(50),
+  phoneNumber: z.string().regex(/^(\+\d{1,3}[ -]?)?\d{10}$/, {
+    message: "Please enter a valid phone number (e.g., +911234567890 or 1234567890)",
+  }),
+});
+
+type ProfileFormValues = z.infer<typeof formSchema>;
+
+const ProfileEditForm = ({ profile }: { profile: UserProfile }) => {
+  const { toast } = useToast();
+  const { user } = useFixedSupabase();
+  
+  // Default values from existing profile
+  const defaultValues: Partial<ProfileFormValues> = {
+    firstName: profile?.first_name || "",
+    lastName: profile?.last_name || "",
+    phoneNumber: profile?.phone_number || "",
+  };
+  
+  // Initialize form with default values
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
+  });
+  
+  // Setup mutation for profile updates
+  const updateProfileMutation = useMutation({
+    mutationFn: async (values: ProfileFormValues) => {
+      if (!user) throw new Error("Not authenticated");
+      
+      // Map form values to database fields
+      const userData = {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        phone_number: values.phoneNumber,
+        // Combine first and last name into full_name for backward compatibility
+        full_name: `${values.firstName} ${values.lastName}`.trim()
+      };
+      
+      const result = await directSupabaseService.user.updateUserProfile(user.id, userData);
+      if (result.error) throw new Error(result.error.message);
+      return result.user;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Profile updated",
+        description: "Your profile information has been successfully updated.",
+      });
+      
+      // Invalidate queries to refresh user data
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "An error occurred while updating your profile.",
+        variant: "destructive",
+      });
+    }
+  });
+  
+  // Handle form submission
+  const onSubmit = (values: ProfileFormValues) => {
+    updateProfileMutation.mutate(values);
+  };
+  
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your first name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your last name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder="+91XXXXXXXXXX" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter your phone number with country code (e.g., +91XXXXXXXXXX)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <Button 
+          type="submit" 
+          className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
+          disabled={updateProfileMutation.isPending}
+        >
+          {updateProfileMutation.isPending ? (
+            <>
+              <span className="mr-2">Updating...</span>
+              <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            </>
+          ) : "Save Profile Information"}
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
 const EnhancedDashboard = () => {
   // State management
   const [activeTab, setActiveTab] = useState("overview");
