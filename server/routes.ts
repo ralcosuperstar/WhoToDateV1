@@ -11,6 +11,7 @@ import { User } from '@shared/schema';
 import { setupSupabaseRoutes } from "./routes/supabase";
 // Database test routes removed
 import { registerSupabaseSyncRoutes } from "./routes/supabase-sync";
+import { setupDatabaseFixRoutes } from "./routes/database-fix";
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
@@ -150,6 +151,9 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   
   // Set up Supabase sync routes
   registerSupabaseSyncRoutes(router, db);
+  
+  // Set up database fix routes
+  setupDatabaseFixRoutes(app, router);
   
   // Add a health check endpoint that bypasses auth
   router.get("/health", (req: Request, res: Response) => {
