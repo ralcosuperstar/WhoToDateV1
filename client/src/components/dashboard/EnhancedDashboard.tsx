@@ -773,6 +773,8 @@ const EnhancedDashboard = () => {
             username: user.email?.split('@')[0] || 'user',
             email: user.email || '',
             full_name: user.user_metadata?.full_name || null,
+            first_name: null,
+            last_name: null,
             phone_number: user.phone || null
           });
         } else if (profile) {
@@ -787,6 +789,8 @@ const EnhancedDashboard = () => {
             full_name: typeof profile.full_name === 'string' ? profile.full_name : 
                       (user.user_metadata && typeof user.user_metadata.full_name === 'string' ? 
                       user.user_metadata.full_name : null),
+            first_name: typeof profile.first_name === 'string' ? profile.first_name : null,
+            last_name: typeof profile.last_name === 'string' ? profile.last_name : null,
             phone_number: typeof profile.phone_number === 'string' ? profile.phone_number : 
                          (typeof user.phone === 'string' ? user.phone : null)
           };
@@ -803,6 +807,8 @@ const EnhancedDashboard = () => {
             username: user.email?.split('@')[0] || 'user',
             email: user.email || '',
             full_name: user.user_metadata?.full_name || null,
+            first_name: null,
+            last_name: null,
             phone_number: user.phone || null
           });
         }
