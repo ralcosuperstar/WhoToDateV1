@@ -158,12 +158,17 @@ export const user = {
   // Update user profile
   updateUserProfile: async (userId: string, userData: any) => {
     const supabase = await getClient();
+    console.log('Updating user profile with data:', userData);
+    
+    // Remove any fields that don't exist in the database schema
+    const cleanUserData = { ...userData };
+    if ('updated_at' in cleanUserData) {
+      delete cleanUserData.updated_at;
+    }
+    
     const { data, error } = await supabase
       .from('users')
-      .update({
-        ...userData
-        // Removed updated_at as it's no longer in the schema
-      })
+      .update(cleanUserData)
       .eq('id', userId)
       .select()
       .single();
