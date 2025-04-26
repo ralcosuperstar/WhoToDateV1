@@ -23,9 +23,9 @@ export class SupabaseStorage implements IStorage {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
       console.warn('⚠️ Running in DEVELOPMENT MODE with mock data');
       console.log('ℹ️ This is intentional during the Supabase migration phase');
-      
+
       this.devMode = true;
-      
+
       // Set up in-memory session store for development
       this.sessionStore = new MemoryStore({
         checkPeriod: 86400000 // Prune expired entries every 24h
@@ -40,14 +40,17 @@ export class SupabaseStorage implements IStorage {
             auth: {
               autoRefreshToken: false,
               persistSession: false,
+            },
+            db: {
+              schema: 'public'
             }
           }
         );
-        
+
         // Log a connection attempt message - we'll test the connection on first use
         console.log('✅ Connecting to Supabase...'); 
         console.log('✅ Supabase client initialized successfully');
-        
+
         // Set up in-memory session store for Supabase setup
         // We're using Supabase for auth directly, so session store is less critical
         console.log('Setting up in-memory session store for Express sessions');
@@ -57,9 +60,9 @@ export class SupabaseStorage implements IStorage {
       } catch (error) {
         console.error('❌ Failed to connect to Supabase:', error);
         console.warn('⚠️ Falling back to development mode');
-        
+
         this.devMode = true;
-        
+
         // Use in-memory session store for fallback
         this.sessionStore = new MemoryStore({
           checkPeriod: 86400000 // Prune expired entries every 24h
@@ -73,20 +76,20 @@ export class SupabaseStorage implements IStorage {
     if (this.devMode || !this.client) {
       return false;
     }
-    
+
     try {
       // Test connection by fetching a dummy record
       const { error: testError } = await this.client
         .from('users')
         .select('count')
         .limit(1);
-        
+
       if (testError) {
         console.error('❌ Failed to connect to Supabase database:', testError.message);
         this.devMode = true;
         return false;
       }
-      
+
       console.log('✅ Supabase connection verified successfully');
       return true;
     } catch (error) {
@@ -123,14 +126,14 @@ export class SupabaseStorage implements IStorage {
         // Note: updatedAt removed as it doesn't exist in the actual database
       } as User;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     // Test connection on first use
     await this.testConnection();
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*')
@@ -158,11 +161,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*')
@@ -191,11 +194,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*')
@@ -224,11 +227,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*')
@@ -257,11 +260,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*')
@@ -299,11 +302,11 @@ export class SupabaseStorage implements IStorage {
         }
       ] as User[];
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .select('*');
@@ -314,7 +317,7 @@ export class SupabaseStorage implements IStorage {
 
   async createUser(user: Partial<InsertUser>): Promise<User> {
     console.log('🐛 DEBUG: createUser called with:', JSON.stringify(user, null, 2));
-    
+
     if (this.devMode) {
       console.log('⚠️ Development mode: Creating mock user', user.email);
       // Create a mock user with a random ID (as a number now)
@@ -330,17 +333,17 @@ export class SupabaseStorage implements IStorage {
         isVerified: false,
         createdAt: new Date()
       } as User;
-      
+
       return newUser;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     try {
       console.log('Creating user in Supabase:', JSON.stringify(user, null, 2));
-      
+
       // Accept either camelCase or snake_case property names
       // Make sure we have required fields
       if (!user.username && !(user as any).username) {
@@ -352,14 +355,14 @@ export class SupabaseStorage implements IStorage {
       if (!user.email && !(user as any).email) {
         throw new Error('Missing required field: email');
       }
-      
+
       // Support both camelCase and snake_case properties
       const supabaseUser = {
         // NOTE: id is auto-generated as integer in database
         username: user.username || (user as any).username,
         password: user.password || (user as any).password,
         email: user.email || (user as any).email,
-        
+
         // Handle both naming conventions
         phone_number: user.phoneNumber || (user as any).phone_number || null,
         first_name: user.firstName || (user as any).first_name || null,
@@ -367,48 +370,48 @@ export class SupabaseStorage implements IStorage {
         full_name: user.fullName || (user as any).full_name || 
           (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null) ||
           ((user as any).first_name && (user as any).last_name ? `${(user as any).first_name} ${(user as any).last_name}` : null),
-        
+
         is_verified: user.isVerified !== undefined ? user.isVerified : 
           ((user as any).is_verified !== undefined ? (user as any).is_verified : false),
-        
+
         verification_method: user.verificationMethod || (user as any).verification_method || null
       };
-      
+
       console.log('Formatted user for Supabase:', JSON.stringify(supabaseUser, null, 2));
-      
+
       // Test if we can read from the users table first
       const testQuery = await this.client
         .from('users')
         .select('*')
         .limit(1);
-        
+
       console.log('Test query result:', testQuery.data, 'Error:', testQuery.error);
-      
+
       if (testQuery.error) {
         console.error('Error running test query on users table:', testQuery.error);
         throw new Error(`Database error: ${testQuery.error.message}`);
       }
-      
+
       // Now attempt the insert
       const { data, error } = await this.client
         .from('users')
         .insert(supabaseUser)
         .select()
         .single();
-      
+
       if (error) {
         console.error('Error inserting user:', error);
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
         console.error('Error details:', error.details);
-        
+
         throw new Error(`Failed to create user: ${error.message}`);
       }
-      
+
       if (!data) {
         throw new Error('No data returned after user creation');
       }
-      
+
       console.log('User created successfully:', data);
       // Convert the returned database record to our User type
       const createdUser: User = {
@@ -432,7 +435,7 @@ export class SupabaseStorage implements IStorage {
         clerkId: data.clerk_id,
         createdAt: data.created_at ? new Date(data.created_at) : null // Adding this for backward compatibility
       };
-      
+
       return createdUser;
     } catch (error) {
       console.error('Unexpected error in createUser:', error);
@@ -459,11 +462,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as User;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('users')
       .update(userData)
@@ -525,11 +528,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('quiz_answers')
       .select('*')
@@ -551,11 +554,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as QuizAnswer;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('quiz_answers')
       .insert(quizAnswer)
@@ -577,11 +580,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as QuizAnswer;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('quiz_answers')
       .update({ answers, completed })
@@ -617,11 +620,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('reports')
       .select('*')
@@ -655,11 +658,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('reports')
       .select('*')
@@ -687,11 +690,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as Report;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('reports')
       .insert(report)
@@ -719,11 +722,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as Report;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('reports')
       .update({ isPaid })
@@ -751,11 +754,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as Payment;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('payments')
       .insert(payment)
@@ -784,11 +787,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('payments')
       .select('*')
@@ -814,11 +817,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as Payment;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('payments')
       .update({ status })
@@ -861,11 +864,11 @@ export class SupabaseStorage implements IStorage {
         }
       ] as BlogPost[];
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('blog_posts')
       .select('*')
@@ -873,12 +876,12 @@ export class SupabaseStorage implements IStorage {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    
+
     // Convert to BlogPost type with backward compatibility field
     const posts = data.map(post => ({
       ...post // Add for backward compatibility
     })) as BlogPost[];
-    
+
     return posts;
   }
 
@@ -901,11 +904,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('blog_posts')
       .select('*')
@@ -935,11 +938,11 @@ export class SupabaseStorage implements IStorage {
       }
       return undefined;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('blog_posts')
       .select('*')
@@ -966,11 +969,11 @@ export class SupabaseStorage implements IStorage {
         createdAt: new Date()
       } as BlogPost;
     }
-    
+
     if (!this.client) {
       throw new Error('Supabase client not initialized');
     }
-    
+
     const { data, error } = await this.client
       .from('blog_posts')
       .insert(blogPost)

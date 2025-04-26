@@ -22,12 +22,12 @@ export async function fetchSupabaseConfig(): Promise<{ url: string; anonKey: str
   if (supabaseConfig) {
     return supabaseConfig;
   }
-  
+
   // If there's already a request in progress, return its promise
   if (configPromise) {
     return configPromise;
   }
-  
+
   // Start a new fetch request and store the promise
   configPromise = (async () => {
     try {
@@ -35,13 +35,13 @@ export async function fetchSupabaseConfig(): Promise<{ url: string; anonKey: str
       if (!response.ok) {
         throw new Error('Failed to fetch Supabase config');
       }
-      
+
       const data = await response.json();
       supabaseConfig = {
         url: data.url,
         anonKey: data.anonKey
       };
-      
+
       return supabaseConfig;
     } catch (error) {
       console.error('Error fetching Supabase config:', error);
@@ -52,7 +52,7 @@ export async function fetchSupabaseConfig(): Promise<{ url: string; anonKey: str
       configPromise = null;
     }
   })();
-  
+
   return configPromise;
 }
 
@@ -66,23 +66,26 @@ export async function getSupabaseClient(): Promise<SupabaseClient> {
   if (typeof window !== 'undefined' && window.__SUPABASE_SINGLETON_CLIENT) {
     return window.__SUPABASE_SINGLETON_CLIENT;
   }
-  
+
   try {
     const config = await fetchSupabaseConfig();
-    
+
     console.log('Creating Supabase client with config from API');
     const newClient = createClient(config.url, config.anonKey, {
       auth: {
-        persistSession: true, // Enable session persistence
-        storageKey: 'supabase.auth.token' // Use consistent storage key
+        persistSession: true,
+        storageKey: 'supabase.auth.token'
+      },
+      db: {
+        schema: 'public'
       }
     });
-    
+
     // Store the client in the global scope to ensure it's truly a singleton
     if (typeof window !== 'undefined') {
       window.__SUPABASE_SINGLETON_CLIENT = newClient;
     }
-    
+
     return newClient;
   } catch (error) {
     console.error('Error initializing Supabase client:', error);
