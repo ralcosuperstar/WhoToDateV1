@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 
 // Import Aanchal's image
-import aanchalImage from '@/assets/aanchal_new.png';
+import aanchalImage from '@/assets/Aanchal.jpg';
 
 // Interface for Counselor data
 interface Counselor {

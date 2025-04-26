@@ -36,7 +36,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import supabaseService from "@/services/supabaseService";
-import aanchalImage from "@/assets/aanchal_new.png";
+import aanchalImage from "@/assets/Aanchal.jpg";
 
 // Import icons
 import { 
