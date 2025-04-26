@@ -37,7 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import supabaseService from "@/services/supabaseService";
 import directSupabaseService from "@/services/directSupabaseService";
-import { fixUpdatedAtColumn } from "@/lib/databaseFix";
+import { ensureDatabaseSchema } from "@/lib/databaseFix";
 import aanchalImage from "@/assets/Aanchal.jpg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -600,11 +600,11 @@ const ProfileEditForm = ({ profile }: { profile: UserProfile }) => {
       // First try to fix the database schema if needed (add updated_at column)
       console.log("Attempting to fix database schema before updating profile...");
       try {
-        const fixResult = await fixUpdatedAtColumn(user.id);
-        if (fixResult) {
-          console.log("Successfully applied database schema fix");
+        const fixResult = await ensureDatabaseSchema();
+        if (fixResult.success) {
+          console.log("Successfully applied database schema fix:", fixResult.message);
         } else {
-          console.log("Database schema fix was not needed or did not succeed");
+          console.log("Database schema fix was not needed or did not succeed:", fixResult.message);
         }
       } catch (fixError) {
         console.error("Failed to fix database schema, but continuing with update:", fixError);

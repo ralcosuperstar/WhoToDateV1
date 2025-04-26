@@ -18,7 +18,7 @@ export const checkUpdatedAtColumn = async (): Promise<{
     console.log('Checking if updated_at column exists in users table...');
     
     // Call API endpoint
-    const response = await apiRequest('GET', '/check-updated-at') as Response;
+    const response = await apiRequest('GET', '/api/check-updated-at') as Response;
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -71,7 +71,7 @@ export const addUpdatedAtColumn = async (): Promise<{
     });
     
     // Call API endpoint
-    const response = await apiRequest('POST', '/add-updated-at') as Response;
+    const response = await apiRequest('POST', '/api/add-updated-at') as Response;
     
     if (!response.ok) {
       const errorData = await response.json();

@@ -151,8 +151,11 @@ export const ensureDatabaseCompatibility = async (userId: string): Promise<boole
     
     console.log('Attempting to fix database schema before updating profile...');
     
+    // Import the ensureDatabaseSchema function from databaseFix.ts
+    const { ensureDatabaseSchema } = await import('@/lib/databaseFix');
+    
     // Apply fixes
-    const fixResult = await fixUpdatedAtColumn(userId);
+    const fixResult = await ensureDatabaseSchema();
     
     if (!fixResult.success) {
       console.error('Database schema fix failed:', fixResult.message);
