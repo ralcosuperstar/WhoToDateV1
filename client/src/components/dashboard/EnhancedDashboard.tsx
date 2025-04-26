@@ -930,38 +930,12 @@ const EnhancedDashboard = () => {
                 hasReport={hasReport}
               />
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <EnhancedDatingGuide />
                 
-                {/* If report exists, show compatibility summary, otherwise show quiz prompt */}
-                {hasReport && report ? (
+                {/* Only show compatibility summary if report exists */}
+                {hasReport && report && (
                   <CompatibilitySummaryCard report={report} />
-                ) : (
-                  <Card className="space-y-1 rounded-lg border border-[#e83a8e]/20 p-6 relative overflow-hidden">
-                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e83a8e]/5 rounded-full" />
-                    <div className="absolute bottom-0 right-10 w-24 h-24 bg-[#e83a8e]/5 rounded-full" />
-                    
-                    <div className="relative">
-                      <div className="w-12 h-12 rounded-full bg-[#e83a8e]/10 flex items-center justify-center mb-4">
-                        <AlertTriangle className="h-6 w-6 text-[#e83a8e]" />
-                      </div>
-                      
-                      <h3 className="text-lg font-medium mb-2">Complete Your Compatibility Quiz</h3>
-                      <p className="text-sm text-neutral-dark/70 mb-4">
-                        Take the 5-minute quiz to get your personalized compatibility profile and relationship insights.
-                      </p>
-                      
-                      <Button 
-                        asChild 
-                        className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
-                      >
-                        <Link href="/quiz" className="flex items-center">
-                          Start Quiz
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </Card>
                 )}
               </div>
             </div>
