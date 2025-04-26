@@ -1,5 +1,7 @@
 import { Express, Request, Response, Router } from "express";
-import { supabaseAdmin } from "../db";
+import { supabaseAdmin, pgPool, drizzleDb } from "../db";
+import { users } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 // This file contains routes to handle database schema/column-related fixes
 export function setupDatabaseFixRoutes(app: Express, router: Router) {
@@ -10,7 +12,28 @@ export function setupDatabaseFixRoutes(app: Express, router: Router) {
     try {
       console.log("Fetching database table information");
       
-      // Execute a raw SQL query to get table information from PostgreSQL
+      // First try with direct PostgreSQL connection if available
+      if (pgPool) {
+        try {
+          const result = await pgPool.query(`
+            SELECT column_name, data_type, is_nullable 
+            FROM information_schema.columns 
+            WHERE table_name = 'users'
+          `);
+          
+          console.log("Table information retrieved successfully via direct connection");
+          return res.json({
+            success: true,
+            connectionType: 'direct',
+            data: result.rows
+          });
+        } catch (pgError) {
+          console.error("Error using direct PostgreSQL connection:", pgError);
+          // Fall back to Supabase API
+        }
+      }
+
+      // Fallback to Supabase API if direct connection fails
       const { data, error } = await supabaseAdmin.rpc('get_table_info', {
         table_name: 'users'
       });
@@ -23,9 +46,10 @@ export function setupDatabaseFixRoutes(app: Express, router: Router) {
         });
       }
       
-      console.log("Table information retrieved successfully");
+      console.log("Table information retrieved successfully via Supabase API");
       res.json({
         success: true,
+        connectionType: 'supabase',
         data
       });
     } catch (error) {
@@ -51,7 +75,76 @@ export function setupDatabaseFixRoutes(app: Express, router: Router) {
       
       console.log(`Attempting to fix updated_at column for user: ${userId}`);
       
-      // Simplified direct SQL execution approach
+      // Check if we can use direct PostgreSQL connection
+      if (pgPool && drizzleDb) {
+        try {
+          console.log("Using direct PostgreSQL connection via session pooler");
+          
+          // Verify the schema directly with PostgreSQL
+          const columnCheckResult = await pgPool.query(`
+            SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_name = 'users' AND column_name = 'updated_at'
+          `);
+          
+          const hasUpdatedAtColumn = columnCheckResult.rows.length > 0;
+          console.log(`updated_at column exists: ${hasUpdatedAtColumn}`);
+          
+          // Check triggers
+          const triggerCheckResult = await pgPool.query(`
+            SELECT trigger_name
+            FROM information_schema.triggers
+            WHERE event_object_table = 'users'
+          `);
+          
+          console.log(`Found ${triggerCheckResult.rows.length} triggers on users table:`);
+          triggerCheckResult.rows.forEach((row: any) => {
+            console.log(`- ${row.trigger_name}`);
+          });
+          
+          // Get the current user data using Drizzle
+          const userData = await drizzleDb
+            .select()
+            .from(users)
+            .where(eq(users.id, userId))
+            .execute();
+          
+          if (userData.length === 0) {
+            console.error("User not found");
+            return res.status(404).json({
+              success: false,
+              error: "User not found"
+            });
+          }
+          
+          // Update user via Drizzle to trigger timestamp
+          const updateResult = await drizzleDb
+            .update(users)
+            .set({ 
+              // Use the same value to trigger timestamp update
+              email: userData[0].email
+            })
+            .where(eq(users.id, userId))
+            .returning()
+            .execute();
+          
+          console.log("Successfully triggered update for user via direct connection");
+          return res.json({
+            success: true,
+            connectionType: 'direct',
+            message: "Successfully triggered updated_at via direct PostgreSQL connection",
+            data: updateResult
+          });
+        } catch (pgError) {
+          console.error("Error with direct PostgreSQL connection:", pgError);
+          // Fall back to Supabase API
+        }
+      }
+      
+      // Fallback to Supabase API
+      console.log("Falling back to Supabase API");
+      
+      // Simplified direct SQL execution approach for Supabase
       const addColumnSQL = `
         ALTER TABLE public.users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
       `;
@@ -76,7 +169,7 @@ export function setupDatabaseFixRoutes(app: Express, router: Router) {
       
       // Execute direct SQL using the Supabase REST API to add column if it doesn't exist
       try {
-        console.log("Attempting to add updated_at column directly...");
+        console.log("Attempting to add updated_at column via Supabase API...");
         // The updated_at column might already exist, we just silently continue if there's an error
         await supabaseAdmin
           .from('users')
@@ -121,9 +214,10 @@ export function setupDatabaseFixRoutes(app: Express, router: Router) {
         });
       }
       
-      console.log("Successfully triggered update for user");
+      console.log("Successfully triggered update for user via Supabase API");
       res.json({
         success: true,
+        connectionType: 'supabase',
         message: "Successfully fixed updated_at column",
         data
       });
