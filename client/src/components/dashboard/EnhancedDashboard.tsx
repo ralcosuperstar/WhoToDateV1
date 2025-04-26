@@ -728,6 +728,8 @@ const EnhancedDashboard = () => {
             username: user.email?.split('@')[0] || 'user',
             email: user.email || '',
             full_name: user.user_metadata?.full_name || null,
+            first_name: null,
+            last_name: null,
             phone_number: user.phone || null
           });
         }
