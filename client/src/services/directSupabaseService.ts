@@ -161,8 +161,8 @@ export const user = {
     const { data, error } = await supabase
       .from('users')
       .update({
-        ...userData,
-        updated_at: new Date().toISOString()
+        ...userData
+        // Removed updated_at as it's no longer in the schema
       })
       .eq('id', userId)
       .select()

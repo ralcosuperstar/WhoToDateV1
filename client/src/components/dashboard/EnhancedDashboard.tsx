@@ -79,9 +79,11 @@ import {
 // Define types for clarity
 interface UserProfile {
   id: string;
-  username: string;
+  username: string | null;
   email: string;
   full_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
   phone_number: string | null;
 }
 
