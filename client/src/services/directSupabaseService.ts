@@ -362,8 +362,7 @@ export const report = {
             quiz_id: reportData.quizId,
             report: reportData.report,
             compatibility_color: reportData.compatibilityColor || 'yellow',
-            is_paid: reportData.isPaid || true, // Reports are now free
-            updated_at: new Date().toISOString()
+            is_paid: reportData.isPaid || true // Reports are now free
           })
           .eq('id', existingReport.id)
           .select()
@@ -399,8 +398,7 @@ export const report = {
             report: reportData.report,
             compatibility_color: reportData.compatibilityColor || 'yellow',
             is_paid: reportData.isPaid || true, // Reports are now free
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            created_at: new Date().toISOString()
           }])
           .select()
           .single();
