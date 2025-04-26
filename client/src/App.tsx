@@ -26,6 +26,7 @@ import Counselling from "@/pages/Counselling";
 import NewAuthPage from "@/pages/new-auth-page";
 import HowToDatePage from "@/pages/HowToDatePage"; // Dating approach guide eBook page
 import ProfilePage from "@/pages/ProfilePage"; // New Profile management page
+import AdminPage from "@/pages/AdminPage"; // Admin tools page for database management
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -79,6 +80,7 @@ function Router() {
       {/* Enhanced Dashboard */}
       <ProtectedRoute path="/dashboard" component={EnhancedDashboardPage} />
       <ProtectedRoute path="/profile" component={ProfilePage} />
+      <ProtectedRoute path="/admin" component={AdminPage} />
       
       {/* Catch-all route */}
       <Route component={NotFound} />

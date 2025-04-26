@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Loader2, UserCog } from 'lucide-react';
+import { Loader2, UserCog, Database } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import PersonalInformationForm from '@/components/profile/PersonalInformationForm';
 import { runDatabaseDiagnostic } from '@/lib/databaseUtils';
 import { toast } from '@/hooks/use-toast';
+import { ensureDatabaseSchema } from '@/lib/databaseFix';
 
 /**
  * ProfilePage component for editing user profile information
@@ -13,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
  */
 const ProfilePage: React.FC = () => {
   const { user } = useAuth();
+  const [isFixingSchema, setIsFixingSchema] = useState(false);
   
   // Run a diagnostic
   const handleRunDiagnostic = async () => {
@@ -44,6 +46,40 @@ const ProfilePage: React.FC = () => {
     }
   };
   
+  // Fix database schema - adds missing updated_at column if needed
+  const handleFixDatabaseSchema = async () => {
+    setIsFixingSchema(true);
+    
+    try {
+      console.log('Starting database schema fix...');
+      
+      const result = await ensureDatabaseSchema();
+      
+      if (result.success) {
+        toast({
+          title: 'Database Fix Complete',
+          description: result.message || 'Database schema has been updated successfully.',
+        });
+      } else {
+        toast({
+          title: 'Database Fix Failed',
+          description: result.message || 'Failed to update database schema.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error fixing database schema:', error);
+      
+      toast({
+        title: 'Database Fix Failed',
+        description: error instanceof Error ? error.message : 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsFixingSchema(false);
+    }
+  };
+  
   if (!user) {
     return (
       <div className="min-h-screen bg-neutral-50">
@@ -71,23 +107,45 @@ const ProfilePage: React.FC = () => {
                 <p className="text-gray-600">Manage your personal information and account preferences</p>
               </div>
               
-              {/* Only show diagnostic button in development */}
+              {/* Only show admin buttons in development */}
               {import.meta.env.DEV && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleRunDiagnostic}
-                  className="mt-4 md:mt-0"
-                >
-                  <UserCog className="mr-2 h-4 w-4" />
-                  Run Diagnostic
-                </Button>
+                <div className="flex space-x-2 mt-4 md:mt-0">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleRunDiagnostic}
+                  >
+                    <UserCog className="mr-2 h-4 w-4" />
+                    Run Diagnostic
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleFixDatabaseSchema}
+                    disabled={isFixingSchema}
+                    className="bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100"
+                  >
+                    {isFixingSchema ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Fixing...
+                      </>
+                    ) : (
+                      <>
+                        <Database className="mr-2 h-4 w-4" />
+                        Fix Schema
+                      </>
+                    )}
+                  </Button>
+                </div>
               )}
             </div>
           </header>
           
           <div className="grid grid-cols-1 gap-6">
-            <PersonalInformationForm user={user} />
+            {/* Cast Supabase user to our schema User type */}
+            <PersonalInformationForm user={user as any} />
             
             {/* Future sections can be added here */}
             {/* 
