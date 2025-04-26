@@ -297,60 +297,62 @@ const MobileNavMenu = ({
           Discover your compatibility profile
         </SheetDescription>
       </SheetHeader>
-      <div className="space-y-1">
-        <Button
-          variant={activeTab === "overview" ? "secondary" : "ghost"}
-          className="w-full justify-start"
-          onClick={() => setActiveTab("overview")}
-        >
-          <BarChart3 className="w-5 h-5 mr-2" />
-          Overview
-        </Button>
-        <Button
-          variant={activeTab === "profile" ? "secondary" : "ghost"}
-          className="w-full justify-start"
-          onClick={() => setActiveTab("profile")}
-        >
-          <User className="w-5 h-5 mr-2" />
-          Profile
-        </Button>
-        <Button
-          variant={activeTab === "report" ? "secondary" : "ghost"}
-          className="w-full justify-start"
-          onClick={() => setActiveTab("report")}
-        >
-          <FileText className="w-5 h-5 mr-2" />
-          Compatibility Report
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          asChild
-        >
-          <Link href="/counselling">
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Talk to a Counselor
-          </Link>
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          asChild
-        >
-          <Link href="/blog">
-            <Calendar className="w-5 h-5 mr-2" />
-            Relationship Tips
-          </Link>
-        </Button>
-      </div>
+      <ScrollArea className="h-[calc(100vh-200px)]">
+        <nav className="space-y-1 pr-4">
+          <Button
+            variant={activeTab === "overview" ? "secondary" : "ghost"}
+            className="w-full justify-start h-auto py-2.5"
+            onClick={() => setActiveTab("overview")}
+          >
+            <BarChart3 className="min-w-5 h-5 mr-2" />
+            <span className="text-sm whitespace-normal text-left">Overview</span>
+          </Button>
+          <Button
+            variant={activeTab === "profile" ? "secondary" : "ghost"}
+            className="w-full justify-start h-auto py-2.5"
+            onClick={() => setActiveTab("profile")}
+          >
+            <User className="min-w-5 h-5 mr-2" />
+            <span className="text-sm whitespace-normal text-left">Profile</span>
+          </Button>
+          <Button
+            variant={activeTab === "report" ? "secondary" : "ghost"}
+            className="w-full justify-start h-auto py-2.5"
+            onClick={() => setActiveTab("report")}
+          >
+            <FileText className="min-w-5 h-5 mr-2" />
+            <span className="text-sm whitespace-normal text-left">Compatibility Report</span>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start h-auto py-2.5"
+            asChild
+          >
+            <Link href="/counselling">
+              <MessageCircle className="min-w-5 h-5 mr-2" />
+              <span className="text-sm whitespace-normal text-left">Talk to a Counselor</span>
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start h-auto py-2.5"
+            asChild
+          >
+            <Link href="/blog">
+              <Calendar className="min-w-5 h-5 mr-2" />
+              <span className="text-sm whitespace-normal text-left">Relationship Tips</span>
+            </Link>
+          </Button>
+        </nav>
+      </ScrollArea>
       <div className="absolute bottom-4 left-4 right-4">
         <Button 
           variant="destructive" 
-          className="w-full justify-start"
+          className="w-full justify-start h-auto py-2.5"
           onClick={handleLogout}
         >
-          <LogOut className="w-5 h-5 mr-2" />
-          Log Out
+          <LogOut className="min-w-5 h-5 mr-2" />
+          <span className="text-sm whitespace-normal text-left">Log Out</span>
         </Button>
       </div>
     </SheetContent>
@@ -732,7 +734,7 @@ const EnhancedDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Sidebar - Desktop only */}
         <div className="hidden md:block md:col-span-3 lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-sm border p-4 sticky top-4">
+          <div className="bg-white rounded-lg shadow-sm border p-4 sticky top-24">
             <div className="mb-6">
               <h3 className="font-heading font-bold text-lg flex items-center text-[#e83a8e]">
                 <Heart className="w-5 h-5 mr-2 fill-[#e83a8e]" />
@@ -740,61 +742,61 @@ const EnhancedDashboard = () => {
               </h3>
             </div>
             
-            <div className="space-y-1 mb-6">
+            <nav className="space-y-1 mb-6">
               <Button
                 variant={activeTab === "overview" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 onClick={() => setActiveTab("overview")}
               >
-                <BarChart3 className="w-5 h-5 mr-2" />
-                Overview
+                <BarChart3 className="min-w-5 h-5 mr-2" />
+                <span className="text-sm whitespace-normal text-left">Overview</span>
               </Button>
               <Button
                 variant={activeTab === "profile" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 onClick={() => setActiveTab("profile")}
               >
-                <User className="w-5 h-5 mr-2" />
-                Profile
+                <User className="min-w-5 h-5 mr-2" />
+                <span className="text-sm whitespace-normal text-left">Profile</span>
               </Button>
               <Button
                 variant={activeTab === "report" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 onClick={() => setActiveTab("report")}
               >
-                <FileText className="w-5 h-5 mr-2" />
-                Compatibility Report
+                <FileText className="min-w-5 h-5 mr-2" />
+                <span className="text-sm whitespace-normal text-left">Compatibility Report</span>
               </Button>
               <Button
                 variant="ghost"
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 asChild
               >
                 <Link href="/counselling">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Talk to a Counselor
+                  <MessageCircle className="min-w-5 h-5 mr-2" />
+                  <span className="text-sm whitespace-normal text-left">Talk to a Counselor</span>
                 </Link>
               </Button>
               <Button
                 variant="ghost"
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 asChild
               >
                 <Link href="/blog">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Relationship Tips
+                  <Calendar className="min-w-5 h-5 mr-2" />
+                  <span className="text-sm whitespace-normal text-left">Relationship Tips</span>
                 </Link>
               </Button>
-            </div>
+            </nav>
             
             <div className="pt-4 border-t">
               <Button 
                 variant="destructive" 
-                className="w-full justify-start"
+                className="w-full justify-start h-auto py-2.5"
                 onClick={handleLogout}
               >
-                <LogOut className="w-5 h-5 mr-2" />
-                Log Out
+                <LogOut className="min-w-5 h-5 mr-2" />
+                <span className="text-sm whitespace-normal text-left">Log Out</span>
               </Button>
             </div>
           </div>
