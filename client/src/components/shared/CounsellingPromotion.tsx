@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { Heart, Users, Clock, ChevronRight, BadgeCheck } from "lucide-react";
-import aanchalImg from "@/assets/Aanchal.jpg";
+import aanchalImg from "@/assets/aanchal_new.png";
 
 interface CounsellingPromotionProps {
   variant?: 'default' | 'compact' | 'full';

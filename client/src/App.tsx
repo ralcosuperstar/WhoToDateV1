@@ -24,6 +24,7 @@ import HowItWorks from "@/pages/NewHowItWorks";
 import Science from "@/pages/SciencePage";
 import Counselling from "@/pages/Counselling";
 import NewAuthPage from "@/pages/new-auth-page";
+import HowToDatePage from "@/pages/HowToDatePage"; // Dating approach guide eBook page
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -71,6 +72,7 @@ function Router() {
       <Route path="/quiz" component={FixedQuiz} />
       <Route path="/results" component={FixedResults} />
       <Route path="/report" component={DirectReport} />
+      <Route path="/howtodate" component={HowToDatePage} />
       <ProtectedRoute path="/analytics" component={Analytics} />
       
       {/* Enhanced Dashboard */}

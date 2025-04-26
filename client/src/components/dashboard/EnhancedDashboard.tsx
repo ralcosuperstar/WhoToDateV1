@@ -36,6 +36,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext";
 import supabaseService from "@/services/supabaseService";
+import aanchalImage from "@/assets/aanchal_new.png";
 
 // Import icons
 import { 
@@ -55,7 +56,8 @@ import {
   ArrowRight,
   Clock3,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  BookOpen
 } from "lucide-react";
 
 // Define types for clarity
@@ -133,30 +135,115 @@ const QuickActions = ({ hasCompletedQuiz, hasReport }: { hasCompletedQuiz: boole
       </Card>
     )}
 
-    <Card className="hover:bg-neutral-dark/5 transition-colors">
-      <CardContent className="p-4 flex flex-col items-center text-center">
-        <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mb-3 mt-2">
-          <MessageCircle className="w-5 h-5 text-blue-600" />
+    <Card className="overflow-hidden group hover:shadow-md transition-all duration-300 border-[#e83a8e]/20">
+      <div className="flex">
+        <div className="w-[70%] p-4">
+          <h3 className="font-medium text-[#e83a8e] mb-2">Need a Counselor?</h3>
+          
+          <ul className="space-y-2 mb-3 text-sm">
+            <li className="flex items-start">
+              <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+              <span>Personal guidance from certified experts</span>
+            </li>
+            <li className="flex items-start">
+              <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+              <span>Confidential relationship advice</span>
+            </li>
+            <li className="flex items-start">
+              <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+              <span>Flexible scheduling options available</span>
+            </li>
+          </ul>
+          
+          <Button 
+            asChild 
+            size="sm"
+            className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white text-sm"
+          >
+            <Link href="/counselling" className="flex items-center justify-center">
+              Book a Session
+              <ArrowRight className="ml-1 h-3 w-3" />
+            </Link>
+          </Button>
         </div>
-        <h3 className="font-medium mb-1">Talk to a Counselor</h3>
-        <p className="text-sm text-neutral-dark/70 mb-3">Connect with relationship professionals</p>
-        <Button asChild variant="outline" className="mt-auto w-full">
-          <Link href="/counselling">Learn More</Link>
-        </Button>
-      </CardContent>
+        
+        <div className="w-[30%] relative overflow-hidden">
+          <img 
+            src={aanchalImage} 
+            alt="Aanchal Malani - Relationship Counselor" 
+            className="w-full h-full object-cover object-center" 
+            style={{ objectPosition: "center 25%" }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[rgba(0,0,0,0.7)] to-transparent p-2">
+            <p className="text-white text-xs font-medium">Aanchal</p>
+            <p className="text-white/80 text-[10px]">Certified Counselor</p>
+          </div>
+        </div>
+      </div>
     </Card>
 
-    <Card className="hover:bg-neutral-dark/5 transition-colors">
-      <CardContent className="p-4 flex flex-col items-center text-center">
-        <div className="bg-amber-100 w-10 h-10 rounded-full flex items-center justify-center mb-3 mt-2">
-          <Calendar className="w-5 h-5 text-amber-600" />
+    <Card className="overflow-hidden group hover:shadow-md transition-all duration-300 border-amber-500/20 hover:border-amber-500/40">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-center mb-2">
+          <div className="bg-amber-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+            <Calendar className="w-5 h-5 text-amber-600" />
+          </div>
+          <h3 className="font-semibold text-lg text-amber-600 group-hover:text-amber-700 transition-colors">Relationship Blog</h3>
         </div>
-        <h3 className="font-medium mb-1">Compatibility Tips</h3>
-        <p className="text-sm text-neutral-dark/70 mb-3">Practical tips based on your profile</p>
-        <Button asChild variant="outline" className="mt-auto w-full">
-          <Link href="/blog">Read Tips</Link>
+        <p className="text-sm text-neutral-dark/80 mb-4">Expert advice, relationship tips, and insights from dating professionals</p>
+        
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Badge variant="outline" className="bg-amber-50 text-amber-600 whitespace-nowrap group-hover:bg-amber-100 transition-colors">
+            Dating Tips
+          </Badge>
+          <Badge variant="outline" className="bg-amber-50 text-amber-600 whitespace-nowrap group-hover:bg-amber-100 transition-colors">
+            Relationship Advice
+          </Badge>
+        </div>
+        
+        <Button 
+          asChild 
+          variant="outline" 
+          className="w-full border-amber-200 text-amber-700 hover:bg-amber-50 group-hover:border-amber-300 transition-colors"
+        >
+          <Link href="/blog" className="flex items-center justify-center">
+            Browse Articles
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </Button>
-      </CardContent>
+      </div>
+    </Card>
+    
+    <Card className="overflow-hidden group hover:shadow-md transition-all duration-300 border-blue-500/20 hover:border-blue-500/40">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-center mb-2">
+          <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+            <BookOpen className="w-5 h-5 text-blue-600" />
+          </div>
+          <h3 className="font-semibold text-lg text-blue-600 group-hover:text-blue-700 transition-colors">Dating Guide</h3>
+        </div>
+        <p className="text-sm text-neutral-dark/80 mb-4">Comprehensive eBook with everything you need to know about modern dating</p>
+        
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+            5 Chapters
+          </Badge>
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+            Practical Tips
+          </Badge>
+        </div>
+        
+        <Button 
+          asChild 
+          variant="outline" 
+          className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 group-hover:border-blue-300 transition-colors"
+        >
+          <Link href="/howtodate" className="flex items-center justify-center">
+            Read Guide
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </Button>
+      </div>
     </Card>
   </div>
 );
@@ -168,18 +255,20 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
   const reportGenerated = report !== null;
   
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 hover:shadow-md transition-all duration-300 group border-[#e83a8e]/20 hover:border-[#e83a8e]/40">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center">
-          <Clock3 className="w-5 h-5 mr-2 text-[#e83a8e]" />
-          Your Progress
+          <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-[#e83a8e]/10 group-hover:scale-110 transition-transform">
+            <Clock3 className="w-5 h-5 text-[#e83a8e]" />
+          </div>
+          <span className="text-[#e83a8e] group-hover:text-[#d02e7d] transition-colors">Your Progress</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
             <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${quizCompleted ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${quizCompleted ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
                 {quizCompleted ? <Check className="w-4 h-4 text-green-600" /> : <span className="text-sm">1</span>}
               </div>
               <div>
@@ -188,15 +277,22 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
               </div>
             </div>
             {!quizCompleted && (
-              <Button asChild size="sm" className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-                <Link href="/quiz">Start</Link>
+              <Button 
+                asChild 
+                size="sm" 
+                className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white group-hover:shadow-sm transition-all"
+              >
+                <Link href="/quiz" className="flex items-center">
+                  Start
+                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             )}
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
             <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${reportGenerated ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${reportGenerated ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
                 {reportGenerated ? <Check className="w-4 h-4 text-green-600" /> : <span className="text-sm">2</span>}
               </div>
               <div>
@@ -205,15 +301,22 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
               </div>
             </div>
             {quizCompleted && !reportGenerated && (
-              <Button asChild size="sm" className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-                <Link href="/results">Generate</Link>
+              <Button 
+                asChild 
+                size="sm" 
+                className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white group-hover:shadow-sm transition-all"
+              >
+                <Link href="/results" className="flex items-center">
+                  Generate
+                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             )}
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
             <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-neutral-dark/10">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${reportGenerated ? 'bg-[#e83a8e]/10 text-[#e83a8e]' : 'bg-neutral-dark/10'}`}>
                 <span className="text-sm">3</span>
               </div>
               <div>
@@ -222,8 +325,16 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
               </div>
             </div>
             {reportGenerated && (
-              <Button asChild size="sm" variant="outline">
-                <Link href="/counselling">Explore</Link>
+              <Button 
+                asChild 
+                size="sm" 
+                variant="outline"
+                className="border-[#e83a8e]/30 text-[#e83a8e] hover:bg-[#e83a8e]/5 group-hover:border-[#e83a8e]/50 transition-colors"
+              >
+                <Link href="/counselling" className="flex items-center">
+                  Explore
+                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             )}
           </div>
@@ -235,22 +346,24 @@ const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, r
 
 // Profile summary component
 const ProfileSummary = ({ profile }: { profile: UserProfile }) => (
-  <Card>
+  <Card className="group hover:shadow-md transition-all duration-300 border-[#e83a8e]/20 hover:border-[#e83a8e]/40">
     <CardHeader className="pb-3">
       <CardTitle className="text-lg flex items-center">
-        <User className="w-5 h-5 mr-2 text-[#e83a8e]" />
-        Profile Summary
+        <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-[#e83a8e]/10 group-hover:scale-110 transition-transform">
+          <User className="w-5 h-5 text-[#e83a8e]" />
+        </div>
+        <span className="text-[#e83a8e] group-hover:text-[#d02e7d] transition-colors">Profile Summary</span>
       </CardTitle>
     </CardHeader>
     <CardContent>
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-        <Avatar className="w-16 h-16 border-2 border-[#e83a8e]/20">
-          <AvatarFallback className="bg-[#e83a8e]/10 text-[#e83a8e] text-lg font-medium">
+        <Avatar className="w-16 h-16 border-2 border-[#e83a8e]/20 group-hover:border-[#e83a8e]/40 transition-colors">
+          <AvatarFallback className="bg-[#e83a8e]/10 text-[#e83a8e] text-lg font-medium group-hover:bg-[#e83a8e]/20 transition-colors">
             {profile.full_name ? profile.full_name.charAt(0).toUpperCase() : profile.email.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="text-lg font-medium mb-1">{profile.full_name || profile.username}</h3>
+          <h3 className="text-lg font-medium mb-1 group-hover:text-[#e83a8e]/90 transition-colors">{profile.full_name || profile.username}</h3>
           <p className="text-sm text-neutral-dark/70 mb-2">{profile.email}</p>
           {profile.phone_number && (
             <p className="text-sm text-neutral-dark/70">{profile.phone_number}</p>
@@ -259,13 +372,22 @@ const ProfileSummary = ({ profile }: { profile: UserProfile }) => (
       </div>
       
       <div className="flex flex-wrap gap-2 mt-4">
-        <Badge variant="outline" className="bg-[#e83a8e]/5 text-[#e83a8e]">Profile Active</Badge>
-        <Badge variant="outline" className="bg-blue-50 text-blue-600">Email Verified</Badge>
+        <Badge variant="outline" className="bg-[#e83a8e]/5 text-[#e83a8e] group-hover:bg-[#e83a8e]/10 transition-colors">
+          Profile Active
+        </Badge>
+        <Badge variant="outline" className="bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+          Email Verified
+        </Badge>
       </div>
     </CardContent>
     <CardFooter className="flex justify-end pt-0">
-      <Button variant="ghost" size="sm" className="text-sm text-[#e83a8e]">
+      <Button 
+        variant="ghost" 
+        size="sm" 
+        className="text-sm text-[#e83a8e] group-hover:bg-[#e83a8e]/5 transition-colors flex items-center"
+      >
         Edit Profile
+        <ArrowRight className="ml-1 h-3 w-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
       </Button>
     </CardFooter>
   </Card>
@@ -283,11 +405,17 @@ const MobileNavMenu = ({
 }) => (
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant="ghost" className="md:hidden p-2">
-        <Menu className="h-6 w-6" />
+      <Button variant="outline" className="md:hidden p-2 bg-white border-[#e83a8e]/20 hover:bg-[#e83a8e]/5">
+        <Menu className="h-6 w-6 text-[#e83a8e]" />
       </Button>
     </SheetTrigger>
-    <SheetContent side="left" className="w-[80%] sm:w-[350px]">
+    <SheetContent side="left" className="w-[80%] sm:w-[350px] bg-white border-r shadow-lg">
+      <div className="absolute right-4 top-4">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-dark/60 hover:text-[#e83a8e] hover:bg-[#e83a8e]/10 rounded-full">
+          <X className="h-5 w-5" />
+          <span className="sr-only">Close</span>
+        </Button>
+      </div>
       <SheetHeader className="mb-6">
         <SheetTitle className="flex items-center text-[#e83a8e]">
           <Heart className="w-5 h-5 mr-2 fill-[#e83a8e]" />
@@ -340,7 +468,17 @@ const MobileNavMenu = ({
           >
             <Link href="/blog">
               <Calendar className="min-w-5 h-5 mr-2" />
-              <span className="text-sm whitespace-normal text-left">Relationship Tips</span>
+              <span className="text-sm whitespace-normal text-left">Relationship Blog</span>
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start h-auto py-2.5"
+            asChild
+          >
+            <Link href="/howtodate">
+              <BookOpen className="min-w-5 h-5 mr-2" />
+              <span className="text-sm whitespace-normal text-left">Dating Guide</span>
             </Link>
           </Button>
         </nav>
@@ -383,23 +521,30 @@ const CompatibilitySummaryCard = ({ report }: { report: ReportData }) => {
   };
   
   return (
-    <Card className="overflow-hidden">
-      <div className={`${getColorClass()} px-6 py-4 text-white`}>
-        <h3 className="font-bold text-xl">{title}</h3>
-        <p className="text-white/90 text-sm">Your compatibility profile is ready</p>
+    <Card className="overflow-hidden group hover:shadow-md transition-all duration-300 border-amber-500/20 hover:border-amber-500/40">
+      <div className={`${getColorClass()} px-6 py-4 text-white relative overflow-hidden`}>
+        <div className="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors"></div>
+        <div className="relative z-10">
+          <h3 className="font-bold text-xl group-hover:scale-105 transform transition-transform origin-left">{title}</h3>
+          <p className="text-white/90 text-sm">Your compatibility profile is ready</p>
+        </div>
       </div>
       <CardContent className="pt-4">
         <div className="space-y-4">
-          {traits.map((trait) => (
-            <div key={trait.name} className="space-y-1">
+          {traits.map((trait, index) => (
+            <div key={trait.name} className="space-y-1 group-hover:translate-x-1 transition-transform" style={{ transitionDelay: `${index * 50}ms` }}>
               <div className="flex justify-between text-sm">
                 <span>{trait.name}</span>
                 <span className="font-medium">{trait.value}%</span>
               </div>
-              <div className="w-full bg-neutral-dark/10 rounded-full h-2">
+              <div className="w-full bg-neutral-dark/10 rounded-full h-2 overflow-hidden">
                 <div 
-                  className="bg-[#e83a8e] h-2 rounded-full" 
-                  style={{ width: `${trait.value}%` }}
+                  className="bg-[#e83a8e] h-2 rounded-full transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700" 
+                  style={{ 
+                    width: `${trait.value}%`,
+                    transitionDelay: `${index * 100 + 200}ms`,
+                    transform: 'scaleX(1)' // Initial state, will be overridden by hover
+                  }}
                 ></div>
               </div>
             </div>
@@ -408,10 +553,11 @@ const CompatibilitySummaryCard = ({ report }: { report: ReportData }) => {
         
         <Button 
           asChild 
-          className="w-full mt-6 bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
+          className="w-full mt-6 bg-[#e83a8e] hover:bg-[#d02e7d] text-white group-hover:shadow-md transition-all duration-300"
         >
-          <Link href="/results">
-            View Full Report <ArrowRight className="ml-2 w-4 h-4" />
+          <Link href="/results" className="flex items-center justify-center">
+            View Full Report 
+            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </Button>
       </CardContent>
@@ -690,9 +836,9 @@ const EnhancedDashboard = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-4 md:py-8">
+    <div className="container mx-auto px-4 pt-20 pb-8 md:pt-24 md:pb-12">
       {/* Mobile navigation header */}
-      <div className="flex justify-between items-center mb-6 md:hidden">
+      <div className="flex justify-between items-center mb-8 md:hidden">
         <h1 className="font-heading font-bold text-xl flex items-center">
           <Heart className="w-5 h-5 mr-2 fill-[#e83a8e] text-[#e83a8e]" />
           <span className="text-[#e83a8e]">WhoToDate</span>
@@ -824,40 +970,45 @@ const EnhancedDashboard = () => {
                 {hasReport && report ? (
                   <CompatibilitySummaryCard report={report} />
                 ) : (
-                  <Card>
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center">
-                        <Heart className="w-5 h-5 mr-2 text-[#e83a8e]" />
-                        Unlock Your Compatibility Profile
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">
-                        Complete your compatibility assessment to reveal your unique relationship style and receive personalized insights.
-                      </p>
+                  <Card className="overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#e83a8e] to-[#f87fb4] px-6 py-4 text-white">
+                      <h3 className="font-bold text-xl">The Dating Approach Guide</h3>
+                      <p className="text-white/90 text-sm">Learn proven techniques to approach potential dates</p>
+                    </div>
+                    <CardContent className="pt-5">
+                      <div className="flex items-center mb-4">
+                        <div className="bg-[#e83a8e]/10 p-2 rounded-full mr-3">
+                          <BookOpen className="h-6 w-6 text-[#e83a8e]" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-sm">Comprehensive eBook</h4>
+                          <p className="text-xs text-neutral-dark/70">Expert dating advice tailored for you</p>
+                        </div>
+                      </div>
                       
-                      {!hasCompletedQuiz ? (
-                        <Button asChild className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white w-full">
-                          <Link href="/quiz">
-                            Take 5-Minute Quiz <ArrowRight className="ml-2 w-4 h-4" />
-                          </Link>
-                        </Button>
-                      ) : (
-                        <Button 
-                          className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white w-full"
-                          onClick={() => {
-                            toast({
-                              title: "Generating report...",
-                              description: "Please wait while we prepare your report"
-                            });
-                            setTimeout(() => {
-                              window.location.href = "/results";
-                            }, 500);
-                          }}
-                        >
-                          Generate Report <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
-                      )}
+                      <ul className="space-y-2 mb-5 text-sm">
+                        <li className="flex items-start">
+                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
+                          <span>Build meaningful connections with confidence</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
+                          <span>Communicate authentically and effectively</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
+                          <span>Navigate cultural nuances with respect</span>
+                        </li>
+                      </ul>
+                      
+                      <Button 
+                        asChild 
+                        className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
+                      >
+                        <Link href="/howtodate">
+                          View Dating Guide <ArrowRight className="ml-2 w-4 h-4" />
+                        </Link>
+                      </Button>
                     </CardContent>
                   </Card>
                 )}
