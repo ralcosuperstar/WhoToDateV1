@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useScrollTop } from '@/hooks/use-scroll-top';
 
 /**
  * ScrollToTop component that will automatically scroll the window to the top
@@ -7,14 +6,8 @@ import { useLocation } from 'wouter';
  * component tree, typically just inside your Router.
  */
 export const ScrollToTop = () => {
-  const [location] = useLocation();
-  
-  useEffect(() => {
-    // Scroll to top when location (pathname) changes
-    window.scrollTo(0, 0);
-  }, [location]);
-  
-  return null; // This component doesn't render anything
+  useScrollTop();
+  return null;
 };
 
 export default ScrollToTop;
