@@ -248,97 +248,67 @@ const QuickActions = ({ hasCompletedQuiz, hasReport }: { hasCompletedQuiz: boole
   </div>
 );
 
-// Progress Card component
-const ProgressCard = ({ quizAnswers, report }: { quizAnswers: QuizData | null, report: ReportData | null }) => {
-  // Calculate progress status
-  const quizCompleted = quizAnswers?.completed || false;
-  const reportGenerated = report !== null;
+// Enhanced Dating Guide component to replace Progress Card
+const EnhancedDatingGuide = () => {
+  const chapters = [
+    { title: "Understanding Modern Dating", description: "Navigate the evolving landscape of relationships" },
+    { title: "Building Authentic Connections", description: "Develop meaningful bonds beyond surface-level attraction" },
+    { title: "Communication & Boundaries", description: "Master the art of healthy expression and respect" },
+    { title: "Recognizing Red & Green Flags", description: "Identify signs of healthy and unhealthy dynamics" },
+    { title: "Nurturing Long-Term Relationships", description: "Sustain love through challenges and growth" }
+  ];
   
   return (
-    <Card className="mb-6 hover:shadow-md transition-all duration-300 group border-[#e83a8e]/20 hover:border-[#e83a8e]/40">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-[#e83a8e]/10 group-hover:scale-110 transition-transform">
-            <Clock3 className="w-5 h-5 text-[#e83a8e]" />
+    <Card className="mb-6 overflow-hidden group hover:shadow-md transition-all duration-300 border-blue-500/20 hover:border-blue-500/40">
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-4 border-b border-blue-200">
+        <div className="flex items-center">
+          <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+            <BookOpen className="w-5 h-5 text-blue-600" />
           </div>
-          <span className="text-[#e83a8e] group-hover:text-[#d02e7d] transition-colors">Your Progress</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
-            <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${quizCompleted ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
-                {quizCompleted ? <Check className="w-4 h-4 text-green-600" /> : <span className="text-sm">1</span>}
-              </div>
-              <div>
-                <p className="font-medium">Take Compatibility Quiz</p>
-                <p className="text-sm text-neutral-dark/70">{quizCompleted ? 'Completed' : 'Pending'}</p>
-              </div>
-            </div>
-            {!quizCompleted && (
-              <Button 
-                asChild 
-                size="sm" 
-                className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white group-hover:shadow-sm transition-all"
-              >
-                <Link href="/quiz" className="flex items-center">
-                  Start
-                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            )}
-          </div>
-          
-          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
-            <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${reportGenerated ? 'bg-green-100' : 'bg-neutral-dark/10'}`}>
-                {reportGenerated ? <Check className="w-4 h-4 text-green-600" /> : <span className="text-sm">2</span>}
-              </div>
-              <div>
-                <p className="font-medium">Generate Report</p>
-                <p className="text-sm text-neutral-dark/70">{reportGenerated ? 'Generated' : quizCompleted ? 'Ready' : 'Take quiz first'}</p>
-              </div>
-            </div>
-            {quizCompleted && !reportGenerated && (
-              <Button 
-                asChild 
-                size="sm" 
-                className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white group-hover:shadow-sm transition-all"
-              >
-                <Link href="/results" className="flex items-center">
-                  Generate
-                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            )}
-          </div>
-          
-          <div className="flex items-center justify-between p-2 rounded-md group-hover:bg-slate-50 transition-colors">
-            <div className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-colors ${reportGenerated ? 'bg-[#e83a8e]/10 text-[#e83a8e]' : 'bg-neutral-dark/10'}`}>
-                <span className="text-sm">3</span>
-              </div>
-              <div>
-                <p className="font-medium">Get Personalized Advice</p>
-                <p className="text-sm text-neutral-dark/70">{reportGenerated ? 'Available' : 'After report'}</p>
-              </div>
-            </div>
-            {reportGenerated && (
-              <Button 
-                asChild 
-                size="sm" 
-                variant="outline"
-                className="border-[#e83a8e]/30 text-[#e83a8e] hover:bg-[#e83a8e]/5 group-hover:border-[#e83a8e]/50 transition-colors"
-              >
-                <Link href="/counselling" className="flex items-center">
-                  Explore
-                  <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            )}
+          <div>
+            <h3 className="font-heading font-bold text-xl text-blue-700">Complete Dating Approach Guide</h3>
+            <p className="text-blue-600/80 text-sm">5 comprehensive chapters on modern relationship dynamics</p>
           </div>
         </div>
+      </div>
+      
+      <CardContent className="p-5">
+        <div className="space-y-3 mb-5">
+          {chapters.map((chapter, index) => (
+            <div key={index} className="flex items-center p-2 rounded-md hover:bg-blue-50 transition-colors group-hover:translate-x-1" style={{ transitionDelay: `${index * 50}ms` }}>
+              <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                <span className="text-sm font-medium text-blue-700">{index + 1}</span>
+              </div>
+              <div>
+                <p className="font-medium text-neutral-dark">{chapter.title}</p>
+                <p className="text-xs text-neutral-dark/70">{chapter.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+            Interactive Exercises
+          </Badge>
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+            Real-life Examples
+          </Badge>
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+            Expert Insights
+          </Badge>
+        </div>
+        
+        <Button 
+          asChild 
+          variant="outline" 
+          className="w-full mt-2 border-blue-200 text-blue-700 hover:bg-blue-50 group-hover:border-blue-300 transition-colors"
+        >
+          <Link href="/howtodate" className="flex items-center justify-center">
+            Read Complete Guide
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
@@ -961,55 +931,36 @@ const EnhancedDashboard = () => {
               />
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <ProgressCard 
-                  quizAnswers={quizAnswers}
-                  report={report}
-                />
+                <EnhancedDatingGuide />
                 
-                {/* If report exists, show compatibility summary */}
+                {/* If report exists, show compatibility summary, otherwise show quiz prompt */}
                 {hasReport && report ? (
                   <CompatibilitySummaryCard report={report} />
                 ) : (
-                  <Card className="overflow-hidden">
-                    <div className="bg-gradient-to-r from-[#e83a8e] to-[#f87fb4] px-6 py-4 text-white">
-                      <h3 className="font-bold text-xl">The Dating Approach Guide</h3>
-                      <p className="text-white/90 text-sm">Learn proven techniques to approach potential dates</p>
-                    </div>
-                    <CardContent className="pt-5">
-                      <div className="flex items-center mb-4">
-                        <div className="bg-[#e83a8e]/10 p-2 rounded-full mr-3">
-                          <BookOpen className="h-6 w-6 text-[#e83a8e]" />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-sm">Comprehensive eBook</h4>
-                          <p className="text-xs text-neutral-dark/70">Expert dating advice tailored for you</p>
-                        </div>
+                  <Card className="space-y-1 rounded-lg border border-[#e83a8e]/20 p-6 relative overflow-hidden">
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e83a8e]/5 rounded-full" />
+                    <div className="absolute bottom-0 right-10 w-24 h-24 bg-[#e83a8e]/5 rounded-full" />
+                    
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full bg-[#e83a8e]/10 flex items-center justify-center mb-4">
+                        <AlertTriangle className="h-6 w-6 text-[#e83a8e]" />
                       </div>
                       
-                      <ul className="space-y-2 mb-5 text-sm">
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
-                          <span>Build meaningful connections with confidence</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
-                          <span>Communicate authentically and effectively</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-4 w-4 text-[#e83a8e] mr-2 mt-0.5 flex-shrink-0" />
-                          <span>Navigate cultural nuances with respect</span>
-                        </li>
-                      </ul>
+                      <h3 className="text-lg font-medium mb-2">Complete Your Compatibility Quiz</h3>
+                      <p className="text-sm text-neutral-dark/70 mb-4">
+                        Take the 5-minute quiz to get your personalized compatibility profile and relationship insights.
+                      </p>
                       
                       <Button 
                         asChild 
-                        className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
+                        className="bg-[#e83a8e] hover:bg-[#d02e7d] text-white"
                       >
-                        <Link href="/howtodate">
-                          View Dating Guide <ArrowRight className="ml-2 w-4 h-4" />
+                        <Link href="/quiz" className="flex items-center">
+                          Start Quiz
+                          <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
-                    </CardContent>
+                    </div>
                   </Card>
                 )}
               </div>
