@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { initAnalytics } from "./lib/analytics";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { FixedSupabaseProvider } from "@/contexts/FixedSupabaseContext"; // Simplified direct Supabase integration
+import withScrollReset from "@/lib/with-scroll-reset";
 
 // Layout components
 import Header from "@/components/layout/Header";
@@ -37,17 +38,26 @@ import Sitemap from "@/pages/Sitemap";
 
 import NotFound from "@/pages/not-found";
 
+// Apply scroll reset to page components
+const HomeWithScrollReset = withScrollReset(Home);
+const HowItWorksWithScrollReset = withScrollReset(HowItWorks);
+const ScienceWithScrollReset = withScrollReset(Science);
+const CounsellingWithScrollReset = withScrollReset(Counselling);
+const BlogWithScrollReset = withScrollReset(Blog);
+const BlogPostWithScrollReset = withScrollReset(BlogPost);
+const NewAuthPageWithScrollReset = withScrollReset(NewAuthPage);
+
 function Router() {
   return (
     <Switch>
       {/* Public Routes */}
-      <Route path="/" component={Home} />
-      <Route path="/how-it-works" component={HowItWorks} />
-      <Route path="/science" component={Science} />
-      <Route path="/counselling" component={Counselling} />
-      <Route path="/blog" component={Blog} />
-      <Route path="/blog/:slug" component={BlogPost} />
-      <Route path="/auth" component={NewAuthPage} />
+      <Route path="/" component={HomeWithScrollReset} />
+      <Route path="/how-it-works" component={HowItWorksWithScrollReset} />
+      <Route path="/science" component={ScienceWithScrollReset} />
+      <Route path="/counselling" component={CounsellingWithScrollReset} />
+      <Route path="/blog" component={BlogWithScrollReset} />
+      <Route path="/blog/:slug" component={BlogPostWithScrollReset} />
+      <Route path="/auth" component={NewAuthPageWithScrollReset} />
       
       {/* Policy Pages */}
       <Route path="/privacy" component={PrivacyPolicy} />
