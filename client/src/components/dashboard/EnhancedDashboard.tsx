@@ -600,7 +600,12 @@ const ProfileEditForm = ({ profile }: { profile: UserProfile }) => {
       // First try to fix the database schema if needed (add updated_at column)
       console.log("Attempting to fix database schema before updating profile...");
       try {
-        await fixUpdatedAtColumn(user.id);
+        const fixResult = await fixUpdatedAtColumn(user.id);
+        if (fixResult) {
+          console.log("Successfully applied database schema fix");
+        } else {
+          console.log("Database schema fix was not needed or did not succeed");
+        }
       } catch (fixError) {
         console.error("Failed to fix database schema, but continuing with update:", fixError);
       }
