@@ -147,7 +147,7 @@ export const user = {
         full_name: authUser.user_metadata?.full_name || '',
         phone_number: authUser.phone || '',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        // Removed updated_at field as it no longer exists in the schema
       }])
       .select()
       .single();
@@ -231,8 +231,7 @@ export const quiz = {
           .from('quiz_answers')
           .update({
             answers,
-            completed,
-            updated_at: new Date().toISOString()
+            completed
           })
           .eq('id', existingAnswers.id)
           .select()
@@ -263,8 +262,7 @@ export const quiz = {
           user_id: userId,
           answers,
           completed,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          created_at: new Date().toISOString()
         }])
         .select()
         .single();
