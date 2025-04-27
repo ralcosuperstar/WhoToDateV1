@@ -22,7 +22,7 @@ import CounsellingPromotion from "@/components/shared/CounsellingPromotion";
 
 const Home = () => {
   return (
-    <div className="pt-16 pb-20">
+    <div className="pb-20">
       <Helmet>
         <title>WhoToDate - Find Who to Date With Science and Fun</title>
         <meta name="description" content="Take our FREE 5-minute compatibility quiz to boost your dating confidence. Discover your personality traits, attachment style, and who fits you best." />

@@ -30,7 +30,7 @@ const Blog = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       
-      <div className="min-h-screen bg-neutral-light pt-24 pb-16 px-4">
+      <div className="min-h-screen bg-neutral-light pt-8 pb-16 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-heading font-bold text-3xl md:text-4xl mb-4">Relationship Insights Blog</h1>
