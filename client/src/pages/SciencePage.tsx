@@ -512,14 +512,14 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
 // Main Science page component
 const Science = () => {
   return (
-    <div className="pt-4 pb-20">
+    <div className="pt-0 pb-20">
       <Helmet>
         <title>The Science Behind WhoToDate | Understanding Relationship Compatibility</title>
         <meta name="description" content="Explore the scientific frameworks behind our compatibility assessment - Big Five, MBTI, Attachment Theory, Emotional Intelligence, and Core Values - all tailored for Indian relationships." />
       </Helmet>
 
       {/* Hero section */}
-      <section className="pt-8 pb-16 px-4 bg-gradient-to-br from-pink-50 via-pink-100/30 to-purple-50">
+      <section className="pt-2 pb-16 px-4 bg-gradient-to-br from-pink-50 via-pink-100/30 to-purple-50">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-5 gap-8 md:gap-10 items-center">
             <div className="md:col-span-3">
