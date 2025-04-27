@@ -12,6 +12,7 @@ import { setupSupabaseRoutes } from "./routes/supabase";
 // Database test routes removed
 import { registerSupabaseSyncRoutes } from "./routes/supabase-sync";
 import { setupDatabaseFixRoutes } from "./routes/database-fix";
+import { getBlogPosts, getBlogPostBySlug } from './supabaseStorage';
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
@@ -38,7 +39,7 @@ declare global {
 export async function registerRoutes(app: Express, apiRouter?: Router): Promise<Server> {
   // Define the router to use - either the provided apiRouter or the main app
   const router = apiRouter || app;
-  
+
   // Set up session middleware
   app.use(session({
     secret: process.env.SESSION_SECRET || 'supersecret',
@@ -56,24 +57,24 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   // Middleware to check if user is authenticated via Supabase JWT
   const isAuthenticated = async (req: Request, res: Response, next: Function) => {
     const authHeader = req.headers.authorization;
-    
+
     // Check for JWT token in header
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      
+
       try {
         const supabase = createClient(
           process.env.SUPABASE_URL || '',
           process.env.SUPABASE_ANON_KEY || ''
         );
-        
+
         const { data: { user }, error } = await supabase.auth.getUser(token);
-        
+
         if (error || !user) {
           console.log("JWT authentication failed:", error?.message);
           return res.status(401).json({ message: "Invalid token" });
         }
-        
+
         // Add user ID to request
         req.user = await db.getUser(user.id);
         return next();
@@ -82,12 +83,12 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         return res.status(500).json({ message: "Authentication error" });
       }
     }
-    
+
     // Check for Supabase session-based auth
     if (req.session.supabaseAuthenticated && req.session.userId) {
       try {
         console.log(`Authenticated via Supabase session for user ID: ${req.session.userId}`);
-        
+
         // Try to get user by email first (more reliable with Supabase)
         if (req.session.email) {
           const user = await db.getUserByEmail(req.session.email);
@@ -96,7 +97,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
             return next();
           }
         }
-        
+
         // Fall back to userId if email lookup fails
         try {
           const user = await db.getUser(req.session.userId);
@@ -111,7 +112,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         console.error("Error in Supabase session authentication:", error);
       }
     }
-    
+
     // Development mode fallback for testing
     if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
       console.warn("⚠️ Using development authentication bypass");
@@ -139,22 +140,22 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
       };
       return next();
     }
-    
+
     console.log("Authentication failed: No valid token or session");
     res.status(401).json({ message: "Unauthorized" });
   };
 
   // Set up dedicated Supabase routes
   setupSupabaseRoutes(app, router);
-  
+
   // Database test routes removed
-  
+
   // Set up Supabase sync routes
   registerSupabaseSyncRoutes(router, db);
-  
+
   // Set up database fix routes
   setupDatabaseFixRoutes(app, router);
-  
+
   // Add a health check endpoint that bypasses auth
   router.get("/health", (req: Request, res: Response) => {
     console.log("Health check endpoint hit");
@@ -167,22 +168,22 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
       apiStatus: true
     });
   });
-  
+
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   router.post("/ensure-user", async (req: Request, res: Response) => {
     try {
       const { id, email, username, isVerified } = req.body;
-      
+
       if (!id || !email) {
         return res.status(400).json({ 
           success: false, 
           message: "Missing required user data" 
         });
       }
-      
+
       // Check if user already exists
       const existingUsers = await db.getUserByEmail(email);
-      
+
       if (existingUsers) {
         return res.json({ 
           success: true, 
@@ -190,7 +191,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           exists: true 
         });
       }
-      
+
       // Create new user with UUID as id
       await db.createUser({
         id,
@@ -198,7 +199,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         username: username || email.split('@')[0],
         isVerified: isVerified || false,
       });
-      
+
       res.json({ 
         success: true, 
         message: "User created successfully", 
@@ -221,11 +222,11 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   router.get("/report", isAuthenticated, async (req: Request, res: Response) => {
     console.log("========== REPORT ENDPOINT ACCESSED ==========");
     console.log("Request user:", req.user);
-    
+
     try {
       const userId = req.user?.id;
       console.log("User ID extracted:", userId, "with type:", typeof userId);
-      
+
       if (!userId) {
         console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
@@ -239,7 +240,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         // In development mode, we can return a mock report for easier testing
         if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_AUTH === 'true') {
           console.log("⚠️ Using development report for testing");
-          
+
           const mockReport = {
             id: 1,
             createdAt: new Date(),
@@ -254,44 +255,44 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
             isPaid: true,
             compatibilityColor: "green"
           };
-          
+
           console.log("Returning mock report:", mockReport);
           console.log("========== REPORT ENDPOINT COMPLETED ==========");
           return res.json(mockReport);
         }
-        
+
         // For normal operation
         console.log("Attempting to get report from database...");
         console.log("Storage object type:", typeof db, "with getReportByUserId:", typeof db.getReportByUserId);
-        
+
         // Let's safely try to call getReportByUserId
         try {
           console.log("About to call db.getReportByUserId with userId:", userId);
           // CRITICAL CRASH DEBUG - Wrap everything in multiple try-catch blocks
           console.log("CRITICAL DEBUG: About to process report request");
-          
+
           // Try to convert userId with safe error handling
           let userIdForQuery;
           try {
             console.log("CRITICAL DEBUG: Converting userId", userId, "type:", typeof userId);
-            
+
             // This handles both string and number userId formats, maintaining type compatibility
             userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
               ? Number(userId) 
               : userId;
-              
+
             console.log("CRITICAL DEBUG: Converted to userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
           } catch (conversionError) {
             console.error("CRITICAL ISSUE: Error converting userId:", conversionError);
             console.error("Using original userId without conversion");
             userIdForQuery = userId;
           }
-          
+
           console.log("CRITICAL DEBUG: About to call db.getReportByUserId with:", userIdForQuery);
-          
+
           // Use a fake report object to prevent crashes in development
           let report;
-          
+
           // Try to call the database method safely
           try {
             console.log("CRITICAL DEBUG: Calling getReportByUserId, db object:", typeof db, "function type:", typeof db.getReportByUserId);
@@ -300,7 +301,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           } catch (dbMethodError) {
             console.error("CRITICAL ERROR in getReportByUserId call:", dbMethodError);
             console.error("Stack trace:", (dbMethodError as Error).stack);
-            
+
             if (process.env.NODE_ENV !== 'production') {
               console.log("CRITICAL DEBUG: Using emergency fallback report for development");
               report = {
@@ -322,12 +323,12 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
             }
           }
           console.log("Got report result:", report);
-          
+
           if (!report) {
             console.log("No report found, returning 404");
             return res.status(404).json({ message: "Report not found" });
           }
-          
+
           console.log("Report found, returning:", report);
           console.log("========== REPORT ENDPOINT COMPLETED ==========");
           res.json(report);
@@ -358,11 +359,11 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   router.get("/quiz", isAuthenticated, async (req: Request, res: Response) => {
     console.log("========== QUIZ ENDPOINT ACCESSED ==========");
     console.log("Request user:", req.user);
-    
+
     try {
       const userId = req.user?.id;
       console.log("User ID extracted:", userId, "with type:", typeof userId);
-      
+
       if (!userId) {
         console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
@@ -395,32 +396,32 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
       try {
         console.log("Attempting to get quiz from database...");
         console.log("Storage object type:", typeof db, "with getQuizAnswers:", typeof db.getQuizAnswers);
-        
+
         // CRITICAL CRASH DEBUG - Wrap everything in multiple try-catch blocks
         console.log("CRITICAL DEBUG: About to process quiz request");
-        
+
         // Try to convert userId with safe error handling
         let userIdForQuery;
         try {
           console.log("CRITICAL DEBUG: Converting userId", userId, "type:", typeof userId);
-          
+
           // This handles both string and number userId formats, maintaining type compatibility
           userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
             ? Number(userId) 
             : userId;
-            
+
           console.log("CRITICAL DEBUG: Converted to userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
         } catch (conversionError) {
           console.error("CRITICAL ISSUE: Error converting userId:", conversionError);
           console.error("Using original userId without conversion");
           userIdForQuery = userId;
         }
-        
+
         console.log("CRITICAL DEBUG: About to call db.getQuizAnswers with:", userIdForQuery);
-        
+
         // Use a fake quiz object to prevent crashes in development
         let quizAnswers;
-        
+
         // Try to call the database method safely
         try {
           console.log("CRITICAL DEBUG: Calling getQuizAnswers, db object:", typeof db, "function type:", typeof db.getQuizAnswers);
@@ -429,7 +430,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
         } catch (dbMethodError) {
           console.error("CRITICAL ERROR in getQuizAnswers call:", dbMethodError);
           console.error("Stack trace:", (dbMethodError as Error).stack);
-          
+
           if (process.env.NODE_ENV !== 'production') {
             console.log("CRITICAL DEBUG: Using emergency fallback quiz for development");
             quizAnswers = {
@@ -449,12 +450,12 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           }
         }
         console.log("Got quiz result:", quizAnswers);
-        
+
         if (!quizAnswers) {
           console.log("No quiz found, returning 404");
           return res.status(404).json({ message: "Quiz not found" });
         }
-        
+
         console.log("Quiz found, returning:", quizAnswers);
         console.log("========== QUIZ ENDPOINT COMPLETED ==========");
         res.json(quizAnswers);
@@ -477,11 +478,11 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   router.post("/quiz", isAuthenticated, async (req: Request, res: Response) => {
     console.log("========== POST QUIZ ENDPOINT ACCESSED ==========");
     console.log("Request user:", req.user);
-    
+
     try {
       const userId = req.user?.id;
       console.log("User ID extracted:", userId, "with type:", typeof userId);
-      
+
       if (!userId) {
         console.log("No user ID found, returning 401");
         return res.status(401).json({ message: "Unauthorized" });
@@ -489,7 +490,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
 
       const { answers, completed } = req.body;
       console.log("Received quiz data:", { answersReceived: !!answers, completed });
-      
+
       if (!answers) {
         console.log("Missing quiz answers, returning 400");
         return res.status(400).json({ message: "Missing quiz answers" });
@@ -497,31 +498,31 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
 
       // CRITICAL CRASH DEBUG - Wrap everything in multiple try-catch blocks
       console.log("CRITICAL DEBUG: About to process POST quiz request");
-      
+
       // Try to convert userId with safe error handling
       let userIdForQuery;
       try {
         console.log("CRITICAL DEBUG: Converting userId", userId, "type:", typeof userId);
-        
+
         // This handles both string and number userId formats, maintaining type compatibility
         userIdForQuery = typeof userId === 'string' && !isNaN(Number(userId)) 
           ? Number(userId) 
           : userId;
-          
+
         console.log("CRITICAL DEBUG: Converted to userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
       } catch (conversionError) {
         console.error("CRITICAL ISSUE: Error converting userId:", conversionError);
         console.error("Using original userId without conversion");
         userIdForQuery = userId;
       }
-      
+
       console.log("Using userIdForQuery:", userIdForQuery, "with type:", typeof userIdForQuery);
-      
+
       try {
         // Check if user already has quiz answers
         console.log("CRITICAL DEBUG: About to call db.getQuizAnswers to check for existing answers");
         console.log("Checking for existing quiz answers...");
-        
+
         let existingAnswers;
         try {
           existingAnswers = await db.getQuizAnswers(userIdForQuery);
@@ -532,9 +533,9 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           console.log("Proceeding as if no existing answers were found");
           existingAnswers = null;
         }
-        
+
         console.log("Existing answers:", existingAnswers);
-        
+
         let quizAnswers;
         if (existingAnswers) {
           console.log("Updating existing answers with ID:", existingAnswers.id);
@@ -550,7 +551,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           } catch (updateError) {
             console.error("CRITICAL ERROR updating quiz answers:", updateError);
             console.error("Stack trace:", (updateError as Error).stack);
-            
+
             if (process.env.NODE_ENV !== 'production') {
               console.log("CRITICAL DEBUG: Using emergency fallback for updated quiz in development");
               quizAnswers = {
@@ -579,7 +580,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           } catch (createError) {
             console.error("CRITICAL ERROR creating quiz answers:", createError);
             console.error("Stack trace:", (createError as Error).stack);
-            
+
             if (process.env.NODE_ENV !== 'production') {
               console.log("CRITICAL DEBUG: Using emergency fallback for created quiz in development");
               quizAnswers = {
@@ -626,7 +627,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
       res.status(500).json({ message: "Failed to fetch blog posts" });
     }
   });
-  
+
   // Legacy blog-posts endpoint (keeping for backward compatibility)
   router.get("/blog-posts", async (req: Request, res: Response) => {
     try {
@@ -666,6 +667,30 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     }
   });
 
+  // Blog routes
+  router.get('/blog', async (req, res) => {
+    try {
+      const posts = await getBlogPosts();
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch blog posts' });
+    }
+  });
+
+  router.get('/blog/:slug', async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const post = await getBlogPostBySlug(slug);
+      if (!post) {
+        return res.status(404).json({ error: 'Blog post not found' });
+      }
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch blog post' });
+    }
+  });
+
+
   // Create HTTP server
   const server = createServer(app);
 
@@ -673,7 +698,7 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   if (process.env.NODE_ENV !== "production") {
     // Enable verification link logging if needed
     // await logAllVerificationLinks(db);
-    
+
     // Log that we're in development mode
     console.log("⚠️ Running in development mode");
   }
