@@ -668,26 +668,23 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     }
   });
 
-  // Blog routes
-  router.get('/blog', async (req, res) => {
-    try {
-      const posts = await getBlogPosts();
-      res.json(posts);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch blog posts' });
-    }
-  });
-
-  router.get('/blog/:slug', async (req, res) => {
+  // Blog route for single post by slug
+  router.get('/blog/:slug', async (req: Request, res: Response) => {
     try {
       const { slug } = req.params;
-      const post = await getBlogPostBySlug(slug);
+      console.log(`Fetching blog post with slug: ${slug}`);
+      const post = await db.getBlogPostBySlug(slug);
+      
       if (!post) {
-        return res.status(404).json({ error: 'Blog post not found' });
+        console.log(`Blog post with slug ${slug} not found`);
+        return res.status(404).json({ message: 'Blog post not found' });
       }
+      
+      console.log(`Blog post found: ${post.title}`);
       res.json(post);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch blog post' });
+      console.error('Error fetching blog post by slug:', error);
+      res.status(500).json({ message: 'Failed to fetch blog post' });
     }
   });
 
