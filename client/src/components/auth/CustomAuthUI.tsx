@@ -366,8 +366,8 @@ export function CustomAuthUI() {
 
   return (
     <Card className="border border-gray-200 shadow-md overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-[#e83a8e]/5 to-[#e83a8e]/10 border-b border-[#e83a8e]/10 pb-4">
-        <CardTitle className="text-xl text-[#e83a8e] font-bold tracking-tight">
+      <CardHeader className="bg-gradient-to-r from-[#e83a8e]/5 to-[#e83a8e]/10 border-b border-[#e83a8e]/10 pb-6 mb-4">
+        <CardTitle className="text-xl text-[#e83a8e] font-bold tracking-tight mb-2">
           {activeTab === 'sign-up' ? 'Create Account' : 'Welcome Back'}
         </CardTitle>
         <CardDescription className="text-gray-600">
@@ -376,7 +376,7 @@ export function CustomAuthUI() {
             : 'Sign in to your WhoToDate account'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-8">
+      <CardContent className="pt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2 border border-[#e83a8e]/20 rounded-lg p-1 bg-gray-50">
             <TabsTrigger 
