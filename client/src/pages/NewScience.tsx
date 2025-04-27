@@ -454,7 +454,7 @@ const StatisticItem = ({ icon, value, label, color, highlight, notes }: {
 // Main Science page component
 const Science = () => {
   return (
-    <div className="pt-16 pb-20">
+    <div className="pt-4 pb-20">
       <Helmet>
         <title>The Science Behind WhoToDate | Understanding Relationship Compatibility</title>
         <meta name="description" content="Explore the scientific frameworks behind our compatibility assessment - Big Five, MBTI, Attachment Theory, Emotional Intelligence, and Core Values - all tailored for Indian relationships." />
