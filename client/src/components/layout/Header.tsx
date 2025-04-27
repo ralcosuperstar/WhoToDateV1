@@ -57,7 +57,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-100">
+    <header className="bg-white shadow-sm sticky top-0 w-full z-50 border-b border-gray-100 h-16 md:h-[70px]">
       <div className="container mx-auto px-3 sm:px-4 py-4 md:py-5 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
           <div className="h-8 w-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#e83a8e' }}>

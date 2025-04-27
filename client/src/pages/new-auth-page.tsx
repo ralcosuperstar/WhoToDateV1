@@ -28,10 +28,10 @@ export default function NewAuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen pt-4 md:pt-8">
+    <div className="flex min-h-screen">
       {/* Left column - Auth form */}
       <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-4 md:p-8">
-        <div className="w-full max-w-md mt-4 md:mt-8">
+        <div className="w-full max-w-md">
           <h1 className="text-3xl font-bold mb-2" style={{ color: '#e83a8e' }}>WhotoDate</h1>
           <p className="text-muted-foreground mb-8">
             Unlock your relationship blueprint and self-discovery journey
