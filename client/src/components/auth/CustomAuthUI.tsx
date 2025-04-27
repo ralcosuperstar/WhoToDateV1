@@ -376,7 +376,7 @@ export function CustomAuthUI() {
             : 'Sign in to your WhoToDate account'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="pt-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2 border border-[#e83a8e]/20 rounded-lg p-1 bg-gray-50">
             <TabsTrigger 
@@ -575,22 +575,22 @@ export function CustomAuthUI() {
         </Tabs>
         
         {/* Enhanced Security Trust Badge */}
-        <div className="mt-6 pt-5 border-t border-gray-100 w-full">
-          <div className="bg-white border border-[#e83a8e]/10 shadow-sm rounded-md p-3 w-auto inline-flex flex-col space-y-2">
-            <div className="text-xs font-semibold text-[#e83a8e] flex items-center">
+        <div className="mt-6 pt-5 border-t border-gray-100 w-full flex justify-center">
+          <div className="bg-white border border-[#e83a8e]/10 shadow-sm rounded-md p-3 w-auto flex flex-col items-center space-y-2">
+            <div className="text-xs font-semibold text-[#e83a8e] flex items-center justify-center">
               <Shield className="h-3.5 w-3.5 mr-1.5 text-[#e83a8e]" />
               Secure Login Powered by Supabase
             </div>
             
-            <div className="flex flex-col space-y-1.5">
-              <div className="flex items-center text-xs text-gray-700">
+            <div className="flex flex-col items-center space-y-1.5">
+              <div className="flex items-center justify-center text-xs text-gray-700">
                 <div className="bg-green-50 p-1 rounded-full mr-1.5">
                   <Shield className="h-3 w-3 text-green-600" />
                 </div>
                 <span className="font-medium">SOC 2 Type 2 Compliant</span>
               </div>
               
-              <div className="flex items-center text-xs text-gray-700">
+              <div className="flex items-center justify-center text-xs text-gray-700">
                 <div className="bg-pink-50 p-1 rounded-full mr-1.5">
                   <LockKeyhole className="h-3 w-3 text-[#e83a8e]" />
                 </div>
