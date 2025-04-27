@@ -58,7 +58,7 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-sm fixed w-full z-50 border-b border-gray-100">
-      <div className="container mx-auto px-3 sm:px-4 py-3 flex justify-between items-center">
+      <div className="container mx-auto px-3 sm:px-4 py-4 md:py-5 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2 group">
           <div className="h-8 w-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#e83a8e' }}>
             <span className="font-heading font-bold text-base text-white">W</span>

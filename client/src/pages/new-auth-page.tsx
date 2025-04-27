@@ -21,17 +21,17 @@ export default function NewAuthPage() {
   // If already logged in and waiting for redirect
   if (user || isLoading) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center">
+      <div className="flex min-h-[80vh] items-center justify-center mt-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen pt-4 md:pt-8">
       {/* Left column - Auth form */}
       <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-4 md:p-8">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md mt-4 md:mt-8">
           <h1 className="text-3xl font-bold mb-2" style={{ color: '#e83a8e' }}>WhotoDate</h1>
           <p className="text-muted-foreground mb-8">
             Unlock your relationship blueprint and self-discovery journey
