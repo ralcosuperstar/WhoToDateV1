@@ -560,58 +560,11 @@ export function CustomAuthUI() {
           </TabsContent>
         </Tabs>
         
-        {/* Security Trust Badge Section */}
-        <div className="mt-8 pt-6 border-t border-gray-100">
-          <div className="flex flex-col space-y-3">
-            <h3 className="text-sm font-medium text-gray-900 flex items-center">
-              <Shield className="h-4 w-4 mr-2 text-[#e83a8e]" />
-              Trusted & Secure
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="flex items-start space-x-2">
-                <div className="p-1.5 bg-green-50 rounded-full mt-0.5">
-                  <Check className="h-3 w-3 text-green-600" />
-                </div>
-                <div className="text-xs text-gray-600">
-                  <span className="font-medium">End-to-end encryption</span> for your privacy and security
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2">
-                <div className="p-1.5 bg-green-50 rounded-full mt-0.5">
-                  <Check className="h-3 w-3 text-green-600" />
-                </div>
-                <div className="text-xs text-gray-600">
-                  <span className="font-medium">OTP verification</span> ensures account authenticity
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2">
-                <div className="p-1.5 bg-green-50 rounded-full mt-0.5">
-                  <Check className="h-3 w-3 text-green-600" />
-                </div>
-                <div className="text-xs text-gray-600">
-                  <span className="font-medium">Regular security audits</span> to protect your information
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2">
-                <div className="p-1.5 bg-green-50 rounded-full mt-0.5">
-                  <LockKeyhole className="h-3 w-3 text-green-600" />
-                </div>
-                <div className="text-xs text-gray-600">
-                  <span className="font-medium">ISO 27001 compliant</span> data protection standards
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex justify-center mt-1">
-              <div className="bg-gray-50 rounded-full px-4 py-1.5 flex items-center">
-                <LockKeyhole className="h-3.5 w-3.5 text-[#e83a8e] mr-1.5" />
-                <span className="text-xs font-medium text-gray-700">Secure Connection</span>
-              </div>
-            </div>
+        {/* Simple Security Trust Badge */}
+        <div className="mt-6 pt-4 flex justify-center">
+          <div className="flex items-center text-xs text-gray-500">
+            <Shield className="h-4 w-4 mr-1.5 text-green-600" />
+            <span>SOC 2 Type 2 compliant and regularly audited</span>
           </div>
         </div>
       </CardContent>
