@@ -8,7 +8,7 @@ import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Add fixed
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, LockKeyhole, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Shield, LockKeyhole, Check, AlertCircle, Loader2, UserPlus } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
@@ -365,27 +365,29 @@ export function CustomAuthUI() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{activeTab === 'sign-up' ? 'Create Account' : 'Welcome Back'}</CardTitle>
-        <CardDescription>
+    <Card className="border border-gray-200 shadow-md overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-[#e83a8e]/5 to-[#e83a8e]/10 border-b border-[#e83a8e]/10 pb-4">
+        <CardTitle className="text-xl text-[#e83a8e] font-bold tracking-tight">
+          {activeTab === 'sign-up' ? 'Create Account' : 'Welcome Back'}
+        </CardTitle>
+        <CardDescription className="text-gray-600">
           {activeTab === 'sign-up' 
             ? 'Sign up to get started with WhoToDate' 
             : 'Sign in to your WhoToDate account'}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 border border-[#e83a8e]/20 rounded-lg p-1">
+          <TabsList className="grid w-full grid-cols-2 border border-[#e83a8e]/20 rounded-lg p-1 bg-gray-50">
             <TabsTrigger 
               value="sign-in" 
-              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none rounded-md"
+              className="data-[state=active]:bg-[#e83a8e] data-[state=active]:text-white data-[state=active]:shadow-md rounded-md transition-all duration-300"
             >
               Sign In
             </TabsTrigger>
             <TabsTrigger 
               value="sign-up" 
-              className="data-[state=active]:bg-[#e83a8e]/10 data-[state=active]:text-[#e83a8e] data-[state=active]:shadow-none rounded-md"
+              className="data-[state=active]:bg-[#e83a8e] data-[state=active]:text-white data-[state=active]:shadow-md rounded-md transition-all duration-300"
             >
               Sign Up
             </TabsTrigger>
@@ -431,17 +433,23 @@ export function CustomAuthUI() {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors" 
+                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden group" 
                   disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    'Sign in'
-                  )}
+                  <div className="absolute inset-0 w-full h-full transition-all duration-300 scale-x-0 translate-x-0 group-hover:scale-x-100 group-hover:translate-x-0 bg-[#d02e7d] origin-left"></div>
+                  <span className="relative flex items-center justify-center">
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        <LockKeyhole className="mr-2 h-4 w-4" />
+                        Sign in
+                      </>
+                    )}
+                  </span>
                 </Button>
               </form>
             </Form>
@@ -543,42 +551,51 @@ export function CustomAuthUI() {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white transition-colors" 
+                  className="w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden group" 
                   disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
-                    </>
-                  ) : (
-                    'Create Account'
-                  )}
+                  <div className="absolute inset-0 w-full h-full transition-all duration-300 scale-x-0 translate-x-0 group-hover:scale-x-100 group-hover:translate-x-0 bg-[#d02e7d] origin-left"></div>
+                  <span className="relative flex items-center justify-center">
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Create Account
+                      </>
+                    )}
+                  </span>
                 </Button>
               </form>
             </Form>
           </TabsContent>
         </Tabs>
         
-        {/* Compact Security Trust Badge */}
-        <div className="mt-5 pt-4 border-t border-gray-100 w-full">
-          <div className="bg-gray-50 rounded-md p-2.5 w-auto inline-flex flex-col space-y-1.5">
-            <div className="text-[10px] font-medium text-gray-700">
+        {/* Enhanced Security Trust Badge */}
+        <div className="mt-6 pt-5 border-t border-gray-100 w-full">
+          <div className="bg-white border border-[#e83a8e]/10 shadow-sm rounded-md p-3 w-auto inline-flex flex-col space-y-2">
+            <div className="text-xs font-semibold text-[#e83a8e] flex items-center">
+              <Shield className="h-3.5 w-3.5 mr-1.5 text-[#e83a8e]" />
               Secure Login Powered by Supabase
             </div>
             
-            <div className="flex items-center text-[9px] text-gray-600">
-              <div className="bg-green-50 p-0.5 rounded-full mr-1">
-                <Shield className="h-2.5 w-2.5 text-green-600" />
+            <div className="flex flex-col space-y-1.5">
+              <div className="flex items-center text-xs text-gray-700">
+                <div className="bg-green-50 p-1 rounded-full mr-1.5">
+                  <Shield className="h-3 w-3 text-green-600" />
+                </div>
+                <span className="font-medium">SOC 2 Type 2 Compliant</span>
               </div>
-              <span>SOC 2 Type 2 Compliant</span>
-            </div>
-            
-            <div className="flex items-center text-[9px] text-gray-600">
-              <div className="bg-pink-50 p-0.5 rounded-full mr-1">
-                <LockKeyhole className="h-2.5 w-2.5 text-[#e83a8e]" />
+              
+              <div className="flex items-center text-xs text-gray-700">
+                <div className="bg-pink-50 p-1 rounded-full mr-1.5">
+                  <LockKeyhole className="h-3 w-3 text-[#e83a8e]" />
+                </div>
+                <span>Data Encrypted (AES-256, TLS)</span>
               </div>
-              <span>Data Encrypted (AES-256, TLS)</span>
             </div>
           </div>
         </div>
