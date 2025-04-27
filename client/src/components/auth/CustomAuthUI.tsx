@@ -560,11 +560,22 @@ export function CustomAuthUI() {
           </TabsContent>
         </Tabs>
         
-        {/* Simple Security Trust Badge */}
-        <div className="mt-6 pt-4 flex justify-center">
-          <div className="flex items-center text-xs text-gray-500">
-            <Shield className="h-4 w-4 mr-1.5 text-green-600" />
-            <span>SOC 2 Type 2 compliant and regularly audited</span>
+        {/* Enhanced Security Trust Badge */}
+        <div className="mt-6 pt-5 flex flex-col items-center border-t border-gray-100">
+          <div className="text-xs font-medium text-gray-700 mb-3">
+            🔒 Secure Login Powered by Supabase
+          </div>
+          
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center text-xs text-gray-600">
+              <Shield className="h-4 w-4 mr-1.5 text-green-600 animate-pulse" />
+              <span>SOC 2 Type 2 Compliant</span>
+            </div>
+            
+            <div className="flex items-center text-xs text-gray-600">
+              <LockKeyhole className="h-4 w-4 mr-1.5 text-[#e83a8e]" />
+              <span>Data Encrypted at Rest & In Transit (AES-256, TLS)</span>
+            </div>
           </div>
         </div>
       </CardContent>
