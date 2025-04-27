@@ -100,7 +100,11 @@ const Blog = () => {
                           </svg>
                         </Link>
                         <span className="text-xs text-neutral-dark/60">
-                          {new Date(post.publishedAt).toLocaleDateString('en-US', { 
+                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short',
+                            day: 'numeric'
+                          }) : new Date(post.created_at).toLocaleDateString('en-US', {
                             year: 'numeric', 
                             month: 'short',
                             day: 'numeric'

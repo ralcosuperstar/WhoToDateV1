@@ -983,7 +983,7 @@ const EnhancedDashboard = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 pt-20 pb-8 md:pt-24 md:pb-12">
+    <div className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12">
       {/* Mobile navigation header */}
       <div className="flex justify-between items-center mb-8 md:hidden">
         <h1 className="font-heading font-bold text-xl flex items-center">
