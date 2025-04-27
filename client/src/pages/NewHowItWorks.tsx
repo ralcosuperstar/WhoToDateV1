@@ -136,7 +136,7 @@ const HowItWorks = () => {
   return (
     <div className="pt-0 pb-20">
       {/* Hero section */}
-      <section className="pt-4 pb-16 px-4 bg-gradient-to-br from-pink-50 to-purple-50">
+      <section className="pt-8 pb-16 px-4 bg-gradient-to-br from-pink-50 to-purple-50">
         <div className="container mx-auto max-w-5xl text-center">
           <div className="inline-block mb-6 py-1.5 px-4 bg-white rounded-full shadow-sm">
             <span className="text-gray-700 font-medium text-sm flex items-center">

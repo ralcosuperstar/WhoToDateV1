@@ -461,7 +461,7 @@ const Science = () => {
       </Helmet>
 
       {/* Hero section */}
-      <section className="pt-4 pb-16 px-4 bg-gradient-to-br from-pink-50 via-pink-100/30 to-purple-50">
+      <section className="pt-8 pb-16 px-4 bg-gradient-to-br from-pink-50 via-pink-100/30 to-purple-50">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-5 gap-8 items-center">
             <div className="md:col-span-3">
