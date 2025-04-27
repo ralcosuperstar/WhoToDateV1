@@ -14,8 +14,16 @@ const Analytics = () => {
   const { toast } = useToast();
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+  // Define report type
+  interface ReportData {
+    id: number;
+    user_id: string;
+    isPaid: boolean;
+    report: any;
+  }
+
   // Fetch user report
-  const { data: report, isLoading, error } = useQuery({
+  const { data: report, isLoading, error } = useQuery<ReportData>({
     queryKey: ["/api/report"],
     retry: false,
   });
@@ -47,7 +55,7 @@ const Analytics = () => {
 
   if (!report || error) {
     return (
-      <div className="pt-20 px-4 pb-12 min-h-screen">
+      <div className="pt-4 px-4 pb-12 min-h-screen">
         <div className="container mx-auto max-w-3xl">
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4 mr-2" />
@@ -64,7 +72,7 @@ const Analytics = () => {
   // Check if user has paid for the report
   if (report && !report.isPaid) {
     return (
-      <div className="pt-20 px-4 pb-12 min-h-screen">
+      <div className="pt-4 px-4 pb-12 min-h-screen">
         <div className="container mx-auto max-w-3xl">
           <Alert className="mb-4 border-amber-500 bg-amber-50 text-amber-900">
             <AlertCircle className="h-4 w-4 mr-2" />
@@ -81,7 +89,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="pt-20 px-4 pb-12 bg-neutral-50 min-h-screen">
+    <div className="pt-4 px-4 pb-12 bg-neutral-50 min-h-screen">
       <Helmet>
         <title>Analytics Dashboard | WhoToDate</title>
         <meta name="description" content="Explore your compatibility dimensions in detail" />

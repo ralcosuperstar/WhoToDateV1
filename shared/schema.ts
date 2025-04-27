@@ -140,6 +140,9 @@ export type Payment = typeof payments.$inferSelect;
 
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 export type BlogPost = typeof blogPosts.$inferSelect & {
-  // Non-persisted field for backward compatibility
+  // Non-persisted fields for backward compatibility
   updatedAt?: Date | null; // Added for backward compatibility since it was removed from the schema
+  created_at?: Date | null; // Added for backward compatibility with older database schema
+  createdAt?: Date | null; // Added for camelCase compatibility
+  publishedAt?: Date | null; // Added for compatibility with blog publishing date
 };
