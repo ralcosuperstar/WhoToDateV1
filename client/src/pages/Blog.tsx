@@ -2,10 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Helmet } from 'react-helmet';
 import { BlogPost } from "@shared/schema";
+import { getSupabaseClient } from "@/lib/supabaseConfig";
 
 const Blog = () => {
   const { data: posts, isLoading, error } = useQuery<BlogPost[]>({
-    queryKey: ['/api/blog']
+    queryKey: ['blogPosts'],
+    queryFn: async () => {
+      const supabase = await getSupabaseClient();
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      return data || [];
+    }
   });
 
   return (
