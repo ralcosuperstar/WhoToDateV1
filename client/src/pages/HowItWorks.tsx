@@ -73,7 +73,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 const HowItWorks = () => {
   return (
-    <div className="pt-1 pb-20">
+    <div className="pt-0 pb-20">
       {/* Hero section */}
       <section className="pt-4 pb-16 px-4 bg-gradient-to-br from-primary/5 to-purple-50">
         <div className="container mx-auto max-w-5xl text-center">
