@@ -560,25 +560,25 @@ export function CustomAuthUI() {
           </TabsContent>
         </Tabs>
         
-        {/* Enhanced Security Trust Badge */}
-        <div className="mt-6 pt-5 flex flex-col items-center border-t border-gray-100 text-center w-full">
-          <div className="flex items-center justify-center w-full text-xs font-medium text-gray-700 mb-3">
-            <span>Secure Login Powered by Supabase</span>
-          </div>
-          
-          <div className="flex flex-col items-center space-y-2 w-full">
-            <div className="flex items-center justify-center text-xs text-gray-600 w-full">
-              <div className="bg-green-50 p-1 rounded-full mr-1.5">
-                <Shield className="h-3.5 w-3.5 text-green-600" />
+        {/* Compact Security Trust Badge */}
+        <div className="mt-5 pt-4 border-t border-gray-100 w-full">
+          <div className="bg-gray-50 rounded-md p-2.5 w-auto inline-flex flex-col space-y-1.5">
+            <div className="text-[10px] font-medium text-gray-700">
+              Secure Login Powered by Supabase
+            </div>
+            
+            <div className="flex items-center text-[9px] text-gray-600">
+              <div className="bg-green-50 p-0.5 rounded-full mr-1">
+                <Shield className="h-2.5 w-2.5 text-green-600" />
               </div>
               <span>SOC 2 Type 2 Compliant</span>
             </div>
             
-            <div className="flex items-center justify-center text-xs text-gray-600 w-full">
-              <div className="bg-pink-50 p-1 rounded-full mr-1.5">
-                <LockKeyhole className="h-3.5 w-3.5 text-[#e83a8e]" />
+            <div className="flex items-center text-[9px] text-gray-600">
+              <div className="bg-pink-50 p-0.5 rounded-full mr-1">
+                <LockKeyhole className="h-2.5 w-2.5 text-[#e83a8e]" />
               </div>
-              <span>Data Encrypted at Rest & In Transit (AES-256, TLS)</span>
+              <span>Data Encrypted (AES-256, TLS)</span>
             </div>
           </div>
         </div>
