@@ -12,7 +12,8 @@ import { setupSupabaseRoutes } from "./routes/supabase";
 // Database test routes removed
 import { registerSupabaseSyncRoutes } from "./routes/supabase-sync";
 import { setupDatabaseFixRoutes } from "./routes/database-fix";
-import { getBlogPosts, getBlogPostBySlug } from './supabaseStorage';
+// Import the supabase storage instance instead of direct function imports
+// The SupabaseStorage class has methods for blog posts
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
