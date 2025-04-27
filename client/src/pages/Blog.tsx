@@ -100,15 +100,24 @@ const Blog = () => {
                           </svg>
                         </Link>
                         <span className="text-xs text-neutral-dark/60">
-                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'short',
-                            day: 'numeric'
-                          }) : new Date(post.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric', 
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                          {(() => {
+                            // Use a proper date fallback mechanism with type safety
+                            let dateValue: string | number | Date = new Date();
+                            
+                            if (post.publishedAt) {
+                              dateValue = post.publishedAt;
+                            } else if (post.created_at) {
+                              dateValue = post.created_at;
+                            } else if (post.createdAt) {
+                              dateValue = post.createdAt;
+                            }
+                            
+                            return new Date(dateValue).toLocaleDateString('en-US', { 
+                              year: 'numeric', 
+                              month: 'short',
+                              day: 'numeric'
+                            });
+                          })()}
                         </span>
                       </div>
                     </div>
