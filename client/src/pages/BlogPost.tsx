@@ -37,7 +37,7 @@ const BlogPost = () => {
   }, [post]);
   
   return (
-    <div className="min-h-screen bg-neutral-light pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-neutral-light pt-8 pb-16 px-4">
       <div className="container mx-auto max-w-4xl">
         {isLoading ? (
           <div className="space-y-4">

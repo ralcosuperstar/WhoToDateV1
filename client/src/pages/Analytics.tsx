@@ -39,7 +39,7 @@ const Analytics = () => {
 
   if (isLoading) {
     return (
-      <div className="pt-20 pb-12 min-h-screen flex items-center justify-center">
+      <div className="pt-4 pb-12 min-h-screen flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
       </div>
     );
