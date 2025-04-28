@@ -860,12 +860,12 @@ const EnhancedResults = () => {
                       Your Top Relationship Strengths
                     </h3>
                     <ul className="space-y-2">
-                      {profile.flags.positives.map((strength, index) => (
+                      {profile.flags?.positives?.map((strength, index) => (
                         <li key={index} className="flex items-start">
                           <span className="text-green-500 mr-2">✓</span>
                           <span>{strength}</span>
                         </li>
-                      ))}
+                      )) || <li>No data available</li>}
                     </ul>
                   </div>
                 </div>
@@ -1245,7 +1245,7 @@ const EnhancedResults = () => {
                           <ShieldCheck className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                           <span>{quality}</span>
                         </div>
-                      ))}
+                      )) || <div className="bg-white p-3 rounded-lg shadow-sm">No data available</div>}
                     </div>
                     
                     <h4 className="font-semibold text-indigo-800 mt-5 mb-3">Be cautious with partners who are:</h4>
@@ -1255,7 +1255,7 @@ const EnhancedResults = () => {
                           <AlertTriangle className="h-5 w-5 text-yellow-500 mr-2 flex-shrink-0 mt-0.5" />
                           <span>{quality}</span>
                         </div>
-                      ))}
+                      )) || <div className="bg-white p-3 rounded-lg shadow-sm">No data available</div>}
                     </div>
                   </div>
                   
@@ -1333,12 +1333,12 @@ const EnhancedResults = () => {
                     
                     <h4 className="font-semibold text-amber-800 mb-3">Growth Opportunities:</h4>
                     <div className="space-y-3">
-                      {profile.flags.growth.map((growth, index) => (
+                      {profile.flags?.growth?.map((growth, index) => (
                         <div key={index} className="bg-white p-3 rounded-lg shadow-sm flex items-start">
                           <Sparkles className="h-5 w-5 text-amber-500 mr-2 flex-shrink-0 mt-0.5" />
                           <span>{growth}</span>
                         </div>
-                      ))}
+                      )) || <div className="bg-white p-3 rounded-lg shadow-sm">No growth data available</div>}
                     </div>
                   </div>
                 </div>
@@ -1350,12 +1350,15 @@ const EnhancedResults = () => {
                   </p>
                   
                   <div className="space-y-4 mb-6">
-                    {profile.tips.map((tip, index) => (
+                    {profile.tips?.map((tip, index) => (
                       <div key={index} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-primary">
                         <h4 className="font-semibold text-gray-800 mb-1">Tip #{index + 1}</h4>
                         <p className="text-gray-700">{tip}</p>
                       </div>
-                    ))}
+                    )) || <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-primary">
+                      <h4 className="font-semibold text-gray-800 mb-1">No tips available</h4>
+                      <p className="text-gray-700">Complete your profile to receive personalized tips.</p>
+                    </div>}
                   </div>
                 </div>
                 
@@ -1369,14 +1372,19 @@ const EnhancedResults = () => {
                   </p>
                   
                   <div className="space-y-4">
-                    {profile.wowInsights.map((insight, index) => (
+                    {profile.wowInsights?.map((insight, index) => (
                       <div key={index} className="bg-white p-4 rounded-lg shadow-sm flex">
                         <div className="bg-blue-100 h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
                           <PartyPopper className="h-4 w-4 text-blue-600" />
                         </div>
                         <p className="text-gray-700">{insight}</p>
                       </div>
-                    ))}
+                    )) || <div className="bg-white p-4 rounded-lg shadow-sm flex">
+                      <div className="bg-blue-100 h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-1">
+                        <PartyPopper className="h-4 w-4 text-blue-600" />
+                      </div>
+                      <p className="text-gray-700">Complete your profile to discover fascinating insights about your personality!</p>
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -1431,20 +1439,30 @@ function attachmentDescription(attachment: string): string {
 }
 
 function getBigFiveValue(profile: DetailedReport, trait: keyof DetailedReport['bigFive']): number {
-  return Math.round(profile.bigFive[trait]);
+  if (!profile.bigFive) return 50; // Default value if bigFive is missing
+  return Math.round(profile.bigFive[trait] || 50); // Default to 50 if the trait is missing
 }
 
 function highestBigFiveTrait(profile: DetailedReport): string {
-  const traits = Object.entries(profile.bigFive);
+  if (!profile.bigFive) return 'balanced'; // Default if bigFive is missing
+  
+  const traits = Object.entries(profile.bigFive || {});
+  if (traits.length === 0) return 'balanced'; // Default if no traits
+  
   const highest = traits.reduce((max, current) => 
-    (current[1] > max[1]) ? current : max
+    (current[1] > max[1]) ? current : max, 
+    ['openness', 0] as [string, number] // Default initial value
   );
   
   return traitLabel(highest[0] as keyof DetailedReport['bigFive']);
 }
 
 function secondHighestBigFiveTrait(profile: DetailedReport): string {
-  const traits = Object.entries(profile.bigFive);
+  if (!profile.bigFive) return 'balanced'; // Default if bigFive is missing
+  
+  const traits = Object.entries(profile.bigFive || {});
+  if (traits.length <= 1) return 'balanced'; // Default if 0 or 1 traits
+  
   const sorted = [...traits].sort((a, b) => b[1] - a[1]);
   
   if (sorted.length > 1) {
@@ -1549,34 +1567,43 @@ function getCommunicationPreferences(profile: DetailedReport): string[] {
   // Generate based on personality traits
   const preferences = [];
   
-  if (profile.bigFive.extraversion > 60) {
-    preferences.push("Direct, energetic conversations with plenty of verbal exchange");
-  } else if (profile.bigFive.extraversion < 40) {
-    preferences.push("Thoughtful, measured communication with time to process");
+  // Safely check if bigFive exists and has properties
+  if (profile.bigFive) {
+    if (profile.bigFive.extraversion > 60) {
+      preferences.push("Direct, energetic conversations with plenty of verbal exchange");
+    } else if (profile.bigFive.extraversion < 40) {
+      preferences.push("Thoughtful, measured communication with time to process");
+    }
+    
+    if (profile.bigFive.openness > 60) {
+      preferences.push("Abstract, big-picture discussions that explore possibilities");
+    } else if (profile.bigFive.openness < 40) {
+      preferences.push("Practical, concrete conversations focused on specifics");
+    }
   }
   
-  if (profile.bigFive.openness > 60) {
-    preferences.push("Abstract, big-picture discussions that explore possibilities");
-  } else if (profile.bigFive.openness < 40) {
-    preferences.push("Practical, concrete conversations focused on specifics");
-  }
-  
-  if (profile.eq.empathy > 60) {
+  // Safely check if eq exists and has properties
+  if (profile.eq && typeof profile.eq.empathy === 'number' && profile.eq.empathy > 60) {
     preferences.push("Emotionally sensitive exchanges that acknowledge feelings");
   }
   
-  if (profile.attachment === 'secure') {
-    preferences.push("Straightforward expression of needs and concerns");
-  } else if (profile.attachment === 'anxious') {
-    preferences.push("Regular check-ins and verbal reassurance");
-  } else if (profile.attachment === 'avoidant') {
-    preferences.push("Respectful space to process thoughts before responding");
+  // Check attachment style
+  if (profile.attachment) {
+    if (profile.attachment === 'secure') {
+      preferences.push("Straightforward expression of needs and concerns");
+    } else if (profile.attachment === 'anxious') {
+      preferences.push("Regular check-ins and verbal reassurance");
+    } else if (profile.attachment === 'avoidant') {
+      preferences.push("Respectful space to process thoughts before responding");
+    }
   }
   
   // Add some defaults if we don't have enough
   if (preferences.length < 3) {
     preferences.push("Balanced dialogue with mutual sharing and listening");
     preferences.push("Clear, specific language about expectations");
+    preferences.push("Communicating needs and expectations clearly");
+    preferences.push("Creating space for both partners to share their perspectives");
   }
   
   return preferences.slice(0, 4);
@@ -1586,34 +1613,42 @@ function getCommunicationChallenges(profile: DetailedReport): string[] {
   // Generate based on personality traits
   const challenges = [];
   
-  if (profile.bigFive.extraversion > 70) {
-    challenges.push("May sometimes dominate conversations or interrupt");
-  } else if (profile.bigFive.extraversion < 30) {
-    challenges.push("Might not always express thoughts in group settings");
+  // Safely check if bigFive exists and has properties
+  if (profile.bigFive) {
+    if (profile.bigFive.extraversion > 70) {
+      challenges.push("May sometimes dominate conversations or interrupt");
+    } else if (profile.bigFive.extraversion < 30) {
+      challenges.push("Might not always express thoughts in group settings");
+    }
+    
+    if (profile.bigFive.neuroticism > 60) {
+      challenges.push("Can read too much into ambiguous messages");
+    }
+    
+    if (profile.bigFive.agreeableness > 70) {
+      challenges.push("Might avoid necessary conflict to maintain harmony");
+    } else if (profile.bigFive.agreeableness < 40) {
+      challenges.push("May sometimes come across as too direct or critical");
+    }
   }
   
-  if (profile.bigFive.neuroticism > 60) {
-    challenges.push("Can read too much into ambiguous messages");
-  }
-  
-  if (profile.bigFive.agreeableness > 70) {
-    challenges.push("Might avoid necessary conflict to maintain harmony");
-  } else if (profile.bigFive.agreeableness < 40) {
-    challenges.push("May sometimes come across as too direct or critical");
-  }
-  
-  if (profile.attachment === 'anxious') {
-    challenges.push("Tendency to seek excessive confirmation or clarification");
-  } else if (profile.attachment === 'avoidant') {
-    challenges.push("May withdraw when emotional conversations get intense");
-  } else if (profile.attachment === 'fearful') {
-    challenges.push("Could send mixed signals about your needs and feelings");
+  // Check attachment style
+  if (profile.attachment) {
+    if (profile.attachment === 'anxious') {
+      challenges.push("Tendency to seek excessive confirmation or clarification");
+    } else if (profile.attachment === 'avoidant') {
+      challenges.push("May withdraw when emotional conversations get intense");
+    } else if (profile.attachment === 'fearful') {
+      challenges.push("Could send mixed signals about your needs and feelings");
+    }
   }
   
   // Add some defaults if we don't have enough
   if (challenges.length < 3) {
     challenges.push("Occasional misalignment between words and non-verbal cues");
     challenges.push("Difficulty expressing needs during heightened emotions");
+    challenges.push("Balancing listening and speaking in conversations");
+    challenges.push("Navigating difficult topics with sensitivity");
   }
   
   return challenges.slice(0, 4);
