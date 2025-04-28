@@ -168,14 +168,14 @@ const SectionCard = ({
   className?: string;
 }) => (
   <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6 ${className}`}>
-    <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 border-b border-gray-100 flex items-center">
+    <div className="bg-gradient-to-r from-primary/20 to-primary/10 p-4 border-b border-gray-100 flex items-center">
       <span className="text-2xl mr-2">{emoji}</span>
       <h2 className="text-xl font-bold text-gray-800 flex items-center">
         {title}
         <span className="ml-2 text-primary">{icon}</span>
       </h2>
     </div>
-    <div className="p-5">
+    <div className="p-5 bg-white">
       {children}
     </div>
   </div>
@@ -670,12 +670,23 @@ const EnhancedResults = () => {
     }
   }, [isUserError, toast, navigate]);
   
+  // Define interface for database user
+  interface DbUser {
+    id: string;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    full_name?: string;
+    [key: string]: any; // For any other properties
+  }
+  
   // Get user's first name
   const getFirstName = () => {
-    if (!dbUser) return '';
+    if (!dbUser || !dbUser.user) return '';
     
-    const fullName = dbUser.name || '';
-    return fullName.split(' ')[0];
+    // Use first_name from database or extract from full_name
+    const user = dbUser.user as DbUser;
+    return user.first_name || user.full_name?.split(' ')[0] || '';
   };
   
   // Only show authentication loading if it's still loading

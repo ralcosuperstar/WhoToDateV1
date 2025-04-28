@@ -3,6 +3,14 @@ import jsPDF from "jspdf";
 // Need to import jspdf-autotable in a way that properly extends jsPDF prototype
 import 'jspdf-autotable';
 
+// Extend the jsPDF type to include properties added by autoTable
+interface jsPDFWithAutoTable extends jsPDF {
+  lastAutoTable?: {
+    finalY: number;
+  };
+  autoTable: Function;
+}
+
 /**
  * Generates and downloads a PDF report based on the user's compatibility profile
  * @param profile The detailed compatibility report 
@@ -102,7 +110,7 @@ export const downloadPDFReport = (profile: DetailedReport): void => {
   });
   
   // @ts-ignore - getting the last position after the table
-  yPos = doc.lastAutoTable.finalY + 15;
+  yPos = (doc as any).lastAutoTable?.finalY + 15 || yPos + 40;
   
   // Add compatibility insights section
   doc.setFontSize(16);
@@ -197,6 +205,7 @@ export const downloadPDFReport = (profile: DetailedReport): void => {
   doc.text(wrappedMission, 20, yPos);
   
   // Add footer
+  // @ts-ignore - internal methods for pagination not well typed
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
