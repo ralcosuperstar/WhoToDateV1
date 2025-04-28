@@ -1,6 +1,7 @@
 import { type DetailedReport } from "../logic/profile";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+// Need to import jspdf-autotable in a way that properly extends jsPDF prototype
+import 'jspdf-autotable';
 
 /**
  * Generates and downloads a PDF report based on the user's compatibility profile
