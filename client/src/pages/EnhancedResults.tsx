@@ -770,7 +770,7 @@ const EnhancedResults = () => {
       
       <div className="container mx-auto max-w-4xl px-4">
         {/* Hero section with user greeting and action buttons */}
-        <div className="bg-gradient-to-r from-primary to-pink-600 text-white rounded-xl p-6 md:p-8 shadow-md mb-6 overflow-hidden relative">
+        <div className="bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl p-6 md:p-8 shadow-md mb-6 overflow-hidden relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full translate-x-1/3 -translate-y-1/3"></div>
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
           
