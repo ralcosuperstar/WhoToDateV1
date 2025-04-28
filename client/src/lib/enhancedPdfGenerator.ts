@@ -3,6 +3,9 @@ import jsPDF from "jspdf";
 // Import jspdf-autotable and get the plugin
 import autoTable from 'jspdf-autotable';
 
+// Define valid attachment style types based on the compatibility analysis
+type AttachmentStyle = 'secure' | 'anxious' | 'avoidant' | 'fearful';
+
 // Extend the jsPDF type to include properties added by autoTable
 interface jsPDFWithAutoTable extends jsPDF {
   lastAutoTable?: {
@@ -218,16 +221,36 @@ export const downloadEnhancedPDFReport = (profile: DetailedReport): void => {
   doc.text("Relationship Strengths:", 25, yPos);
   yPos += 7;
   
-  const attachmentStrengths = [
-    profile.attachment === 'secure' ? 'Building trust and security' : null,
-    profile.attachment === 'secure' ? 'Healthy communication patterns' : null,
-    profile.attachment === 'anxious' ? 'Deep emotional investment' : null,
-    profile.attachment === 'anxious' ? 'Strong loyalty and commitment' : null,
-    profile.attachment === 'avoidant' ? 'Respecting independence' : null,
-    profile.attachment === 'avoidant' ? 'Self-reliance and stability' : null,
-    profile.attachment === 'fearful-avoidant' ? 'Emotional depth and awareness' : null,
-    profile.attachment === 'fearful-avoidant' ? 'Understanding of complex emotions' : null,
-  ].filter(Boolean);
+  // Create strengths based on attachment style in type-safe way
+  let strengths: string[] = [];
+  
+  if (profile.attachment === 'secure') {
+    strengths = [
+      'Building trust and security',
+      'Healthy communication patterns',
+      'Creating balanced relationships'
+    ];
+  } else if (profile.attachment === 'anxious') {
+    strengths = [
+      'Deep emotional investment',
+      'Strong loyalty and commitment',
+      'Attentiveness to partner needs'
+    ];
+  } else if (profile.attachment === 'avoidant') {
+    strengths = [
+      'Respecting independence',
+      'Self-reliance and stability',
+      'Valuing personal space'
+    ];
+  } else {
+    strengths = [
+      'Emotional depth and awareness',
+      'Understanding complex emotions',
+      'Adaptability in relationships'
+    ];
+  }
+  
+  const attachmentStrengths = strengths;
   
   attachmentStrengths.slice(0, 3).forEach(strength => {
     if (strength) {
@@ -244,15 +267,36 @@ export const downloadEnhancedPDFReport = (profile: DetailedReport): void => {
   doc.text("Growth Opportunities:", 25, yPos);
   yPos += 7;
   
-  const attachmentChallenges = [
-    profile.attachment === 'secure' ? 'Understanding partners with different attachment styles' : null,
-    profile.attachment === 'anxious' ? 'Managing fear of abandonment' : null,
-    profile.attachment === 'anxious' ? 'Building healthy independence' : null,
-    profile.attachment === 'avoidant' ? 'Opening up emotionally' : null,
-    profile.attachment === 'avoidant' ? 'Allowing healthy dependency' : null,
-    profile.attachment === 'fearful-avoidant' ? 'Resolving conflicting needs for closeness and distance' : null,
-    profile.attachment === 'fearful-avoidant' ? 'Building consistent relationship patterns' : null,
-  ].filter(Boolean);
+  // Create challenges based on attachment style in type-safe way
+  let challenges: string[] = [];
+  
+  if (profile.attachment === 'secure') {
+    challenges = [
+      'Understanding partners with different attachment styles',
+      'Supporting partners through their insecurities',
+      'Maintaining patience with complex relationship dynamics'
+    ];
+  } else if (profile.attachment === 'anxious') {
+    challenges = [
+      'Managing fear of abandonment',
+      'Building healthy independence',
+      'Reducing overthinking in relationships'
+    ];
+  } else if (profile.attachment === 'avoidant') {
+    challenges = [
+      'Opening up emotionally',
+      'Allowing healthy dependency',
+      'Communicating needs clearly'
+    ];
+  } else {
+    challenges = [
+      'Resolving conflicting needs for closeness and distance',
+      'Building consistent relationship patterns',
+      'Developing trust and security'
+    ];
+  }
+  
+  const attachmentChallenges = challenges;
   
   attachmentChallenges.slice(0, 3).forEach(challenge => {
     if (challenge) {
