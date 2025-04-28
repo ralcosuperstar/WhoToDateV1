@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useFixedSupabase } from "../contexts/FixedSupabaseContext";
 import directSupabaseService from "../services/directSupabaseService";
 import jsPDF from "jspdf";
-import { downloadPDFReport } from "../lib/pdfGenerator";
+import { downloadEnhancedPDFReport } from "../lib/enhancedPdfGenerator";
 import { 
   Download, 
   CheckCircle2, 
@@ -794,7 +794,7 @@ const EnhancedResults = () => {
             </Link>
             
             <button
-              onClick={() => downloadPDFReport(profile)}
+              onClick={() => downloadEnhancedPDFReport(profile)}
               className="bg-white/20 backdrop-blur-sm text-white font-medium py-2 px-4 rounded-lg flex items-center hover:bg-white/30 transition-colors"
             >
               <Download className="h-5 w-5 mr-1" />
