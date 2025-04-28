@@ -17,6 +17,7 @@ import Home from "@/pages/Home";
 import FixedQuiz from "@/pages/FixedQuiz"; // Fixed version of the quiz component
 import DirectReport from "@/pages/DirectReport"; // New simplified direct report page
 import FixedResults from "@/pages/FixedResults"; // Fixed results page with improved error handling
+import EnhancedResults from "@/pages/EnhancedResults"; // New redesigned results page with better UX
 import Analytics from "@/pages/Analytics";
 import EnhancedDashboardPage from "@/pages/EnhancedDashboardPage"; // New Enhanced Dashboard with better UI/UX
 import Blog from "@/pages/Blog";
@@ -75,7 +76,8 @@ function Router() {
         
         {/* Core App Routes */}
         <Route path="/quiz" component={FixedQuiz} />
-        <Route path="/results" component={FixedResults} />
+        <Route path="/results" component={EnhancedResults} />
+        <Route path="/results-old" component={FixedResults} />
         <Route path="/report" component={DirectReport} />
         <Route path="/howtodate" component={HowToDatePage} />
         <ProtectedRoute path="/analytics" component={Analytics} />

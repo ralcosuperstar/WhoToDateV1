@@ -1,323 +1,214 @@
-import { DetailedReport } from "../logic/profile";
-import { jsPDF } from "jspdf";
-import autoTable from 'jspdf-autotable';
-
-// Add the autotable type to jsPDF
-declare module "jspdf" {
-  interface jsPDF {
-    autoTable: (options: any) => jsPDF;
-    lastAutoTable?: {
-      finalY: number;
-    };
-  }
-}
+import { type DetailedReport } from "../logic/profile";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 /**
- * Generates a PDF report based on the DetailedReport type
- * 
- * This function serves as an adapter for the legacy code,
- * allowing it to use the new DetailedReport format without
- * having to change all the calling code at once.
+ * Generates and downloads a PDF report based on the user's compatibility profile
+ * @param profile The detailed compatibility report 
  */
-export const generatePDFReport = (profile: DetailedReport): jsPDF => {
-  // Simply pass through to the detailed report generator
-  return generateDetailedPDFReport(profile);
-};
-
-/**
- * Generates a PDF report from the new DetailedReport type
- */
-export const generateDetailedPDFReport = (report: DetailedReport): jsPDF => {
+export const downloadPDFReport = (profile: DetailedReport): void => {
   // Create a new PDF document
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const margin = 20;
-  const contentWidth = pageWidth - (margin * 2);
   
-  // Add a header
-  doc.setFillColor(345, 85, 55); // primary color in HSL
-  doc.rect(0, 0, pageWidth, 40, "F");
-  doc.setTextColor(255, 255, 255);
-  doc.setFont("helvetica", "bold");
+  // Add header with title and date
   doc.setFontSize(22);
-  doc.text("WhoToDate Compatibility Report", margin, 25);
+  doc.setTextColor(232, 58, 142); // #e83a8e - primary pink color
+  doc.text("WhoToDate Compatibility Report", pageWidth / 2, 20, { align: "center" });
   
-  // Add a subtitle
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text("Your personalized compatibility profile", margin, 35);
-  
-  // Add date
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('en-IN', { 
-    day: 'numeric', 
-    month: 'long', 
-    year: 'numeric'
-  });
-  doc.text(`Generated on: ${dateStr}`, pageWidth - margin - 60, 35, { align: "right" });
-  
-  // Add summary section
-  doc.setTextColor(0, 0, 0);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text("Profile Summary", margin, 60);
-  
-  // Add overall compatibility
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Overall Compatibility: ${report.overall.toUpperCase()}`, margin, 70);
-  
-  // Add description
-  doc.setFontSize(12);
-  doc.text(report.snapshot, margin, 80, { 
-    maxWidth: contentWidth,
-    align: "left"
-  });
-  
-  // Get current y position
-  let yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 100;
-  
-  // Add Archetype and Attachment Style
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Key Profile Metrics", margin, yPos);
-  
-  yPos += 10;
-
-  // Add primary archetype
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Your Primary Archetype: ${report.primaryArchetype}`, margin, yPos);
-  
-  yPos += 10;
-  
-  // Add attachment style
-  doc.text(`Attachment Style: ${report.attachment}`, margin, yPos);
-  
-  yPos += 10;
-  
-  // Add MBTI type
-  doc.text(`MBTI Type: ${report.mbti}`, margin, yPos);
-  
-  yPos += 20;
-  
-  // Add Personality Traits Section
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Personality Traits", margin, yPos);
-  
-  yPos += 10;
-  
-  // Create personality traits table
-  const personalityTraits = Object.entries(report.bigFive).map(([trait, score]) => {
-    return [trait.charAt(0).toUpperCase() + trait.slice(1), `${score}%`];
-  });
-  
-  autoTable(doc, {
-    startY: yPos,
-    head: [["Trait", "Score"]],
-    body: personalityTraits,
-    margin: { left: margin, right: margin },
-    headStyles: { fillColor: [345, 85, 55] }
-  });
-  
-  yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : yPos + 60;
-  
-  // Add Strengths & Challenges Section
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Strengths & Challenges", margin, yPos);
-  
-  yPos += 10;
-  
-  // Add Strengths & Challenges tables
-  const strengthsData = report.flags.positives.map(strength => [strength]);
-  const cautionsData = report.flags.cautions.map(caution => [caution]);
-  const growthData = report.flags.growth.map(growth => [growth]);
-  
-  // Strengths table
-  autoTable(doc, {
-    startY: yPos,
-    head: [["Your Relationship Strengths"]],
-    body: strengthsData,
-    margin: { left: margin, right: margin },
-    headStyles: { fillColor: [120, 80, 60] } // Green color
-  });
-  
-  yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : yPos + 60;
-  
-  // Cautions table
-  autoTable(doc, {
-    startY: yPos,
-    head: [["Caution Areas"]],
-    body: cautionsData,
-    margin: { left: margin, right: margin },
-    headStyles: { fillColor: [40, 80, 60] } // Yellow color
-  });
-  
-  yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : yPos + 60;
-  
-  // Growth table
-  autoTable(doc, {
-    startY: yPos,
-    head: [["Growth Areas"]],
-    body: growthData,
-    margin: { left: margin, right: margin },
-    headStyles: { fillColor: [345, 85, 55] } // Primary color
-  });
-  
-  // Add a new page for premium insights
-  doc.addPage();
-  
-  // Add a header
-  doc.setFillColor(345, 85, 55); // primary color in HSL
-  doc.rect(0, 0, pageWidth, 40, "F");
-  doc.setTextColor(255, 255, 255);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(22);
-  doc.text("Comprehensive Compatibility Insights", margin, 25);
-  
-  yPos = 60;
-  
-  // Add growth recommendation
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("What You Should Work On", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(report.growthPlan, margin, yPos, { 
-    maxWidth: contentWidth,
-    align: "left"
-  });
-  
-  yPos += 30;
-  
-  // Add ideal partner
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Your Ideal Match", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(report.partnerSummary, margin, yPos, { 
-    maxWidth: contentWidth,
-    align: "left"
-  });
-  
-  yPos += 30;
-  
-  // Add dating mission
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Try This In Real Life", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(report.datingMission, margin, yPos, { 
-    maxWidth: contentWidth,
-    align: "left"
-  });
-  
-  yPos += 30;
-  
-  // Add compatibility types
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Compatible Types", margin, yPos);
-  
-  yPos += 10;
-  
-  // Most compatible types
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Most Compatible With:", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFont("helvetica", "normal");
-  report.matches.idealPartners.forEach((type, index) => {
-    doc.text(`• ${type}`, margin + 5, yPos + (index * 7));
-  });
-  
-  yPos += 10 + (report.matches.idealPartners.length * 7);
-  
-  // Challenging matches
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Challenging Matches:", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFont("helvetica", "normal");
-  report.matches.trickyPartners.forEach((type, index) => {
-    doc.text(`• ${type}`, margin + 5, yPos + (index * 7));
-  });
-  
-  yPos += 10 + (report.matches.trickyPartners.length * 7);
-  
-  // Compatibility rationale
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Why:", margin, yPos);
-  
-  yPos += 10;
-  
-  doc.setFont("helvetica", "normal");
-  doc.text(report.matches.why, margin, yPos, { 
-    maxWidth: contentWidth,
-    align: "left"
-  });
-  
-  // Add footer with contact info
-  const footerText = "WhoToDate.com | Scientifically Matching Indian Singles | contact@whotodate.com";
+  // Add generation date
   doc.setFontSize(10);
   doc.setTextColor(100, 100, 100);
-  doc.text(footerText, pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: "center" });
-  
-  return doc;
-};
+  const today = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+  doc.text(`Generated on ${today}`, pageWidth / 2, 28, { align: "center" });
 
-/**
- * Generates and downloads a PDF report from the compatibility profile
- */
-export const downloadPDFReport = (profile: DetailedReport) => {
-  const doc = generatePDFReport(profile);
+  // Add section divider
+  doc.setDrawColor(232, 58, 142);
+  doc.setLineWidth(0.5);
+  doc.line(20, 32, pageWidth - 20, 32);
   
-  // Generate a filename
-  const filename = `WhoToDate_Compatibility_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+  // Add compatibility overview section
+  doc.setFontSize(16);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Compatibility Overview", 20, 42);
+  
+  // Add compatibility badge info
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  const compatibilityText = profile.overall === 'green' 
+    ? 'High Compatibility'
+    : profile.overall === 'yellow'
+      ? 'Balanced Compatibility'
+      : 'Complex Compatibility';
+  doc.text(compatibilityText, 20, 52);
+  
+  // Add snapshot description
+  doc.setFontSize(11);
+  doc.setTextColor(80, 80, 80);
+  const wrappedSnapshot = doc.splitTextToSize(profile.snapshot, pageWidth - 40);
+  doc.text(wrappedSnapshot, 20, 60);
+  
+  // Add key personality info
+  let yPos = 75;
+
+  // Add personality type
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Your Personality Profile", 20, yPos);
+  yPos += 10;
+  
+  doc.setFontSize(12);
+  doc.setTextColor(232, 58, 142);
+  doc.text(`Primary Archetype: ${profile.primaryArchetype}`, 25, yPos);
+  yPos += 7;
+  
+  doc.setTextColor(50, 50, 50);
+  doc.text(`Attachment Style: ${profile.attachment}`, 25, yPos);
+  yPos += 7;
+  
+  doc.text(`MBTI Type: ${profile.mbti}`, 25, yPos);
+  yPos += 15;
+  
+  // Big Five Traits Table
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Your Big Five Personality Traits", 20, yPos);
+  yPos += 10;
+  
+  const bigFiveData = [
+    ["Trait", "Score"],
+    ["Openness", `${Math.round(profile.bigFive.openness)}%`],
+    ["Conscientiousness", `${Math.round(profile.bigFive.conscientiousness)}%`],
+    ["Extraversion", `${Math.round(profile.bigFive.extraversion)}%`],
+    ["Agreeableness", `${Math.round(profile.bigFive.agreeableness)}%`],
+    ["Emotional Stability", `${100 - Math.round(profile.bigFive.neuroticism)}%`]
+  ];
+  
+  // @ts-ignore - jspdf-autotable types are not correctly recognized
+  doc.autoTable({
+    startY: yPos,
+    head: [bigFiveData[0]],
+    body: bigFiveData.slice(1),
+    theme: 'striped',
+    headStyles: { fillColor: [232, 58, 142], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 },
+    styles: { overflow: 'linebreak' },
+    columnStyles: { 0: { fontStyle: 'bold' } }
+  });
+  
+  // @ts-ignore - getting the last position after the table
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Add compatibility insights section
+  doc.setFontSize(16);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Relationship Insights", 20, yPos);
+  yPos += 10;
+  
+  // Strengths and Challenges
+  doc.setFontSize(12);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Your Relationship Strengths:", 20, yPos);
+  yPos += 7;
+  
+  profile.flags.positives.forEach((strength, index) => {
+    doc.setFontSize(10);
+    doc.text(`• ${strength}`, 25, yPos);
+    yPos += 6;
+  });
+  
+  yPos += 5;
+  doc.setFontSize(12);
+  doc.text("Areas for Growth:", 20, yPos);
+  yPos += 7;
+  
+  profile.flags.growth.forEach((growth, index) => {
+    doc.setFontSize(10);
+    doc.text(`• ${growth}`, 25, yPos);
+    yPos += 6;
+  });
+  
+  // Check if we need a new page for the partner compatibility
+  if (yPos > 250) {
+    doc.addPage();
+    yPos = 20;
+  } else {
+    yPos += 10;
+  }
+  
+  // Add partner compatibility section
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Your Ideal Partner", 20, yPos);
+  yPos += 8;
+  
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  const wrappedPartnerSummary = doc.splitTextToSize(profile.partnerSummary, pageWidth - 40);
+  doc.text(wrappedPartnerSummary, 20, yPos);
+  yPos += wrappedPartnerSummary.length * 6 + 5;
+  
+  // Ideal Partners
+  doc.setFontSize(11);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Ideal Qualities in a Partner:", 20, yPos);
+  yPos += 7;
+  
+  profile.matches.idealPartners.forEach((quality, index) => {
+    doc.setFontSize(10);
+    doc.text(`• ${quality}`, 25, yPos);
+    yPos += 6;
+  });
+  
+  // Check if we need a new page for the final section
+  if (yPos > 240) {
+    doc.addPage();
+    yPos = 20;
+  } else {
+    yPos += 10;
+  }
+  
+  // Add growth plan
+  doc.setFontSize(14);
+  doc.setTextColor(50, 50, 50);
+  doc.text("Your Personal Growth Plan", 20, yPos);
+  yPos += 8;
+  
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  const wrappedGrowthPlan = doc.splitTextToSize(profile.growthPlan, pageWidth - 40);
+  doc.text(wrappedGrowthPlan, 20, yPos);
+  yPos += wrappedGrowthPlan.length * 6 + 7;
+  
+  // Dating Mission
+  doc.setFontSize(12);
+  doc.setTextColor(232, 58, 142);
+  doc.text("Your Dating Mission:", 20, yPos);
+  yPos += 7;
+  
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  const wrappedMission = doc.splitTextToSize(profile.datingMission, pageWidth - 40);
+  doc.text(wrappedMission, 20, yPos);
+  
+  // Add footer
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(
+      `WhoToDate - Powered by Relationship Science - Page ${i} of ${pageCount}`,
+      pageWidth / 2,
+      doc.internal.pageSize.getHeight() - 10,
+      { align: "center" }
+    );
+  }
   
   // Save the PDF
-  doc.save(filename);
-};
-
-/**
- * Generates and downloads a PDF from the new DetailedReport type
- */
-export const downloadDetailedPDFReport = (report: DetailedReport) => {
-  const doc = generateDetailedPDFReport(report);
-  
-  // Generate a filename
-  const filename = `WhoToDate_Detailed_Report_${new Date().toISOString().split('T')[0]}.pdf`;
-  
-  // Save the PDF
-  doc.save(filename);
-};
-
-/**
- * Combined approach - downloads a PDF for the DetailedReport
- * 
- * This simplified function exists for backward compatibility with code that
- * might have been using the earlier dual-format approach.
- */
-export const downloadCombinedPDFReport = (report: DetailedReport) => {
-  // Now we always use the DetailedReport format
-  downloadDetailedPDFReport(report);
+  doc.save("WhoToDate-Compatibility-Report.pdf");
 };
