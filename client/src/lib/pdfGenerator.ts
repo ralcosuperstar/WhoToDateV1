@@ -1,14 +1,14 @@
 import { type DetailedReport } from "../logic/profile";
 import jsPDF from "jspdf";
-// Need to import jspdf-autotable in a way that properly extends jsPDF prototype
-import 'jspdf-autotable';
+// Import jspdf-autotable and get the plugin
+import autoTable from 'jspdf-autotable';
 
 // Extend the jsPDF type to include properties added by autoTable
 interface jsPDFWithAutoTable extends jsPDF {
   lastAutoTable?: {
     finalY: number;
   };
-  autoTable: Function;
+  autoTable: typeof autoTable;
 }
 
 /**
@@ -97,8 +97,8 @@ export const downloadPDFReport = (profile: DetailedReport): void => {
     ["Emotional Stability", `${100 - Math.round(profile.bigFive.neuroticism)}%`]
   ];
   
-  // @ts-ignore - jspdf-autotable types are not correctly recognized
-  doc.autoTable({
+  // Use the imported autoTable function with our document
+  autoTable(doc, {
     startY: yPos,
     head: [bigFiveData[0]],
     body: bigFiveData.slice(1),
@@ -109,8 +109,16 @@ export const downloadPDFReport = (profile: DetailedReport): void => {
     columnStyles: { 0: { fontStyle: 'bold' } }
   });
   
-  // @ts-ignore - getting the last position after the table
-  yPos = (doc as any).lastAutoTable?.finalY + 15 || yPos + 40;
+  // Get the final Y position after the table
+  try {
+    const docWithTable = doc as jsPDFWithAutoTable;
+    // Access as any to avoid TypeScript errors
+    const finalY = (docWithTable.lastAutoTable as any)?.finalY;
+    yPos = finalY ? finalY + 15 : yPos + 40;
+  } catch (e) {
+    // If there's any error accessing the property, just move the position down
+    yPos += 40;
+  }
   
   // Add compatibility insights section
   doc.setFontSize(16);
@@ -205,18 +213,25 @@ export const downloadPDFReport = (profile: DetailedReport): void => {
   doc.text(wrappedMission, 20, yPos);
   
   // Add footer
-  // @ts-ignore - internal methods for pagination not well typed
-  const pageCount = doc.internal.getNumberOfPages();
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text(
-      `WhoToDate - Powered by Relationship Science - Page ${i} of ${pageCount}`,
-      pageWidth / 2,
-      doc.internal.pageSize.getHeight() - 10,
-      { align: "center" }
-    );
+  // Using internal methods for pagination - access the pages array length
+  try {
+    // Cast to any to access internal properties safely
+    const internal = (doc as any).internal;
+    const pageCount = internal.pages ? internal.pages.length - 1 : 1;
+    
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(
+        `WhoToDate - Powered by Relationship Science - Page ${i} of ${pageCount}`,
+        pageWidth / 2,
+        doc.internal.pageSize.getHeight() - 10,
+        { align: "center" }
+      );
+    }
+  } catch (error) {
+    console.error('Error adding footers to PDF:', error);
   }
   
   // Save the PDF
