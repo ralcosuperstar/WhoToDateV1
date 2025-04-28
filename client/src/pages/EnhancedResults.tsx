@@ -764,49 +764,67 @@ const EnhancedResults = () => {
                 display: none !important;
               }
             }
+            
+            .gradient-text {
+              background: linear-gradient(to right, #ffffff 20%, #ffe1f0 80%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              color: transparent;
+              display: inline;
+              text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            }
           `}
         </style>
       </Helmet>
       
       <div className="container mx-auto max-w-4xl px-4">
-        {/* Hero section with user greeting and action buttons */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl p-6 md:p-8 shadow-md mb-6 overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full translate-x-1/3 -translate-y-1/3"></div>
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-10 rounded-full -translate-x-1/3 translate-y-1/3"></div>
+        {/* Hero section with user greeting and action buttons - redesigned with vibrant colors */}
+        <div className="bg-gradient-to-br from-violet-600 via-fuchsia-500 to-pink-500 text-white rounded-xl p-6 md:p-10 shadow-xl mb-8 overflow-hidden relative">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full translate-x-1/4 -translate-y-1/4 animate-pulse"></div>
+          <div className="absolute -bottom-10 -left-10 w-60 h-60 bg-white opacity-10 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 right-1/4 w-20 h-20 bg-yellow-300 opacity-20 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
           
-          <div className="relative mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 flex flex-wrap items-center">
-              <span className="mr-2">🎉</span>
-              {getFirstName() ? `${getFirstName()}, Your` : 'Your'} Results Are Ready!
+          {/* Sparkling stars */}
+          <div className="absolute top-1/4 right-1/3 text-2xl animate-bounce" style={{ animationDuration: '2s' }}>✨</div>
+          <div className="absolute bottom-1/4 left-1/3 text-2xl animate-bounce" style={{ animationDuration: '3s', animationDelay: '0.5s' }}>✨</div>
+          
+          <div className="relative mb-8 z-10">
+            <div className="inline-block bg-pink-700/30 px-4 py-1 rounded-full text-sm font-semibold mb-3 backdrop-blur-sm">
+              COMPATIBILITY REPORT COMPLETE
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 flex flex-wrap items-center">
+              <span className="mr-3 text-yellow-300">🎯</span>
+              <span className="gradient-text">{getFirstName() ? `${getFirstName()}, Your` : 'Your'} Results Are Ready!</span>
             </h1>
-            <p className="text-lg opacity-90 max-w-3xl">
-              We've analyzed your answers and created this personalized compatibility profile just for you. Let's explore what makes you unique in relationships!
+            <p className="text-lg opacity-95 max-w-3xl leading-relaxed">
+              <span className="font-semibold">Congratulations!</span> We've analyzed your answers and created this <span className="underline decoration-pink-300 decoration-wavy underline-offset-2">personalized compatibility profile</span> just for you. Discover your unique relationship patterns and find your perfect match!
             </p>
           </div>
           
-          <div className="flex flex-wrap gap-4 mt-4">
+          <div className="flex flex-wrap gap-4 mt-6 z-10 relative">
             <Link 
               href="/dashboard" 
-              className="bg-white text-primary font-medium py-2 px-4 rounded-lg flex items-center hover:bg-opacity-90 transition-colors"
+              className="bg-white text-fuchsia-600 font-medium py-3 px-5 rounded-lg flex items-center hover:bg-fuchsia-50 transition-colors shadow-md"
             >
-              <ChevronsLeft className="h-5 w-5 mr-1" />
+              <ChevronsLeft className="h-5 w-5 mr-2" />
               Back to Dashboard
             </Link>
             
             <button
               onClick={() => downloadEnhancedPDFReport(profile)}
-              className="bg-white/20 backdrop-blur-sm text-white font-medium py-2 px-4 rounded-lg flex items-center hover:bg-white/30 transition-colors"
+              className="bg-fuchsia-800 shadow-md text-white font-medium py-3 px-5 rounded-lg flex items-center hover:bg-fuchsia-700 transition-colors"
             >
-              <Download className="h-5 w-5 mr-1" />
-              Download PDF
+              <Download className="h-5 w-5 mr-2" />
+              Download PDF Report
             </button>
             
             <button
               onClick={handlePrint}
-              className="bg-white/20 backdrop-blur-sm text-white font-medium py-2 px-4 rounded-lg flex items-center hover:bg-white/30 transition-colors"
+              className="bg-transparent border-2 border-white/70 backdrop-blur-sm text-white font-medium py-3 px-5 rounded-lg flex items-center hover:bg-white/10 transition-colors"
             >
-              <Printer className="h-5 w-5 mr-1" />
-              Print
+              <Printer className="h-5 w-5 mr-2" />
+              Print Report
             </button>
           </div>
         </div>
