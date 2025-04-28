@@ -28,6 +28,7 @@ import {
   BookOpen,
   Book,
   ChevronDown,
+  Check,
   ChevronUp,
   HomeIcon,
   Printer,
@@ -196,64 +197,132 @@ const TabNav = ({
   
   const activeTabData = tabs.find(tab => tab.id === activeTab);
   
-  // For desktop - regular tabs
+  // For desktop - regular tabs with gradient and glass effect
   const desktopTabs = (
-    <div className="hidden md:flex space-x-1 bg-white p-1 rounded-lg shadow-sm">
-      {tabs.map(tab => (
-        <button
-          key={tab.id}
-          onClick={() => setActiveTab(tab.id)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center ${
-            activeTab === tab.id 
-              ? "bg-primary text-white shadow-sm" 
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          <span className="mr-1.5">{tab.emoji}</span>
-          {tab.label}
-          {tab.icon && <span className="ml-1.5">{tab.icon}</span>}
-        </button>
-      ))}
+    <div className="hidden md:flex space-x-3 justify-center">
+      {tabs.map(tab => {
+        // Define different gradient colors for each tab
+        const gradientColors = {
+          overview: "from-violet-600 to-fuchsia-600",
+          personality: "from-blue-600 to-indigo-600",
+          compatibility: "from-pink-600 to-rose-600",
+          growth: "from-amber-600 to-orange-600"
+        };
+        
+        const selectedGradient = gradientColors[tab.id as keyof typeof gradientColors] || "from-violet-600 to-fuchsia-600";
+
+        return (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`
+              relative px-5 py-3 rounded-lg text-sm font-medium transition-all flex items-center group
+              ${activeTab === tab.id 
+                ? `text-white bg-gradient-to-r ${selectedGradient} shadow-md` 
+                : "text-gray-700 bg-white/80 hover:bg-white hover:shadow-sm"
+              }
+            `}
+          >
+            {/* Subtle glow effect for active tab */}
+            {activeTab === tab.id && (
+              <div className="absolute inset-0 rounded-lg blur-sm -z-10 opacity-40 animate-pulse bg-gradient-to-r from-violet-600 to-fuchsia-600"
+                style={{ 
+                  animationDuration: "3s"
+                }}
+              ></div>
+            )}
+            
+            <div className="flex items-center z-10">
+              <span className={`mr-2 text-lg transition-transform ${activeTab === tab.id ? 'scale-125' : 'group-hover:scale-110'}`}>
+                {tab.emoji}
+              </span>
+              <span className={`transition-all ${activeTab === tab.id ? 'font-semibold' : ''}`}>
+                {tab.label}
+              </span>
+              {tab.icon && (
+                <span className={`ml-2 transition-opacity ${activeTab === tab.id ? 'opacity-100' : 'opacity-70'}`}>
+                  {tab.icon}
+                </span>
+              )}
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
   
-  // For mobile - dropdown
+  // For mobile - dropdown with enhanced design
   const mobileDropdown = (
     <div className="md:hidden relative">
+      {/* Gradient picker button for mobile */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-3 bg-white rounded-lg shadow-sm border border-gray-200"
+        className={`
+          w-full flex items-center justify-between p-4 rounded-lg 
+          ${!isOpen 
+            ? "bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white shadow-md" 
+            : "bg-white border border-gray-200 text-gray-800"
+          }
+          transition-all duration-300
+        `}
       >
         <div className="flex items-center">
-          <span className="mr-2">{activeTabData?.emoji}</span>
-          <span className="font-medium">{activeTabData?.label}</span>
+          <span className="mr-3 text-lg">{activeTabData?.emoji}</span>
+          <span className="font-medium text-base">{activeTabData?.label}</span>
         </div>
-        {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        
+        <div className={`transition-all duration-300 ${isOpen ? "rotate-180" : ""}`}>
+          <ChevronDown size={20} className={isOpen ? "text-gray-600" : "text-white"} />
+        </div>
       </button>
       
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden"
+            initial={{ opacity: 0, y: -5, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -5, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-10 mt-2 w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 overflow-hidden"
           >
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  setIsOpen(false);
-                }}
-                className={`w-full p-3 text-left flex items-center ${
-                  activeTab === tab.id ? "bg-primary/10" : "hover:bg-gray-50"
-                }`}
-              >
-                <span className="mr-2">{tab.emoji}</span>
-                {tab.label}
-              </button>
-            ))}
+            {tabs.map(tab => {
+              // Define different colors for each tab
+              const tabColors = {
+                overview: "text-violet-600 border-violet-200 bg-violet-50",
+                personality: "text-indigo-600 border-indigo-200 bg-indigo-50",
+                compatibility: "text-pink-600 border-pink-200 bg-pink-50",
+                growth: "text-amber-600 border-amber-200 bg-amber-50"
+              };
+              
+              const activeColors = tabColors[tab.id as keyof typeof tabColors] || "text-violet-600";
+              
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setIsOpen(false);
+                  }}
+                  className={`
+                    w-full p-4 text-left flex items-center transition-all
+                    ${activeTab === tab.id 
+                      ? `${activeColors} font-medium`
+                      : "text-gray-700 hover:bg-gray-50"
+                    }
+                    ${tab.id !== tabs[tabs.length - 1].id ? "border-b border-gray-100" : ""}
+                  `}
+                >
+                  <span className="mr-3 text-xl">{tab.emoji}</span>
+                  <span>{tab.label}</span>
+                  
+                  {activeTab === tab.id && (
+                    <span className="ml-auto">
+                      <Check size={18} className="text-green-500" />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>
@@ -261,10 +330,19 @@ const TabNav = ({
   );
   
   return (
-    <div className="sticky top-[76px] bg-gray-50 z-30 py-3 px-4 border-b border-gray-200 mb-6">
-      <div className="max-w-4xl mx-auto">
-        {desktopTabs}
-        {mobileDropdown}
+    <div className="sticky top-[76px] z-30 mb-6 bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 backdrop-blur-sm">
+      <div className="max-w-4xl mx-auto relative">
+        {/* Decorative elements */}
+        <div className="absolute -left-4 top-1/2 w-8 h-8 rounded-full bg-violet-500/10 animate-pulse"></div>
+        <div className="absolute -right-4 top-1/2 w-8 h-8 rounded-full bg-pink-500/10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        
+        <div className="py-4 px-4 border-b border-gray-200/50">
+          {desktopTabs}
+          {mobileDropdown}
+        </div>
+        
+        {/* Gradient line below tabs */}
+        <div className="h-1 w-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500"></div>
       </div>
     </div>
   );
