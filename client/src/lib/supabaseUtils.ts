@@ -14,10 +14,22 @@ export async function ensureUserExists(authUser: User): Promise<void> {
   try {
     const supabase = await getSupabaseClient();
     
+    // First check if we have stored signup data in localStorage
+    let storedUserData: any = null;
+    try {
+      const savedData = localStorage.getItem('pendingSignupData');
+      if (savedData) {
+        storedUserData = JSON.parse(savedData);
+        console.log('Found stored signup data:', storedUserData);
+      }
+    } catch (e) {
+      console.error('Error retrieving saved signup data:', e);
+    }
+    
     // Check if user already exists
     const { data: existingUser, error: checkError } = await supabase
       .from('users')
-      .select('id, email')
+      .select('id, email, first_name, last_name, phone_number')
       .eq('id', authUser.id)
       .single();
       
@@ -26,36 +38,71 @@ export async function ensureUserExists(authUser: User): Promise<void> {
       return;
     }
     
+    // Extract user metadata (if any)
+    const metadata = authUser.user_metadata || {};
+    
+    // If user exists but is missing profile data
+    if (existingUser) {
+      console.log('User already exists in database:', existingUser.email);
+      
+      // Check if profile data is missing and we have stored data to update with
+      if (storedUserData && (!existingUser.first_name || !existingUser.last_name || !existingUser.phone_number)) {
+        console.log('Updating existing user with stored signup data');
+        
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({
+            first_name: storedUserData.first_name,
+            last_name: storedUserData.last_name,
+            phone_number: storedUserData.phone,
+            full_name: `${storedUserData.first_name} ${storedUserData.last_name}`.trim(),
+            is_verified: authUser.email_confirmed_at ? true : false,
+          })
+          .eq('id', authUser.id);
+          
+        if (updateError) {
+          console.error('Error updating user with stored data:', updateError);
+        } else {
+          console.log('Successfully updated user with stored signup data');
+          // Clear the stored data
+          localStorage.removeItem('pendingSignupData');
+        }
+      }
+    }
     // If user doesn't exist, create them
-    if (!existingUser) {
+    else {
       console.log('User not found in database, creating:', authUser.email);
       
-      // Extract user metadata (if any)
-      const metadata = authUser.user_metadata || {};
+      // Prioritize stored data, fallback to metadata
+      const userData = {
+        id: authUser.id,
+        email: authUser.email,
+        username: metadata.username || authUser.email.split('@')[0],
+        first_name: storedUserData?.first_name || metadata.first_name || '',
+        last_name: storedUserData?.last_name || metadata.last_name || '',
+        phone_number: storedUserData?.phone || metadata.phone || '',
+        full_name: '',
+        is_verified: authUser.email_confirmed_at ? true : false,
+        created_at: new Date().toISOString(),
+      };
+      
+      // Set the full name if we have first and last name
+      if (userData.first_name && userData.last_name) {
+        userData.full_name = `${userData.first_name} ${userData.last_name}`;
+      }
       
       // Create a new user record
       const { error: insertError } = await supabase
         .from('users')
-        .insert({
-          id: authUser.id,
-          email: authUser.email,
-          username: metadata.username || authUser.email.split('@')[0],
-          first_name: metadata.first_name || '',
-          last_name: metadata.last_name || '',
-          phone_number: metadata.phone || '',
-          full_name: metadata.first_name && metadata.last_name ? `${metadata.first_name} ${metadata.last_name}` : '',
-          is_verified: authUser.email_confirmed_at ? true : false,
-          created_at: new Date().toISOString(),
-          // Note: updated_at column doesn't exist in the database schema
-        });
+        .insert(userData);
         
       if (insertError) {
         console.error('Error creating user:', insertError);
       } else {
         console.log('Successfully created user in database');
+        // Clear the stored data
+        localStorage.removeItem('pendingSignupData');
       }
-    } else {
-      console.log('User already exists in database:', existingUser.email);
     }
   } catch (error) {
     console.error('Error in ensureUserExists:', error);

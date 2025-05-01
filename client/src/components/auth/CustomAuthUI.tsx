@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 // We're using the context directly
 import { useFixedSupabase } from '@/contexts/FixedSupabaseContext'; // Add fixed Supabase context
+import { getSupabaseClient } from '@/lib/supabaseConfig'; // Import Supabase client function
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -165,11 +166,22 @@ export function CustomAuthUI() {
       // Extract the data for signup
       const { first_name, last_name, email, password, phone } = formData;
 
-      // Sign up with the context function
-      const result = await signUp(email, password, {
+      // Store the signup data for later use when verifying OTP
+      // We'll save this in localStorage temporarily
+      localStorage.setItem('pendingSignupData', JSON.stringify({
         first_name,
         last_name,
+        email,
         phone
+      }));
+
+      // Sign up with the context function - add the user metadata
+      const result = await signUp(email, password, {
+        data: {
+          first_name,
+          last_name,
+          phone
+        }
       });
 
       // Check for error indicating existing user
@@ -245,17 +257,88 @@ export function CustomAuthUI() {
         throw result.error;
       }
 
-      // Import and call ensureUserExists function to create user record in the database
-      // This makes sure the first_name, last_name, and phone_number are saved
+      // Check if we have pending signup data saved in localStorage
+      let userData = null;
+      try {
+        const savedData = localStorage.getItem('pendingSignupData');
+        if (savedData) {
+          userData = JSON.parse(savedData);
+          console.log('Retrieved saved signup data:', userData);
+        }
+      } catch (e) {
+        console.error('Error retrieving saved signup data:', e);
+      }
+
+      // Explicitly update the user record in the database
       if (result.data?.user) {
         try {
-          // Dynamically import to avoid circular dependencies
-          const { ensureUserExists } = await import('@/lib/supabaseUtils');
-          await ensureUserExists(result.data.user);
-          console.log('User record ensured in database after verification');
-        } catch (ensureError) {
-          console.error('Failed to ensure user record in database:', ensureError);
-          // Continue anyway as authentication succeeded
+          // Import Supabase utilities
+          const supabase = await getSupabaseClient();
+            
+          // First check if this user already exists in the database
+          const { data: existingUser, error: checkError } = await supabase
+            .from('users')
+            .select('id, first_name, last_name, phone_number')
+            .eq('id', result.data.user.id)
+            .single();
+
+          // If the user exists but is missing profile data, update it
+          if (existingUser && userData) {
+            console.log('User exists in database, updating with profile data');
+            
+            // Update user with the saved form data
+            const { error: updateError } = await supabase
+              .from('users')
+              .update({
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                phone_number: userData.phone,
+                full_name: `${userData.first_name} ${userData.last_name}`.trim(),
+                is_verified: true
+              })
+              .eq('id', result.data.user.id);
+                
+            if (updateError) {
+              console.error('Error updating user record:', updateError);
+            } else {
+              console.log('Successfully updated user profile');
+            }
+          } 
+          // If user doesn't exist, create a new record
+          else if (!existingUser && userData) {
+            console.log('Creating new user record with profile data');
+            
+            // Insert new user record with complete profile data
+            const { error: insertError } = await supabase
+              .from('users')
+              .insert({
+                id: result.data.user.id,
+                email: result.data.user.email,
+                username: result.data.user.email?.split('@')[0] || '',
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                phone_number: userData.phone,
+                full_name: `${userData.first_name} ${userData.last_name}`.trim(),
+                is_verified: true,
+                created_at: new Date().toISOString()
+              });
+                
+            if (insertError) {
+              console.error('Error creating user record:', insertError);
+            } else {
+              console.log('Successfully created user profile');
+            }
+          } else {
+            // Use the original ensureUserExists function as fallback
+            const { ensureUserExists } = await import('@/lib/supabaseUtils');
+            await ensureUserExists(result.data.user);
+            console.log('User record ensured in database using fallback method');
+          }
+        } catch (dbError) {
+          console.error('Failed to update user record in database:', dbError);
+        } finally {
+          // Clean up stored data
+          localStorage.removeItem('pendingSignupData');
         }
       }
 

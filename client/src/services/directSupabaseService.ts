@@ -31,12 +31,13 @@ export const auth = {
   },
 
   // Sign up with email and password
-  signUp: async (email: string, password: string, userData?: any) => {
+  signUp: async (email: string, password: string, options?: any) => {
     const supabase = await getClient();
+    console.log('Signing up with options:', options);
     return await supabase.auth.signUp({
       email,
       password,
-      options: { data: userData }
+      options: options
     });
   },
   
