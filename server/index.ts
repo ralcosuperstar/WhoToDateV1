@@ -2,6 +2,11 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import dotenv from 'dotenv';
+import compression from 'compression';
+import NodeCache from 'node-cache';
+
+// Create a global cache instance with 5 minute TTL default
+export const appCache = new NodeCache({ stdTTL: 300 });
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +31,9 @@ if (!process.env.SUPABASE_SERVICE_KEY) {
 }
 
 const app = express();
+// Enable compression for all responses
+app.use(compression());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -43,6 +51,11 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
+      // Flag slow API requests for monitoring
+      if (duration > 500) {
+        console.warn(`⚠️ SLOW REQUEST: ${req.method} ${path} took ${duration}ms`);
+      }
+
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
@@ -127,12 +140,24 @@ app.use((req, res, next) => {
   // Register all API routes using the apiRouter
   const server = await registerRoutes(app, apiRouter);
 
-  // Error handling middleware
+  // Enhanced error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
+    
+    // Create standardized error response
+    const errorResponse = {
+      success: false,
+      message: message,
+      // Only include details in development mode
+      error: process.env.NODE_ENV !== 'production' ? {
+        stack: err.stack,
+        details: err.details || err.data || undefined
+      } : undefined,
+      timestamp: new Date().toISOString()
+    };
 
-    res.status(status).json({ message });
+    res.status(status).json(errorResponse);
     console.error('Error in request:', err);
   });
   
