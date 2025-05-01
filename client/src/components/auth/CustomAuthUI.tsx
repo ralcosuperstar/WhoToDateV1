@@ -169,15 +169,22 @@ export function CustomAuthUI() {
       // Check if user already exists before attempting signup
       // This prevents the issue where existing users are sent verification emails
       try {
-        const supabase = await getSupabaseClient();
+        // Use our server endpoint to check if email exists
+        const response = await fetch('/api/check-email-exists', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
         
-        // Check if the user already exists in the database
-        const { data: existingUsers, error: dbError } = await supabase
-          .from('users')
-          .select('email')
-          .eq('email', email);
-          
-        if (!dbError && existingUsers && existingUsers.length > 0) {
+        if (!response.ok) {
+          throw new Error('Failed to check if email exists');
+        }
+        
+        const result = await response.json();
+        
+        if (result.exists) {
           console.log('User already exists in database:', email);
           handleExistingUser(email);
           return;

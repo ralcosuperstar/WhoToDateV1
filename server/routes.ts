@@ -170,6 +170,36 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     });
   });
 
+  // Check if an email already exists in the system
+  router.post("/check-email-exists", async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Email is required" 
+        });
+      }
+
+      // Check if user already exists in the database
+      const existingUser = await db.getUserByEmail(email);
+
+      // Return the result
+      return res.json({ 
+        success: true, 
+        exists: !!existingUser,
+        message: existingUser ? "Email already exists" : "Email is available" 
+      });
+    } catch (error) {
+      console.error("Error in check-email-exists API:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to check if email exists" 
+      });
+    }
+  });
+
   // Ensure user exists in public.users table (bypassing Supabase RLS)
   router.post("/ensure-user", async (req: Request, res: Response) => {
     try {
