@@ -166,6 +166,27 @@ export function CustomAuthUI() {
       // Extract the data for signup
       const { first_name, last_name, email, password, phone } = formData;
 
+      // Check if user already exists before attempting signup
+      // This prevents the issue where existing users are sent verification emails
+      try {
+        const supabase = await getSupabaseClient();
+        
+        // Check if the user already exists in the database
+        const { data: existingUsers, error: dbError } = await supabase
+          .from('users')
+          .select('email')
+          .eq('email', email);
+          
+        if (!dbError && existingUsers && existingUsers.length > 0) {
+          console.log('User already exists in database:', email);
+          handleExistingUser(email);
+          return;
+        }
+      } catch (checkError) {
+        console.error('Error checking if user exists:', checkError);
+        // Continue with signup attempt even if check fails
+      }
+      
       // Store the signup data for later use when verifying OTP
       // We'll save this in localStorage temporarily
       localStorage.setItem('pendingSignupData', JSON.stringify({
@@ -188,7 +209,8 @@ export function CustomAuthUI() {
       if (result.error) {
         if (result.error.message && (
           result.error.message.includes('User already registered') || 
-          result.error.message.includes('already been registered')
+          result.error.message.includes('already been registered') ||
+          result.error.message.includes('already exists')
         )) {
           handleExistingUser(email);
           return;
