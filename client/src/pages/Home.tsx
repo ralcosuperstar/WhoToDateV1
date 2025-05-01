@@ -169,10 +169,10 @@ const Home = () => {
                 <div className="flex justify-center">
                   <Link
                     href="/register"
-                    className="inline-flex items-center justify-center px-6 py-2.5 text-white font-medium rounded-lg shadow-md border border-pink-200 hover:opacity-90 text-sm"
+                    className="inline-flex items-center justify-center px-6 py-2.5 text-white font-medium rounded-lg shadow-md border border-pink-200 hover:opacity-90 text-sm animate-pulse"
                     style={{ backgroundColor: '#e83a8e' }}
                   >
-                    See Sample Report
+                    Take the Quiz
                     <ChevronRight className="ml-1 h-4 w-4" />
                   </Link>
                 </div>
