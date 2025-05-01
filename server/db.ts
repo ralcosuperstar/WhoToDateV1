@@ -48,9 +48,13 @@ if (process.env.SUPABASE_DB_PASSWORD) {
       ssl: {
         rejectUnauthorized: false
       },
-      // Connection pool configuration
-      max: 10, // Maximum number of clients
+      // Enhanced connection pool configuration
+      max: 20, // Increased maximum number of clients for better concurrency
+      min: 2, // Maintain at least 2 idle connections
       idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
+      connectionTimeoutMillis: 5000, // Connection timeout
+      statement_timeout: 10000, // Query timeout (10 seconds)
+      query_timeout: 10000 // Query timeout (10 seconds)
     });
 
     // Initialize Drizzle ORM with the connection pool

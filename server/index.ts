@@ -3,10 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import dotenv from 'dotenv';
 import compression from 'compression';
-import NodeCache from 'node-cache';
-
-// Create a global cache instance with 5 minute TTL default
-export const appCache = new NodeCache({ stdTTL: 300 });
+import { appCache } from './cacheService';
 
 // Load environment variables
 dotenv.config();

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import session from "express-session";
 import { supabaseStorage } from "./supabaseStorage";
 import { setupVite, serveStatic, log } from "./vite";
+import { appCache } from "./cacheService";
 import { generateVerificationToken, generateTokenExpiry, logAllVerificationLinks } from "./emailService";
 import { generateOTP, generateOTPExpiry } from "./twilioService";
 import { createClient } from '@supabase/supabase-js';
@@ -247,7 +248,75 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
 
   // Protected routes that require authentication
   router.get("/user", isAuthenticated, (req: Request, res: Response) => {
+    // Optionally support field selection
+    const fields = req.query.fields?.toString()?.split(',') || null;
+    
+    if (fields) {
+      // Return only requested fields
+      const filteredUser: Record<string, any> = {};
+      fields.forEach(field => {
+        if (req.user && field in req.user) {
+          filteredUser[field] = (req.user as Record<string, any>)[field];
+        }
+      });
+      return res.json(filteredUser);
+    }
+    
+    // Return full user object if no fields specified
     res.json(req.user);
+  });
+  
+  // New combined profile endpoint that returns user, quiz, and report data in a single request
+  router.get("/user-profile", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Unauthorized" });
+      }
+      
+      // Set response cache header (short lived for authenticated data)
+      res.set('Cache-Control', 'private, max-age=60'); // Cache for 1 minute
+      
+      // Use the appCache from the global cache instance to avoid redundant requests
+      const cacheKey = `user-profile-${userId}`;
+      const cachedData = appCache.get(cacheKey);
+      
+      if (cachedData) {
+        console.log(`Cache hit for user profile: ${userId}`);
+        return res.json(cachedData);
+      }
+      
+      // Fetch all user data in parallel
+      const [userQuiz, userReport] = await Promise.all([
+        db.getQuizAnswers(userId).catch(err => {
+          console.error(`Error fetching quiz answers for ${userId}:`, err);
+          return null;
+        }),
+        db.getReportByUserId(userId).catch(err => {
+          console.error(`Error fetching report for ${userId}:`, err);
+          return null;
+        })
+      ]);
+      
+      // Build comprehensive profile object
+      const profile = {
+        user: req.user,
+        quiz: userQuiz,
+        report: userReport
+      };
+      
+      // Cache the result
+      appCache.set(cacheKey, profile);
+      
+      res.json(profile);
+    } catch (error) {
+      console.error("Error in user-profile endpoint:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch user profile" 
+      });
+    }
   });
 
   router.get("/report", isAuthenticated, async (req: Request, res: Response) => {
