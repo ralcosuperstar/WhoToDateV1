@@ -575,6 +575,13 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     }
   });
 
+  // Helper function to invalidate user-related cache entries when data is updated
+  const invalidateUserCache = (userId: string | number) => {
+    // Invalidate user profile cache
+    appCache.del(`user-profile-${userId}`);
+    console.log(`Invalidated cache for user profile: ${userId}`);
+  };
+  
   router.post("/quiz", isAuthenticated, async (req: Request, res: Response) => {
     console.log("========== POST QUIZ ENDPOINT ACCESSED ==========");
     console.log("Request user:", req.user);
@@ -697,6 +704,9 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
           }
         }
 
+        // Invalidate relevant cache entries
+        invalidateUserCache(userIdForQuery);
+        
         console.log("Quiz saved successfully:", quizAnswers);
         console.log("========== POST QUIZ ENDPOINT COMPLETED ==========");
         res.json(quizAnswers);
@@ -716,76 +726,166 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     }
   });
 
-  // API routes for blog posts
-  router.get("/blog", async (req: Request, res: Response) => {
+  // Optimized blog posts endpoint with pagination, filtering, and caching
+  const getBlogPosts = async (req: Request, res: Response) => {
     try {
-      console.log("Blog API endpoint accessed");
-      const blogPosts = await db.getAllBlogPosts();
-      res.json(blogPosts);
+      // Set cache header for blog content (10 minutes)
+      res.set('Cache-Control', 'public, max-age=600'); 
+      
+      // Parse pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = (page - 1) * limit;
+      
+      // Generate cache key based on query parameters
+      const cacheKey = `blog-posts-${page}-${limit}`;
+      const cachedData = appCache.get(cacheKey);
+      
+      if (cachedData) {
+        console.log(`Cache hit for blog posts: page ${page}, limit ${limit}`);
+        return res.json(cachedData);
+      }
+      
+      // Fetch all posts for now (we'll paginate in memory since storage API doesn't support it directly)
+      const allPosts = await db.getAllBlogPosts();
+      
+      // Get total count
+      const total = allPosts.length;
+      
+      // Manual pagination
+      const paginatedPosts = allPosts.slice(offset, offset + limit);
+      
+      // Prepare response with pagination metadata
+      const response = {
+        posts: paginatedPosts,
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit)
+        }
+      };
+      
+      // Cache the result
+      appCache.set(cacheKey, response);
+      
+      res.json(response);
     } catch (error) {
       console.error("Error fetching blog posts:", error);
-      res.status(500).json({ message: "Failed to fetch blog posts" });
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch blog posts" 
+      });
     }
-  });
+  };
+  
+  // Primary blog endpoint
+  router.get("/blog", getBlogPosts);
+  
+  // Legacy blog-posts endpoint (redirects to primary endpoint)
+  router.get("/blog-posts", getBlogPosts);
 
-  // Legacy blog-posts endpoint (keeping for backward compatibility)
-  router.get("/blog-posts", async (req: Request, res: Response) => {
-    try {
-      const blogPosts = await db.getAllBlogPosts();
-      res.json(blogPosts);
-    } catch (error) {
-      console.error("Error fetching blog posts:", error);
-      res.status(500).json({ message: "Failed to fetch blog posts" });
-    }
-  });
-
+  // Optimized blog post by ID endpoint with caching
   router.get("/blog-posts/:id", async (req: Request, res: Response) => {
     try {
+      // Set strong cache for blog content (1 hour)
+      res.set('Cache-Control', 'public, max-age=3600'); 
+      
       const id = parseInt(req.params.id);
+      
+      // Generate cache key
+      const cacheKey = `blog-post-id-${id}`;
+      const cachedPost = appCache.get(cacheKey);
+      
+      if (cachedPost) {
+        console.log(`Cache hit for blog post ID: ${id}`);
+        return res.json(cachedPost);
+      }
+      
       const blogPost = await db.getBlogPostById(id);
       if (!blogPost) {
-        return res.status(404).json({ message: "Blog post not found" });
+        return res.status(404).json({ 
+          success: false, 
+          message: "Blog post not found" 
+        });
       }
+      
+      // Cache the result
+      appCache.set(cacheKey, blogPost, 3600); // Cache for 1 hour
+      
+      // Generate ETag for client-side caching
+      const etag = `"${id}-${blogPost.updatedAt || blogPost.createdAt || Date.now()}"`;
+      res.set('ETag', etag);
+      
+      // Check If-None-Match header for client cache validation
+      if (req.headers['if-none-match'] === etag) {
+        return res.status(304).end(); // Not Modified
+      }
+      
       res.json(blogPost);
     } catch (error) {
       console.error("Error fetching blog post:", error);
-      res.status(500).json({ message: "Failed to fetch blog post" });
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch blog post" 
+      });
     }
   });
 
-  router.get("/blog-posts/slug/:slug", async (req: Request, res: Response) => {
+  // Shared function for fetching post by slug to avoid duplicate code
+  const getBlogPostBySlug = async (req: Request, res: Response) => {
     try {
+      // Set strong cache for blog content (1 hour)
+      res.set('Cache-Control', 'public, max-age=3600');
+      
       const slug = req.params.slug;
-      const blogPost = await db.getBlogPostBySlug(slug);
-      if (!blogPost) {
-        return res.status(404).json({ message: "Blog post not found" });
+      
+      // Generate cache key
+      const cacheKey = `blog-post-slug-${slug}`;
+      const cachedPost = appCache.get(cacheKey);
+      
+      if (cachedPost) {
+        console.log(`Cache hit for blog post slug: ${slug}`);
+        return res.json(cachedPost);
       }
-      res.json(blogPost);
-    } catch (error) {
-      console.error("Error fetching blog post by slug:", error);
-      res.status(500).json({ message: "Failed to fetch blog post" });
-    }
-  });
-
-  // Blog route for single post by slug
-  router.get('/blog/:slug', async (req: Request, res: Response) => {
-    try {
-      const { slug } = req.params;
+      
       console.log(`Fetching blog post with slug: ${slug}`);
       const post = await db.getBlogPostBySlug(slug);
       
       if (!post) {
         console.log(`Blog post with slug ${slug} not found`);
-        return res.status(404).json({ message: 'Blog post not found' });
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Blog post not found' 
+        });
+      }
+      
+      // Cache the result
+      appCache.set(cacheKey, post, 3600); // Cache for 1 hour
+      
+      // Generate ETag for client-side caching
+      const etag = `"${slug}-${post.updatedAt || post.createdAt || Date.now()}"`;
+      res.set('ETag', etag);
+      
+      // Check If-None-Match header for client cache validation
+      if (req.headers['if-none-match'] === etag) {
+        return res.status(304).end(); // Not Modified
       }
       
       console.log(`Blog post found: ${post.title}`);
       res.json(post);
     } catch (error) {
       console.error('Error fetching blog post by slug:', error);
-      res.status(500).json({ message: 'Failed to fetch blog post' });
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to fetch blog post' 
+      });
     }
-  });
+  };
+  
+  // Two identical routes for fetching by slug - one legacy, one current
+  router.get("/blog-posts/slug/:slug", getBlogPostBySlug);
+  router.get('/blog/:slug', getBlogPostBySlug);
 
 
   // Create HTTP server
