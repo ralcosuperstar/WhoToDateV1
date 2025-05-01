@@ -245,6 +245,20 @@ export function CustomAuthUI() {
         throw result.error;
       }
 
+      // Import and call ensureUserExists function to create user record in the database
+      // This makes sure the first_name, last_name, and phone_number are saved
+      if (result.data?.user) {
+        try {
+          // Dynamically import to avoid circular dependencies
+          const { ensureUserExists } = await import('@/lib/supabaseUtils');
+          await ensureUserExists(result.data.user);
+          console.log('User record ensured in database after verification');
+        } catch (ensureError) {
+          console.error('Failed to ensure user record in database:', ensureError);
+          // Continue anyway as authentication succeeded
+        }
+      }
+
       toast({
         title: 'Email verified',
         description: 'Your email has been verified. You are now signed in.',
