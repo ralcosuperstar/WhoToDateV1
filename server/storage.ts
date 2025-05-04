@@ -4,8 +4,7 @@ import {
   quizAnswers, type QuizAnswer, type InsertQuizAnswer,
   reports, type Report, type InsertReport,
   payments, type Payment, type InsertPayment,
-  blogPosts, type BlogPost, type InsertBlogPost,
-  counselors, type Counselor, type InsertCounselor
+  blogPosts, type BlogPost, type InsertBlogPost
 } from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
@@ -55,14 +54,6 @@ export interface IStorage {
   getBlogPostBySlug(slug: string): Promise<BlogPost | undefined>;
   createBlogPost(blogPost: InsertBlogPost): Promise<BlogPost>;
   
-  // Counselor operations
-  getAllCounselors(): Promise<Counselor[]>;
-  getCounselorById(id: number): Promise<Counselor | undefined>;
-  createCounselor(counselor: InsertCounselor): Promise<Counselor>;
-  updateCounselor(id: number, counselorData: Partial<InsertCounselor>): Promise<Counselor>;
-  deleteCounselor(id: number): Promise<boolean>;
-  getFeaturedCounselors(): Promise<Counselor[]>;
-  
   // Utility
   close(): Promise<void>;
 }
@@ -73,13 +64,11 @@ export class MemStorage implements IStorage {
   private reports: Map<number, Report>;
   private payments: Map<number, Payment>;
   private blogPosts: Map<number, BlogPost>;
-  private counselors: Map<number, Counselor>;
   
   private currentQuizId: number;
   private currentReportId: number;
   private currentPaymentId: number;
   private currentBlogPostId: number;
-  private currentCounselorId: number;
   
   public sessionStore: session.Store;
 
@@ -89,13 +78,11 @@ export class MemStorage implements IStorage {
     this.reports = new Map();
     this.payments = new Map();
     this.blogPosts = new Map();
-    this.counselors = new Map();
     
     this.currentQuizId = 1;
     this.currentReportId = 1;
     this.currentPaymentId = 1;
     this.currentBlogPostId = 1;
-    this.currentCounselorId = 1;
     
     // Initialize session store
     this.sessionStore = new MemoryStore({
@@ -489,82 +476,6 @@ export class MemStorage implements IStorage {
     });
   }
   
-  // Counselor operations
-  async getAllCounselors(): Promise<Counselor[]> {
-    return Array.from(this.counselors.values()).sort(
-      (a, b) => {
-        // Sort featured counselors first, then by name
-        if (a.isFeatured && !b.isFeatured) return -1;
-        if (!a.isFeatured && b.isFeatured) return 1;
-        return a.name.localeCompare(b.name);
-      }
-    );
-  }
-
-  async getFeaturedCounselors(): Promise<Counselor[]> {
-    return Array.from(this.counselors.values())
-      .filter(counselor => counselor.isFeatured)
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  async getCounselorById(id: number): Promise<Counselor | undefined> {
-    return this.counselors.get(id);
-  }
-
-  async createCounselor(insertCounselor: InsertCounselor): Promise<Counselor> {
-    const id = this.currentCounselorId++;
-    const createdAt = new Date();
-    
-    const counselor: Counselor = {
-      id,
-      name: insertCounselor.name,
-      title: insertCounselor.title,
-      description: insertCounselor.description,
-      imageUrl: insertCounselor.imageUrl || null,
-      specialties: insertCounselor.specialties || [],
-      experience: insertCounselor.experience || null,
-      isFeatured: insertCounselor.isFeatured || false,
-      isVerified: insertCounselor.isVerified || false,
-      availability: insertCounselor.availability || [],
-      contactType: insertCounselor.contactType || null,
-      contactUrl: insertCounselor.contactUrl || null,
-      price: insertCounselor.price || null,
-      rating: insertCounselor.rating || null,
-      testimonials: insertCounselor.testimonials || [],
-      createdAt,
-      updatedAt: null
-    };
-    
-    this.counselors.set(id, counselor);
-    return counselor;
-  }
-
-  async updateCounselor(id: number, counselorData: Partial<InsertCounselor>): Promise<Counselor> {
-    const counselor = this.counselors.get(id);
-    if (!counselor) {
-      throw new Error('Counselor not found');
-    }
-    
-    const updatedAt = new Date();
-    const updatedCounselor: Counselor = {
-      ...counselor,
-      ...counselorData,
-      updatedAt
-    };
-    
-    this.counselors.set(id, updatedCounselor);
-    return updatedCounselor;
-  }
-
-  async deleteCounselor(id: number): Promise<boolean> {
-    if (!this.counselors.has(id)) {
-      return false;
-    }
-    
-    this.counselors.delete(id);
-    return true;
-  }
-
   async close(): Promise<void> {
     // No resources to clean up for in-memory storage
     console.log("MemStorage.close() called - no resources to clean up");
