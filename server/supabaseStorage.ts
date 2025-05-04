@@ -984,6 +984,238 @@ export class SupabaseStorage implements IStorage {
     return data as BlogPost;
   }
 
+  // Counselor methods
+  async getAllCounselors(): Promise<Counselor[]> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Getting all counselors');
+      return [
+        {
+          id: 1,
+          name: 'Dr. Priya Sharma',
+          title: 'Relationship Psychologist',
+          description: 'Specializes in couple therapy with 10+ years of experience',
+          imageUrl: 'https://example.com/counselors/sharma.jpg',
+          specialization: 'Couple Therapy',
+          experience: 10,
+          rating: 4.8,
+          sessionPrice: 2500,
+          currency: 'INR',
+          availabilityStatus: 'available',
+          availableDays: 'Monday to Friday',
+          availableHours: '10:00 AM - 6:00 PM',
+          contactEmail: 'dr.sharma@example.com',
+          contactPhone: '+91123456789',
+          isVerified: true,
+          isFeatured: true,
+          socialProfiles: { linkedin: 'https://linkedin.com/in/drpriyasharma' },
+          createdAt: new Date()
+        },
+        {
+          id: 2,
+          name: 'Dr. Raj Malhotra',
+          title: 'Marriage Counselor',
+          description: 'Helping couples find harmony for over 15 years',
+          imageUrl: 'https://example.com/counselors/malhotra.jpg',
+          specialization: 'Marriage Counseling',
+          experience: 15,
+          rating: 4.9,
+          sessionPrice: 3000,
+          currency: 'INR',
+          availabilityStatus: 'limited',
+          availableDays: 'Weekends',
+          availableHours: '9:00 AM - 5:00 PM',
+          contactEmail: 'dr.malhotra@example.com',
+          contactPhone: '+91987654321',
+          isVerified: true,
+          isFeatured: false,
+          socialProfiles: null,
+          createdAt: new Date()
+        }
+      ];
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await this.client
+      .from('counselors')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    return data as Counselor[];
+  }
+
+  async getFeaturedCounselors(): Promise<Counselor[]> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Getting featured counselors');
+      return [
+        {
+          id: 1,
+          name: 'Dr. Priya Sharma',
+          title: 'Relationship Psychologist',
+          description: 'Specializes in couple therapy with 10+ years of experience',
+          imageUrl: 'https://example.com/counselors/sharma.jpg',
+          specialization: 'Couple Therapy',
+          experience: 10,
+          rating: 4.8,
+          sessionPrice: 2500,
+          currency: 'INR',
+          availabilityStatus: 'available',
+          availableDays: 'Monday to Friday',
+          availableHours: '10:00 AM - 6:00 PM',
+          contactEmail: 'dr.sharma@example.com',
+          contactPhone: '+91123456789',
+          isVerified: true,
+          isFeatured: true,
+          socialProfiles: { linkedin: 'https://linkedin.com/in/drpriyasharma' },
+          createdAt: new Date()
+        }
+      ];
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await this.client
+      .from('counselors')
+      .select('*')
+      .eq('is_featured', true)
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    return data as Counselor[];
+  }
+
+  async getCounselorById(id: number): Promise<Counselor | undefined> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Getting counselor by ID', id);
+      if (id === 1) {
+        return {
+          id: 1,
+          name: 'Dr. Priya Sharma',
+          title: 'Relationship Psychologist',
+          description: 'Specializes in couple therapy with 10+ years of experience',
+          imageUrl: 'https://example.com/counselors/sharma.jpg',
+          specialization: 'Couple Therapy',
+          experience: 10,
+          rating: 4.8,
+          sessionPrice: 2500,
+          currency: 'INR',
+          availabilityStatus: 'available',
+          availableDays: 'Monday to Friday',
+          availableHours: '10:00 AM - 6:00 PM',
+          contactEmail: 'dr.sharma@example.com',
+          contactPhone: '+91123456789',
+          isVerified: true,
+          isFeatured: true,
+          socialProfiles: { linkedin: 'https://linkedin.com/in/drpriyasharma' },
+          createdAt: new Date()
+        };
+      }
+      return undefined;
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await this.client
+      .from('counselors')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error || !data) return undefined;
+    return data as Counselor;
+  }
+
+  async createCounselor(counselor: InsertCounselor): Promise<Counselor> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Creating counselor', counselor.name);
+      return {
+        id: Math.floor(Math.random() * 1000) + 1,
+        ...counselor,
+        createdAt: new Date()
+      } as Counselor;
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await this.client
+      .from('counselors')
+      .insert(counselor)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Counselor;
+  }
+
+  async updateCounselor(id: number, counselorData: Partial<InsertCounselor>): Promise<Counselor> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Updating counselor', id);
+      return {
+        id: id,
+        name: counselorData.name || 'Updated Counselor',
+        title: counselorData.title || 'Updated Title',
+        description: counselorData.description || 'Updated description',
+        imageUrl: counselorData.imageUrl || 'https://example.com/counselors/updated.jpg',
+        specialization: counselorData.specialization || 'General Counseling',
+        experience: counselorData.experience || 5,
+        rating: counselorData.rating || 4.0,
+        sessionPrice: counselorData.sessionPrice || 2000,
+        currency: 'INR',
+        availabilityStatus: counselorData.availabilityStatus || 'available',
+        availableDays: counselorData.availableDays || 'Weekdays',
+        availableHours: counselorData.availableHours || '9 AM - 5 PM',
+        contactEmail: counselorData.contactEmail || 'contact@example.com',
+        contactPhone: counselorData.contactPhone || '+91123456789',
+        isVerified: counselorData.isVerified || false,
+        isFeatured: counselorData.isFeatured || false,
+        socialProfiles: counselorData.socialProfiles || null,
+        createdAt: new Date()
+      } as Counselor;
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { data, error } = await this.client
+      .from('counselors')
+      .update(counselorData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Counselor;
+  }
+
+  async deleteCounselor(id: number): Promise<boolean> {
+    if (this.devMode) {
+      console.log('⚠️ Development mode: Deleting counselor', id);
+      return true;
+    }
+
+    if (!this.client) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    const { error } = await this.client
+      .from('counselors')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    return true;
+  }
+
   // Utility to close any connections
   async close() {
     if (this.client) {

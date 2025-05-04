@@ -3,7 +3,9 @@ import { initUserRoutes } from './user.routes';
 import { initBlogRoutes } from './blog.routes';
 import { initQuizRoutes } from './quiz.routes';
 import { initReportRoutes } from './report.routes';
-import { UserService, BlogService, QuizService, ReportService } from '../services';
+import { registerCounselorRoutes } from './counselor.routes';
+import { UserService, BlogService, QuizService, ReportService, CounselorService } from '../services';
+import { IStorage } from '../storage';
 
 /**
  * Initialize all API routes
@@ -15,6 +17,8 @@ export function initAPIRoutes(services: {
   blogService: BlogService;
   quizService: QuizService;
   reportService: ReportService;
+  counselorService: CounselorService;
+  storage: IStorage;
 }) {
   const router = Router();
 
@@ -28,6 +32,9 @@ export function initAPIRoutes(services: {
   router.use(initBlogRoutes(services.blogService));
   router.use(initQuizRoutes(services.quizService));
   router.use(initReportRoutes(services.reportService));
+  
+  // Register counselor routes
+  registerCounselorRoutes(router, services.storage);
 
   return router;
 }

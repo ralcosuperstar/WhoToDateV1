@@ -47,6 +47,8 @@ declare global {
 }
 
 export async function registerRoutes(app: Express, apiRouter?: Router): Promise<Server> {
+  // Initialize all services
+  const services = initServices(db);
   // Define the router to use - either the provided apiRouter or the main app
   const router = apiRouter || app;
   
@@ -176,7 +178,14 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
   setupDatabaseFixRoutes(app, router);
 
   // Register API feature routes using our modular approach
-  const featureRoutes = initAPIRoutes(services);
+  const featureRoutes = initAPIRoutes({
+    userService: services.userService,
+    blogService: services.blogService,
+    quizService: services.quizService,
+    reportService: services.reportService,
+    counselorService: services.counselorService,
+    storage: db
+  });
   router.use(featureRoutes);
 
   // Add a health check endpoint that bypasses auth
