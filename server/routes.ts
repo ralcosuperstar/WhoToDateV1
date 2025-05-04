@@ -1,23 +1,31 @@
 import express, { type Express, type Router, type Request, type Response, type NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
+import compression from "compression";
 import { supabaseStorage } from "./supabaseStorage";
 import { setupVite, serveStatic, log } from "./vite";
-import { appCache } from "./cacheService";
-import { generateVerificationToken, generateTokenExpiry, logAllVerificationLinks } from "./emailService";
-import { generateOTP, generateOTPExpiry } from "./twilioService";
 import { createClient } from '@supabase/supabase-js';
 import { IStorage } from "./storage";
 import { User } from '@shared/schema';
+
+// Import utilities and middleware
+import { errorMiddleware } from "./utils/error-handler";
+import { requestLogger } from "./middleware/request-logger";
+
+// Import services
+import { initServices, cacheService as appCache } from "./services";
+
+// Import route modules
+import { initAPIRoutes } from "./routes/index";
 import { setupSupabaseRoutes } from "./routes/supabase";
-// Database test routes removed
 import { registerSupabaseSyncRoutes } from "./routes/supabase-sync";
 import { setupDatabaseFixRoutes } from "./routes/database-fix";
-// Import the supabase storage instance instead of direct function imports
-// The SupabaseStorage class has methods for blog posts
 
 // Use Supabase storage
 const db: IStorage = supabaseStorage;
+
+// Initialize services
+const services = initServices(db);
 
 // Session data interface
 declare module "express-session" {
@@ -41,6 +49,15 @@ declare global {
 export async function registerRoutes(app: Express, apiRouter?: Router): Promise<Server> {
   // Define the router to use - either the provided apiRouter or the main app
   const router = apiRouter || app;
+  
+  // Enable request compression
+  app.use(compression());
+  
+  // Add request logging middleware
+  app.use(requestLogger);
+  
+  // Add global error handling middleware
+  app.use(errorMiddleware);
 
   // Set up session middleware
   app.use(session({
@@ -157,6 +174,10 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
 
   // Set up database fix routes
   setupDatabaseFixRoutes(app, router);
+
+  // Register API feature routes using our modular approach
+  const featureRoutes = initAPIRoutes(services);
+  router.use(featureRoutes);
 
   // Add a health check endpoint that bypasses auth
   router.get("/health", (req: Request, res: Response) => {
@@ -899,6 +920,8 @@ export async function registerRoutes(app: Express, apiRouter?: Router): Promise<
     // Log that we're in development mode
     console.log("⚠️ Running in development mode");
   }
+
+  // API routes already registered above
 
   return server;
 }

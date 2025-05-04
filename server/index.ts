@@ -3,7 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import dotenv from 'dotenv';
 import compression from 'compression';
-import { appCache } from './cacheService';
+import { cacheService as appCache } from './services';
 
 // Load environment variables
 dotenv.config();
