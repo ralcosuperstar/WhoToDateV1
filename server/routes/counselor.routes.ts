@@ -20,7 +20,7 @@ export function registerCounselorRoutes(router: Router, db: IStorage): void {
   };
 
   // Get all counselors (public route)
-  router.get('/api/counselors', async (_req: Request, res: Response) => {
+  router.get('/counselors', async (_req: Request, res: Response) => {
     try {
       const counselors = await counselorService.getAllCounselors();
       return res.json(counselors);
