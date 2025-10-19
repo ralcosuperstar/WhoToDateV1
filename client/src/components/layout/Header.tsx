@@ -3,7 +3,6 @@ import { Link, useLocation } from "wouter";
 import MobileMenu from "./MobileMenu";
 import { useToast } from "@/hooks/use-toast";
 import { useFixedSupabase } from "@/contexts/FixedSupabaseContext"; // Use the fixed Supabase context
-import { Heart } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,12 +72,6 @@ const Header = () => {
           <Link href="/science" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/science' ? 'text-primary font-semibold' : ''}`}>
             The Science
           </Link>
-          <Link href="/counselling" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location === '/counselling' ? 'text-primary font-semibold' : ''}`}>
-            Counselling
-          </Link>
-          <Link href="/blog" className={`text-gray-700 hover:text-primary font-medium text-sm transition-colors relative ${location.startsWith('/blog') ? 'text-primary font-semibold' : ''}`}>
-            Blog
-          </Link>
         </nav>
         
         <div className="flex items-center space-x-3">
@@ -100,13 +93,6 @@ const Header = () => {
               Login
             </Link>
           )}
-          <Link 
-            href="/counselling" 
-            className="hidden md:flex items-center text-gray-700 hover:text-primary font-medium text-sm border border-gray-200 rounded-full px-3 py-1.5 bg-white hover:bg-gray-50 transition-all"
-          >
-            <Heart className="w-3.5 h-3.5 text-primary mr-1" />
-            Talk to Counsellor
-          </Link>
           <Link 
             href={user ? "/quiz" : "/auth?tab=register"} 
             className="text-white font-medium px-4 py-1.5 text-sm rounded-full shadow-sm hover:shadow transition-all"
