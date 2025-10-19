@@ -115,7 +115,7 @@ const WelcomeBanner = ({ name }: { name: string }) => (
         Welcome, {name}!
       </h1>
       <p className="text-white/90 max-w-lg">
-        Your journey to better relationships starts here. Explore your profile, check your compatibility report, or connect with a relationship counselor.
+        Your journey to better relationships starts here. Explore your profile and discover your compatibility insights.
       </p>
     </div>
   </div>
