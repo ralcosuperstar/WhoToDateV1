@@ -20,11 +20,8 @@ import FixedResults from "@/pages/FixedResults"; // Fixed results page with impr
 import EnhancedResults from "@/pages/EnhancedResults"; // New redesigned results page with better UX
 import Analytics from "@/pages/Analytics";
 import EnhancedDashboardPage from "@/pages/EnhancedDashboardPage"; // New Enhanced Dashboard with better UI/UX
-import Blog from "@/pages/Blog";
-import BlogPost from "@/pages/BlogPost";
 import HowItWorks from "@/pages/NewHowItWorks";
 import Science from "@/pages/SciencePage";
-import Counselling from "@/pages/Counselling";
 import NewAuthPage from "@/pages/new-auth-page";
 import HowToDatePage from "@/pages/HowToDatePage"; // Dating approach guide eBook page
 import ProfilePage from "@/pages/ProfilePage"; // New Profile management page
@@ -48,9 +45,6 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/how-it-works" component={HowItWorks} />
         <Route path="/science" component={Science} />
-        <Route path="/counselling" component={Counselling} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/blog/:slug" component={BlogPost} />
         <Route path="/auth" component={NewAuthPage} />
         
         {/* Policy Pages */}
