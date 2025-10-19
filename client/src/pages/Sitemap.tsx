@@ -13,25 +13,22 @@ const Sitemap: React.FC = () => {
         { url: "/how-it-works", label: "How It Works" },
         { url: "/science", label: "The Science" },
         { url: "/auth", label: "Login / Register" },
-        { url: "/about", label: "About Us" },
-        { url: "/contact", label: "Contact Us" },
+        { url: "/howtodate", label: "Dating Guide" },
       ]
     },
     {
-      title: "Quiz & Assessments",
+      title: "Quiz & Report",
       links: [
         { url: "/quiz", label: "Compatibility Quiz" },
-        { url: "/personality-types", label: "Personality Types" },
-        { url: "/relationship-patterns", label: "Relationship Patterns" },
+        { url: "/report", label: "Your Compatibility Report" },
+        { url: "/results", label: "Quiz Results" },
       ]
     },
     {
-      title: "User Dashboard",
+      title: "User Account",
       links: [
         { url: "/dashboard", label: "Dashboard" },
-        { url: "/dashboard/profile", label: "My Profile" },
-        { url: "/dashboard/reports", label: "My Reports" },
-        { url: "/dashboard/settings", label: "Account Settings" },
+        { url: "/profile", label: "My Profile" },
       ]
     },
     {
@@ -41,14 +38,6 @@ const Sitemap: React.FC = () => {
         { url: "/terms", label: "Terms of Service" },
         { url: "/cookies", label: "Cookie Policy" },
         { url: "/refund-policy", label: "Refund Policy" },
-      ]
-    },
-    {
-      title: "Support",
-      links: [
-        { url: "/help", label: "Help Center" },
-        { url: "/faq", label: "Frequently Asked Questions" },
-        { url: "/contact", label: "Contact Support" },
       ]
     },
   ];
@@ -77,10 +66,10 @@ const Sitemap: React.FC = () => {
           </h1>
           
           <p className="text-gray-600 mb-10">
-            Welcome to the WhoToDate sitemap. Use this page to navigate to any section of our website. If you can't find what you're looking for, please <Link href="/contact" className="text-primary hover:underline">contact us</Link>.
+            Welcome to the WhoToDate sitemap. Use this page to navigate to any section of our personality-based compatibility platform.
           </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
+          <div className="grid md:grid-cols-2 gap-x-10 gap-y-14">
             {linkCategories.map((category, index) => (
               <div key={index} className="space-y-3">
                 <h2 className="font-heading font-semibold text-lg text-gray-800 border-b border-gray-200 pb-2">
@@ -102,7 +91,7 @@ const Sitemap: React.FC = () => {
           
           <div className="mt-16 pt-6 border-t border-gray-200">
             <p className="text-center text-gray-500 text-sm">
-              Can't find what you're looking for? <Link href="/contact" className="text-primary hover:underline">Contact our support team</Link>.
+              All pages listed above are part of our personality-based compatibility assessment platform.
             </p>
           </div>
         </div>

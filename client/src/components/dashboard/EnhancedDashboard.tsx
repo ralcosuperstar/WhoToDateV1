@@ -123,60 +123,75 @@ const WelcomeBanner = ({ name }: { name: string }) => (
 
 // Quick Actions component
 const QuickActions = ({ hasCompletedQuiz, hasReport }: { hasCompletedQuiz: boolean, hasReport: boolean }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
     {!hasCompletedQuiz && (
-      <Card className="border-2 border-[#e83a8e]/30 bg-[#e83a8e]/5 hover:bg-[#e83a8e]/10 transition-colors">
-        <CardContent className="p-4 flex flex-col items-center text-center">
-          <div className="bg-[#e83a8e]/10 w-10 h-10 rounded-full flex items-center justify-center mb-3 mt-2">
-            <FileText className="w-5 h-5 text-[#e83a8e]" />
+      <Card className="border-2 border-[#e83a8e] bg-gradient-to-br from-[#e83a8e]/10 to-[#e83a8e]/5 hover:shadow-lg transition-all duration-300">
+        <CardContent className="p-6 flex flex-col items-center text-center">
+          <div className="bg-[#e83a8e] w-14 h-14 rounded-full flex items-center justify-center mb-4 mt-2 shadow-md">
+            <FileText className="w-7 h-7 text-white" />
           </div>
-          <h3 className="font-medium mb-1">Take Compatibility Quiz</h3>
-          <p className="text-sm text-neutral-dark/70 mb-3">Discover your relationship profile in 5 minutes</p>
-          <Button asChild className="mt-auto w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-            <Link href="/quiz">Start Quiz</Link>
+          <h3 className="font-bold text-xl mb-2 text-[#e83a8e]">Take Your Compatibility Quiz</h3>
+          <p className="text-sm text-neutral-dark/80 mb-4">Start your journey to better relationships. Discover your unique compatibility profile in just 5 minutes.</p>
+          <Button 
+            asChild 
+            className="mt-auto w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white font-semibold py-6 text-base shadow-md hover:shadow-lg transition-all"
+            data-testid="button-start-quiz"
+          >
+            <Link href="/quiz">
+              Start Quiz Now
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </CardContent>
       </Card>
     )}
 
     {hasCompletedQuiz && hasReport && (
-      <Card className="border-2 border-[#e83a8e]/30 bg-[#e83a8e]/5 hover:bg-[#e83a8e]/10 transition-colors">
-        <CardContent className="p-4 flex flex-col items-center text-center">
-          <div className="bg-[#e83a8e]/10 w-10 h-10 rounded-full flex items-center justify-center mb-3 mt-2">
-            <BarChart3 className="w-5 h-5 text-[#e83a8e]" />
+      <Card className="border-2 border-[#e83a8e] bg-gradient-to-br from-[#e83a8e]/10 to-[#e83a8e]/5 hover:shadow-lg transition-all duration-300">
+        <CardContent className="p-6 flex flex-col items-center text-center">
+          <div className="bg-green-500 w-14 h-14 rounded-full flex items-center justify-center mb-4 mt-2 shadow-md">
+            <Check className="w-7 h-7 text-white" />
           </div>
-          <h3 className="font-medium mb-1">View Full Report</h3>
-          <p className="text-sm text-neutral-dark/70 mb-3">Explore your detailed compatibility insights</p>
-          <Button asChild className="mt-auto w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white">
-            <Link href="/report">View Report</Link>
+          <h3 className="font-bold text-xl mb-2 text-[#e83a8e]">View Your Report</h3>
+          <p className="text-sm text-neutral-dark/80 mb-4">Your compatibility report is ready! Explore detailed insights about your relationship patterns.</p>
+          <Button 
+            asChild 
+            className="mt-auto w-full bg-[#e83a8e] hover:bg-[#d02e7d] text-white font-semibold py-6 text-base shadow-md hover:shadow-lg transition-all"
+            data-testid="button-view-report"
+          >
+            <Link href="/report">
+              View Full Report
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </CardContent>
       </Card>
     )}
 
-    <Card className="overflow-hidden group hover:shadow-md transition-all duration-300 border-blue-500/20 hover:border-blue-500/40">
-      <div className="p-4 sm:p-5">
-        <div className="flex items-center mb-2">
-          <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-            <BookOpen className="w-5 h-5 text-blue-600" />
+    <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 border-2 border-blue-500/30 hover:border-blue-500/50">
+      <div className="p-6">
+        <div className="flex items-center mb-3">
+          <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform shadow-md">
+            <BookOpen className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-lg text-blue-600 group-hover:text-blue-700 transition-colors">Dating Guide</h3>
+          <h3 className="font-bold text-xl text-blue-600 group-hover:text-blue-700 transition-colors">Dating Guide</h3>
         </div>
-        <p className="text-sm text-neutral-dark/80 mb-4">Comprehensive eBook with everything you need to know about modern dating</p>
+        <p className="text-sm text-neutral-dark/80 mb-4">Comprehensive guide with everything you need to know about modern dating and relationships</p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
             5 Chapters
           </Badge>
-          <Badge variant="outline" className="bg-blue-50 text-blue-600 whitespace-nowrap group-hover:bg-blue-100 transition-colors">
-            Practical Tips
+          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+            Expert Insights
           </Badge>
         </div>
         
         <Button 
           asChild 
           variant="outline" 
-          className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 group-hover:border-blue-300 transition-colors"
+          className="w-full border-2 border-blue-500 text-blue-700 hover:bg-blue-50 group-hover:border-blue-600 transition-all font-semibold py-5"
+          data-testid="button-dating-guide"
         >
           <Link href="/howtodate" className="flex items-center justify-center">
             Read Guide

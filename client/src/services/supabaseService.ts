@@ -1,5 +1,5 @@
 import { User, Session, PostgrestError } from '@supabase/supabase-js';
-import { Report, QuizAnswer, BlogPost } from '@shared/schema';
+import { Report, QuizAnswer } from '@shared/schema';
 import { getSupabaseClient } from '@/lib/supabaseConfig';
 
 /**
@@ -688,71 +688,6 @@ export const reportService = {
 };
 
 /**
- * Blog Services
- */
-export const blogService = {
-  /**
-   * Get all blog posts
-   */
-  getAllPosts: async () => {
-    const supabase = await authService.getClient();
-    
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('published_at', 'is not null')
-      .order('published_at', { ascending: false });
-      
-    if (error) {
-      console.error('Error fetching blog posts:', error);
-      return { posts: [], error };
-    }
-    
-    return { posts: data as BlogPost[], error: null };
-  },
-
-  /**
-   * Get blog post by ID
-   */
-  getPostById: async (id: number) => {
-    const supabase = await authService.getClient();
-    
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('id', id)
-      .single();
-      
-    if (error) {
-      console.error('Error fetching blog post:', error);
-      return { post: null, error };
-    }
-    
-    return { post: data as BlogPost, error: null };
-  },
-
-  /**
-   * Get blog post by slug
-   */
-  getPostBySlug: async (slug: string) => {
-    const supabase = await authService.getClient();
-    
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-      
-    if (error) {
-      console.error('Error fetching blog post by slug:', error);
-      return { post: null, error };
-    }
-    
-    return { post: data as BlogPost, error: null };
-  }
-};
-
-/**
  * Payment Services
  */
 export const paymentService = {
@@ -900,7 +835,6 @@ export default {
   user: userService,
   quiz: quizService,
   report: reportService,
-  blog: blogService,
   payment: paymentService,
   storage: storageService,
 };

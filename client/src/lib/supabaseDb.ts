@@ -1,5 +1,5 @@
 import { getSupabaseClient } from './supabaseConfig';
-import type { User, QuizAnswer, Report, Payment, BlogPost } from '@shared/schema';
+import type { User, QuizAnswer, Report, Payment } from '@shared/schema';
 
 // Get the Supabase client on-demand to avoid duplicate client instances
 const getClient = async () => await getSupabaseClient();
@@ -240,53 +240,3 @@ export async function updatePaymentStatus(paymentId: number, status: string): Pr
   }
 }
 
-// Blog operations
-export async function getAllBlogPosts(): Promise<SupabaseResponse<BlogPost[]>> {
-  try {
-    const supabase = await getClient();
-    
-    const result = await supabase
-      .from('blog_posts')
-      .select('*')
-      .order('createdAt', { ascending: false });
-    
-    return handleSupabaseResponse(result);
-  } catch (error) {
-    console.error('Error getting all blog posts:', error);
-    return { data: null, error: error instanceof Error ? error : new Error('Unknown error') };
-  }
-}
-
-export async function getBlogPostById(id: number): Promise<SupabaseResponse<BlogPost>> {
-  try {
-    const supabase = await getClient();
-    
-    const result = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('id', id)
-      .single();
-    
-    return handleSupabaseResponse(result);
-  } catch (error) {
-    console.error('Error getting blog post by ID:', error);
-    return { data: null, error: error instanceof Error ? error : new Error('Unknown error') };
-  }
-}
-
-export async function getBlogPostBySlug(slug: string): Promise<SupabaseResponse<BlogPost>> {
-  try {
-    const supabase = await getClient();
-    
-    const result = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-    
-    return handleSupabaseResponse(result);
-  } catch (error) {
-    console.error('Error getting blog post by slug:', error);
-    return { data: null, error: error instanceof Error ? error : new Error('Unknown error') };
-  }
-}
