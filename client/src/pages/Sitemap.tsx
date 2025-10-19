@@ -12,7 +12,6 @@ const Sitemap: React.FC = () => {
         { url: "/", label: "Home" },
         { url: "/how-it-works", label: "How It Works" },
         { url: "/science", label: "The Science" },
-        { url: "/counselling", label: "Counselling" },
         { url: "/auth", label: "Login / Register" },
         { url: "/about", label: "About Us" },
         { url: "/contact", label: "Contact Us" },
@@ -32,18 +31,7 @@ const Sitemap: React.FC = () => {
         { url: "/dashboard", label: "Dashboard" },
         { url: "/dashboard/profile", label: "My Profile" },
         { url: "/dashboard/reports", label: "My Reports" },
-        { url: "/dashboard/sessions", label: "Counseling Sessions" },
         { url: "/dashboard/settings", label: "Account Settings" },
-      ]
-    },
-    {
-      title: "Blog Categories",
-      links: [
-        { url: "/blog", label: "All Articles" },
-        { url: "/blog/category/compatibility", label: "Compatibility" },
-        { url: "/blog/category/relationships", label: "Relationships" },
-        { url: "/blog/category/psychology", label: "Psychology" },
-        { url: "/blog/category/dating-tips", label: "Dating Tips" },
       ]
     },
     {

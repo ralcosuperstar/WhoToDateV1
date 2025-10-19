@@ -98,7 +98,7 @@ const Footer = () => {
         </div>
         
         {/* Links Grid Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10 mb-12">
           <div>
             <h4 className="font-heading font-semibold text-lg mb-5 flex items-center">
               <div className="w-1.5 h-6 bg-primary rounded-full mr-2.5"></div>
@@ -124,12 +124,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Blog</span>
-                </Link>
-              </li>
-              <li>
                 <Link href="/help" className="text-white hover:text-primary transition-colors flex items-center">
                   <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
                   <span>Help & Support</span>
@@ -145,60 +139,21 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3.5">
               <li>
-                <Link href="/blog/understanding-compatibility-profile" className="text-white hover:text-primary transition-colors flex items-center">
+                <Link href="/science" className="text-white hover:text-primary transition-colors flex items-center">
                   <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Compatibility Guide</span>
+                  <span>The Science</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
+                <Link href="/how-it-works" className="text-white hover:text-primary transition-colors flex items-center">
                   <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Relationship Tips</span>
+                  <span>How It Works</span>
                 </Link>
               </li>
               <li>
-                <Link href="/blog/understanding-attachment-styles" className="text-white hover:text-primary transition-colors flex items-center">
+                <Link href="/quiz" className="text-white hover:text-primary transition-colors flex items-center">
                   <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Understanding Attachment</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Personality Types</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-white hover:text-primary transition-colors flex items-center">
-                  <ChevronRight className="w-4 h-4 mr-1.5 text-primary" />
-                  <span>Emotional Intelligence</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          
-          <div className="col-span-2 md:col-span-1">
-            <h4 className="font-heading font-semibold text-lg mb-5 flex items-center">
-              <div className="w-1.5 h-6 bg-primary rounded-full mr-2.5"></div>
-              Latest Articles
-            </h4>
-            <ul className="space-y-4">
-              <li>
-                <Link href="/blog/the-science-of-attachment" className="group">
-                  <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">The Science of Attachment Styles</p>
-                  <p className="text-white/80 text-xs">April 2, 2025</p>
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/emotional-intelligence" className="group">
-                  <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">Why Emotional Intelligence Matters in Relationships</p>
-                  <p className="text-white/80 text-xs">March 28, 2025</p>
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/personality-compatibility" className="group">
-                  <p className="text-white group-hover:text-primary transition-colors text-sm font-medium mb-1">Personality Compatibility: Myths vs. Reality</p>
-                  <p className="text-white/80 text-xs">March 15, 2025</p>
+                  <span>Take the Quiz</span>
                 </Link>
               </li>
             </ul>
