@@ -366,26 +366,6 @@ const MobileNavMenu = ({
             className="w-full justify-start h-auto py-2.5"
             asChild
           >
-            <Link href="/counselling">
-              <MessageCircle className="min-w-5 h-5 mr-2" />
-              <span className="text-sm whitespace-normal text-left">Talk to a Counselor</span>
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start h-auto py-2.5"
-            asChild
-          >
-            <Link href="/blog">
-              <Calendar className="min-w-5 h-5 mr-2" />
-              <span className="text-sm whitespace-normal text-left">Relationship Blog</span>
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start h-auto py-2.5"
-            asChild
-          >
             <Link href="/howtodate">
               <BookOpen className="min-w-5 h-5 mr-2" />
               <span className="text-sm whitespace-normal text-left">Dating Guide</span>
@@ -980,26 +960,6 @@ const EnhancedDashboard = () => {
               >
                 <FileText className="min-w-5 h-5 mr-2" />
                 <span className="text-sm whitespace-normal text-left">Compatibility Report</span>
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start h-auto py-2.5"
-                asChild
-              >
-                <Link href="/counselling">
-                  <MessageCircle className="min-w-5 h-5 mr-2" />
-                  <span className="text-sm whitespace-normal text-left">Talk to a Counselor</span>
-                </Link>
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start h-auto py-2.5"
-                asChild
-              >
-                <Link href="/blog">
-                  <Calendar className="min-w-5 h-5 mr-2" />
-                  <span className="text-sm whitespace-normal text-left">Relationship Tips</span>
-                </Link>
               </Button>
             </nav>
             
